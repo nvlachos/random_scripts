@@ -1,0 +1,16 @@
+
+Extract the core alignment for the input 4 genomes.
+
+Step 1: get the alignment using progressiveMauve, run
+progressiveMauve --output=full_alignment.xmfa genome1.gbk genome2.gbk 
+genome3.gbk genome4.gbk (or genome1.fasta etc.)
+
+Step 2: extract LCBs shared by all genomes
+stripSubsetLCBs full_alignment.xmfa full_alignment.xmfa.bbcols core_alignment.xmfa 500 4
+the first number "500" is the minimum length of the LCB; the second 
+number "4" indicates the minimum number of genomes that share a LCB
+
+Step 3: concatenate all the LCBs
+perl xmfa2fasta.pl core_alignment.xmfa
+You will get "core_alignment.fasta" in the current directory
+
