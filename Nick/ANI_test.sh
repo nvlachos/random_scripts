@@ -34,9 +34,9 @@ elif [[ "${1}" = "-h" ]]; then
 	echo "Usage is ./run_ANI.sh sample_name run_id"
 	echo "Output is saved to in ${processed}/sample_name/ANI"
 	exit 0
-elif [ -z "$2" ]; then
-	echo "Empty database name supplied to run_ANI.sh. Second argument should be a genus found in ${share}/DBs/ANI/  ...Exiting"
-	exit 1
+#elif [ -z "$2" ]; then
+#	echo "Empty database name supplied to run_ANI.sh. Second argument should be a genus found in ${share}/DBs/ANI/  ...Exiting"
+#	exit 1
 fi
 
 start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
