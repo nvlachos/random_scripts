@@ -44,8 +44,8 @@ echo "Started ANI at ${start_time}"
 
 # Sets the output folder to the sample_name folder in processed samples
 OUTDATADIR="${local_DBs}/aniDB/"
-if [[ ! -d ${local_DBs}/aniDB/dists ]]; then
-	mkdir ${local_DBs}/aniDB/dists
+if [[ ! -d ${local_DBs}/aniDB/all_named_test/dists ]]; then
+	mkdir ${local_DBs}/aniDB/all_named_test/dists
 fi
 
 # Gets persons name to use as email during entrez request to identify best matching sample
