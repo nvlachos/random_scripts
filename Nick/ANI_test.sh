@@ -7,6 +7,9 @@
 #$ -q all.q
 
 #Import the config file with shortcuts and settings
+if [[ ! -d ./config.sh ]]; then
+	cp ./config_template.sh config.sh
+fi
 . ./config.sh
 #${shareScript}/module_changers/list_modules.sh
 
@@ -40,22 +43,7 @@ start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 echo "Started ANI at ${start_time}"
 
 # Sets the output folder to the sample_name folder in processed samples
-OUTDATADIR="${processed}/${2}/${1}"
-
-# Checks to see if an ANI folder already exists and creates it if not
-if [ ! -d "$OUTDATADIR/ANI" ]; then
-	echo "Creating $OUTDATADIR/ANI"
-	mkdir -p "$OUTDATADIR/ANI"
-fi
-
-# Checks to see if the local DB ANI folder already exists and creates it if not. This is used to store a local copy of all samples in DB to be compared to (as to not disturb the source DB)
-if [ ! -d "$OUTDATADIR/ANI/localANIDB" ]; then  #create outdir if absent
-	echo "Creating $OUTDATADIR/ANI/localANIDB"
-	mkdir -p "$OUTDATADIR/ANI/localANIDB"
-else
-	rm -r "$OUTDATADIR/ANI/localANIDB"
-	mkdir -p "$OUTDATADIR/ANI/localANIDB"
-fi
+OUTDATADIR="${1}"
 
 # Gets persons name to use as email during entrez request to identify best matching sample
 me=$(whoami)
