@@ -53,10 +53,13 @@ me=$(whoami)
 # cp ${share}/DBs/aniDB/all/compound_sketch_all.msh "${OUTDATADIR}/ANI/"
 
 #mash dist "${local_DBs}/aniDB/refseq.genomes.k21s1000.msh" "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta" > "${OUTDATADIR}/ANI/${1}_all_refSeq.dists"
+counter=0
 for ref in ${local_DBs}/aniDB/all_named_test/*.fna; do
 	echo ${ref}
+	counter=$(( conter + 1 ))
 done
 
+echo ${counter}
 exit
 mash dist "${local_DBs}/aniDB/all_named_test/all_named.msh" "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta" > "${OUTDATADIR}/ANI/${1}_all_refSeq.dists"
 sort -k3 -n -o "${OUTDATADIR}/ANI/${1}_all_sorted_refSeq.dists" "${OUTDATADIR}/ANI/${1}_all_refSeq.dists"
