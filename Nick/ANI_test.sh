@@ -62,7 +62,7 @@ for ref in ${local_DBs}/aniDB/all_named_test/*.fna; do
 	counter=$(( counter + 1 ))
 	filename=$(basename ${ref})
 	mash dist "${local_DBs}/aniDB/all_named_test/all_named.msh" "${ref}" > "${OUTDATADIR}/all_named_test/dists/${filename}_unsorted.dists"
-	sort -k3 -n -o "${OUTDATADIR}/all_named_test/dists/${filename}_unsorted.dists" "${OUTDATADIR}/all_named_test/dists/${filename}.dists"
+	sort -k3 -n -o "${OUTDATADIR}/all_named_test/dists/${filename}.dists" "${OUTDATADIR}/all_named_test/dists/${filename}_unsorted.dists"
 	rm -r "${OUTDATADIR}/all_named_test/dists/${filename}_unsorted.dists"
 done
 
