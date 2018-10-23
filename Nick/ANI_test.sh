@@ -44,8 +44,8 @@ echo "Started ANI at ${start_time}"
 
 # Sets the output folder to the sample_name folder in processed samples
 OUTDATADIR="${local_DBs}/aniDB"
-if [[ ! -d ${local_DBs}/aniDB/all_named_test/dists ]]; then
-	mkdir ${local_DBs}/aniDB/all_named_test/dists
+if [[ ! -d ${OUTDATADIR}/all_named_test/dists ]]; then
+	mkdir ${OUTDATADIR}/all_named_test/dists
 fi
 
 # Gets persons name to use as email during entrez request to identify best matching sample
@@ -61,9 +61,9 @@ for ref in ${local_DBs}/aniDB/all_named_test/*.fna; do
 	echo ${ref}
 	counter=$(( counter + 1 ))
 	filename=$(basename ${ref})
-	mash dist "${local_DBs}/aniDB/all_named_test/all_named.msh" "${ref}" > "${OUTDATADIR}/dists/${filename}_unsorted.dists"
-	sort -k3 -n -o "${OUTDATADIR}/dists/${filename}_unsorted.dists" "${OUTDATADIR}/dists/${filename}.dists"
-	rm -r "${OUTDATADIR}/dists/${filename}_unsorted.dists"
+	mash dist "${local_DBs}/aniDB/all_named_test/all_named.msh" "${ref}" > "${OUTDATADIR}/all_named_test/dists/${filename}_unsorted.dists"
+	sort -k3 -n -o "${OUTDATADIR}/all_named_test/dists/${filename}_unsorted.dists" "${OUTDATADIR}/all_named_test/dists/${filename}.dists"
+	rm -r "${OUTDATADIR}/all_named_test/dists/${filename}_unsorted.dists"
 done
 
 echo ${counter}
