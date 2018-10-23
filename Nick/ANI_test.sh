@@ -44,6 +44,9 @@ echo "Started ANI at ${start_time}"
 
 # Sets the output folder to the sample_name folder in processed samples
 OUTDATADIR="${1}"
+if [[ ! -d ${OUTDATADIR}/dists ]]; then
+	mkdir ${OUTDATADIR}/dists
+fi
 
 # Gets persons name to use as email during entrez request to identify best matching sample
 me=$(whoami)
@@ -57,12 +60,14 @@ counter=0
 for ref in ${local_DBs}/aniDB/all_named_test/*.fna; do
 	echo ${ref}
 	counter=$(( counter + 1 ))
+	filename=$(basename ${ref})
+	mash dist "${local_DBs}/aniDB/all_named_test/all_named.msh" "${ref}" > "${OUTDATADIR}/dists/${filename}_unsorted.dists"
+	sort -k3 -n -o "${OUTDATADIR}/dists/${filename}_unsorted.dists" "${OUTDATADIR}/dists/${filename}.dists"
+	rm -r "${OUTDATADIR}/dists/${filename}_unsorted.dists"
 done
 
 echo ${counter}
 exit
-mash dist "${local_DBs}/aniDB/all_named_test/all_named.msh" "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta" > "${OUTDATADIR}/ANI/${1}_all_refSeq.dists"
-sort -k3 -n -o "${OUTDATADIR}/ANI/${1}_all_sorted_refSeq.dists" "${OUTDATADIR}/ANI/${1}_all_refSeq.dists"
 
 counter=0
 threshold=0
