@@ -53,7 +53,7 @@ me=$(whoami)
 # cp ${share}/DBs/aniDB/all/compound_sketch_all.msh "${OUTDATADIR}/ANI/"
 
 #mash dist "${local_DBs}/aniDB/refseq.genomes.k21s1000.msh" "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta" > "${OUTDATADIR}/ANI/${1}_all_refSeq.dists"
-for ref in ${local_DBs}/aniDB/all_named_test/*.fna
+for ref in ${local_DBs}/aniDB/all_named_test/*.fna; do
 	echo ${ref}
 done
 
