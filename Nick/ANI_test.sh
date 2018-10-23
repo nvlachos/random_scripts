@@ -43,7 +43,7 @@ echo "Started ANI at ${start_time}"
 OUTDATADIR="${processed}/${2}/${1}"
 
 # Checks to see if an ANI folder already exists and creates it if not
-if [ ! -d "$OUTDATADIR/ANI" ]; then 
+if [ ! -d "$OUTDATADIR/ANI" ]; then
 	echo "Creating $OUTDATADIR/ANI"
 	mkdir -p "$OUTDATADIR/ANI"
 fi
@@ -64,10 +64,14 @@ me=$(whoami)
 #Creates a local copy of the database folder
 # cp ${share}/DBs/aniDB/all/compound_sketch_all.msh "${OUTDATADIR}/ANI/"
 
-mash dist "${share}/DBs/aniDB/refseq.genomes.k21s1000.msh" "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta" > "${OUTDATADIR}/ANI/${1}_all_refSeq.dists"
-sort -k3 -n -o "${OUTDATADIR}/ANI/${1}_all_sorted_refSeq.dists" "${OUTDATADIR}/ANI/${1}_all_refSeq.dists"
+#mash dist "${local_DBs}/aniDB/refseq.genomes.k21s1000.msh" "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta" > "${OUTDATADIR}/ANI/${1}_all_refSeq.dists"
+for ref in ${local_DBs}/aniDB/all_named_test/*.fna
+	echo ${ref}
+done
 
 exit
+mash dist "${local_DBs}/aniDB/all_named_test/all_named.msh" "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta" > "${OUTDATADIR}/ANI/${1}_all_refSeq.dists"
+sort -k3 -n -o "${OUTDATADIR}/ANI/${1}_all_sorted_refSeq.dists" "${OUTDATADIR}/ANI/${1}_all_refSeq.dists"
 
 counter=0
 threshold=0
@@ -80,13 +84,13 @@ do
 	source=${source:0:-4}
 	echo ${source}
 	distance=$(echo "${line}" | cut -d'	' -f3)
-	if [[ ${counter} -gt ${max_ani_samples} ]] && [[ ${distance} != ${threshold} ]]; then
+	if [[ ${counter} -gt 50 ]] && [[ ${distance} != ${threshold} ]]; then
 		break
 	else
 		echo "Going to copy ${source} to localANIDB"
 		cp "${source_path}" "${OUTDATADIR}/ANI/localANIDB/${source}.fasta"
 		echo "${OUTDATADIR}/ANI/localANIDB/${source}.fasta" >> "${OUTDATADIR}/ANI/twenty_closest_mash.list"
-	fi 
+	fi
 	counter=$(( counter + 1))
 	threshold="${distance}"
 done < "${OUTDATADIR}/ANI/${1}_all_sorted.dists"
@@ -111,7 +115,7 @@ echo "${OUTDATADIR}/ANI/localANIDB/"
 #. "${shareScript}/module_changers/unload_python_3.6.sh"
 
 #Extracts the query sample info line for percentage identity from the percent identity file
-while IFS='' read -r line; 
+while IFS='' read -r line;
 do
 #	echo "!-${line}"
 	if [[ ${line:0:7} = "sample_" ]]; then
@@ -137,11 +141,11 @@ IFS="	" read -r -a percents <<< "${sampleline}"
 n=${#samples[@]}
 
 #Extracts all %id against the query sample (excluding itself) and writes them to file
-for (( i=0; i<n; i++ )); 
+for (( i=0; i<n; i++ ));
 do
 #	echo ${i}-${samples[i]}
 	if [[ ${samples[i]:0:7} = "sample_" ]];
-	then 
+	then
 #		echo "Skipping ${i}"
 		continue
 	fi
@@ -154,7 +158,7 @@ done
 sort -nr -t' ' -k1 -o "${OUTDATADIR}/ANI/best_hits_ordered.txt" "${OUTDATADIR}/ANI/best_hits.txt"
 #Extracts the first line of the file (best hit)
 best=$(head -n 1 "${OUTDATADIR}/ANI/best_hits_ordered.txt")
-#Creates an array from the best hit 
+#Creates an array from the best hit
 IFS=' ' read -r -a def_array <<< "${best}"
 #echo -${def_array[@]}+
 #Captures the assembly file name that the best hit came from
@@ -177,7 +181,7 @@ if [[ "${best_file}" = *"_scaffolds_trimmed" ]]; then
 					if [[ "${tool}" = "weighted Classify " ]]; then
 						best_organism_guess=$(echo "${pstats_line}" | cut -d':' -f3 | cut -d' ' -f3,4)
 						break 2
-					fi					
+					fi
 				done < ${processed}/${project}/${sample_name}/${sample_name}_pipeline_stats.txt
 		fi
 	done < ${share}/${5}
