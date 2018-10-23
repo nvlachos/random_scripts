@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o run_ANI.out
-#$ -e run_ANI.err
-#$ -N run_ANI
+#$ -o test_ANI.out
+#$ -e test_ANI.err
+#$ -N test_ANI
 #$ -cwd
 #$ -q all.q
 
@@ -66,49 +66,67 @@ for ref in ${local_DBs}/aniDB/all_named_test/*.fna; do
 	rm -r "${OUTDATADIR}/all_named_test/dists/${filename}_unsorted.dists"
 done
 
+for distfile in ${local_DBs}/aniDB/all_named_test/*.dists; do
+	taxa=$(basename ${distfile} | cut -d'_' -f1,2)
+	if [[ ! -d ${local_DBs}/aniDB/all_named_test/${taxa} ]]; then
+		mkdir -p ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB
+	fi
+	counter=0
+	max_ani_samples=30
+	> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
+	while IFS= read -r line || [[ "$line" ]];  do
+		if [[ ! -d ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB ]]; then
+			if [[ ${counter} -eq 0 ]]; then
+				ref_path=$(echo "${line}" | cut -d'	' -f2)
+				"${ref_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
+				cp ${ref_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB
+			fi
+			if [[ ${counter} -gt ${max_ani_samples} ]]; then
+				break
+			else
+				source_path=$(echo "${line}" | cut -d'	' -f1)
+				cp ${source_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB
+		fi
+	done < ${distfile}
+done
 echo ${counter}
 exit
 
-counter=0
-threshold=0
-cp "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta" "${OUTDATADIR}/ANI/localANIDB/sample_${1}.fasta"
-> "${OUTDATADIR}/ANI/twenty_closest_mash.list"
-while IFS='' read -r line;
-do
-	source_path=$(echo "${line}" | cut -d'	' -f1)
-	source=$(echo "${source_path}" | rev | cut -d'/' -f1 | rev)
-	source=${source:0:-4}
-	echo ${source}
-	distance=$(echo "${line}" | cut -d'	' -f3)
-	if [[ ${counter} -gt 50 ]] && [[ ${distance} != ${threshold} ]]; then
-		break
-	else
-		echo "Going to copy ${source} to localANIDB"
-		cp "${source_path}" "${OUTDATADIR}/ANI/localANIDB/${source}.fasta"
-		echo "${OUTDATADIR}/ANI/localANIDB/${source}.fasta" >> "${OUTDATADIR}/ANI/twenty_closest_mash.list"
-	fi
-	counter=$(( counter + 1))
-	threshold="${distance}"
-done < "${OUTDATADIR}/ANI/${1}_all_sorted.dists"
+#counter=0
+#threshold=0
+#cp "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta" "${OUTDATADIR}/ANI/localANIDB/sample_${1}.fasta"
+#> "${OUTDATADIR}/ANI/twenty_closest_mash.list"
+#while IFS='' read -r line;
+#do
+#	source_path=$(echo "${line}" | cut -d'	' -f1)
+#	source=$(echo "${source_path}" | rev | cut -d'/' -f1 | rev)
+#	source=${source:0:-4}
+#	echo ${source}
+#	distance=$(echo "${line}" | cut -d'	' -f3)
+#	if [[ ${counter} -gt 50 ]] && [[ ${distance} != ${threshold} ]]; then
+#		break
+#	else
+#		echo "Going to copy ${source} to localANIDB"
+#		cp "${source_path}" "${OUTDATADIR}/ANI/localANIDB/${source}.fasta"
+#		echo "${OUTDATADIR}/ANI/localANIDB/${source}.fasta" >> "${OUTDATADIR}/ANI/twenty_closest_mash.list"
+#	fi
+#	counter=$(( counter + 1))
+#	threshold="${distance}"
+#done < "${OUTDATADIR}/ANI/${1}_all_sorted.dists"
 
 # Checks for a previous copy of the aniM folder, removes it if found
 if [ -d "${OUTDATADIR}/ANI/aniM" ]; then  #checks for and removes old results folder for ANIm
 	echo "Removing old ANIm results in ${OUTDATADIR}/ANI/aniM"
 	rm -rf "${OUTDATADIR}/ANI/aniM"
 fi
-exit
-#Calls pyani on local db folder
-python -V
-echo "${OUTDATADIR}/ANI/localANIDB/"
-"${shareScript}/pyani_1/average_nucleotide_identity.py" -i "${OUTDATADIR}/ANI/localANIDB/" -o "${OUTDATADIR}/ANI/aniM5" -l "${OUTDATADIR}/ANI/aniM5.log" -m ANIm
-#./fastANI --refList "${OUTDATADIR}/ANI/twenty_closest_mash.list" --queryList "${OUTDATADIR}/ANI/twenty_closest_mash.list" -t "${procs}" --matrix -o "${OUTDATADIR}/ANI/matrix_identity.tsv"
-./fastANI --refList "${OUTDATADIR}/ANI/twenty_closest_mash.list" --query "${OUTDATADIR}/ANI/localANIDB/sample_${1}.fasta" -t "${procs}"
 
-#Calls pyani using scicomp module
-#module load pyani
-#. "${shareScript}/module_changers/load_python_3.6.sh"
-#`average_nucleotide_identity.py -i "${OUTDATADIR}/ANI/localANIDB" -o "${OUTDATADIR}/ANI/aniM3"`
-#. "${shareScript}/module_changers/unload_python_3.6.sh"
+python "/apps/x86_64/pyani/pyani/bin/average_nucleotide_identity.py" -i "${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB" -o "${local_DBs}/aniDB/all_named_test/${taxa}/aniM" --write_excel
+python "/apps/x86_64/pyani/pyani/bin/average_nucleotide_identity.py" -i "${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB" -o "${local_DBs}/aniDB/all_named_test/${taxa}/aniB" --write_excel
+
+
+
+
+
 
 #Extracts the query sample info line for percentage identity from the percent identity file
 while IFS='' read -r line;
@@ -119,13 +137,13 @@ do
 #		echo "found it-"$sampleline
 		break
 	fi
-done < "${OUTDATADIR}/ANI/aniM/ANIm_percentage_identity.tab"
+done < "${local_DBs}/aniDB/all_named_test/${taxa}/aniM/ANIm_percentage_identity.tab"
 
 #Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
-if [[ -s "${OUTDATADIR}/ANI/aniM/ANIm_percentage_identity.tab" ]]; then
-	firstline=$(head -n 1 "${OUTDATADIR}/ANI/aniM/ANIm_percentage_identity.tab")
+if [[ -s "${local_DBs}/aniDB/all_named_test/${taxa}/aniM/ANIm_percentage_identity.tab" ]]; then
+	firstline=$(head -n 1 "${local_DBs}/aniDB/all_named_test/${taxa}/aniM/ANIm_percentage_identity.tab")
 else
-	echo "No "${OUTDATADIR}/ANI/aniM/ANIm_percentage_identity.tab" file, exiting"
+	echo "No "${local_DBs}/aniDB/all_named_test/${taxa}/aniM/ANIm_percentage_identity.tab" file, exiting"
 	exit 1
 fi
 
@@ -145,63 +163,56 @@ do
 #		echo "Skipping ${i}"
 		continue
 	fi
-	definition=$(head -1 "${OUTDATADIR}/ANI/localANIDB/${samples[i]}.fasta")
+	definition=$(head -1 "${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${samples[i]}.fna")
 	# Prints all matching samples to file (Except the self comparison) by line as percent_match  sample_name  fasta_header
-	echo "${percents[i+1]} ${samples[i]} ${definition}" >> "${OUTDATADIR}/ANI/best_hits.txt"
+	echo "${percents[i+1]} ${samples[i]} ${definition}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt"
 done
 
 #Sorts the list in the file based on %id (best to worst)
-sort -nr -t' ' -k1 -o "${OUTDATADIR}/ANI/best_hits_ordered.txt" "${OUTDATADIR}/ANI/best_hits.txt"
-#Extracts the first line of the file (best hit)
-best=$(head -n 1 "${OUTDATADIR}/ANI/best_hits_ordered.txt")
-#Creates an array from the best hit
-IFS=' ' read -r -a def_array <<< "${best}"
-#echo -${def_array[@]}+
-#Captures the assembly file name that the best hit came from
-best_file=${def_array[1]}
-#Formats the %id to standard percentage (xx.xx%)
-best_percent=$(awk -v per="${def_array[0]}" 'BEGIN{printf "%.2f", per * 100}')
-echo "${best_file}"
-# If the best match comes from the additional file, extract the taxonomy from that file
-if [[ "${best_file}" = *"_scaffolds_trimmed" ]]; then
-	best_outbreak_match=$(echo "${best_file}" | rev | cut -d'_' -f3- | rev)
-	while IFS= read -r var
-	do
-		sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
-		if [[ "${sample_name}" = "${best_outbreak_match}" ]]; then
-			project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-			while IFS= read -r pstats_line
-				do
-					tool=$(echo "${pstats_line}" | cut -d':' -f1 | tr -s " ")
-					#echo ":${tool}:"
-					if [[ "${tool}" = "weighted Classify " ]]; then
-						best_organism_guess=$(echo "${pstats_line}" | cut -d':' -f3 | cut -d' ' -f3,4)
-						break 2
-					fi
-				done < ${processed}/${project}/${sample_name}/${sample_name}_pipeline_stats.txt
-		fi
-	done < ${share}/${5}
-# if the best hit comes from the aniDB then pull taxonomy from name
+sort -nr -t' ' -k1 -o "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits__aniM_ordered.txt" "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt"
+
+#Extracts the query sample info line for percentage identity from the percent identity file
+while IFS='' read -r line;
+do
+#	echo "!-${line}"
+	if [[ ${line:0:7} = "sample_" ]]; then
+		sampleline=${line}
+#		echo "found it-"$sampleline
+		break
+	fi
+done < "${local_DBs}/aniDB/all_named_test/${taxa}/aniB/ANIb_percentage_identity.tab"
+
+#Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
+if [[ -s "${local_DBs}/aniDB/all_named_test/${taxa}/aniB/ANIb_percentage_identity.tab" ]]; then
+	firstline=$(head -n 1 "${local_DBs}/aniDB/all_named_test/${taxa}/aniB/ANIb_percentage_identity.tab")
 else
-	#Extracts the accession number from the definition line
-	accession=$(echo "${def_array[2]}" | cut -d' ' -f1  | cut -d'>' -f2)
-	#Looks up the NCBI genus species from the accession number
-	#best_organism_guess=$(python "${shareScript}/entrez_get_taxon_from_accession.py" "${accession}" "${me}")
-
+	echo "No "${local_DBs}/aniDB/all_named_test/${taxa}/aniB/ANIb_percentage_identity.tab" file, exiting"
+	exit 1
 fi
 
-#Creates a line at the top of the file to show the best match in an easily readable format that matches the style on the MMB_Seq log
-echo -e "${best_percent}%-${best_organism_guess}(${best_file}.fna)\\n$(cat "${OUTDATADIR}/ANI/best_hits_ordered.txt")" > "${OUTDATADIR}/ANI/best_ANI_hits_ordered(${1}_vs_All).txt"
+#Arrays to read sample names and the %ids for the query sample against those other samples
+IFS="	" read -r -a samples <<< "${firstline}"
+IFS="	" read -r -a percents <<< "${sampleline}"
 
-#Removes the transient hit files
-if [ -s "${OUTDATADIR}/ANI/best_hits.txt" ]; then
-	rm "${OUTDATADIR}/ANI/best_hits.txt"
-#	echo "1"
-fi
-if [ -s "${OUTDATADIR}/ANI/best_hits_ordered.txt" ]; then
-	rm "${OUTDATADIR}/ANI/best_hits_ordered.txt"
-#	echo "2"
-fi
+#How many samples were compared
+n=${#samples[@]}
+
+#Extracts all %id against the query sample (excluding itself) and writes them to file
+for (( i=0; i<n; i++ ));
+do
+#	echo ${i}-${samples[i]}
+	if [[ ${samples[i]:0:7} = "sample_" ]];
+	then
+#		echo "Skipping ${i}"
+		continue
+	fi
+	definition=$(head -1 "${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${samples[i]}.fna")
+	# Prints all matching samples to file (Except the self comparison) by line as percent_match  sample_name  fasta_header
+	echo "${percents[i+1]} ${samples[i]} ${definition}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB.txt"
+done
+
+#Sorts the list in the file based on %id (best to worst)
+sort -nr -t' ' -k1 -o "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits__aniB_ordered.txt" "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB.txt"
 
 end_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 echo "ENDed ANI at ${end_time}"
