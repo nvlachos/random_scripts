@@ -8,7 +8,7 @@
 
 #Import the config file with shortcuts and settings
 . ./config.sh
-${shareScript}/module_changers/list_modules.sh
+#${shareScript}/module_changers/list_modules.sh
 
 #
 # Script to calculate the average nucleotide identity of a sample to numerous other samples from the same genus (genus dependent)
