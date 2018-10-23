@@ -56,7 +56,7 @@ me=$(whoami)
 counter=0
 for ref in ${local_DBs}/aniDB/all_named_test/*.fna; do
 	echo ${ref}
-	counter=$(( conter + 1 ))
+	counter=$(( counter + 1 ))
 done
 
 echo ${counter}
