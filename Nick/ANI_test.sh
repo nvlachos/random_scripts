@@ -43,7 +43,7 @@ start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 echo "Started ANI at ${start_time}"
 
 # Sets the output folder to the sample_name folder in processed samples
-OUTDATADIR="${local_DBs}/aniDB/"
+OUTDATADIR="${local_DBs}/aniDB"
 if [[ ! -d ${local_DBs}/aniDB/all_named_test/dists ]]; then
 	mkdir ${local_DBs}/aniDB/all_named_test/dists
 fi
