@@ -85,7 +85,7 @@ for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
 			if [[ ${counter} -eq 0 ]]; then
 				ref_path=$(echo "${line}" | cut -d'	' -f2)
 				echo "rp-${ref_path}"
-				"${ref_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
+				echo "${ref_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
 				cp ${ref_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB
 			fi
 			if [[ ${counter} -gt ${max_ani_samples} ]]; then
