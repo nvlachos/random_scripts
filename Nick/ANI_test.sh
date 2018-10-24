@@ -67,84 +67,52 @@ counter=0
 #	rm -r "${OUTDATADIR}/all_named_test/dists/${filename}_unsorted.dists"
 #done
 
-for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
-	[ -f "$distfile" ] || break
-	taxa=$(basename ${distfile} | cut -d'_' -f1,2)
-	if [[ ! -d ${local_DBs}/aniDB/all_named_test/${taxa} ]]; then
-		mkdir -p ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB
-	fi
-	counter=0
-	max_ani_samples=30
-	echo "${distfile}-${taxa}"
-	> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
-	if [[ ! -d ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB ]]; then
-		mkdir "${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB"
-	fi
-	while IFS= read -r line;  do
-			echo "${counter}:-:-:${line}"
-			if [[ ${counter} -eq 0 ]]; then
-				ref_path=$(echo "${line}" | cut -d'	' -f2)
-				echo "rp-${ref_path}"
-				echo "${ref_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
-				fasta=$(basename ${ref_path})
-				fasta=${fasta:0:-3}"fasta"
-				echo "cp ${ref_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${fasta}"
-				cp ${ref_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${fasta}
-			fi
-			if [[ ${counter} -gt ${max_ani_samples} ]]; then
-				break
-			else
-				source_path=$(echo "${line}" | cut -d'	' -f1)
-				echo "sp-${source_path}"
-				echo "${source_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
-				fasta=$(basename ${source_path})
-				fasta=${fasta:0:-3}"fasta"
-				echo "cp ${source_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${fasta}"
-				cp ${source_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${fasta}
-			fi
-			counter=$(( counter + 1 ))
-	done < ${distfile}
+# for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
+# 	[ -f "$distfile" ] || break
+# 	taxa=$(basename ${distfile} | cut -d'_' -f1,2)
+# 	if [[ ! -d ${local_DBs}/aniDB/all_named_test/${taxa} ]]; then
+# 		mkdir -p ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB
+# 	fi
+# 	counter=0
+# 	max_ani_samples=30
+# 	echo "${distfile}-${taxa}"
+# 	> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
+# 	if [[ ! -d ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB ]]; then
+# 		mkdir "${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB"
+# 	fi
+# 	while IFS= read -r line;  do
+# 			echo "${counter}:-:-:${line}"
+# 			if [[ ${counter} -eq 0 ]]; then
+# 				ref_path=$(echo "${line}" | cut -d'	' -f2)
+# 				echo "rp-${ref_path}"
+# 				echo "${ref_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
+# 				fasta=$(basename ${ref_path})
+# 				fasta=${fasta:0:-3}"fasta"
+# 				echo "cp ${ref_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${fasta}"
+# 				cp ${ref_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${fasta}
+# 			fi
+# 			if [[ ${counter} -gt ${max_ani_samples} ]]; then
+# 				break
+# 			else
+# 				source_path=$(echo "${line}" | cut -d'	' -f1)
+# 				echo "sp-${source_path}"
+# 				echo "${source_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
+# 				fasta=$(basename ${source_path})
+# 				fasta=${fasta:0:-3}"fasta"
+# 				echo "cp ${source_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${fasta}"
+# 				cp ${source_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${fasta}
+# 			fi
+# 			counter=$(( counter + 1 ))
+# 	done < ${distfile}
+# done
+# echo ${counter}
+
+for localaniDB in ${local_DBs}/aniDB/all_named_test/*; do
+	taxa=$(basename ${localANIDB} | cut -d'_' -f1,2)
+	if [[ -d ${species}/localANIDB ]]; then
+		qsub python "/apps/x86_64/pyani/pyani/bin/average_nucleotide_identity.py" -i "${species}/localANIDB" -o "${local_DBs}/aniDB/all_named_test/${taxa}/aniM" --write_excel
+		qsub python "/apps/x86_64/pyani/pyani/bin/average_nucleotide_identity.py" -i "${species}/localANIDB" -o "${local_DBs}/aniDB/all_named_test/${taxa}/aniB" --write_excel
 done
-echo ${counter}
-
-#for fna in ${local_DBs}/aniDB/all_named_test/*/localANIDB/*; do
-#	fasta="${fna:0:-4}.fasta"
-#	echo "new fasta-${fasta}"
-#	#mv ${fna} ${fasta}
-#done
-
-exit
-
-#counter=0
-#threshold=0
-#cp "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta" "${OUTDATADIR}/ANI/localANIDB/sample_${1}.fasta"
-#> "${OUTDATADIR}/ANI/twenty_closest_mash.list"
-#while IFS='' read -r line;
-#do
-#	source_path=$(echo "${line}" | cut -d'	' -f1)
-#	source=$(echo "${source_path}" | rev | cut -d'/' -f1 | rev)
-#	source=${source:0:-4}
-#	echo ${source}
-#	distance=$(echo "${line}" | cut -d'	' -f3)
-#	if [[ ${counter} -gt 50 ]] && [[ ${distance} != ${threshold} ]]; then
-#		break
-#	else
-#		echo "Going to copy ${source} to localANIDB"
-#		cp "${source_path}" "${OUTDATADIR}/ANI/localANIDB/${source}.fasta"
-#		echo "${OUTDATADIR}/ANI/localANIDB/${source}.fasta" >> "${OUTDATADIR}/ANI/twenty_closest_mash.list"
-#	fi
-#	counter=$(( counter + 1))
-#	threshold="${distance}"
-#done < "${OUTDATADIR}/ANI/${1}_all_sorted.dists"
-
-# Checks for a previous copy of the aniM folder, removes it if found
-if [ -d "${OUTDATADIR}/ANI/aniM" ]; then  #checks for and removes old results folder for ANIm
-	echo "Removing old ANIm results in ${OUTDATADIR}/ANI/aniM"
-	rm -rf "${OUTDATADIR}/ANI/aniM"
-fi
-
-python "/apps/x86_64/pyani/pyani/bin/average_nucleotide_identity.py" -i "${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB" -o "${local_DBs}/aniDB/all_named_test/${taxa}/aniM" --write_excel
-python "/apps/x86_64/pyani/pyani/bin/average_nucleotide_identity.py" -i "${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB" -o "${local_DBs}/aniDB/all_named_test/${taxa}/aniB" --write_excel
 
 
 
