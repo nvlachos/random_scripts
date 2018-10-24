@@ -75,7 +75,7 @@ for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
 	fi
 	counter=0
 	max_ani_samples=30
-	echo "${distfile}"
+	echo "${distfile}-${taxa}"
 	> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
 	if [[ ! -d ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB ]]; then
 		mkdir "${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB"
@@ -86,14 +86,14 @@ for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
 				ref_path=$(echo "${line}" | cut -d'	' -f2)
 				echo "rp-${ref_path}"
 				echo "${ref_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
-				cp ${ref_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB
+				cp ${ref_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/
 			fi
 			if [[ ${counter} -gt ${max_ani_samples} ]]; then
 				break
 			else
 				source_path=$(echo "${line}" | cut -d'	' -f1)
 				echo "sp-${source_path}"
-				cp ${source_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB
+				cp ${source_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/
 			fi
 			counter=$(( counter + 1 ))
 	done < ${distfile}
