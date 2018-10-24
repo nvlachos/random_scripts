@@ -88,6 +88,7 @@ for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
 				echo "${ref_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
 				fasta=$(basename ${ref_path})
 				fasta=${fasta:0:-3}"fasta"
+				echo "cp ${ref_path} ${fasta}"
 				cp ${ref_path} ${fasta}
 			fi
 			if [[ ${counter} -gt ${max_ani_samples} ]]; then
@@ -98,6 +99,7 @@ for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
 				echo "${source_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
 				fasta=$(basename ${source_path})
 				fasta=${fasta:0:-3}"fasta"
+				echo "cp ${source_path} ${fasta}"
 				cp ${source_path} ${fasta}
 			fi
 			counter=$(( counter + 1 ))
