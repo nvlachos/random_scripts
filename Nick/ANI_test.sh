@@ -77,8 +77,11 @@ for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
 	max_ani_samples=30
 	echo "${distfile}"
 	> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
+	if [[ ! -d ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB ]]; then
+		mkdir "${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB"
+	fi
 	while IFS= read -r line;  do
-		if [[ ! -d ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB ]]; then
+			echo "${counter}:-:-:${line}"
 			if [[ ${counter} -eq 0 ]]; then
 				ref_path=$(echo "${line}" | cut -d'	' -f2)
 				"${ref_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
@@ -90,7 +93,6 @@ for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
 				source_path=$(echo "${line}" | cut -d'	' -f1)
 				cp ${source_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB
 			fi
-		fi
 	done < ${distfile}
 done
 echo ${counter}
