@@ -84,6 +84,7 @@ for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
 			echo "${counter}:-:-:${line}"
 			if [[ ${counter} -eq 0 ]]; then
 				ref_path=$(echo "${line}" | cut -d'	' -f2)
+				echo "rp-${ref_path}"
 				"${ref_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
 				cp ${ref_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB
 			fi
@@ -91,8 +92,10 @@ for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
 				break
 			else
 				source_path=$(echo "${line}" | cut -d'	' -f1)
+				echo "sp-${source_path}"
 				cp ${source_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB
 			fi
+			counter=$(( counter + 1 ))
 	done < ${distfile}
 done
 echo ${counter}
