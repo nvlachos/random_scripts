@@ -67,7 +67,8 @@ counter=0
 #	rm -r "${OUTDATADIR}/all_named_test/dists/${filename}_unsorted.dists"
 #done
 
-for distfile in ${local_DBs}/aniDB/all_named_test/*.dists; do
+for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
+	[ -f "$distfile" ] || break
 	taxa=$(basename ${distfile} | cut -d'_' -f1,2)
 	if [[ ! -d ${local_DBs}/aniDB/all_named_test/${taxa} ]]; then
 		mkdir -p ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB
