@@ -86,7 +86,8 @@ for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
 				ref_path=$(echo "${line}" | cut -d'	' -f2)
 				echo "rp-${ref_path}"
 				echo "${ref_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
-				fasta="${ref_path:0:-4}.fasta"
+				fasta=$(basename ${ref_path})
+				fasta=${fasta:0:-3}"fasta"
 				cp ${ref_path} ${fasta}
 			fi
 			if [[ ${counter} -gt ${max_ani_samples} ]]; then
@@ -95,7 +96,8 @@ for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
 				source_path=$(echo "${line}" | cut -d'	' -f1)
 				echo "sp-${source_path}"
 				echo "${source_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
-				fasta="${source_path:0:-4}.fasta"
+				fasta=$(basename ${source_path})
+				fasta=${fasta:0:-3}"fasta"
 				cp ${source_path} ${fasta}
 			fi
 			counter=$(( counter + 1 ))
