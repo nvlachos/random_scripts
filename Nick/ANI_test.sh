@@ -93,6 +93,7 @@ for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
 			else
 				source_path=$(echo "${line}" | cut -d'	' -f1)
 				echo "sp-${source_path}"
+				echo "${source_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
 				cp ${source_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/
 			fi
 			counter=$(( counter + 1 ))
