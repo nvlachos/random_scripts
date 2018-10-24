@@ -74,8 +74,9 @@ for distfile in ${local_DBs}/aniDB/all_named_test/*.dists; do
 	fi
 	counter=0
 	max_ani_samples=30
+	echo "${distfile}"
 	> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
-	while IFS= read -r line || [[ "$line" ]];  do
+	while IFS= read -r line;  do
 		if [[ ! -d ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB ]]; then
 			if [[ ${counter} -eq 0 ]]; then
 				ref_path=$(echo "${line}" | cut -d'	' -f2)
