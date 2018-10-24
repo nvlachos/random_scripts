@@ -8,7 +8,7 @@
 
 #Import the config file with shortcuts and settings
 if [[ ! -d ./config.sh ]]; then
-	cp ./config_template.sh config.sh
+	cp config_template.sh config.sh
 fi
 . ./config.sh
 #   ${shareScript}/module_changers/list_modules.sh
