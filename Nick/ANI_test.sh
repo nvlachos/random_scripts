@@ -6,6 +6,7 @@
 #$ -cwd
 #$ -q all.q
 
+pwd
 #Import the config file with shortcuts and settings
 if [[ ! -d ./config.sh ]]; then
 	cp config_template.sh config.sh
