@@ -100,6 +100,13 @@ for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
 	done < ${distfile}
 done
 echo ${counter}
+
+for fna in ${local_DBs}/aniDB/all_named_test/*/localANIDB/*; do
+	fasta="${fna:0:-4}.fasta"
+	echo "new fasta-${fasta}"
+	#mv ${fna} ${fasta}
+done
+
 exit
 
 #counter=0
