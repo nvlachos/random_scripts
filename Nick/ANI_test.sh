@@ -126,7 +126,7 @@ for localANIDB in ${local_DBs}/aniDB/Single_ANI_Test/*; do
 	echo "${taxa}"
 	if [[ ${sub_counter} -lt ${max_subs} ]]; then
 		echo  "Index is below max submissions, submitting"
-		echo -e "#!/bin/bash -l\n" > "${main_dir}/ani_${sample}_${start_time}.sh"
+		echo -e "#!/bin/bash -l\n" > "${main_dir}/aniB_${sample}_${start_time}.sh"
 		echo -e "#$ -o aniB_${sample}.out" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 		echo -e "#$ -e aniB_${sample}.err" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 		echo -e "#$ -N aniB_${sample}"   >> "${main_dir}/aniB_${sample}_${start_time}.sh"
