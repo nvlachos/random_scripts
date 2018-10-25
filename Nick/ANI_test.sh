@@ -117,13 +117,13 @@ mkdir ${main_dir}
 
 for localANIDB in ${local_DBs}/aniDB/Single_ANI_Test/*; do
 	echo "${localANIDB}"
-	exit
 	taxa=$(basename ${localANIDB} | rev | cut -d'/' -f1 | rev)
 	if [[ ! -d ${localANIDB} ]]; then
 		break
 	else
 		samples[sub_counter]=${taxa}
 	fi
+	echo "${taxa}"
 	if [[ ${sub_counter} -lt ${max_subs} ]]; then
 		echo  "Index is below max submissions, submitting"
 		echo -e "#!/bin/bash -l\n" > "${main_dir}/ani_${sample}_${start_time}.sh"
