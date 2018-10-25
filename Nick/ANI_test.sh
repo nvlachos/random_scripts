@@ -109,7 +109,7 @@ counter=0
 
 sub_counter=0
 samples=()
-main_dir=/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs/ani_TEST
+main_dir="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs/ani_TEST"
 mkdir ${main_dir}
 
 for localaniDB in ${local_DBs}/aniDB/Single_ANI_Test/; do
@@ -159,7 +159,7 @@ else
 			echo -e "#$ -o aniB_${sample}.out" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 			echo -e "#$ -e aniB_${sample}.err" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 			echo -e "#$ -N aniB_${sample}"   >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-			echo -e "#$ -cwd"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+			echo -e "#$ -cwd" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 			echo -e "#$ -q short.q\n"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 			echo -e "module load pyani/1.0" "${main_dir}/aniB_${sample}_${start_time}.sh"
 			echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_named_test/${taxa}/aniB\" \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
@@ -176,9 +176,10 @@ else
 			echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_named_test/${taxa}/aniM\" \"--write_excel\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniM_complete.txt\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 			qsub "${main_dir}/aniM_${sample}_${start_time}.sh"
-		fi
+	fi
 	done
-sub_counter=$(( counter + 1 ))
+fi
+	sub_counter=$(( counter + 1 ))
 done
 
 
