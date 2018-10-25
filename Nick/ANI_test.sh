@@ -23,6 +23,8 @@ fi
 # Python/3.5.2 (pyani is located in Nick_DIR/script folder, not run from scicomp module)
 #
 
+local_DBs="/scicomp/groups/OID/NCEZID/DHQP/CEMB/databases"
+
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
 	echo "No argument supplied to run_ANI.sh, exiting"
@@ -113,8 +115,9 @@ samples=()
 main_dir="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs/ani_TEST"
 mkdir ${main_dir}
 
-for localANIDB in ${local_DBs}/aniDB/Single_ANI_Test/; do
+for localANIDB in ${local_DBs}/aniDB/Single_ANI_Test/*; do
 	echo "${localANIDB}"
+	exit
 	taxa=$(basename ${localANIDB} | cut -d'_' -f1,2)
 	if [[ ! -d ${localANIDB} ]]; then
 		break
