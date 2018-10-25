@@ -118,7 +118,7 @@ mkdir ${main_dir}
 for localANIDB in ${local_DBs}/aniDB/Single_ANI_Test/*; do
 	echo "${localANIDB}"
 	exit
-	taxa=$(basename ${localANIDB} | cut -d'_' -f1,2)
+	taxa=$(basename ${localANIDB} | rev | cut -d'/' -f1 | rev)
 	if [[ ! -d ${localANIDB} ]]; then
 		break
 	else
