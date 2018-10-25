@@ -108,6 +108,7 @@ counter=0
 # echo ${counter}
 
 sub_counter=0
+max_subs=50
 samples=()
 main_dir="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs/ani_TEST"
 mkdir ${main_dir}
