@@ -113,6 +113,7 @@ main_dir="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs/ani_TEST"
 mkdir ${main_dir}
 
 for locaANIDB in ${local_DBs}/aniDB/Single_ANI_Test/; do
+	echo "${localANIDB}"
 	taxa=$(basename ${localANIDB} | cut -d'_' -f1,2)
 	if [[ ! -d ${localANIDB} ]]; then
 		break
