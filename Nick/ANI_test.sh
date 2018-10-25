@@ -107,13 +107,79 @@ counter=0
 # done
 # echo ${counter}
 
-for localaniDB in ${local_DBs}/aniDB/all_named_test/*; do
-	taxa=$(basename ${localANIDB} | cut -d'_' -f1,2)
-	if [[ -d ${species}/localANIDB ]]; then
-		qsub python "/apps/x86_64/pyani/pyani/bin/average_nucleotide_identity.py" -i "${species}/localANIDB" -o "${local_DBs}/aniDB/all_named_test/${taxa}/aniM" --write_excel
-		qsub python "/apps/x86_64/pyani/pyani/bin/average_nucleotide_identity.py" -i "${species}/localANIDB" -o "${local_DBs}/aniDB/all_named_test/${taxa}/aniB" --write_excel
-done
+sub_counter=0
+samples=()
+main_dir=/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs/ani_TEST
+mkdir ${main_dir}
 
+for localaniDB in ${local_DBs}/aniDB/Single_ANI_Test/; do
+	taxa=$(basename ${localANIDB} | cut -d'_' -f1,2)
+	if [[ ! -d ${localANIDB} ]]; then
+		break
+	else
+		samples[sub_counter]=${taxa}
+	fi
+	if [[ ${sub_counter} -lt ${max_subs} ]]; then
+		echo  "Index is below max submissions, submitting"
+		echo -e "#!/bin/bash -l\n" > "${main_dir}/ani_${sample}_${start_time}.sh"
+		echo -e "#$ -o aniB_${sample}.out" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		echo -e "#$ -e aniB_${sample}.err" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		echo -e "#$ -N aniB_${sample}"   >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		echo -e "#$ -cwd"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		echo -e "#$ -q short.q\n"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		echo -e "module load pyani/1.0" "${main_dir}/aniB_${sample}_${start_time}.sh"
+		echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_named_test/${taxa}/aniB\" \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniB_complete.txt\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		qsub "${main_dir}/aniB_${sample}_${start_time}.sh"
+
+		echo -e "#!/bin/bash -l\n" > "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "#$ -o aniM_${sample}.out" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "#$ -e aniM_${sample}.err" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "#$ -N aniM_${sample}"   >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "#$ -cwd"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "#$ -q short.q\n"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "module load pyani/1.0" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_named_test/${taxa}/aniM\" \"--write_excel\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniM_complete.txt\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		qsub "${main_dir}/aniM_${sample}_${start_time}.sh"
+else
+	waiting_for_index=$(( counter - max_subs ))
+	waiting_sample=$(echo "${samples[${waiting_for_index}]}")
+	timer=0
+	echo "Index is above max submissions, waiting for index ${waiting_for_index}:${waiting_sample} to complete"
+	while :
+	do
+		if [[ ${timer} -gt 1800 ]]; then
+			echo "Timer exceeded limit of 1800 seconds 30 minutes"
+			break
+		fi
+		if [[ -f "${main_dir}/complete/${waiting_sample}_aniB_complete.txt" ]] && [[ -f "${main_dir}/complete/${waiting_sample}_aniM_complete.txt" ]]; then
+			echo  "Index is below max submissions, submitting"
+			echo -e "#!/bin/bash -l\n" > "${main_dir}/ani_${sample}_${start_time}.sh"
+			echo -e "#$ -o aniB_${sample}.out" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+			echo -e "#$ -e aniB_${sample}.err" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+			echo -e "#$ -N aniB_${sample}"   >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+			echo -e "#$ -cwd"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+			echo -e "#$ -q short.q\n"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+			echo -e "module load pyani/1.0" "${main_dir}/aniB_${sample}_${start_time}.sh"
+			echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_named_test/${taxa}/aniB\" \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniB_complete.txt\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+			qsub "${main_dir}/aniB_${sample}_${start_time}.sh"
+
+			echo -e "#!/bin/bash -l\n" > "${main_dir}/aniM_${sample}_${start_time}.sh"
+			echo -e "#$ -o aniM_${sample}.out" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+			echo -e "#$ -e aniM_${sample}.err" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+			echo -e "#$ -N aniM_${sample}"   >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+			echo -e "#$ -cwd"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+			echo -e "#$ -q short.q\n"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+			echo -e "module load pyani/1.0" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+			echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_named_test/${taxa}/aniM\" \"--write_excel\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniM_complete.txt\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+			qsub "${main_dir}/aniM_${sample}_${start_time}.sh"
+		fi
+	done
+sub_counter=$(( counter + 1 ))
+done
 
 
 
@@ -138,9 +204,35 @@ else
 	exit 1
 fi
 
+#Extracts the query sample info line for percentage identity from the percent identity file
+while IFS='' read -r line;
+do
+#	echo "!-${line}"
+	if [[ ${line:0:7} = "sample_" ]]; then
+		sampleline=${line}
+#		echo "found it-"$sampleline
+		break
+	fi
+done < "${local_DBs}/aniDB/all_named_test/${taxa}/aniM/ANIm_alignment_coverage.tab"
+
+#Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
+if [[ -s "${local_DBs}/aniDB/all_named_test/${taxa}/aniM/ANIm_alignment_coverage.tab" ]]; then
+	firstline=$(head -n 1 "${local_DBs}/aniDB/all_named_test/${taxa}/aniM/ANIm_alignment_coverage.tab")
+else
+	echo "No "${local_DBs}/aniDB/all_named_test/${taxa}/aniM/ANIm_alignment_coverage.tab" file, exiting"
+	exit 1
+fi
+
 #Arrays to read sample names and the %ids for the query sample against those other samples
-IFS="	" read -r -a samples <<< "${firstline}"
-IFS="	" read -r -a percents <<< "${sampleline}"
+IFS="	" read -r -a samples_aniM_coverage <<< "${firstline}"
+IFS="	" read -r -a percents_aniM_coverage <<< "${sampleline}"
+declare -A coverage_array
+counter=0
+for isolate in "${firstline[@]}"; do
+	coverage_array[isolate]=${sampleline[${counter}]}
+	counter=$(( counter + 1 ))
+done
+
 
 #How many samples were compared
 n=${#samples[@]}
@@ -156,11 +248,42 @@ do
 	fi
 	definition=$(head -1 "${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${samples[i]}.fna")
 	# Prints all matching samples to file (Except the self comparison) by line as percent_match  sample_name  fasta_header
-	echo "${percents[i+1]} ${samples[i]} ${definition}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt"
+	echo "${percents[i+1]} ${coverage_array[${samples[i]}]}	${samples[i]} ${definition}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt"
 done
 
 #Sorts the list in the file based on %id (best to worst)
 sort -nr -t' ' -k1 -o "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits__aniM_ordered.txt" "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt"
+
+#Extracts the query sample info line for percentage identity from the percent identity file
+cov_counter=0
+total_lines
+while IFS='' read -r line;
+do
+	coverage=$(echo ${line} | cut -d '	' -f2)
+	if [[ coverage -eq 1 ]]; then
+		coverage=100
+	elif [[ coverage -eq 0 ]]; then
+		coverage=0
+	else
+		coverage=$(echo ${coverage} | cut '.' -f2)
+		coverage=${coverage:0:2}
+	fi
+	if [[ ${coverage} -gt 40]]; then
+		counter=$(( counter + 1))
+		total_lines=$(( total_lines + 1 ))
+	else
+		total_lines=$(( total_lines + 1 ))
+	fi
+done < "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt"
+
+high_cov_limit=$(( total_lines - cov_counter ))
+low_cov=$(head -n${cov_counter} "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt")
+high_cov=$(tail -n${high_cov_limit} "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt")
+mv "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt" "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM_sorted.txt"
+cat ${high_cov} ${low_cov} > "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM_filtered.txt"
+
+
+
 
 #Extracts the query sample info line for percentage identity from the percent identity file
 while IFS='' read -r line;
@@ -181,9 +304,35 @@ else
 	exit 1
 fi
 
+#Extracts the query sample info line for percentage identity from the percent identity file
+while IFS='' read -r line;
+do
+#	echo "!-${line}"
+	if [[ ${line:0:7} = "sample_" ]]; then
+		sampleline=${line}
+#		echo "found it-"$sampleline
+		break
+	fi
+done < "${local_DBs}/aniDB/all_named_test/${taxa}/aniB/ANIb_alignment_coverage.tab"
+
+#Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
+if [[ -s "${local_DBs}/aniDB/all_named_test/${taxa}/aniB/ANIb_alignment_coverage.tab" ]]; then
+	firstline=$(head -n 1 "${local_DBs}/aniDB/all_named_test/${taxa}/aniB/ANIb_alignment_coverage.tab")
+else
+	echo "No "${local_DBs}/aniDB/all_named_test/${taxa}/aniB/ANIb_alignment_coverage.tab" file, exiting"
+	exit 1
+fi
+
 #Arrays to read sample names and the %ids for the query sample against those other samples
-IFS="	" read -r -a samples <<< "${firstline}"
-IFS="	" read -r -a percents <<< "${sampleline}"
+IFS="	" read -r -a samples_aniB_coverage <<< "${firstline}"
+IFS="	" read -r -a percents_aniB_coverage <<< "${sampleline}"
+declare -A coverage_array
+counter=0
+for isolate in "${firstline[@]}"; do
+	coverage_array[isolate]=${sampleline[${counter}]}
+	counter=$(( counter + 1 ))
+done
+
 
 #How many samples were compared
 n=${#samples[@]}
@@ -199,11 +348,39 @@ do
 	fi
 	definition=$(head -1 "${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${samples[i]}.fna")
 	# Prints all matching samples to file (Except the self comparison) by line as percent_match  sample_name  fasta_header
-	echo "${percents[i+1]} ${samples[i]} ${definition}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB.txt"
+	echo "${percents[i+1]} ${coverage_array[${samples[i]}]}	${samples[i]} ${definition}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB.txt"
 done
 
 #Sorts the list in the file based on %id (best to worst)
-sort -nr -t' ' -k1 -o "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits__aniB_ordered.txt" "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB.txt"
+sort -nr -t' ' -k1 -o "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits__aniM_ordered.txt" "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB.txt"
+
+#Extracts the query sample info line for percentage identity from the percent identity file
+cov_counter=0
+total_lines
+while IFS='' read -r line;
+do
+	coverage=$(echo ${line} | cut -d '	' -f2)
+	if [[ coverage -eq 1 ]]; then
+		coverage=100
+	elif [[ coverage -eq 0 ]]; then
+		coverage=0
+	else
+		coverage=$(echo ${coverage} | cut '.' -f2)
+		coverage=${coverage:0:2}
+	fi
+	if [[ ${coverage} -gt 40]]; then
+		counter=$(( counter + 1))
+		total_lines=$(( total_lines + 1 ))
+	else
+		total_lines=$(( total_lines + 1 ))
+	fi
+done < "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB.txt"
+
+high_cov_limit=$(( total_lines - cov_counter ))
+low_cov=$(head -n${cov_counter} "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB.txt")
+high_cov=$(tail -n${high_cov_limit} "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB.txt")
+mv "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt" "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB_sorted.txt"
+cat ${high_cov} ${low_cov} > "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB_filtered.txt"
 
 end_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 echo "ENDed ANI at ${end_time}"
