@@ -7,7 +7,7 @@
 #$ -q all.q
 
 #Import the config file with shortcuts and settings
-. /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/scripts/config.sh
+. ./config.sh
 old_name=${1}
 if [[ ! -z ${4} ]]; then
 	old_name=${4}

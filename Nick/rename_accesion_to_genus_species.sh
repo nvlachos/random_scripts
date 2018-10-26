@@ -28,7 +28,7 @@ for j in ${1}/*.${3}; do
 		#echo "${j}" >> "${1}/bad.list"
 	fi
 	#echo ${accession}
-	genus_species_info=$(python /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/scripts/entrez_get_taxon_from_accession.py ${accession} nvx4@cdc.gov)
+	genus_species_info=$(python ./entrez_get_taxon_from_accession.py ${accession} nvx4@cdc.gov)
 	genus=$(echo "${genus_species_info}" | cut -d' ' -f1)
 	species=$(echo "${genus_species_info}" | cut -d' ' -f2)
 	#echo ${genus_species}
