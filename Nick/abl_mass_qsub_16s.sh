@@ -53,7 +53,7 @@ elif [[ ! -d "${share}/mass_subs/blast16s_subs/complete" ]]; then
 	mkdir "${share}/mass_subs/blast16s_subs/complete"
 fi
 
-start_time=$(DATE)
+start_time=$(date "+%F-%T")
 
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
