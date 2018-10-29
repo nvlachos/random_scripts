@@ -60,11 +60,13 @@ start_time=$(date)
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
+	genus=$(echo "${arr[${counter}]}" | cut -d'/' -f3 | cut -d'_' -f1)
+	species=$(echo "${arr[${counter}]}" | cut -d'/' -f3 | cut -d'_' -f1)
 	echo "${sample} and ${project}:"
 	echo "${counter}-${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta"
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
-		genus="Pseudomonas"
-		species="aeruginosa"
+		#genus="Pseudomonas"
+		#species="aeruginosa"
 	# if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
 	# 	while IFS= read -r line;
 	# 	do
