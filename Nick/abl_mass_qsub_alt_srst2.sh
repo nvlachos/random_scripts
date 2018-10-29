@@ -56,16 +56,6 @@ alt_DB=$(basename "${alt_DB_path}")
 
 start_time=$(DATE)
 
-module unload Python/2.7
-module unload python/3.5.2
-module unload perl/5.22.1
-
-module load Python/2.7.15
-module load bowtie2/2.2.4
-module load samtools/0.1.18
-module load perl/5.16.1-MT
-module load srst2
-
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
@@ -81,7 +71,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			echo -e "#$ -q short.q\n"  >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo -e "module unload Python/2.7" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo -e "module unload Python/3.5.2" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			echo -e "module perl/5.22.1" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+			echo -e "module load perl/5.22.1" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo -e "module load Python/2.7.15" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo -e "module load bowtie2/2.2.4" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo -e "module load samtools/0.1.18" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
@@ -93,7 +83,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 		else
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			echo "${project}/${sample} already has 20180608"
+			echo "${project}/${sample} already has ${alt_DB}"
 		fi
 	else
 		waiting_for_index=$(( counter - max_subs ))
@@ -117,7 +107,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					echo -e "#$ -q short.q\n"  >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo -e "module unload Python/2.7" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo -e "module unload Python/3.5.2" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-					echo -e "module perl/5.22.1" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+					echo -e "module load perl/5.22.1" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo -e "module load Python/2.7.15" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo -e "module load bowtie2/2.2.4" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo -e "module load samtools/0.1.18" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
