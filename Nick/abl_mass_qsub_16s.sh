@@ -58,7 +58,7 @@ start_time=$(date "+%F-%T")
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
-	#rm -r "${processed}/${project}/${sample}/16s/${sample}.16s"
+	rm -r "${processed}/${project}/${sample}/16s"
 	#echo ${counter}"-${processed}/${project}/${sample}/kraken/postAssembly/${sample}_kraken_summary_assembled_BP_data.txt"
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
 		if [[ ${counter} -lt ${max_subs} ]]; then
