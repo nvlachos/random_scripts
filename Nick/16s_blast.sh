@@ -9,7 +9,7 @@
 #Import the config file with shortcuts and settings
 . ./config.sh
 #. "${shareScript}/module_changers/perl_5221_to_5123.sh"
-. ./module_changers/list_modules.sh
+#. ./module_changers/list_modules.sh
 module unload perl/5.22.1
 module load perl 5.12.3
 #
