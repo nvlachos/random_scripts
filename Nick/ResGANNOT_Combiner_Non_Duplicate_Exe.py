@@ -83,6 +83,7 @@ def Duplicate_Gene_Remover(input_fasta, output_file, output_copy_file):
 
 def Dual_Fasta_Combiner(res_File, arg_file, new_file):
     """Reads in Two fasta files and writes them out to a single new file"""
+    print(res_File,"and",arg_file)
     f1 = open(res_File, 'r')
     f2 = open(new_file, 'w')
     for line in f1:
