@@ -35,6 +35,8 @@ def Duplicate_Gene_Remover(input_fasta, output_file, output_copy_file):
             if str(Gene_List[genes].seq) == str(Gene_List_out[genes_2].seq):
                 Gene_Adder = 1
                 print("Wrong1")
+                print(Gene_List[genes].description)
+                print(Gene_List_out[genes_2].description)
                 #Gene_copies_out.append(Gene_List[genes].description)
                 #Gene_copies_out.append(Gene_List[genes].seq)
                 #Gene_copies_out.append(Gene_List_out[genes_2].description)
@@ -45,6 +47,8 @@ def Duplicate_Gene_Remover(input_fasta, output_file, output_copy_file):
             elif str(Gene_List[genes].seq.reverse_complement()) == str(Gene_List_out[genes_2].seq):
                 Gene_Adder = 1
                 print("Wrong2")
+                print(Gene_List[genes].description)
+                print(Gene_List_out[genes_2].description)
                 #Gene_copies_out.append(Gene_List[genes].description)
                 #Gene_copies_out.append(Gene_List[genes].seq)
                 #Gene_copies_out.append(Gene_List_out[genes_2].description)
