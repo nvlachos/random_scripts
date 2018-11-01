@@ -22,16 +22,22 @@ def check_alphabet(sequence,  code="ATGCatgc"):
             return False
     return True
 
-def Duplicate_Gene_Remover(input_fasta, output_file):
+def Duplicate_Gene_Remover(input_fasta, output_file, output_copy_file):
     Gene_List = list(SeqIO.parse(input_fasta, 'fasta'))
     Gene_List_out = [Gene_List[0]]
+    Gene_copies_out = []
     Gene_Adder = 0
     output_fasta = open(output_file, 'w')
+    copies_fasta = open(output_copy_file, 'w')
     bad_seqs=[]
     for genes in range(1, len(Gene_List)):
         for genes_2 in range(len(Gene_List_out)):
             if str(Gene_List[genes].seq) == str(Gene_List_out[genes_2].seq):
                 Gene_Adder = 1
+                Gene_copies_out.append(Gene_List[genes].description)
+                Gene_copies_out.append(Gene_List[genes].seq)
+                Gene_copies_out.append(Gene_List_out[genes_2].description)
+                Gene_copies_out.append(Gene_List_out[genes_2].seq)
                 break
             elif str(Gene_List[genes].seq.reverse_complement()) == str(Gene_List_out[genes_2].seq):
                 Gene_Adder = 1
@@ -85,4 +91,4 @@ def Dual_Fasta_Combiner(res_File, arg_file, new_file):
             f2.write(line.replace('>', '>[ARG]').replace('/','-'))
 
 Dual_Fasta_Combiner(sys.argv[1], sys.argv[2], sys.argv[3])
-Duplicate_Gene_Remover(sys.argv[3], sys.argv[3])
+Duplicate_Gene_Remover(sys.argv[3], sys.argv[3], sys.argv[4])

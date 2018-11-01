@@ -72,26 +72,26 @@ if [[ "${non_duplicated}" != "true" ]]; then
 		ARGANNOT_source=$(find ${DATADIR} -name 'arg-annot-nt*')
 	fi
 	echo ":${ARGANNOT_source}:${resFinder_source}:"
-	
+
 	cp "${ARGANNOT_source}" "${DATADIR}/argannot_${today}.fasta"
 	ARGANNOT_source="${DATADIR}/argannot_${today}.fasta"
 	sed -i 's/\//_/g' "${ARGANNOT_source}"
-	
+
 	if [[ "${resFinder_source}" == "" ]]; then
 	#echo "Looking rf:${DATADIR}"
 		resFinder_zip=$(find ${DATADIR} -name 'genomicepidemiology-resfinder_db-*')
 	fi
 	#echo ":${ARGANNOT_source}:${resFinder_zip}:"
-	
+
 	temp_dir=$(basename "${resFinder_zip}" ".zip")
 	#echo "${resFinder_zip}, ${temp_dir}"
 	unzip "${resFinder_zip}" "-d" "${DATADIR}"
-	
+
 	for files in ${DATADIR}/${temp_dir}/*
 	do
 		echo "${files}"
 		mv "${files}" "${DATADIR}"
-	done 
+	done
 	resFinder_source="${DATADIR}/resFinder_${today}.fasta"
 	ResGANNOT_source="${DATADIR}/ResGANNOT_${today}.fasta"
 	echo "arg-source=${ARGANNOT_source}"
@@ -101,14 +101,14 @@ if [[ "${non_duplicated}" != "true" ]]; then
 	for file in ${DATADIR}/*.fsa
 	do
 		while IFS= read -r line
-		do	
+		do
 			echo ${line} >> ${resFinder_source}
-		done < ${file}	
+		done < ${file}
 	done
 	rm -r ${DATADIR}/*.fsa
 	rm -r ${DATADIR}/${temp_dir}
 
-	python "${shareScript}/ResGANNOT_Combiner_Non_Duplicate_Exe.py" "${resFinder_source}" "${ARGANNOT_source}" "${ResGANNOT_source}"
+	python "${shareScript}/ResGANNOT_Combiner_Non_Duplicate_Exe.py" "${resFinder_source}" "${ARGANNOT_source}" "${ResGANNOT_source}" "${DATADIR}/Copies.fasta"
 fi
 
 #Creates an associative array for looking up the genes to what they confer
@@ -155,7 +155,7 @@ do
 			#echo "${gene_type,,}"
 			confers="${groups[${gene_type,,}]}"
 			#echo "confers-${confers}-"
-			if [[ "${confers}" ]];then 
+			if [[ "${confers}" ]];then
 				continue
 			else
 				echo "-${line}-"
@@ -182,7 +182,7 @@ do
 			#echo "${gene_type}"
 			confers="${groups[${gene_type}]}"
 			#echo "confers-${confers}-"
-			if [[ "${confers}" ]]; then 
+			if [[ "${confers}" ]]; then
 				continue
 			else
 				echo "RES -${line}-"
