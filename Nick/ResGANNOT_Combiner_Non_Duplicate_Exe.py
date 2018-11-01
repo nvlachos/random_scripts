@@ -10,7 +10,7 @@ from Bio.Alphabet import IUPAC
 from Bio import SeqIO
 from decimal import *
 getcontext().prec = 3
-exit()
+
 def Gene_Counter(input_fasta):
     Gene_List = list(SeqIO.parse(input_fasta, 'fasta'))
     Gene_Count = len(Gene_List)
