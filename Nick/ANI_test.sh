@@ -60,14 +60,14 @@ me=$(whoami)
 
 #mash dist "${local_DBs}/aniDB/refseq.genomes.k21s1000.msh" "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta" > "${OUTDATADIR}/ANI/${1}_all_refSeq.dists"
 counter=0
-for ref in ${local_DBs}/aniDB/all/*.fna; do
-	echo ${ref}
-	counter=$(( counter + 1 ))
-	filename=$(basename ${ref} | cut -d'_' -f1,2)
-	mash dist "${local_DBs}/aniDB/all/all_sketch.msh" "${ref}" > "${OUTDATADIR}/all_test/dists/${filename}_unsorted.dists"
-	sort -k3 -n -o "${OUTDATADIR}/all_test/dists/${filename}.dists" "${OUTDATADIR}/all_test/dists/${filename}_unsorted.dists"
-	rm -r "${OUTDATADIR}/all_test/dists/${filename}_unsorted.dists"
-done
+#for ref in ${local_DBs}/aniDB/all/*.fna; do
+#	echo ${ref}
+#	counter=$(( counter + 1 ))
+#	filename=$(basename ${ref} | cut -d'_' -f1,2)
+#	mash dist "${local_DBs}/aniDB/all/all_sketch.msh" "${ref}" > "${OUTDATADIR}/all_test/dists/${filename}_unsorted.dists"
+#	sort -k3 -n -o "${OUTDATADIR}/all_test/dists/${filename}.dists" "${OUTDATADIR}/all_test/dists/${filename}_unsorted.dists"
+#	rm -r "${OUTDATADIR}/all_test/dists/${filename}_unsorted.dists"
+#done
 
 for distfile in ${local_DBs}/aniDB/all_test/dists/*.dists; do
 	[ -f "$distfile" ] || break
