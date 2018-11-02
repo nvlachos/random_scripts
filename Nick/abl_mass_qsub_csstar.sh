@@ -57,6 +57,8 @@ start_time=$(date)
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
+	rm -r ${processed}/${project}/${sample}/c-sstar/*20181003*
+	rm -r ${processed}/${project}/${sample}/c-sstar_plasmid/*20181003*
 	echo ${counter}-${project}-${sample}
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
 		echo "Test"
@@ -113,7 +115,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					break
 				fi
 				if [[ -f "${main_dir}/complete/${waiting_sample}_csstarn_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_scaffolds_trimmed.fasta" ]]; then
-					if [[ ! -f "${processed}/${project}/${sample}/c-sstar/${sample}.${resGANNOT_srst2_filename}.gapped_98_sstar_summary.txt" ]]; then
+					#if [[ ! -f "${processed}/${project}/${sample}/c-sstar/${sample}.${resGANNOT_srst2_filename}.gapped_98_sstar_summary.txt" ]]; then
 						echo  "Index is below max submissions, submitting"
 						echo -e "#!/bin/bash -l\n" > "${main_dir}/csstn_${sample}_${start_time}.sh"
 						echo -e "#$ -o csstn_${sample}.out" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
@@ -126,13 +128,13 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "\"${shareScript}/run_c-sstar_on_single.sh\" \"${sample}\" g h \"${project}\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarn_complete.txt\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 						qsub "${main_dir}/csstn_${sample}_${start_time}.sh"
-					else
-						echo "${project}/${sample} already has ${resGANNOT_srst2_filename}"
-						echo "$(date)" > "${main_dir}/complete/${sample}_csstarn_complete.txt"
-					fi
+					#else
+					#	echo "${project}/${sample} already has ${resGANNOT_srst2_filename}"
+					#	echo "$(date)" > "${main_dir}/complete/${sample}_csstarn_complete.txt"
+					#fi
 
 					if [[ -d "${processed}/${project}/${sample}/c-sstar_plasmid" ]]; then
-						if [[ ! -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${resGANNOT_srst2_filename}.gapped_40_sstar_summary.txt" ]]; then
+						#if [[ ! -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${resGANNOT_srst2_filename}.gapped_40_sstar_summary.txt" ]]; then
 							echo -e "#!/bin/bash -l\n" > "${main_dir}/csstp_${sample}_${start_time}.sh"
 							echo -e "#$ -o csstp_${sample}.out" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 							echo -e "#$ -e csstp_${sample}.err" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
@@ -144,10 +146,10 @@ while [ ${counter} -lt ${arr_size} ] ; do
 							echo -e "\"${shareScript}/run_c-sstar_on_single.sh\" \"${sample}\" g o \"${project}\" \"--plasmid\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 							echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarp_complete.txt\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 							qsub "${main_dir}/csstp_${sample}_${start_time}.sh"
-						else
-							echo "${project}/${sample} already has ${resGANNOT_srst2_filename} PLASMID"
-							echo "$(date)" > "${main_dir}/complete/${sample}_csstarp_complete.txt"
-						fi
+						#else
+						#	echo "${project}/${sample} already has ${resGANNOT_srst2_filename} PLASMID"
+						#	echo "$(date)" > "${main_dir}/complete/${sample}_csstarp_complete.txt"
+						#fi
 					fi
 					break
 				else
