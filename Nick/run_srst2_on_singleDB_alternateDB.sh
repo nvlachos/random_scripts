@@ -37,7 +37,6 @@ alt_DB=$(echo ${alt_DB_path##*/} | cut -d'.' -f1)
 
 echo ${alt_DB_path}
 echo ${alt_DB}
-exit
 
 mkdir "${processed}/${2}/${1}/srst2"
 
