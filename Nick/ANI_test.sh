@@ -47,8 +47,8 @@ echo "Started ANI at ${start_time}"
 
 # Sets the output folder to the sample_name folder in processed samples
 OUTDATADIR="${local_DBs}/aniDB"
-if [[ ! -d ${OUTDATADIR}/all_named_test/dists ]]; then
-	mkdir ${OUTDATADIR}/all_named_test/dists
+if [[ ! -d ${OUTDATADIR}/all_test/dists ]]; then
+	mkdir ${OUTDATADIR}/all_test/dists
 fi
 
 # Gets persons name to use as email during entrez request to identify best matching sample
@@ -60,54 +60,56 @@ me=$(whoami)
 
 #mash dist "${local_DBs}/aniDB/refseq.genomes.k21s1000.msh" "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta" > "${OUTDATADIR}/ANI/${1}_all_refSeq.dists"
 counter=0
-#for ref in ${local_DBs}/aniDB/all_named_test/*.fna; do
-#	echo ${ref}
-#	counter=$(( counter + 1 ))
-#	filename=$(basename ${ref})
-#	mash dist "${local_DBs}/aniDB/all_named_test/all_named.msh" "${ref}" > "${OUTDATADIR}/all_named_test/dists/${filename}_unsorted.dists"
-#	sort -k3 -n -o "${OUTDATADIR}/all_named_test/dists/${filename}.dists" "${OUTDATADIR}/all_named_test/dists/${filename}_unsorted.dists"
-#	rm -r "${OUTDATADIR}/all_named_test/dists/${filename}_unsorted.dists"
-#done
+for ref in ${local_DBs}/aniDB/all_test/*.fna; do
+	echo ${ref}
+	counter=$(( counter + 1 ))
+	filename=$(basename ${ref} | cut -d'_' -f1,2)
+	mash dist "${local_DBs}/aniDB/all_test/all_named.msh" "${ref}" > "${OUTDATADIR}/all_test/dists/${filename}_unsorted.dists"
+	sort -k3 -n -o "${OUTDATADIR}/all_test/dists/${filename}.dists" "${OUTDATADIR}/all_test/dists/${filename}_unsorted.dists"
+	rm -r "${OUTDATADIR}/all_test/dists/${filename}_unsorted.dists"
+done
 
-# for distfile in ${local_DBs}/aniDB/all_named_test/dists/*.dists; do
-# 	[ -f "$distfile" ] || break
-# 	taxa=$(basename ${distfile} | cut -d'_' -f1,2)
-# 	if [[ ! -d ${local_DBs}/aniDB/all_named_test/${taxa} ]]; then
-# 		mkdir -p ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB
-# 	fi
-# 	counter=0
-# 	max_ani_samples=30
-# 	echo "${distfile}-${taxa}"
-# 	> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
-# 	if [[ ! -d ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB ]]; then
-# 		mkdir "${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB"
-# 	fi
-# 	while IFS= read -r line;  do
-# 			echo "${counter}:-:-:${line}"
-# 			if [[ ${counter} -eq 0 ]]; then
-# 				ref_path=$(echo "${line}" | cut -d'	' -f2)
-# 				echo "rp-${ref_path}"
-# 				echo "${ref_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
-# 				fasta=$(basename ${ref_path})
-# 				fasta=${fasta:0:-3}"fasta"
-# 				echo "cp ${ref_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${fasta}"
-# 				cp ${ref_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${fasta}
-# 			fi
-# 			if [[ ${counter} -gt ${max_ani_samples} ]]; then
-# 				break
-# 			else
-# 				source_path=$(echo "${line}" | cut -d'	' -f1)
-# 				echo "sp-${source_path}"
-# 				echo "${source_path}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/thirty_closest_dists.txt"
-# 				fasta=$(basename ${source_path})
-# 				fasta=${fasta:0:-3}"fasta"
-# 				echo "cp ${source_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${fasta}"
-# 				cp ${source_path} ${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${fasta}
-# 			fi
-# 			counter=$(( counter + 1 ))
-# 	done < ${distfile}
-# done
-# echo ${counter}
+for distfile in ${local_DBs}/aniDB/all_test/dists/*.dists; do
+	[ -f "$distfile" ] || break
+	taxa=$(basename ${distfile})
+	if [[ ! -d ${local_DBs}/aniDB/all_test/${taxa} ]]; then
+		mkdir -p ${local_DBs}/aniDB/all_test/${taxa}/localANIDB
+	fi
+	counter=0
+	max_ani_samples=30
+	echo "${distfile}-${taxa}"
+	> "${local_DBs}/aniDB/all_test/${taxa}/thirty_closest_dists.txt"
+	if [[ ! -d ${local_DBs}/aniDB/all_test/${taxa}/localANIDB ]]; then
+		mkdir "${local_DBs}/aniDB/all_test/${taxa}/localANIDB"
+	fi
+	while IFS= read -r line;  do
+			echo "${counter}:-:-:${line}"
+			if [[ ${counter} -eq 0 ]]; then
+				ref_path=$(echo "${line}" | cut -d'	' -f2)
+				echo "rp-${ref_path}"
+				echo "${ref_path}" >> "${local_DBs}/aniDB/all_test/${taxa}/thirty_closest_dists.txt"
+				fasta=$(basename ${ref_path})
+				fasta=${fasta:0:-3}"fasta"
+				echo "cp ${ref_path} ${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${fasta}"
+				cp ${ref_path} ${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${fasta}
+			fi
+			if [[ ${counter} -gt ${max_ani_samples} ]]; then
+				break
+			else
+				source_path=$(echo "${line}" | cut -d'	' -f1)
+				echo "sp-${source_path}"
+				echo "${source_path}" >> "${local_DBs}/aniDB/all_test/${taxa}/thirty_closest_dists.txt"
+				fasta=$(basename ${source_path})
+				fasta=${fasta:0:-3}"fasta"
+				echo "cp ${source_path} ${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${fasta}"
+				cp ${source_path} ${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${fasta}
+			fi
+			counter=$(( counter + 1 ))
+	done < ${distfile}
+done
+echo ${counter}
+
+exit
 
 sub_counter=0
 max_subs=50
@@ -133,7 +135,7 @@ for localANIDB in ${local_DBs}/aniDB/Single_ANI_Test/*; do
 		echo -e "#$ -cwd"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 		echo -e "#$ -q short.q\n"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 		echo -e "module load pyani/1.0" "${main_dir}/aniB_${sample}_${start_time}.sh"
-		echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_named_test/${taxa}/aniB\" \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_test/${taxa}/aniB\" \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniB_complete.txt\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 		qsub "${main_dir}/aniB_${sample}_${start_time}.sh"
 
@@ -144,7 +146,7 @@ for localANIDB in ${local_DBs}/aniDB/Single_ANI_Test/*; do
 		echo -e "#$ -cwd"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 		echo -e "#$ -q short.q\n"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 		echo -e "module load pyani/1.0" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-		echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_named_test/${taxa}/aniM\" \"--write_excel\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_test/${taxa}/aniM\" \"--write_excel\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniM_complete.txt\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 		qsub "${main_dir}/aniM_${sample}_${start_time}.sh"
 else
@@ -167,7 +169,7 @@ else
 			echo -e "#$ -cwd" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 			echo -e "#$ -q short.q\n"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 			echo -e "module load pyani/1.0" "${main_dir}/aniB_${sample}_${start_time}.sh"
-			echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_named_test/${taxa}/aniB\" \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+			echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_test/${taxa}/aniB\" \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniB_complete.txt\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 			qsub "${main_dir}/aniB_${sample}_${start_time}.sh"
 
@@ -178,7 +180,7 @@ else
 			echo -e "#$ -cwd"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 			echo -e "#$ -q short.q\n"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 			echo -e "module load pyani/1.0" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-			echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_named_test/${taxa}/aniM\" \"--write_excel\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+			echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_test/${taxa}/aniM\" \"--write_excel\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniM_complete.txt\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 			qsub "${main_dir}/aniM_${sample}_${start_time}.sh"
 	fi
@@ -200,13 +202,13 @@ do
 #		echo "found it-"$sampleline
 		break
 	fi
-done < "${local_DBs}/aniDB/all_named_test/${taxa}/aniM/ANIm_percentage_identity.tab"
+done < "${local_DBs}/aniDB/all_test/${taxa}/aniM/ANIm_percentage_identity.tab"
 
 #Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
-if [[ -s "${local_DBs}/aniDB/all_named_test/${taxa}/aniM/ANIm_percentage_identity.tab" ]]; then
-	firstline=$(head -n 1 "${local_DBs}/aniDB/all_named_test/${taxa}/aniM/ANIm_percentage_identity.tab")
+if [[ -s "${local_DBs}/aniDB/all_test/${taxa}/aniM/ANIm_percentage_identity.tab" ]]; then
+	firstline=$(head -n 1 "${local_DBs}/aniDB/all_test/${taxa}/aniM/ANIm_percentage_identity.tab")
 else
-	echo "No "${local_DBs}/aniDB/all_named_test/${taxa}/aniM/ANIm_percentage_identity.tab" file, exiting"
+	echo "No "${local_DBs}/aniDB/all_test/${taxa}/aniM/ANIm_percentage_identity.tab" file, exiting"
 	exit 1
 fi
 
@@ -219,13 +221,13 @@ do
 #		echo "found it-"$sampleline
 		break
 	fi
-done < "${local_DBs}/aniDB/all_named_test/${taxa}/aniM/ANIm_alignment_coverage.tab"
+done < "${local_DBs}/aniDB/all_test/${taxa}/aniM/ANIm_alignment_coverage.tab"
 
 #Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
-if [[ -s "${local_DBs}/aniDB/all_named_test/${taxa}/aniM/ANIm_alignment_coverage.tab" ]]; then
-	firstline=$(head -n 1 "${local_DBs}/aniDB/all_named_test/${taxa}/aniM/ANIm_alignment_coverage.tab")
+if [[ -s "${local_DBs}/aniDB/all_test/${taxa}/aniM/ANIm_alignment_coverage.tab" ]]; then
+	firstline=$(head -n 1 "${local_DBs}/aniDB/all_test/${taxa}/aniM/ANIm_alignment_coverage.tab")
 else
-	echo "No "${local_DBs}/aniDB/all_named_test/${taxa}/aniM/ANIm_alignment_coverage.tab" file, exiting"
+	echo "No "${local_DBs}/aniDB/all_test/${taxa}/aniM/ANIm_alignment_coverage.tab" file, exiting"
 	exit 1
 fi
 
@@ -252,13 +254,13 @@ do
 #		echo "Skipping ${i}"
 		continue
 	fi
-	definition=$(head -1 "${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${samples[i]}.fna")
+	definition=$(head -1 "${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${samples[i]}.fna")
 	# Prints all matching samples to file (Except the self comparison) by line as percent_match  sample_name  fasta_header
-	echo "${percents[i+1]} ${coverage_array[${samples[i]}]}	${samples[i]} ${definition}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt"
+	echo "${percents[i+1]} ${coverage_array[${samples[i]}]}	${samples[i]} ${definition}" >> "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM.txt"
 done
 
 #Sorts the list in the file based on %id (best to worst)
-sort -nr -t' ' -k1 -o "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits__aniM_ordered.txt" "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt"
+sort -nr -t' ' -k1 -o "${local_DBs}/aniDB/all_test/${taxa}/best_hits__aniM_ordered.txt" "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM.txt"
 
 #Extracts the query sample info line for percentage identity from the percent identity file
 cov_counter=0
@@ -280,13 +282,13 @@ do
 	else
 		total_lines=$(( total_lines + 1 ))
 	fi
-done < "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt"
+done < "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM.txt"
 
 high_cov_limit=$(( total_lines - cov_counter ))
-low_cov=$(head -n${cov_counter} "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt")
-high_cov=$(tail -n${high_cov_limit} "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt")
-mv "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt" "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM_sorted.txt"
-cat ${high_cov} ${low_cov} > "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM_filtered.txt"
+low_cov=$(head -n${cov_counter} "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM.txt")
+high_cov=$(tail -n${high_cov_limit} "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM.txt")
+mv "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM.txt" "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM_sorted.txt"
+cat ${high_cov} ${low_cov} > "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM_filtered.txt"
 
 
 
@@ -300,13 +302,13 @@ do
 #		echo "found it-"$sampleline
 		break
 	fi
-done < "${local_DBs}/aniDB/all_named_test/${taxa}/aniB/ANIb_percentage_identity.tab"
+done < "${local_DBs}/aniDB/all_test/${taxa}/aniB/ANIb_percentage_identity.tab"
 
 #Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
-if [[ -s "${local_DBs}/aniDB/all_named_test/${taxa}/aniB/ANIb_percentage_identity.tab" ]]; then
-	firstline=$(head -n 1 "${local_DBs}/aniDB/all_named_test/${taxa}/aniB/ANIb_percentage_identity.tab")
+if [[ -s "${local_DBs}/aniDB/all_test/${taxa}/aniB/ANIb_percentage_identity.tab" ]]; then
+	firstline=$(head -n 1 "${local_DBs}/aniDB/all_test/${taxa}/aniB/ANIb_percentage_identity.tab")
 else
-	echo "No "${local_DBs}/aniDB/all_named_test/${taxa}/aniB/ANIb_percentage_identity.tab" file, exiting"
+	echo "No "${local_DBs}/aniDB/all_test/${taxa}/aniB/ANIb_percentage_identity.tab" file, exiting"
 	exit 1
 fi
 
@@ -319,13 +321,13 @@ do
 #		echo "found it-"$sampleline
 		break
 	fi
-done < "${local_DBs}/aniDB/all_named_test/${taxa}/aniB/ANIb_alignment_coverage.tab"
+done < "${local_DBs}/aniDB/all_test/${taxa}/aniB/ANIb_alignment_coverage.tab"
 
 #Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
-if [[ -s "${local_DBs}/aniDB/all_named_test/${taxa}/aniB/ANIb_alignment_coverage.tab" ]]; then
-	firstline=$(head -n 1 "${local_DBs}/aniDB/all_named_test/${taxa}/aniB/ANIb_alignment_coverage.tab")
+if [[ -s "${local_DBs}/aniDB/all_test/${taxa}/aniB/ANIb_alignment_coverage.tab" ]]; then
+	firstline=$(head -n 1 "${local_DBs}/aniDB/all_test/${taxa}/aniB/ANIb_alignment_coverage.tab")
 else
-	echo "No "${local_DBs}/aniDB/all_named_test/${taxa}/aniB/ANIb_alignment_coverage.tab" file, exiting"
+	echo "No "${local_DBs}/aniDB/all_test/${taxa}/aniB/ANIb_alignment_coverage.tab" file, exiting"
 	exit 1
 fi
 
@@ -352,13 +354,13 @@ do
 #		echo "Skipping ${i}"
 		continue
 	fi
-	definition=$(head -1 "${local_DBs}/aniDB/all_named_test/${taxa}/localANIDB/${samples[i]}.fna")
+	definition=$(head -1 "${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${samples[i]}.fna")
 	# Prints all matching samples to file (Except the self comparison) by line as percent_match  sample_name  fasta_header
-	echo "${percents[i+1]} ${coverage_array[${samples[i]}]}	${samples[i]} ${definition}" >> "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB.txt"
+	echo "${percents[i+1]} ${coverage_array[${samples[i]}]}	${samples[i]} ${definition}" >> "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniB.txt"
 done
 
 #Sorts the list in the file based on %id (best to worst)
-sort -nr -t' ' -k1 -o "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits__aniM_ordered.txt" "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB.txt"
+sort -nr -t' ' -k1 -o "${local_DBs}/aniDB/all_test/${taxa}/best_hits__aniM_ordered.txt" "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniB.txt"
 
 #Extracts the query sample info line for percentage identity from the percent identity file
 cov_counter=0
@@ -380,13 +382,13 @@ do
 	else
 		total_lines=$(( total_lines + 1 ))
 	fi
-done < "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB.txt"
+done < "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniB.txt"
 
 high_cov_limit=$(( total_lines - cov_counter ))
-low_cov=$(head -n${cov_counter} "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB.txt")
-high_cov=$(tail -n${high_cov_limit} "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB.txt")
-mv "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniM.txt" "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB_sorted.txt"
-cat ${high_cov} ${low_cov} > "${local_DBs}/aniDB/all_named_test/${taxa}/best_hits_aniB_filtered.txt"
+low_cov=$(head -n${cov_counter} "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniB.txt")
+high_cov=$(tail -n${high_cov_limit} "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniB.txt")
+mv "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM.txt" "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniB_sorted.txt"
+cat ${high_cov} ${low_cov} > "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniB_filtered.txt"
 
 end_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 echo "ENDed ANI at ${end_time}"

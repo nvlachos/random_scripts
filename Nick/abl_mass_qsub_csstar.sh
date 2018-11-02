@@ -57,8 +57,8 @@ start_time=$(date)
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
-	rm -r ${processed}/${project}/${sample}/c-sstar/*20181003*
-	rm -r ${processed}/${project}/${sample}/c-sstar_plasmid/*20181003*
+	#rm -r ${processed}/${project}/${sample}/c-sstar/*20181003*
+	#rm -r ${processed}/${project}/${sample}/c-sstar_plasmid/*20181003*
 	echo ${counter}-${project}-${sample}
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
 		echo "Test"
