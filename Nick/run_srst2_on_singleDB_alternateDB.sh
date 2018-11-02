@@ -41,6 +41,10 @@ exit
 
 mkdir "${processed}/${2}/${1}/srst2"
 
+if [[ -d "${processed}/${2}/${1}/srst2/${1}_" ]]; then
+	rm -r "${processed}/${2}/${1}/srst2/${1}_"
+fi
+
 if [ ! -f "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" ]; then
 	if [ -f "${processed}/${2}/${1}/trimmed/${1}_R1_001.paired.fq.gz" ]; then
 		#echo "1"
