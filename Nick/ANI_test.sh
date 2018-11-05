@@ -142,7 +142,7 @@ for ref_tax in ${local_DBs}/aniDB/Single_ANI_Test/*; do
 		echo -e "#$ -q short.q\n"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 		echo -e "module load pyani/1.0" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 		echo -e "module load Python/3.5.2" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-		echo -e "average_nucleotide_identity.py -i \"${ref_tax}/localANIDB\" -o \"${ref_tax}/aniB\" \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		echo -e "average_nucleotide_identity.py -i \"${ref_tax}/localANIDB\" -o \"${ref_tax}/aniB\" -m \"ANIb\" -g \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniB_complete.txt\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 		qsub "${main_dir}/aniB_${sample}_${start_time}.sh"
 
