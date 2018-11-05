@@ -300,7 +300,7 @@ do
 	current_percent=$(echo ${line} | cut -d'	' -f3)
 	temp_isolate=$(echo ${tax} | cut -d'.' -f1)
 	fastANI_identity_array[${temp_isolate}]=${current_percent}
-done < "${local_DBs}/aniDB/${working_dir}/${working_dir}/${sample}/${sample}.fani"
+done < "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.fani"
 echo "4"
 if [[ -f ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv ]]; then
 	rm -r ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
