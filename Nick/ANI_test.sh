@@ -69,47 +69,47 @@ counter=0
 #	rm -r "${OUTDATADIR}/all_test/dists/${filename}_unsorted.dists"
 #done
 
-for distfile in ${local_DBs}/aniDB/all_test/dists/*.dists; do
-	[ -f "$distfile" ] || break
-	taxa=$(basename ${distfile})
-	if [[ ! -d ${local_DBs}/aniDB/all_test/${taxa} ]]; then
-		mkdir -p ${local_DBs}/aniDB/all_test/${taxa}/localANIDB
-	fi
-	counter=0
-	max_ani_samples=30
-	echo "${distfile}-${taxa}"
-	> "${local_DBs}/aniDB/all_test/${taxa}/thirty_closest_dists.txt"
-	if [[ ! -d ${local_DBs}/aniDB/all_test/${taxa}/localANIDB ]]; then
-		mkdir "${local_DBs}/aniDB/all_test/${taxa}/localANIDB"
-	fi
-	while IFS= read -r line;  do
-			echo "${counter}:-:-:${line}"
-			if [[ ${counter} -eq 0 ]]; then
-				ref_path=$(echo "${line}" | cut -d'	' -f2)
-				echo "rp-${ref_path}"
-				echo "${ref_path}" >> "${local_DBs}/aniDB/all_test/${taxa}/thirty_closest_dists.txt"
-				fasta=$(basename ${ref_path})
-				fasta=${fasta:0:-3}"fasta"
-				echo "cp ${ref_path} ${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${fasta}"
-				cp ${ref_path} ${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${fasta}
-			fi
-			if [[ ${counter} -gt ${max_ani_samples} ]]; then
-				break
-			else
-				source_path=$(echo "${line}" | cut -d'	' -f1)
-				echo "sp-${source_path}"
-				echo "${source_path}" >> "${local_DBs}/aniDB/all_test/${taxa}/thirty_closest_dists.txt"
-				fasta=$(basename ${source_path})
-				fasta=${fasta:0:-3}"fasta"
-				echo "cp ${source_path} ${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${fasta}"
-				cp ${source_path} ${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${fasta}
-			fi
-			counter=$(( counter + 1 ))
-	done < ${distfile}
-done
-echo ${counter}
-
-exit
+# for distfile in ${local_DBs}/aniDB/all_test/dists/*.dists; do
+# 	[ -f "$distfile" ] || break
+# 	taxa=$(basename ${distfile})
+# 	if [[ ! -d ${local_DBs}/aniDB/all_test/${taxa} ]]; then
+# 		mkdir -p ${local_DBs}/aniDB/all_test/${taxa}/localANIDB
+# 	fi
+# 	counter=0
+# 	max_ani_samples=30
+# 	echo "${distfile}-${taxa}"
+# 	> "${local_DBs}/aniDB/all_test/${taxa}/thirty_closest_dists.txt"
+# 	if [[ ! -d ${local_DBs}/aniDB/all_test/${taxa}/localANIDB ]]; then
+# 		mkdir "${local_DBs}/aniDB/all_test/${taxa}/localANIDB"
+# 	fi
+# 	while IFS= read -r line;  do
+# 			echo "${counter}:-:-:${line}"
+# 			if [[ ${counter} -eq 0 ]]; then
+# 				ref_path=$(echo "${line}" | cut -d'	' -f2)
+# 				echo "rp-${ref_path}"
+# 				echo "${ref_path}" >> "${local_DBs}/aniDB/all_test/${taxa}/thirty_closest_dists.txt"
+# 				fasta=$(basename ${ref_path})
+# 				fasta=${fasta:0:-3}"fasta"
+# 				echo "cp ${ref_path} ${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${fasta}"
+# 				cp ${ref_path} ${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${fasta}
+# 			fi
+# 			if [[ ${counter} -gt ${max_ani_samples} ]]; then
+# 				break
+# 			else
+# 				source_path=$(echo "${line}" | cut -d'	' -f1)
+# 				echo "sp-${source_path}"
+# 				echo "${source_path}" >> "${local_DBs}/aniDB/all_test/${taxa}/thirty_closest_dists.txt"
+# 				fasta=$(basename ${source_path})
+# 				fasta=${fasta:0:-3}"fasta"
+# 				echo "cp ${source_path} ${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${fasta}"
+# 				cp ${source_path} ${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${fasta}
+# 			fi
+# 			counter=$(( counter + 1 ))
+# 	done < ${distfile}
+# done
+# echo ${counter}
+#
+# exit
 
 sub_counter=0
 max_subs=50
@@ -117,10 +117,15 @@ samples=()
 main_dir="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs/ani_TEST"
 mkdir ${main_dir}
 
-for localANIDB in ${local_DBs}/aniDB/Single_ANI_Test/*; do
-	echo "${localANIDB}"
-	sample=$(basename ${localANIDB} | rev | cut -d'/' -f1 | rev)
-	if [[ ! -d ${localANIDB} ]]; then
+for ref_tax in ${local_DBs}/aniDB/Single_ANI_Test/*; do
+	echo "${ref_tax}"
+	sample=$(basename ${ref_tax} | rev | cut -d'/' -f1 | rev)
+	if [[ -f "${ref_tax}/localANIDB/${sample}"* ]]; then
+		mv "${ref_tax}/localANIDB/${sample}"* "${ref_tax}"
+		reference=$(find ${ref_tax} -iname '${sample}*.fasta' -type f)
+		echo "Reference is ${reference}"
+	fi
+	if [[ ! -d ${ref_tax} ]]; then
 		break
 	else
 		samples[sub_counter]=${sample}
@@ -134,8 +139,9 @@ for localANIDB in ${local_DBs}/aniDB/Single_ANI_Test/*; do
 		echo -e "#$ -N aniB_${sample}"   >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 		echo -e "#$ -cwd"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 		echo -e "#$ -q short.q\n"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-		echo -e "module load pyani/1.0" "${main_dir}/aniB_${sample}_${start_time}.sh"
-		echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_test/${taxa}/aniB\" \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		echo -e "module load pyani/1.0" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		echo -e "module load Python/3.5.2" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		echo -e "average_nucleotide_identity.py -i \"${ref_tax}/localANIDB\" -o \"${ref_tax}/aniB\" \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniB_complete.txt\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 		qsub "${main_dir}/aniB_${sample}_${start_time}.sh"
 
@@ -146,50 +152,71 @@ for localANIDB in ${local_DBs}/aniDB/Single_ANI_Test/*; do
 		echo -e "#$ -cwd"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 		echo -e "#$ -q short.q\n"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 		echo -e "module load pyani/1.0" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-		echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_test/${taxa}/aniM\" \"--write_excel\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "module load Python/3.5.2" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "average_nucleotide_identity.py -i \"${ref_tax}/localANIDB\" -o \"${ref_tax}/aniM\" \"--write_excel\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniM_complete.txt\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 		qsub "${main_dir}/aniM_${sample}_${start_time}.sh"
-else
-	waiting_for_index=$(( counter - max_subs ))
-	waiting_sample=$(echo "${samples[${waiting_for_index}]}")
-	timer=0
-	echo "Index is above max submissions, waiting for index ${waiting_for_index}:${waiting_sample} to complete"
-	while :
-	do
-		if [[ ${timer} -gt 1800 ]]; then
-			echo "Timer exceeded limit of 1800 seconds 30 minutes"
-			break
-		fi
-		if [[ -f "${main_dir}/complete/${waiting_sample}_aniB_complete.txt" ]] && [[ -f "${main_dir}/complete/${waiting_sample}_aniM_complete.txt" ]]; then
-			echo  "Index is below max submissions, submitting"
-			echo -e "#!/bin/bash -l\n" > "${main_dir}/ani_${sample}_${start_time}.sh"
-			echo -e "#$ -o aniB_${sample}.out" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-			echo -e "#$ -e aniB_${sample}.err" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-			echo -e "#$ -N aniB_${sample}"   >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-			echo -e "#$ -cwd" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-			echo -e "#$ -q short.q\n"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-			echo -e "module load pyani/1.0" "${main_dir}/aniB_${sample}_${start_time}.sh"
-			echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_test/${taxa}/aniB\" \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniB_complete.txt\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-			qsub "${main_dir}/aniB_${sample}_${start_time}.sh"
 
-			echo -e "#!/bin/bash -l\n" > "${main_dir}/aniM_${sample}_${start_time}.sh"
-			echo -e "#$ -o aniM_${sample}.out" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-			echo -e "#$ -e aniM_${sample}.err" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-			echo -e "#$ -N aniM_${sample}"   >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-			echo -e "#$ -cwd"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-			echo -e "#$ -q short.q\n"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-			echo -e "module load pyani/1.0" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-			echo -e "average_nucleotide_identity.py -i \"${localANIDB}/localANIDB\" -o \"${local_DBs}/aniDB/all_test/${taxa}/aniM\" \"--write_excel\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniM_complete.txt\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-			qsub "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "#!/bin/bash -l\n" > "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "#$ -o Fani_${sample}.out" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+		echo -e "#$ -e Fani_${sample}.err" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+		echo -e "#$ -N Fani_${sample}"   >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+		echo -e "#$ -cwd"  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+		echo -e "#$ -q short.q\n"  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+		echo -e "${shareScript}/fastANI --refList \"${ref_tax}/thirty_closest_dists.txt\" --query \"${reference}\" -t \"${procs}\" -o \"${ref_tax}/${sample}.fastaANI\""  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_Fani_complete.txt\"" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+		qsub "${main_dir}/Fani_${sample}_${start_time}.sh"
+	else
+		waiting_for_index=$(( counter - max_subs ))
+		waiting_sample=$(echo "${samples[${waiting_for_index}]}")
+		timer=0
+		echo "Index is above max submissions, waiting for index ${waiting_for_index}:${waiting_sample} to complete"
+		while :
+		do
+			if [[ ${timer} -gt 1800 ]]; then
+				echo "Timer exceeded limit of 1800 seconds 30 minutes"
+				break
+			fi
+			if [[ -f "${main_dir}/complete/${waiting_sample}_aniB_complete.txt" ]] && [[ -f "${main_dir}/complete/${waiting_sample}_aniM_complete.txt" ]] && [[ -f "${main_dir}/complete/${waiting_sample}_Fani_complete.txt" ]]; then
+				echo  "Index is below max submissions, submitting"
+				echo -e "#!/bin/bash -l\n" > "${main_dir}/ani_${sample}_${start_time}.sh"
+				echo -e "#$ -o aniB_${sample}.out" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+				echo -e "#$ -e aniB_${sample}.err" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+				echo -e "#$ -N aniB_${sample}"   >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+				echo -e "#$ -cwd" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+				echo -e "#$ -q short.q\n"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+				echo -e "module load pyani/1.0" "${main_dir}/aniB_${sample}_${start_time}.sh"
+				echo -e "average_nucleotide_identity.py -i \"${ref_tax}/localANIDB\" -o \"${ref_tax}/aniB\" \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniB_complete.txt\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+				qsub "${main_dir}/aniB_${sample}_${start_time}.sh"
+
+				echo -e "#!/bin/bash -l\n" > "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "#$ -o aniM_${sample}.out" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "#$ -e aniM_${sample}.err" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "#$ -N aniM_${sample}"   >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "#$ -cwd"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "#$ -q short.q\n"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "module load pyani/1.0" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "average_nucleotide_identity.py -i \"${ref_tax}/localANIDB\" -o \"${ref_tax}/aniM\" \"--write_excel\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniM_complete.txt\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				qsub "${main_dir}/aniM_${sample}_${start_time}.sh"
+
+				echo -e "#!/bin/bash -l\n" > "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "#$ -o Fani_${sample}.out" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+				echo -e "#$ -e Fani_${sample}.err" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+				echo -e "#$ -N Fani_${sample}"   >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+				echo -e "#$ -cwd"  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+				echo -e "#$ -q short.q\n"  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+				echo -e "${shareScript}/fastANI --refList \"${ref_tax}/thirty_closest_dists.txt\" --query \"${reference}\" -t \"${procs}\" -o \"${ref_tax}/${sample}.fastaANI\""  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_Fani_complete.txt\"" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+				qsub "${main_dir}/Fani_${sample}_${start_time}.sh"
+			fi
+		done
 	fi
-	done
-fi
 	sub_counter=$(( counter + 1 ))
 done
 
-
+exit
 
 
 
