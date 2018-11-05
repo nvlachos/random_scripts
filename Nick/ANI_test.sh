@@ -45,10 +45,12 @@ fi
 start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 echo "Started ANI at ${start_time}"
 
+working_dir="Single_ANI_Test"
+
 # Sets the output folder to the sample_name folder in processed samples
 OUTDATADIR="${local_DBs}/aniDB"
-if [[ ! -d ${OUTDATADIR}/all_test/dists ]]; then
-	mkdir -p ${OUTDATADIR}/all_test/dists
+if [[ ! -d ${OUTDATADIR}/${working_dir}/dists ]]; then
+	mkdir -p ${OUTDATADIR}/${working_dir}/dists
 fi
 
 # Gets persons name to use as email during entrez request to identify best matching sample
@@ -64,45 +66,45 @@ counter=0
 #	echo ${ref}
 #	counter=$(( counter + 1 ))
 #	filename=$(basename ${ref} | cut -d'_' -f1,2)
-#	mash dist "${local_DBs}/aniDB/all/all_sketch.msh" "${ref}" > "${OUTDATADIR}/all_test/dists/${filename}_unsorted.dists"
-#	sort -k3 -n -o "${OUTDATADIR}/all_test/dists/${filename}.dists" "${OUTDATADIR}/all_test/dists/${filename}_unsorted.dists"
-#	rm -r "${OUTDATADIR}/all_test/dists/${filename}_unsorted.dists"
+#	mash dist "${local_DBs}/aniDB/all/all_sketch.msh" "${ref}" > "${OUTDATADIR}/${working_dir}/dists/${filename}_unsorted.dists"
+#	sort -k3 -n -o "${OUTDATADIR}/${working_dir}/dists/${filename}.dists" "${OUTDATADIR}/${working_dir}/dists/${filename}_unsorted.dists"
+#	rm -r "${OUTDATADIR}/${working_dir}/dists/${filename}_unsorted.dists"
 #done
 
-# for distfile in ${local_DBs}/aniDB/all_test/dists/*.dists; do
+# for distfile in ${local_DBs}/aniDB/${working_dir}/dists/*.dists; do
 # 	[ -f "$distfile" ] || break
 # 	taxa=$(basename ${distfile})
-# 	if [[ ! -d ${local_DBs}/aniDB/all_test/${taxa} ]]; then
-# 		mkdir -p ${local_DBs}/aniDB/all_test/${taxa}/localANIDB
+# 	if [[ ! -d ${local_DBs}/aniDB/${working_dir}/${taxa} ]]; then
+# 		mkdir -p ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB
 # 	fi
 # 	counter=0
 # 	max_ani_samples=30
 # 	echo "${distfile}-${taxa}"
-# 	> "${local_DBs}/aniDB/all_test/${taxa}/thirty_closest_dists.txt"
-# 	if [[ ! -d ${local_DBs}/aniDB/all_test/${taxa}/localANIDB ]]; then
-# 		mkdir "${local_DBs}/aniDB/all_test/${taxa}/localANIDB"
+# 	> "${local_DBs}/aniDB/${working_dir}/${taxa}/thirty_closest_dists.txt"
+# 	if [[ ! -d ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB ]]; then
+# 		mkdir "${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB"
 # 	fi
 # 	while IFS= read -r line;  do
 # 			echo "${counter}:-:-:${line}"
 # 			if [[ ${counter} -eq 0 ]]; then
 # 				ref_path=$(echo "${line}" | cut -d'	' -f2)
 # 				echo "rp-${ref_path}"
-# 				echo "${ref_path}" >> "${local_DBs}/aniDB/all_test/${taxa}/thirty_closest_dists.txt"
+# 				echo "${ref_path}" >> "${local_DBs}/aniDB/${working_dir}/${taxa}/thirty_closest_dists.txt"
 # 				fasta=$(basename ${ref_path})
 # 				fasta=${fasta:0:-3}"fasta"
-# 				echo "cp ${ref_path} ${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${fasta}"
-# 				cp ${ref_path} ${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${fasta}
+# 				echo "cp ${ref_path} ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB/${fasta}"
+# 				cp ${ref_path} ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB/${fasta}
 # 			fi
 # 			if [[ ${counter} -gt ${max_ani_samples} ]]; then
 # 				break
 # 			else
 # 				source_path=$(echo "${line}" | cut -d'	' -f1)
 # 				echo "sp-${source_path}"
-# 				echo "${source_path}" >> "${local_DBs}/aniDB/all_test/${taxa}/thirty_closest_dists.txt"
+# 				echo "${source_path}" >> "${local_DBs}/aniDB/${working_dir}/${taxa}/thirty_closest_dists.txt"
 # 				fasta=$(basename ${source_path})
 # 				fasta=${fasta:0:-3}"fasta"
-# 				echo "cp ${source_path} ${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${fasta}"
-# 				cp ${source_path} ${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${fasta}
+# 				echo "cp ${source_path} ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB/${fasta}"
+# 				cp ${source_path} ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB/${fasta}
 # 			fi
 # 			counter=$(( counter + 1 ))
 # 	done < ${distfile}
@@ -117,7 +119,8 @@ samples=()
 main_dir="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs/ani_TEST"
 mkdir ${main_dir}
 
-for ref_tax in ${local_DBs}/aniDB/Single_ANI_Test/*; do
+
+for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
 	echo "${ref_tax}"
 	sample=$(basename ${ref_tax} | rev | cut -d'/' -f1 | rev)
 	echo "sample: ${sample}"
@@ -169,7 +172,7 @@ for ref_tax in ${local_DBs}/aniDB/Single_ANI_Test/*; do
 		echo -e "#$ -N Fani_${sample}"   >> "${main_dir}/Fani_${sample}_${start_time}.sh"
 		echo -e "#$ -cwd"  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
 		echo -e "#$ -q short.q\n"  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
-		echo -e "${shareScript}/fastANI --refList \"${ref_tax}/thirty_closest_dists.txt\" --query \"${reference}\" -t \"${procs}\" -o \"${ref_tax}/${sample}.fastaANI\""  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+		echo -e "${shareScript}/fastANI --refList \"${ref_tax}/thirty_closest_dists.txt\" --query \"${reference}\" -t \"${procs}\" -o \"${ref_tax}/${sample}.fani\""  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_Fani_complete.txt\"" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
 		qsub "${main_dir}/Fani_${sample}_${start_time}.sh"
 	else
@@ -213,7 +216,7 @@ for ref_tax in ${local_DBs}/aniDB/Single_ANI_Test/*; do
 				echo -e "#$ -N Fani_${sample}"   >> "${main_dir}/Fani_${sample}_${start_time}.sh"
 				echo -e "#$ -cwd"  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
-				echo -e "${shareScript}/fastANI --refList \"${ref_tax}/thirty_closest_dists.txt\" --query \"${reference}\" -t \"${procs}\" -o \"${ref_tax}/${sample}.fastaANI\""  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+				echo -e "${shareScript}/fastANI --refList \"${ref_tax}/thirty_closest_dists.txt\" --query \"${reference}\" -t \"${procs}\" -o \"${ref_tax}/${sample}.fani\""  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_Fani_complete.txt\"" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
 				qsub "${main_dir}/Fani_${sample}_${start_time}.sh"
 			fi
@@ -230,18 +233,18 @@ exit
 while IFS='' read -r line;
 do
 #	echo "!-${line}"
-	if [[ ${line:0:7} = "sample_" ]]; then
-		sampleline=${line}
+	if [[ ${line} == ${sample}* ]]; then
+		sampleIMline=${line}
 #		echo "found it-"$sampleline
 		break
 	fi
-done < "${local_DBs}/aniDB/all_test/${taxa}/aniM/ANIm_percentage_identity.tab"
+done < "${local_DBs}/aniDB/${working_dir}/${taxa}/aniM/ANIm_percentage_identity.tab"
 
 #Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
-if [[ -s "${local_DBs}/aniDB/all_test/${taxa}/aniM/ANIm_percentage_identity.tab" ]]; then
-	firstline=$(head -n 1 "${local_DBs}/aniDB/all_test/${taxa}/aniM/ANIm_percentage_identity.tab")
+if [[ -s "${local_DBs}/aniDB/${working_dir}/${taxa}/aniM/ANIm_percentage_identity.tab" ]]; then
+	firstIMline=$(head -n 1 "${local_DBs}/aniDB/${working_dir}/${taxa}/aniM/ANIm_percentage_identity.tab")
 else
-	echo "No "${local_DBs}/aniDB/all_test/${taxa}/aniM/ANIm_percentage_identity.tab" file, exiting"
+	echo "No "${local_DBs}/aniDB/${working_dir}/${taxa}/aniM/ANIm_percentage_identity.tab" file, exiting"
 	exit 1
 fi
 
@@ -249,182 +252,62 @@ fi
 while IFS='' read -r line;
 do
 #	echo "!-${line}"
-	if [[ ${line:0:7} = "sample_" ]]; then
-		sampleline=${line}
+	if [[ ${line} == ${sample}* ]]; then
+		sampleCMline=${line}
 #		echo "found it-"$sampleline
 		break
 	fi
-done < "${local_DBs}/aniDB/all_test/${taxa}/aniM/ANIm_alignment_coverage.tab"
+done < "${local_DBs}/aniDB/${working_dir}/${taxa}/aniM/ANIm_alignment_coverage.tab"
 
 #Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
-if [[ -s "${local_DBs}/aniDB/all_test/${taxa}/aniM/ANIm_alignment_coverage.tab" ]]; then
-	firstline=$(head -n 1 "${local_DBs}/aniDB/all_test/${taxa}/aniM/ANIm_alignment_coverage.tab")
+if [[ -s "${local_DBs}/aniDB/${working_dir}/${taxa}/aniM/ANIm_alignment_coverage.tab" ]]; then
+	firstCMline=$(head -n 1 "${local_DBs}/aniDB/${working_dir}/${taxa}/aniM/ANIm_alignment_coverage.tab")
 else
-	echo "No "${local_DBs}/aniDB/all_test/${taxa}/aniM/ANIm_alignment_coverage.tab" file, exiting"
+	echo "No "${local_DBs}/aniDB/${working_dir}/${taxa}/aniM/ANIm_alignment_coverage.tab" file, exiting"
 	exit 1
 fi
 
 #Arrays to read sample names and the %ids for the query sample against those other samples
-IFS="	" read -r -a samples_aniM_coverage <<< "${firstline}"
-IFS="	" read -r -a percents_aniM_coverage <<< "${sampleline}"
+IFS="	" read -r -a samples_aniM_identity <<< "${firstIMline}"
+IFS="	" read -r -a percents_aniM_identity <<< "${sampleIMline}"
+IFS="	" read -r -a samples_aniM_coverage <<< "${firstCMline}"
+IFS="	" read -r -a percents_aniM_coverage <<< "${sampleCMline}"
+
 declare -A coverage_array
 counter=0
-for isolate in "${firstline[@]}"; do
-	coverage_array[isolate]=${sampleline[${counter}]}
+for isolate in "${samples_aniM_coverage[@]}"; do
+	pyani_coverage_array[isolate]=${percents_aniM_coverage[${counter}]}
 	counter=$(( counter + 1 ))
 done
 
-
-#How many samples were compared
-n=${#samples[@]}
-
-#Extracts all %id against the query sample (excluding itself) and writes them to file
-for (( i=0; i<n; i++ ));
-do
-#	echo ${i}-${samples[i]}
-	if [[ ${samples[i]:0:7} = "sample_" ]];
-	then
-#		echo "Skipping ${i}"
-		continue
-	fi
-	definition=$(head -1 "${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${samples[i]}.fna")
-	# Prints all matching samples to file (Except the self comparison) by line as percent_match  sample_name  fasta_header
-	echo "${percents[i+1]} ${coverage_array[${samples[i]}]}	${samples[i]} ${definition}" >> "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM.txt"
-done
-
-#Sorts the list in the file based on %id (best to worst)
-sort -nr -t' ' -k1 -o "${local_DBs}/aniDB/all_test/${taxa}/best_hits__aniM_ordered.txt" "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM.txt"
-
-#Extracts the query sample info line for percentage identity from the percent identity file
-cov_counter=0
-total_lines
-while IFS='' read -r line;
-do
-	coverage=$(echo ${line} | cut -d '	' -f2)
-	if [[ coverage -eq 1 ]]; then
-		coverage=100
-	elif [[ coverage -eq 0 ]]; then
-		coverage=0
-	else
-		coverage=$(echo ${coverage} | cut '.' -f2)
-		coverage=${coverage:0:2}
-	fi
-	if [[ ${coverage} -gt 40]]; then
-		counter=$(( counter + 1))
-		total_lines=$(( total_lines + 1 ))
-	else
-		total_lines=$(( total_lines + 1 ))
-	fi
-done < "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM.txt"
-
-high_cov_limit=$(( total_lines - cov_counter ))
-low_cov=$(head -n${cov_counter} "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM.txt")
-high_cov=$(tail -n${high_cov_limit} "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM.txt")
-mv "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM.txt" "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM_sorted.txt"
-cat ${high_cov} ${low_cov} > "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM_filtered.txt"
-
-
-
-
-#Extracts the query sample info line for percentage identity from the percent identity file
-while IFS='' read -r line;
-do
-#	echo "!-${line}"
-	if [[ ${line:0:7} = "sample_" ]]; then
-		sampleline=${line}
-#		echo "found it-"$sampleline
-		break
-	fi
-done < "${local_DBs}/aniDB/all_test/${taxa}/aniB/ANIb_percentage_identity.tab"
-
-#Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
-if [[ -s "${local_DBs}/aniDB/all_test/${taxa}/aniB/ANIb_percentage_identity.tab" ]]; then
-	firstline=$(head -n 1 "${local_DBs}/aniDB/all_test/${taxa}/aniB/ANIb_percentage_identity.tab")
-else
-	echo "No "${local_DBs}/aniDB/all_test/${taxa}/aniB/ANIb_percentage_identity.tab" file, exiting"
-	exit 1
-fi
-
-#Extracts the query sample info line for percentage identity from the percent identity file
-while IFS='' read -r line;
-do
-#	echo "!-${line}"
-	if [[ ${line:0:7} = "sample_" ]]; then
-		sampleline=${line}
-#		echo "found it-"$sampleline
-		break
-	fi
-done < "${local_DBs}/aniDB/all_test/${taxa}/aniB/ANIb_alignment_coverage.tab"
-
-#Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
-if [[ -s "${local_DBs}/aniDB/all_test/${taxa}/aniB/ANIb_alignment_coverage.tab" ]]; then
-	firstline=$(head -n 1 "${local_DBs}/aniDB/all_test/${taxa}/aniB/ANIb_alignment_coverage.tab")
-else
-	echo "No "${local_DBs}/aniDB/all_test/${taxa}/aniB/ANIb_alignment_coverage.tab" file, exiting"
-	exit 1
-fi
-
-#Arrays to read sample names and the %ids for the query sample against those other samples
-IFS="	" read -r -a samples_aniB_coverage <<< "${firstline}"
-IFS="	" read -r -a percents_aniB_coverage <<< "${sampleline}"
-declare -A coverage_array
+declare -A identity_array
 counter=0
-for isolate in "${firstline[@]}"; do
-	coverage_array[isolate]=${sampleline[${counter}]}
+for isolate in "${samples_aniM_identity[@]}"; do
+	pyani_identity_array[isolate]=${percents_aniM_identity[${counter}]}
 	counter=$(( counter + 1 ))
 done
 
-
-#How many samples were compared
-n=${#samples[@]}
-
-#Extracts all %id against the query sample (excluding itself) and writes them to file
-for (( i=0; i<n; i++ ));
-do
-#	echo ${i}-${samples[i]}
-	if [[ ${samples[i]:0:7} = "sample_" ]];
-	then
-#		echo "Skipping ${i}"
-		continue
-	fi
-	definition=$(head -1 "${local_DBs}/aniDB/all_test/${taxa}/localANIDB/${samples[i]}.fna")
-	# Prints all matching samples to file (Except the self comparison) by line as percent_match  sample_name  fasta_header
-	echo "${percents[i+1]} ${coverage_array[${samples[i]}]}	${samples[i]} ${definition}" >> "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniB.txt"
-done
-
-#Sorts the list in the file based on %id (best to worst)
-sort -nr -t' ' -k1 -o "${local_DBs}/aniDB/all_test/${taxa}/best_hits__aniM_ordered.txt" "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniB.txt"
-
-#Extracts the query sample info line for percentage identity from the percent identity file
-cov_counter=0
-total_lines
+#Extracts the query sample info line for ANI
+declare -A fastANI_identity_array
 while IFS='' read -r line;
 do
-	coverage=$(echo ${line} | cut -d '	' -f2)
-	if [[ coverage -eq 1 ]]; then
-		coverage=100
-	elif [[ coverage -eq 0 ]]; then
-		coverage=0
-	else
-		coverage=$(echo ${coverage} | cut '.' -f2)
-		coverage=${coverage:0:2}
+	current_tax=$(echo ${line} | cut -d'	' -f2 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
+	current_percent=$(echo ${line} | cut -d'	' -f3)
+	fastANI_identity_array[${current_tax}]=${current_percent}
+done < "${local_DBs}/aniDB/${working_dir}/${taxa}/${sample}.fani"
+
+
+if [[ -f ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv ]]; then
+	rm -r ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
+fi
+echo "ANI summary for ${sample}" >> ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
+echo -e "reference	pyani_%_ID	pyani_coverage	fastANI_%_ID"
+for isolate in "${samples_aniM_identity[@]}"; do
+	pyani_percent_ID=${pyani_identity_array[${isolate}]}
+	pyani_coverage=${pyani_coverage_array[${isolate}]}
+	fastANI_percent_ID=${fastANI_identity_array[${isolate}]}
+	if [[ -z ${fastANI_percent_ID }]]; then
+		fastANI_percent_ID="<<80"
 	fi
-	if [[ ${coverage} -gt 40]]; then
-		counter=$(( counter + 1))
-		total_lines=$(( total_lines + 1 ))
-	else
-		total_lines=$(( total_lines + 1 ))
-	fi
-done < "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniB.txt"
-
-high_cov_limit=$(( total_lines - cov_counter ))
-low_cov=$(head -n${cov_counter} "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniB.txt")
-high_cov=$(tail -n${high_cov_limit} "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniB.txt")
-mv "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniM.txt" "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniB_sorted.txt"
-cat ${high_cov} ${low_cov} > "${local_DBs}/aniDB/all_test/${taxa}/best_hits_aniB_filtered.txt"
-
-end_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
-echo "ENDed ANI at ${end_time}"
-
-#Script exited gracefully (unless something else inside failed)
-exit 0
+	echo -e "${isolate}	${pyani_percent_ID}	${pyani_coverage}	${fastANI_percent_ID}" >> ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
+done
