@@ -121,9 +121,9 @@ for ref_tax in ${local_DBs}/aniDB/Single_ANI_Test/*; do
 	echo "${ref_tax}"
 	sample=$(basename ${ref_tax} | rev | cut -d'/' -f1 | rev)
 	echo "sample: ${sample}"
-	reference=$(find ${ref_tax} -iname '${sample}*.fasta' -type f)
+	reference=$(find ${ref_tax}/localANIDB -name '${sample}*.fasta' -type f)
 	echo "reference: ${reference}"
-	mv "${ref_tax}/localANIDB/${sample}"* "${ref_tax}"
+	mv "${reference}" "${ref_tax}"
 	exit
 	if [[ ! -d ${ref_tax} ]]; then
 		break
