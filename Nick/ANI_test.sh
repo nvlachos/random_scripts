@@ -273,20 +273,21 @@ IFS="	" read -r -a percents_aniM_identity <<< "${sampleIMline}"
 IFS="	" read -r -a samples_aniM_coverage <<< "${firstCMline}"
 IFS="	" read -r -a percents_aniM_coverage <<< "${sampleCMline}"
 
+echo "1"
 declare -A coverage_array
 counter=0
 for isolate in "${samples_aniM_coverage[@]}"; do
 	pyani_coverage_array[isolate]=${percents_aniM_coverage[${counter}]}
 	counter=$(( counter + 1 ))
 done
-
+echo"2"
 declare -A identity_array
 counter=0
 for isolate in "${samples_aniM_identity[@]}"; do
 	pyani_identity_array[isolate]=${percents_aniM_identity[${counter}]}
 	counter=$(( counter + 1 ))
 done
-
+echo"3"
 #Extracts the query sample info line for ANI
 declare -A fastANI_identity_array
 while IFS='' read -r line;
@@ -295,8 +296,7 @@ do
 	current_percent=$(echo ${line} | cut -d'	' -f3)
 	fastANI_identity_array[${current_tax}]=${current_percent}
 done < "${local_DBs}/aniDB/${working_dir}/${working_dir}/${sample}/${sample}.fani"
-
-
+echo"4"
 if [[ -f ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv ]]; then
 	rm -r ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
 fi
