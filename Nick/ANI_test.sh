@@ -294,14 +294,14 @@ do
 	current_tax=$(echo ${line} | cut -d'	' -f2 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
 	current_percent=$(echo ${line} | cut -d'	' -f3)
 	fastANI_identity_array[${current_tax}]=${current_percent}
-done < "${local_DBs}/aniDB/${working_dir}/${${working_dir}}/${sample}.fani"
+done < "${local_DBs}/aniDB/${working_dir}/${working_dir}/${sample}/${sample}.fani"
 
 
 if [[ -f ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv ]]; then
 	rm -r ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
 fi
 echo "ANI summary for ${sample}" >> ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
-echo -e "reference	pyani_%_ID	pyani_coverage	fastANI_%_ID"
+echo -e "reference	pyani_%_ID	pyani_coverage	fastANI_%_ID" >> ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
 for isolate in "${samples_aniM_identity[@]}"; do
 	pyani_percent_ID=${pyani_identity_array[${isolate}]}
 	pyani_coverage=${pyani_coverage_array[${isolate}]}
