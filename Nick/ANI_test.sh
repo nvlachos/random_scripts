@@ -306,7 +306,7 @@ for isolate in "${samples_aniM_identity[@]}"; do
 	pyani_percent_ID=${pyani_identity_array[${isolate}]}
 	pyani_coverage=${pyani_coverage_array[${isolate}]}
 	fastANI_percent_ID=${fastANI_identity_array[${isolate}]}
-	if [[ -z ${fastANI_percent_ID }]]; then
+	if [[ -z ${fastANI_percent_ID} ]]; then
 		fastANI_percent_ID="<<80"
 	fi
 	echo -e "${isolate}	${pyani_percent_ID}	${pyani_coverage}	${fastANI_percent_ID}" >> ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
