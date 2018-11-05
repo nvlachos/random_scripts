@@ -257,13 +257,13 @@ do
 #		echo "found it-"$sampleline
 		break
 	fi
-done < "${local_DBs}/aniDB/${working_dir}/aniM/ANIm_alignment_coverage.tab"
+done < "${local_DBs}/aniDB/${working_dir}/${sample}/aniM/ANIm_alignment_coverage.tab"
 
 #Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
-if [[ -s "${local_DBs}/aniDB/${working_dir}/aniM/ANIm_alignment_coverage.tab" ]]; then
-	firstCMline=$(head -n 1 "${local_DBs}/aniDB/${working_dir}/aniM/ANIm_alignment_coverage.tab")
+if [[ -s "${local_DBs}/aniDB/${working_dir}/${sample}/aniM/ANIm_alignment_coverage.tab" ]]; then
+	firstCMline=$(head -n 1 "${local_DBs}/aniDB/${working_dir}/${sample}/aniM/ANIm_alignment_coverage.tab")
 else
-	echo "No "${local_DBs}/aniDB/${working_dir}/aniM/ANIm_alignment_coverage.tab" file, exiting"
+	echo "No "${local_DBs}/aniDB/${working_dir}/${sample}/aniM/ANIm_alignment_coverage.tab" file, exiting"
 	exit 1
 fi
 
