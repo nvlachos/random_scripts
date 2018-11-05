@@ -121,6 +121,7 @@ for ref_tax in ${local_DBs}/aniDB/Single_ANI_Test/*; do
 	echo "${ref_tax}"
 	sample=$(basename ${ref_tax} | rev | cut -d'/' -f1 | rev)
 	echo "sample: ${sample}"
+	echo "Looking in ${ref_tax}/localANIDB for ${sample}*.fasta"
 	reference=$(find ${ref_tax}/localANIDB -name '${sample}*.fasta' -type f)
 	echo "reference: ${reference}"
 	mv "${reference}" "${ref_tax}"
