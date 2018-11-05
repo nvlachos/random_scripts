@@ -126,7 +126,7 @@ for ref_tax in ${local_DBs}/aniDB/Single_ANI_Test/*; do
 	echo "reference: ${reference}"
 	mv "${reference}" "${ref_tax}"
 	closest=$(wc -l ${ref_tax}/thirty_closest_dists.txt)
-	if [[ ${closest} -gt 30 ]];
+	if [[ ${closest} -gt 30 ]]; then
 		echo "$(tail -30 ${ref_tax}/thirty_closest_dists.txt)" > ${ref_tax}/thirty_closest_dists_30.txt
 		mv ${ref_tax}/thirty_closest_dists_30.txt ${ref_tax}/thirty_closest_dists.txt
 	fi
