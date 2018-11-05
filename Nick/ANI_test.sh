@@ -223,9 +223,9 @@ for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
 # 		done
 # 	fi
 # 	sub_counter=$(( counter + 1 ))
-# done
+ done
 
-exit
+
 
 
 
