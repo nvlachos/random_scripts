@@ -277,16 +277,16 @@ echo "1"
 declare -A coverage_array
 counter=0
 for isolate in "${samples_aniM_coverage[@]}"; do
-	echo "${isolate}"
-	pyani_coverage_array[isolate]=${percents_aniM_coverage[${counter}]}
+	#echo "${isolate}"
+	pyani_coverage_array[${isolate}]=${percents_aniM_coverage[${counter}]}
 	counter=$(( counter + 1 ))
 done
 echo"2"
 declare -A identity_array
 counter=0
 for isolate in "${samples_aniM_identity[@]}"; do
-	echo "${isolate}"
-	pyani_identity_array[isolate]=${percents_aniM_identity[${counter}]}
+	#echo "${isolate}"
+	pyani_identity_array[${isolate}]=${percents_aniM_identity[${counter}]}
 	counter=$(( counter + 1 ))
 done
 echo"3"
