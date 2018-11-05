@@ -49,9 +49,9 @@ working_dir="Single_ANI_Test"
 
 # Sets the output folder to the sample_name folder in processed samples
 OUTDATADIR="${local_DBs}/aniDB"
-if [[ ! -d ${OUTDATADIR}/${working_dir}/dists ]]; then
-	mkdir -p ${OUTDATADIR}/${working_dir}/dists
-fi
+#if [[ ! -d ${OUTDATADIR}/${working_dir}/dists ]]; then
+#	mkdir -p ${OUTDATADIR}/${working_dir}/dists
+#fi
 
 # Gets persons name to use as email during entrez request to identify best matching sample
 me=$(whoami)
