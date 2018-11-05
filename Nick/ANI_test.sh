@@ -308,9 +308,10 @@ fi
 echo "ANI summary for ${sample}" >> ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
 echo -e "reference	pyani_%_ID	pyani_coverage	fastANI_%_ID" >> ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
 for isolate in "${samples_aniM_identity[@]}"; do
-	pyani_percent_ID=${pyani_identity_array[${isolate}]}
-	pyani_coverage=${pyani_coverage_array[${isolate}]}
-	fastANI_percent_ID=${fastANI_identity_array[${isolate}]}
+	temp_isolate=$(echo ${isolate} | cut -d'.' -f1)
+	pyani_percent_ID=${pyani_identity_array[${temp_isolate}]}
+	pyani_coverage=${pyani_coverage_array[${temp_isolate}]}
+	fastANI_percent_ID=${fastANI_identity_array[${temp_isolate}]}
 	if [[ -z ${fastANI_percent_ID} ]]; then
 		fastANI_percent_ID="<<80"
 	fi
