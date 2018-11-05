@@ -125,7 +125,7 @@ for ref_tax in ${local_DBs}/aniDB/Single_ANI_Test/*; do
 	reference=$(find ${ref_tax}/localANIDB -name "${sample}*.fasta" -type f)
 	echo "reference: ${reference}"
 	mv "${reference}" "${ref_tax}"
-	exit
+	
 	if [[ ! -d ${ref_tax} ]]; then
 		break
 	else
