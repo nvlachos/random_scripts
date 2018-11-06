@@ -45,7 +45,7 @@ fi
 start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 echo "Started ANI at ${start_time}"
 
-working_dir="Single_ANI_Test"
+working_dir="all_test"
 
 # Sets the output folder to the sample_name folder in processed samples
 OUTDATADIR="${local_DBs}/aniDB"
