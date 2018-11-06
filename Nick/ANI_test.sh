@@ -284,6 +284,7 @@ for isolate in "${samples_aniM_coverage[@]}"; do
 	pyani_coverage_array["${temp_isolate}"]=${percents_aniM_coverage[${counter}]}
 	counter=$(( counter + 1 ))
 done
+for x in "${!pyani_coverage_array[@]}"; do printf "[%s]=%s\n" "$x" "${pyani_coverage_array[$x]}" ; done
 echo "Making pyani_identity_array"
 declare -A identity_array
 counter=0
@@ -295,6 +296,7 @@ for isolate in "${samples_aniM_identity[@]}"; do
 	pyani_identity_array["${temp_isolate}"]=${percents_aniM_identity[${counter}]}
 	counter=$(( counter + 1 ))
 done
+for x in "${!pyani_idenity_array[@]}"; do printf "[%s]=%s\n" "$x" "${pyani_identity_array[$x]}" ; done
 echo "Making fastANI_identity_array"
 #Extracts the query sample info line for ANI
 declare -A fastANI_identity_array
@@ -309,12 +311,14 @@ do
 	temp_isolate=${temp_isolate//./_dot_}
 	fastANI_identity_array[${temp_isolate}]=${temp_percent}
 done < "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.fani"
+for x in "${!fastANI_identity_array[@]}"; do printf "[%s]=%s\n" "$x" "${fastANI_identity_array[$x]}" ; done
 echo "4"
 if [[ -f ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv ]]; then
 	rm -r ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
 fi
 echo "ANI summary for ${sample}" >> ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
 echo -e "reference	pyani_%_ID	pyani_coverage	fastANI_%_ID" >> ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
+
 for isolate in "${samples_aniM_identity[@]}"; do
 	#temp_isolate=$(echo ${isolate} | rev | cut -d'.' -f2 | rev)
 	echo "A"
