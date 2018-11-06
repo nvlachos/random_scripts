@@ -317,6 +317,7 @@ for isolate in "${samples_aniM_identity[@]}"; do
 	pyani_percent_ID=${pyani_identity_array[${temp_isolate}]}
 	pyani_coverage=${pyani_coverage_array[${temp_isolate}]}
 	fastANI_percent_ID=${fastANI_identity_array[${temp_isolate}]}
+	echo "${isolate}:${temp_isolate}:${pyani_percent_ID}:${pyani_coverage}:${fastANI_percent_ID}"
 	if [[ -z ${fastANI_percent_ID} ]]; then
 		fastANI_percent_ID="<<80"
 	fi
