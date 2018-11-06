@@ -222,9 +222,10 @@ do
  		echo "Timer exceeded limit of 1800 seconds 30 minutes"
  		break
  	fi
- 	if [[ -f "${main_dir}/complete/${waiting_sample}_aniM_complete.txt" ]] && [[ -f "${main_dir}/complete/${waiting_sample}_Fani_complete.txt" ]]; then
- 		echo  "Waiting on ${waiting_sample} to finish ANI's"
+ 	if [[ ! -f "${main_dir}/complete/${waiting_sample}_aniM_complete.txt" ]] && [[ ! -f "${main_dir}/complete/${waiting_sample}_Fani_complete.txt" ]]; then
+ 		break
 	else
+		echo  "Waited ${timer}s on ${waiting_sample} to finish ANI's"
 		sleep 5
 		timer=$(( timer + 5 ))
 	fi
