@@ -378,7 +378,7 @@ for isolate in "${samples_aniM_identity[@]}"; do
 	if [[ -z ${fastANI_percent_ID} ]]; then
 		fastANI_percent_ID="<<80"
 	fi
-	echo -e "${isolate}	${pyani_percent_ID}	${pyani_coverage}	${fastANI_percent_ID}" >> ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
+	echo -e "${isolate}	${pyani_percent_ID}	${pyani_coverage}	${fastANI_percent_ID}	${mash_dist}	${mash_kmer}" >> ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
 done
 sort -k2 -nr -o ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
 tail -n +2 "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv" > "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv.tmp" && mv "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv.tmp" "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv"
