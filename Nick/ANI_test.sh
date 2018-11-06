@@ -331,18 +331,25 @@ done < "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.fani"
 for x in "${!fastANI_identity_array[@]}"; do printf "[%s]=%s\n" "$x" "${fastANI_identity_array[$x]}" ; done
 echo "4"
 declare -A mash_dist_array
+declare -A mash_kmers_array
+if [[ ! -f "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.dists" ]]; then
+	cp "${local_DBs}/aniDB/all_test/${sample}.dists" "${local_DBs}/aniDB/${working_dir}/${sample}"
+fi
 while IFS='' read -r line;
 do
-	temp_isolate=$(echo ${line} | cut -d' ' -f2 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
-	temp_percent=$(echo ${line} | cut -d' ' -f3)
+	isolate=$(echo ${line} | cut -d'	' -f2 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
+	temp_isolate=${isolate//./_dot_}
+	mash_dist=$(echo ${line} | cut -d'	' -f3)
+	mash_kmer=$(echo ${line} | cut -d'	' -f5)
 	echo "Tax:${temp_isolate}"
-	echo "%:${temp_percent}"
+	echo "dist:${mash_dist}"
+	echo "kmer:${mash_kmer}"
 	#temp_isolate=$(echo ${tax} | cut -d'.' -f1)
-	echo "${temp_isolate}-${temp_percent}"
-	temp_isolate=${temp_isolate//./_dot_}
-	fastANI_identity_array[${temp_isolate}]=${temp_percent}
-done < "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.fani"
-for x in "${!fastANI_identity_array[@]}"; do printf "[%s]=%s\n" "$x" "${fastANI_identity_array[$x]}" ; done
+	mash_dist_array[${temp_isolate}]=${mash_dist}
+	mash_kmers_array[${temp_isolate}]=${mash_kmer}
+done < "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.dists"
+for x in "${!mash_dist_array[@]}"; do printf "[%s]=%s\n" "$x" "${mash_dist_array[$x]}" ; done
+for x in "${!mash_kmers_array[@]}"; do printf "[%s]=%s\n" "$x" "${mash_kmers_array[$x]}" ; done
 echo "5"
 if [[ -f ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv ]]; then
 	rm -r ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
@@ -363,6 +370,8 @@ for isolate in "${samples_aniM_identity[@]}"; do
 	if [[ "${temp_isolate_tax}" == "${sample}" ]]; then
 		fastANI_percent_ID=100
 	fi
+	mash_dist=${mash_dist_array[${temp_isolate}]}
+	mash_kmer=${mash_kmers_array[${temp_isolate}]}
 	#echo "D"
 	echo "${isolate}:${temp_isolate}:${pyani_percent_ID}:${pyani_coverage}:${fastANI_percent_ID}"
 
