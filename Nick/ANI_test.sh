@@ -281,7 +281,14 @@ for isolate in "${samples_aniM_coverage[@]}"; do
 	#temp_isolate=$(echo ${isolate} | cut -d'.' -f1)
 	temp_isolate=${isolate//./_dot_}
 	echo "${temp_isolate}=${percents_aniM_coverage[${counter}]}"
-	pyani_coverage_array[${temp_isolate}]=${percents_aniM_coverage[${counter}]}
+	temp_percent=${percents_aniM_coverage[${counter}]}
+	if [[ ${temp_percent} -eq 1 ]]; then
+		temp_percent=100
+	else
+		temp_percent_digits=$(echo ${temp_percent} | cut -d'.' -f2)
+		temp_percent="${temp_percent_digits:0:2}.${temp_percent_digits:2}"
+	fi
+	pyani_coverage_array[${temp_isolate}]=${temp_percent}
 	counter=$(( counter + 1 ))
 done
 for x in "${!pyani_coverage_array[@]}"; do printf "[%s]=%s\n" "$x" "${pyani_coverage_array[$x]}" ; done
