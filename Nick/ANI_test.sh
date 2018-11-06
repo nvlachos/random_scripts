@@ -274,7 +274,7 @@ IFS="	" read -r -a samples_aniM_coverage <<< "${firstCMline}"
 IFS="	" read -r -a percents_aniM_coverage <<< "${sampleCMline}"
 
 echo "Making pyani_coverage_array"
-declare -A coverage_array
+declare -A pyani_coverage_array
 counter=0
 for isolate in "${samples_aniM_coverage[@]}"; do
 	#echo "${isolate}"
@@ -286,7 +286,7 @@ for isolate in "${samples_aniM_coverage[@]}"; do
 done
 for x in "${!pyani_coverage_array[@]}"; do printf "[%s]=%s\n" "$x" "${pyani_coverage_array[$x]}" ; done
 echo "Making pyani_identity_array"
-declare -A identity_array
+declare -A pyani_identity_array
 counter=0
 for isolate in "${samples_aniM_identity[@]}"; do
 	#echo "${isolate}"
