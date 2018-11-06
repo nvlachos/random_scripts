@@ -306,7 +306,7 @@ do
 	echo "%:${temp_percent}"
 	#temp_isolate=$(echo ${tax} | cut -d'.' -f1)
 	echo "${temp_isolate}-${temp_percent}"
-	temp_isolate=${isolate//./_dot_}
+	temp_isolate=${temp_isolate//./_dot_}
 	fastANI_identity_array[${temp_isolate}]=${temp_percent}
 done < "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.fani"
 echo "4"
