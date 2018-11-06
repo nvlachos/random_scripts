@@ -358,5 +358,5 @@ for isolate in "${samples_aniM_identity[@]}"; do
 	echo -e "${isolate}	${pyani_percent_ID}	${pyani_coverage}	${fastANI_percent_ID}" >> ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
 done
 sort -k2 -nr -o ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
-
-#echo -e "ANI summary for ${sample}\nreference	pyani_%_ID	pyani_coverage	fastANI_%_IDtask goes here\n $(cat ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv)" > ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
+tail -n +2 "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv" > "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv.tmp" && mv "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv.tmp" "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv"
+echo -e "ANI summary for ${sample}\nreference	pyani_%_ID	pyani_coverage	fastANI_%_ID	mash_dist mash_kmers\n $(cat ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv)" > ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
