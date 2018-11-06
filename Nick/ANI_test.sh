@@ -294,7 +294,7 @@ for isolate in "${samples_aniM_identity[@]}"; do
 	temp_isolate=${isolate//./_dot_}
 	echo "${temp_isolate}=${percents_aniM_identity[${counter}]}"
 	temp_percent=${percents_aniM_identity[${counter}]}
-	if [[ ${temp_percent} -eq 1]]; then
+	if [[ ${temp_percent} -eq 1 ]]; then
 		temp_percent=100
 	else
 		temp_percent_digits=$(echo ${temp_percent} | cut -d'.' -f2)
