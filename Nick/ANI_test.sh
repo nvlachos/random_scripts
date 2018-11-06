@@ -298,7 +298,7 @@ echo "Making fastANI_identity_array"
 declare -A fastANI_identity_array
 while IFS='' read -r line;
 do
-	current_tax=$(echo ${line} | cut -d'	' -f2 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
+	current_tax=$(echo ${line} | cut -d'	' -f2 | rev | cut -d'/' -f1) # | cut -d'.' -f2- | rev)
 	current_percent=$(echo ${line} | cut -d'	' -f3)
 	echo "Tax:${current_tax}"
 	echo "%:${current_percent}"
