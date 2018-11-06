@@ -280,8 +280,8 @@ for isolate in "${samples_aniM_coverage[@]}"; do
 	#echo "${isolate}"
 	#temp_isolate=$(echo ${isolate} | cut -d'.' -f1)
 	temp_isolate=${isolate//./_dot_}
-	echo "${temp_isolate}-${percents_aniM_coverage[${counter}]}"
-	pyani_coverage_array["${temp_isolate}"]=${percents_aniM_coverage[${counter}]}
+	echo "${temp_isolate}=${percents_aniM_coverage[${counter}]}"
+	pyani_coverage_array[${temp_isolate}]=${percents_aniM_coverage[${counter}]}
 	counter=$(( counter + 1 ))
 done
 for x in "${!pyani_coverage_array[@]}"; do printf "[%s]=%s\n" "$x" "${pyani_coverage_array[$x]}" ; done
@@ -292,8 +292,8 @@ for isolate in "${samples_aniM_identity[@]}"; do
 	#echo "${isolate}"
 	#temp_isolate=$(echo ${isolate} | cut -d'.' -f1)
 	temp_isolate=${isolate//./_dot_}
-	echo "${temp_isolate}-${percents_aniM_identity[${counter}]}"
-	pyani_identity_array["${temp_isolate}"]=${percents_aniM_identity[${counter}]}
+	echo "${temp_isolate}=${percents_aniM_identity[${counter}]}"
+	pyani_identity_array[${temp_isolate}]=${percents_aniM_identity[${counter}]}
 	counter=$(( counter + 1 ))
 done
 for x in "${!pyani_idenity_array[@]}"; do printf "[%s]=%s\n" "$x" "${pyani_identity_array[$x]}" ; done
