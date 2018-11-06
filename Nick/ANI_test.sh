@@ -273,25 +273,27 @@ IFS="	" read -r -a percents_aniM_identity <<< "${sampleIMline}"
 IFS="	" read -r -a samples_aniM_coverage <<< "${firstCMline}"
 IFS="	" read -r -a percents_aniM_coverage <<< "${sampleCMline}"
 
-echo "1"
+echo "Making pyani_coverage_array"
 declare -A coverage_array
 counter=0
 for isolate in "${samples_aniM_coverage[@]}"; do
 	#echo "${isolate}"
 	temp_isolate=$(echo ${isolate} | cut -d'.' -f1)
+	echo "${temp_isolate}-${percents_aniM_coverage[${counter}]}"
 	pyani_coverage_array[${temp_isolate}]=${percents_aniM_coverage[${counter}]}
 	counter=$(( counter + 1 ))
 done
-echo "2"
+echo "Making pyani_identity_array"
 declare -A identity_array
 counter=0
 for isolate in "${samples_aniM_identity[@]}"; do
 	#echo "${isolate}"
 	temp_isolate=$(echo ${isolate} | cut -d'.' -f1)
+	echo "${temp_isolate}-${percents_aniM_identity[${counter}]}"
 	pyani_identity_array[${temp_isolate}]=${percents_aniM_identity[${counter}]}
 	counter=$(( counter + 1 ))
 done
-echo "3"
+echo "Making fastANI_identity_array"
 #Extracts the query sample info line for ANI
 declare -A fastANI_identity_array
 while IFS='' read -r line;
@@ -299,6 +301,7 @@ do
 	current_tax=$(echo ${line} | cut -d'	' -f2 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
 	current_percent=$(echo ${line} | cut -d'	' -f3)
 	temp_isolate=$(echo ${tax} | cut -d'.' -f1)
+	echo "${temp_isolate}-${current_percent}"
 	fastANI_identity_array[${temp_isolate}]=${current_percent}
 done < "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.fani"
 echo "4"
