@@ -338,7 +338,7 @@ if [[ ! -f "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.dists" ]]; the
 fi
 while IFS='' read -r line;
 do
-	isolate=$(echo ${line} | cut -d' ' -f2 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
+	isolate=$(echo ${line} | cut -d' ' -f1 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
 	temp_isolate=${isolate//./_dot_}
 	mash_dist=$(echo ${line} | cut -d' ' -f3)
 	mash_kmer=$(echo ${line} | cut -d' ' -f5)
@@ -374,7 +374,7 @@ for isolate in "${samples_aniM_identity[@]}"; do
 	mash_dist=${mash_dist_array[${temp_isolate}]}
 	mash_kmer=${mash_kmers_array[${temp_isolate}]}
 	#echo "D"
-	echo "${isolate}:${temp_isolate}:${pyani_percent_ID}:${pyani_coverage}:${fastANI_percent_ID}"
+	echo "${isolate}:${temp_isolate}:${pyani_percent_ID}:${pyani_coverage}:${fastANI_percent_ID}:${mash_dist}:${mash_kmer}"
 
 	if [[ -z ${fastANI_percent_ID} ]]; then
 		fastANI_percent_ID="<<80"
