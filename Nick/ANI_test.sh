@@ -304,6 +304,10 @@ while IFS='' read -r line;
 do
 	temp_isolate=$(echo ${line} | cut -d' ' -f2 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
 	temp_percent=$(echo ${line} | cut -d' ' -f3)
+	temp_isolate_tax=$(echo ${temp_isolate} | cut -d'_' -f1,2)
+	if [[ "${temp_isolate}" == "${sample}" ]]; then
+		temp_percent=100
+	fi
 	echo "Tax:${temp_isolate}"
 	echo "%:${temp_percent}"
 	#temp_isolate=$(echo ${tax} | cut -d'.' -f1)
