@@ -225,6 +225,7 @@ do
  	if [[ -f "${main_dir}/complete/${waiting_sample}_aniM_complete.txt" ]] && [[ -f "${main_dir}/complete/${waiting_sample}_Fani_complete.txt" ]]; then
  		echo  "Waiting on ${waiting_sample} to finish ANI's"
 	else
+		sleep 5
 		timer=$(( timer + 5 ))
 	fi
 done
