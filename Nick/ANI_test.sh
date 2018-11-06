@@ -290,7 +290,7 @@ counter=0
 for isolate in "${samples_aniM_identity[@]}"; do
 	#echo "${isolate}"
 	#temp_isolate=$(echo ${isolate} | cut -d'.' -f1)
-	temp_isolate=${isolate}
+	temp_isolate=${isolate//./_Z_}
 	echo "${temp_isolate}-${percents_aniM_identity[${counter}]}"
 	pyani_identity_array["${temp_isolate}"]=${percents_aniM_identity[${counter}]}
 	counter=$(( counter + 1 ))
