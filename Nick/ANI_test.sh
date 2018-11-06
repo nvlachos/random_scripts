@@ -129,89 +129,89 @@ for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
 		samples[sub_counter]=${sample}
 	fi
 	echo "${sample}"
-# 	if [[ ${sub_counter} -lt ${max_subs} ]]; then
-# 		echo  "Index is below max submissions, submitting"
-# 		# echo -e "#!/bin/bash -l\n" > "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 		# echo -e "#$ -o aniB_${sample}.out" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 		# echo -e "#$ -e aniB_${sample}.err" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 		# echo -e "#$ -N aniB_${sample}"   >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 		# echo -e "#$ -cwd"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 		# echo -e "#$ -q short.q\n"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 		# echo -e "module load pyani/1.0" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 		# echo -e "module load Python/3.5.2" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 		# echo -e "average_nucleotide_identity.py -i \"${ref_tax}/localANIDB\" -o \"${ref_tax}/aniB\" -m \"ANIb\" -g \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 		# echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniB_complete.txt\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 		# qsub "${main_dir}/aniB_${sample}_${start_time}.sh"
-#
-# 		echo -e "#!/bin/bash -l\n" > "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 		echo -e "#$ -o aniM_${sample}.out" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 		echo -e "#$ -e aniM_${sample}.err" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 		echo -e "#$ -N aniM_${sample}"   >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 		echo -e "#$ -cwd"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 		echo -e "#$ -q short.q\n"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 		echo -e "module load pyani/1.0" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 		echo -e "module load Python/3.5.2" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 		echo -e "average_nucleotide_identity.py -i \"${ref_tax}/localANIDB\" -o \"${ref_tax}/aniM\" \"--write_excel\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniM_complete.txt\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 		qsub "${main_dir}/aniM_${sample}_${start_time}.sh"
-#
-# 		echo -e "#!/bin/bash -l\n" > "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 		echo -e "#$ -o Fani_${sample}.out" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
-# 		echo -e "#$ -e Fani_${sample}.err" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
-# 		echo -e "#$ -N Fani_${sample}"   >> "${main_dir}/Fani_${sample}_${start_time}.sh"
-# 		echo -e "#$ -cwd"  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
-# 		echo -e "#$ -q short.q\n"  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
-# 		echo -e "${shareScript}/fastANI --refList \"${ref_tax}/thirty_closest_dists.txt\" --query \"${reference}\" -t \"${procs}\" -o \"${ref_tax}/${sample}.fani\""  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
-# 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_Fani_complete.txt\"" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
-# 		qsub "${main_dir}/Fani_${sample}_${start_time}.sh"
-# 	else
-# 		waiting_for_index=$(( counter - max_subs ))
-# 		waiting_sample=$(echo "${samples[${waiting_for_index}]}")
-# 		timer=0
-# 		echo "Index is above max submissions, waiting for index ${waiting_for_index}:${waiting_sample} to complete"
-# 		while :
-# 		do
-# 			if [[ ${timer} -gt 1800 ]]; then
-# 				echo "Timer exceeded limit of 1800 seconds 30 minutes"
-# 				break
-# 			fi
-# 			if [[ -f "${main_dir}/complete/${waiting_sample}_aniM_complete.txt" ]] && [[ -f "${main_dir}/complete/${waiting_sample}_Fani_complete.txt" ]]; then
-# 				echo  "Index is below max submissions, submitting"
-# 				# echo -e "#!/bin/bash -l\n" > "${main_dir}/ani_${sample}_${start_time}.sh"
-# 				# echo -e "#$ -o aniB_${sample}.out" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 				# echo -e "#$ -e aniB_${sample}.err" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 				# echo -e "#$ -N aniB_${sample}"   >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 				# echo -e "#$ -cwd" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 				# echo -e "#$ -q short.q\n"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 				# echo -e "module load pyani/1.0" "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 				# echo -e "average_nucleotide_identity.py -i \"${ref_tax}/localANIDB\" -o \"${ref_tax}/aniB\" -m \"ANIb\" -g \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 				# echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniB_complete.txt\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
-# 				# qsub "${main_dir}/aniB_${sample}_${start_time}.sh"
-#
-# 				echo -e "#!/bin/bash -l\n" > "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 				echo -e "#$ -o aniM_${sample}.out" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 				echo -e "#$ -e aniM_${sample}.err" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 				echo -e "#$ -N aniM_${sample}"   >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 				echo -e "#$ -cwd"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 				echo -e "#$ -q short.q\n"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 				echo -e "module load pyani/1.0" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 				echo -e "average_nucleotide_identity.py -i \"${ref_tax}/localANIDB\" -o \"${ref_tax}/aniM\" \"--write_excel\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniM_complete.txt\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 				qsub "${main_dir}/aniM_${sample}_${start_time}.sh"
-#
-# 				echo -e "#!/bin/bash -l\n" > "${main_dir}/aniM_${sample}_${start_time}.sh"
-# 				echo -e "#$ -o Fani_${sample}.out" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
-# 				echo -e "#$ -e Fani_${sample}.err" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
-# 				echo -e "#$ -N Fani_${sample}"   >> "${main_dir}/Fani_${sample}_${start_time}.sh"
-# 				echo -e "#$ -cwd"  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
-# 				echo -e "#$ -q short.q\n"  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
-# 				echo -e "${shareScript}/fastANI --refList \"${ref_tax}/thirty_closest_dists.txt\" --query \"${reference}\" -t \"${procs}\" -o \"${ref_tax}/${sample}.fani\""  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
-# 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_Fani_complete.txt\"" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
-# 				qsub "${main_dir}/Fani_${sample}_${start_time}.sh"
-# 			fi
-# 		done
-# 	fi
-# 	sub_counter=$(( counter + 1 ))
+	if [[ ${sub_counter} -lt ${max_subs} ]]; then
+		echo  "Index is below max submissions, submitting"
+		# echo -e "#!/bin/bash -l\n" > "${main_dir}/aniB_${sample}_${start_time}.sh"
+		# echo -e "#$ -o aniB_${sample}.out" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		# echo -e "#$ -e aniB_${sample}.err" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		# echo -e "#$ -N aniB_${sample}"   >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		# echo -e "#$ -cwd"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		# echo -e "#$ -q short.q\n"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		# echo -e "module load pyani/1.0" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		# echo -e "module load Python/3.5.2" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		# echo -e "average_nucleotide_identity.py -i \"${ref_tax}/localANIDB\" -o \"${ref_tax}/aniB\" -m \"ANIb\" -g \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		# echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniB_complete.txt\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+		# qsub "${main_dir}/aniB_${sample}_${start_time}.sh"
+
+		echo -e "#!/bin/bash -l\n" > "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "#$ -o aniM_${sample}.out" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "#$ -e aniM_${sample}.err" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "#$ -N aniM_${sample}"   >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "#$ -cwd"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "#$ -q short.q\n"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "module load pyani/1.0" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "module load Python/3.5.2" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "average_nucleotide_identity.py -i \"${ref_tax}/localANIDB\" -o \"${ref_tax}/aniM\" \"--write_excel\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniM_complete.txt\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+		qsub "${main_dir}/aniM_${sample}_${start_time}.sh"
+
+		echo -e "#!/bin/bash -l\n" > "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "#$ -o Fani_${sample}.out" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+		echo -e "#$ -e Fani_${sample}.err" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+		echo -e "#$ -N Fani_${sample}"   >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+		echo -e "#$ -cwd"  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+		echo -e "#$ -q short.q\n"  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+		echo -e "${shareScript}/fastANI --refList \"${ref_tax}/thirty_closest_dists.txt\" --query \"${reference}\" -t \"${procs}\" -o \"${ref_tax}/${sample}.fani\""  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_Fani_complete.txt\"" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+		qsub "${main_dir}/Fani_${sample}_${start_time}.sh"
+	else
+		waiting_for_index=$(( counter - max_subs ))
+		waiting_sample=$(echo "${samples[${waiting_for_index}]}")
+		timer=0
+		echo "Index is above max submissions, waiting for index ${waiting_for_index}:${waiting_sample} to complete"
+		while :
+		do
+			if [[ ${timer} -gt 1800 ]]; then
+				echo "Timer exceeded limit of 1800 seconds 30 minutes"
+				break
+			fi
+			if [[ -f "${main_dir}/complete/${waiting_sample}_aniM_complete.txt" ]] && [[ -f "${main_dir}/complete/${waiting_sample}_Fani_complete.txt" ]]; then
+				echo  "Index is below max submissions, submitting"
+				# echo -e "#!/bin/bash -l\n" > "${main_dir}/ani_${sample}_${start_time}.sh"
+				# echo -e "#$ -o aniB_${sample}.out" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+				# echo -e "#$ -e aniB_${sample}.err" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+				# echo -e "#$ -N aniB_${sample}"   >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+				# echo -e "#$ -cwd" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+				# echo -e "#$ -q short.q\n"  >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+				# echo -e "module load pyani/1.0" "${main_dir}/aniB_${sample}_${start_time}.sh"
+				# echo -e "average_nucleotide_identity.py -i \"${ref_tax}/localANIDB\" -o \"${ref_tax}/aniB\" -m \"ANIb\" -g \"--write_excel\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+				# echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniB_complete.txt\"" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
+				# qsub "${main_dir}/aniB_${sample}_${start_time}.sh"
+
+				echo -e "#!/bin/bash -l\n" > "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "#$ -o aniM_${sample}.out" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "#$ -e aniM_${sample}.err" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "#$ -N aniM_${sample}"   >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "#$ -cwd"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "#$ -q short.q\n"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "module load pyani/1.0" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "average_nucleotide_identity.py -i \"${ref_tax}/localANIDB\" -o \"${ref_tax}/aniM\" \"--write_excel\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniM_complete.txt\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				qsub "${main_dir}/aniM_${sample}_${start_time}.sh"
+
+				echo -e "#!/bin/bash -l\n" > "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "#$ -o Fani_${sample}.out" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+				echo -e "#$ -e Fani_${sample}.err" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+				echo -e "#$ -N Fani_${sample}"   >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+				echo -e "#$ -cwd"  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+				echo -e "#$ -q short.q\n"  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+				echo -e "${shareScript}/fastANI --refList \"${ref_tax}/thirty_closest_dists.txt\" --query \"${reference}\" -t \"${procs}\" -o \"${ref_tax}/${sample}.fani\""  >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_Fani_complete.txt\"" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
+				qsub "${main_dir}/Fani_${sample}_${start_time}.sh"
+			fi
+		done
+	fi
+	sub_counter=$(( counter + 1 ))
  done
 
 
@@ -270,7 +270,7 @@ for isolate in "${samples_aniM_coverage[@]}"; do
 	#temp_isolate=$(echo ${isolate} | cut -d'.' -f1)
 	temp_isolate=${isolate//./_dot_}
 	temp_percent=${percents_aniM_coverage[${counter}]}
-	echo "${temp_isolate}=${percents_aniM_coverage[${counter}]}=${temp_percent}"
+	#echo "${temp_isolate}=${percents_aniM_coverage[${counter}]}=${temp_percent}"
 	if [[ "${temp_percent}" == "1.0" ]]; then
 		temp_percent=100
 	else
@@ -289,7 +289,7 @@ for isolate in "${samples_aniM_identity[@]}"; do
 	#temp_isolate=$(echo ${isolate} | cut -d'.' -f1)
 	temp_isolate=${isolate//./_dot_}
 	temp_percent=${percents_aniM_identity[${counter}]}
-	echo "${temp_isolate}=${percents_aniM_identity[${counter}]}=${temp_percent}"
+	#echo "${temp_isolate}=${percents_aniM_identity[${counter}]}=${temp_percent}"
 	if [[ "${temp_percent}" == "1.0" ]]; then
 		temp_percent=100
 	else
@@ -308,17 +308,17 @@ do
 	temp_isolate=$(echo ${line} | cut -d' ' -f2 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
 	temp_percent=$(echo ${line} | cut -d' ' -f3)
 
-	echo "Tax:${temp_isolate}"
-	echo "Temp_tax:${temp_isolate_tax}"
-	echo "Sample:${sample}"
-	echo "%:${temp_percent}"
+	#echo "Tax:${temp_isolate}"
+	#echo "Temp_tax:${temp_isolate_tax}"
+	#echo "Sample:${sample}"
+	#echo "%:${temp_percent}"
 	#temp_isolate=$(echo ${tax} | cut -d'.' -f1)
-	echo "${temp_isolate}-${temp_percent}"
+	#echo "${temp_isolate}-${temp_percent}"
 	temp_isolate=${temp_isolate//./_dot_}
 	fastANI_identity_array[${temp_isolate}]=${temp_percent}
 done < "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.fani"
 for x in "${!fastANI_identity_array[@]}"; do printf "[%s]=%s\n" "$x" "${fastANI_identity_array[$x]}" ; done
-echo "4"
+#echo "4"
 declare -A mash_dist_array
 declare -A mash_kmers_array
 if [[ ! -f "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.dists" ]]; then
@@ -331,16 +331,16 @@ do
 	temp_isolate=${isolate//./_dot_}
 	mash_dist=$(echo ${line} | cut -d' ' -f3)
 	mash_kmer=$(echo ${line} | cut -d' ' -f5)
-	echo "Tax:${temp_isolate}"
-	echo "dist:${mash_dist}"
-	echo "kmer:${mash_kmer}"
+	#echo "Tax:${temp_isolate}"
+	#echo "dist:${mash_dist}"
+	#echo "kmer:${mash_kmer}"
 	#temp_isolate=$(echo ${tax} | cut -d'.' -f1)
 	mash_dist_array[${temp_isolate}]=${mash_dist}
 	mash_kmers_array[${temp_isolate}]=${mash_kmer}
 done < "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_top30.dists"
 for x in "${!mash_dist_array[@]}"; do printf "[%s]=%s\n" "$x" "${mash_dist_array[$x]}" ; done
 for x in "${!mash_kmers_array[@]}"; do printf "[%s]=%s\n" "$x" "${mash_kmers_array[$x]}" ; done
-echo "5"
+#echo "5"
 if [[ -f ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv ]]; then
 	rm -r ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
 fi
@@ -363,7 +363,7 @@ for isolate in "${samples_aniM_identity[@]}"; do
 	mash_dist=${mash_dist_array[${temp_isolate}]}
 	mash_kmer=${mash_kmers_array[${temp_isolate}]}
 	#echo "D"
-	echo "${isolate}:${temp_isolate}:${pyani_percent_ID}:${pyani_coverage}:${fastANI_percent_ID}:${mash_dist}:${mash_kmer}"
+	#echo "${isolate}:${temp_isolate}:${pyani_percent_ID}:${pyani_coverage}:${fastANI_percent_ID}:${mash_dist}:${mash_kmer}"
 
 	if [[ -z ${fastANI_percent_ID} ]]; then
 		fastANI_percent_ID="<<80"
