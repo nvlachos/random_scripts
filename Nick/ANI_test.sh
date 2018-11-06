@@ -275,7 +275,7 @@ IFS="	" read -r -a percents_aniM_coverage <<< "${sampleCMline}"
 
 echo "Making pyani_coverage_array"
 declare -A pyani_coverage_array
-counter=0
+counter=1
 for isolate in "${samples_aniM_coverage[@]}"; do
 	#echo "${isolate}"
 	#temp_isolate=$(echo ${isolate} | cut -d'.' -f1)
@@ -287,7 +287,7 @@ done
 for x in "${!pyani_coverage_array[@]}"; do printf "[%s]=%s\n" "$x" "${pyani_coverage_array[$x]}" ; done
 echo "Making pyani_identity_array"
 declare -A pyani_identity_array
-counter=0
+counter=1
 for isolate in "${samples_aniM_identity[@]}"; do
 	#echo "${isolate}"
 	#temp_isolate=$(echo ${isolate} | cut -d'.' -f1)
@@ -313,6 +313,20 @@ do
 done < "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.fani"
 for x in "${!fastANI_identity_array[@]}"; do printf "[%s]=%s\n" "$x" "${fastANI_identity_array[$x]}" ; done
 echo "4"
+declare -A mash_dist_array
+while IFS='' read -r line;
+do
+	temp_isolate=$(echo ${line} | cut -d' ' -f2 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
+	temp_percent=$(echo ${line} | cut -d' ' -f3)
+	echo "Tax:${temp_isolate}"
+	echo "%:${temp_percent}"
+	#temp_isolate=$(echo ${tax} | cut -d'.' -f1)
+	echo "${temp_isolate}-${temp_percent}"
+	temp_isolate=${temp_isolate//./_dot_}
+	fastANI_identity_array[${temp_isolate}]=${temp_percent}
+done < "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.fani"
+for x in "${!fastANI_identity_array[@]}"; do printf "[%s]=%s\n" "$x" "${fastANI_identity_array[$x]}" ; done
+echo "5"
 if [[ -f ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv ]]; then
 	rm -r ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
 fi
@@ -321,12 +335,12 @@ echo -e "reference	pyani_%_ID	pyani_coverage	fastANI_%_ID" >> ${local_DBs}/aniDB
 
 for isolate in "${samples_aniM_identity[@]}"; do
 	#temp_isolate=$(echo ${isolate} | rev | cut -d'.' -f2 | rev)
-	echo "A"
+	#echo "A"
 	temp_isolate=${isolate//./_dot_}
 	pyani_percent_ID=${pyani_identity_array[${temp_isolate}]}
-	echo "B"
+	#echo "B"
 	pyani_coverage=${pyani_coverage_array[${temp_isolate}]}
-	echo "C"
+	#echo "C"
 	fastANI_percent_ID=${fastANI_identity_array[${temp_isolate}]}
 	echo "D"
 	echo "${isolate}:${temp_isolate}:${pyani_percent_ID}:${pyani_coverage}:${fastANI_percent_ID}"
