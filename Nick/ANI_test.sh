@@ -195,6 +195,7 @@ for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
 				echo -e "#$ -cwd"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 				echo -e "module load pyani/1.0" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
+				echo -e "module load Python/3.5.2" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 				echo -e "average_nucleotide_identity.py -i \"${ref_tax}/localANIDB\" -o \"${ref_tax}/aniM\" \"--write_excel\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniM_complete.txt\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 				qsub "${main_dir}/aniM_${sample}_${start_time}.sh"
@@ -222,7 +223,7 @@ do
  		echo "Timer exceeded limit of 1800 seconds 30 minutes"
  		break
  	fi
- 	if [[ ! -f "${main_dir}/complete/${waiting_sample}_aniM_complete.txt" ]] && [[ ! -f "${main_dir}/complete/${waiting_sample}_Fani_complete.txt" ]]; then
+ 	if [[ -f "${main_dir}/complete/${waiting_sample}_aniM_complete.txt" ]] && [[ -f "${main_dir}/complete/${waiting_sample}_Fani_complete.txt" ]]; then
  		break
 	else
 		echo  "Waited ${timer}s on ${waiting_sample} to finish ANI's"
