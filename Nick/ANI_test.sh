@@ -293,7 +293,14 @@ for isolate in "${samples_aniM_identity[@]}"; do
 	#temp_isolate=$(echo ${isolate} | cut -d'.' -f1)
 	temp_isolate=${isolate//./_dot_}
 	echo "${temp_isolate}=${percents_aniM_identity[${counter}]}"
-	pyani_identity_array[${temp_isolate}]=${percents_aniM_identity[${counter}]}
+	temp_percent=${percents_aniM_identity[${counter}]}
+	if [[ "{$temp_percent}" -eq 1]]; then
+		temp_percent=100
+	else
+		temp_percent_digits=$(echo ${temp_percent} | cut -d'.' -f2)
+		temp_percent="${temp_percent_digits:0:2}.${temp_percent_digits:2}"
+	fi
+	pyani_identity_array[${temp_isolate}]=${temp_percent}
 	counter=$(( counter + 1 ))
 done
 for x in "${!pyani_idenity_array[@]}"; do printf "[%s]=%s\n" "$x" "${pyani_identity_array[$x]}" ; done
