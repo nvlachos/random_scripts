@@ -298,13 +298,13 @@ echo "Making fastANI_identity_array"
 declare -A fastANI_identity_array
 while IFS='' read -r line;
 do
-	current_tax=$(echo ${line} | cut -d' ' -f2 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
-	current_percent=$(echo ${line} | cut -d' ' -f3)
+	temp_isolate=$(echo ${line} | cut -d' ' -f2 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
+	temp_percent=$(echo ${line} | cut -d' ' -f3)
 	echo "Tax:${current_tax}"
-	echo "%:${current_percent}"
-	temp_isolate=$(echo ${tax} | cut -d'.' -f1)
-	echo "${temp_isolate}-${current_percent}"
-	fastANI_identity_array[${temp_isolate}]=${current_percent}
+	echo "%:${temp_percent}"
+	#temp_isolate=$(echo ${tax} | cut -d'.' -f1)
+	echo "${temp_isolate}-${temp_percent}"
+	fastANI_identity_array[${temp_isolate}]=${temp_percent}
 done < "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.fani"
 echo "4"
 if [[ -f ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv ]]; then
