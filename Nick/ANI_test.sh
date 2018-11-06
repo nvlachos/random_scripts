@@ -49,69 +49,58 @@ working_dir="Single_ANI_Test"
 
 # Sets the output folder to the sample_name folder in processed samples
 OUTDATADIR="${local_DBs}/aniDB"
-#if [[ ! -d ${OUTDATADIR}/${working_dir}/dists ]]; then
-#	mkdir -p ${OUTDATADIR}/${working_dir}/dists
-#fi
 
-# Gets persons name to use as email during entrez request to identify best matching sample
-me=$(whoami)
-#echo ${me}"___"${1}___${2}___${3}___${4}
-
-#Creates a local copy of the database folder
-# cp ${share}/DBs/aniDB/all/compound_sketch_all.msh "${OUTDATADIR}/ANI/"
-
-#mash dist "${local_DBs}/aniDB/refseq.genomes.k21s1000.msh" "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta" > "${OUTDATADIR}/ANI/${1}_all_refSeq.dists"
 counter=0
-#for ref in ${local_DBs}/aniDB/all/*.fna; do
-#	echo ${ref}
-#	counter=$(( counter + 1 ))
-#	filename=$(basename ${ref} | cut -d'_' -f1,2)
-#	mash dist "${local_DBs}/aniDB/all/all_sketch.msh" "${ref}" > "${OUTDATADIR}/${working_dir}/dists/${filename}_unsorted.dists"
-#	sort -k3 -n -o "${OUTDATADIR}/${working_dir}/dists/${filename}.dists" "${OUTDATADIR}/${working_dir}/dists/${filename}_unsorted.dists"
-#	rm -r "${OUTDATADIR}/${working_dir}/dists/${filename}_unsorted.dists"
-#done
+for ref in ${local_DBs}/aniDB/all/*.fna; do
+	echo ${ref}
+	counter=$(( counter + 1 ))
+	filename=$(basename ${ref} | cut -d'_' -f1,2)
+	mash dist "${local_DBs}/aniDB/all/all_sketch.msh" "${ref}" > "${OUTDATADIR}/${working_dir}/dists/${filename}_unsorted.dists"
+	sort -k3 -n -o "${OUTDATADIR}/${working_dir}/dists/${filename}.dists" "${OUTDATADIR}/${working_dir}/dists/${filename}_unsorted.dists"
+	rm -r "${OUTDATADIR}/${working_dir}/dists/${filename}_unsorted.dists"
+done
 
-# for distfile in ${local_DBs}/aniDB/${working_dir}/dists/*.dists; do
-# 	[ -f "$distfile" ] || break
-# 	taxa=$(basename ${distfile})
-# 	if [[ ! -d ${local_DBs}/aniDB/${working_dir}/${taxa} ]]; then
-# 		mkdir -p ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB
-# 	fi
-# 	counter=0
-# 	max_ani_samples=30
-# 	echo "${distfile}-${taxa}"
-# 	> "${local_DBs}/aniDB/${working_dir}/${taxa}/thirty_closest_dists.txt"
-# 	if [[ ! -d ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB ]]; then
-# 		mkdir "${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB"
-# 	fi
-# 	while IFS= read -r line;  do
-# 			echo "${counter}:-:-:${line}"
-# 			if [[ ${counter} -eq 0 ]]; then
-# 				ref_path=$(echo "${line}" | cut -d'	' -f2)
-# 				echo "rp-${ref_path}"
-# 				echo "${ref_path}" >> "${local_DBs}/aniDB/${working_dir}/${taxa}/thirty_closest_dists.txt"
-# 				fasta=$(basename ${ref_path})
-# 				fasta=${fasta:0:-3}"fasta"
-# 				echo "cp ${ref_path} ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB/${fasta}"
-# 				cp ${ref_path} ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB/${fasta}
-# 			fi
-# 			if [[ ${counter} -gt ${max_ani_samples} ]]; then
-# 				break
-# 			else
-# 				source_path=$(echo "${line}" | cut -d'	' -f1)
-# 				echo "sp-${source_path}"
-# 				echo "${source_path}" >> "${local_DBs}/aniDB/${working_dir}/${taxa}/thirty_closest_dists.txt"
-# 				fasta=$(basename ${source_path})
-# 				fasta=${fasta:0:-3}"fasta"
-# 				echo "cp ${source_path} ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB/${fasta}"
-# 				cp ${source_path} ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB/${fasta}
-# 			fi
-# 			counter=$(( counter + 1 ))
-# 	done < ${distfile}
-# done
-# echo ${counter}
-#
-# exit
+for distfile in ${local_DBs}/aniDB/${working_dir}/dists/*.dists; do
+	[ -f "$distfile" ] || break
+	taxa=$(basename ${distfile})
+	if [[ ! -d ${local_DBs}/aniDB/${working_dir}/${taxa} ]]; then
+		mkdir -p ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB
+	fi
+	counter=0
+	max_ani_samples=30
+	echo "${distfile}-${taxa}"
+	> "${local_DBs}/aniDB/${working_dir}/${taxa}/thirty_closest_dists.txt"
+	if [[ ! -d ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB ]]; then
+		mkdir "${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB"
+	fi
+	while IFS= read -r line;  do
+			echo "${counter}:-:-:${line}"
+			if [[ ${counter} -eq 0 ]]; then
+				ref_path=$(echo "${line}" | cut -d'	' -f2)
+				echo "rp-${ref_path}"
+				echo "${ref_path}" >> "${local_DBs}/aniDB/${working_dir}/${taxa}/thirty_closest_dists.txt"
+				fasta=$(basename ${ref_path})
+				fasta=${fasta:0:-3}"fasta"
+				echo "cp ${ref_path} ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB/${fasta}"
+				cp ${ref_path} ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB/${fasta}
+			fi
+			if [[ ${counter} -gt ${max_ani_samples} ]]; then
+				break
+			else
+				source_path=$(echo "${line}" | cut -d'	' -f1)
+				echo "sp-${source_path}"
+				echo "${source_path}" >> "${local_DBs}/aniDB/${working_dir}/${taxa}/thirty_closest_dists.txt"
+				fasta=$(basename ${source_path})
+				fasta=${fasta:0:-3}"fasta"
+				echo "cp ${source_path} ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB/${fasta}"
+				cp ${source_path} ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB/${fasta}
+			fi
+			counter=$(( counter + 1 ))
+	done < ${distfile}
+done
+echo ${counter}
+
+
 
 sub_counter=0
 max_subs=50
