@@ -338,10 +338,10 @@ if [[ ! -f "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.dists" ]]; the
 fi
 while IFS='' read -r line;
 do
-	isolate=$(echo ${line} | cut -d'	' -f2 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
+	isolate=$(echo ${line} | cut -d' ' -f2 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
 	temp_isolate=${isolate//./_dot_}
-	mash_dist=$(echo ${line} | cut -d'	' -f3)
-	mash_kmer=$(echo ${line} | cut -d'	' -f5)
+	mash_dist=$(echo ${line} | cut -d' ' -f3)
+	mash_kmer=$(echo ${line} | cut -d' ' -f5)
 	echo "Tax:${temp_isolate}"
 	echo "dist:${mash_dist}"
 	echo "kmer:${mash_kmer}"
