@@ -333,7 +333,7 @@ echo "4"
 declare -A mash_dist_array
 declare -A mash_kmers_array
 if [[ ! -f "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.dists" ]]; then
-	cp "${local_DBs}/aniDB/all_test/${sample}.dists" "${local_DBs}/aniDB/${working_dir}/${sample}"
+	cp "${local_DBs}/aniDB/all_test/dists/${sample}.dists" "${local_DBs}/aniDB/${working_dir}/${sample}"
 fi
 while IFS='' read -r line;
 do
