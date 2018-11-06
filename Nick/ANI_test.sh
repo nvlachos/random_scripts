@@ -155,7 +155,7 @@ for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_aniM_complete.txt\"" >> "${main_dir}/aniM_${sample}_${start_time}.sh"
 		qsub "${main_dir}/aniM_${sample}_${start_time}.sh"
 
-		echo -e "#!/bin/bash -l\n" > "${main_dir}/aniM_${sample}_${start_time}.sh"
+		echo -e "#!/bin/bash -l\n" > "${main_dir}/Fani_${sample}_${start_time}.sh"
 		echo -e "#$ -o Fani_${sample}.out" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
 		echo -e "#$ -e Fani_${sample}.err" >> "${main_dir}/Fani_${sample}_${start_time}.sh"
 		echo -e "#$ -N Fani_${sample}"   >> "${main_dir}/Fani_${sample}_${start_time}.sh"
@@ -214,9 +214,19 @@ for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
 	sub_counter=$(( counter + 1 ))
  done
 
-
-
-
+waiting_sample=$(echo "${samples[${counter}]}")
+while :
+do
+ 	if [[ ${timer} -gt 1800 ]]; then
+ 		echo "Timer exceeded limit of 1800 seconds 30 minutes"
+ 		break
+ 	fi
+ 	if [[ -f "${main_dir}/complete/${waiting_sample}_aniM_complete.txt" ]] && [[ -f "${main_dir}/complete/${waiting_sample}_Fani_complete.txt" ]]; then
+ 		echo  "Waiting on ${waiting_sample} to finish ANI's"
+	else
+		timer=$(( timer + 5 ))
+	fi
+done
 
 #Extracts the query sample info line for percentage identity from the percent identity file
 while IFS='' read -r line;
