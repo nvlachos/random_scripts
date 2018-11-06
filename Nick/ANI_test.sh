@@ -334,6 +334,7 @@ declare -A mash_dist_array
 declare -A mash_kmers_array
 if [[ ! -f "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.dists" ]]; then
 	cp "${local_DBs}/aniDB/all_test/dists/${sample}.dists" "${local_DBs}/aniDB/${working_dir}/${sample}"
+	head -n 31 ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.dists > ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_top30.dists
 fi
 while IFS='' read -r line;
 do
@@ -347,7 +348,7 @@ do
 	#temp_isolate=$(echo ${tax} | cut -d'.' -f1)
 	mash_dist_array[${temp_isolate}]=${mash_dist}
 	mash_kmers_array[${temp_isolate}]=${mash_kmer}
-done < "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.dists"
+done < "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_top30.dists"
 for x in "${!mash_dist_array[@]}"; do printf "[%s]=%s\n" "$x" "${mash_dist_array[$x]}" ; done
 for x in "${!mash_kmers_array[@]}"; do printf "[%s]=%s\n" "$x" "${mash_kmers_array[$x]}" ; done
 echo "5"
