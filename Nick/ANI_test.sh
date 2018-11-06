@@ -278,9 +278,10 @@ declare -A coverage_array
 counter=0
 for isolate in "${samples_aniM_coverage[@]}"; do
 	#echo "${isolate}"
-	temp_isolate=$(echo ${isolate} | cut -d'.' -f1)
+	#temp_isolate=$(echo ${isolate} | cut -d'.' -f1)
+	temp_isolate=${isolate}
 	echo "${temp_isolate}-${percents_aniM_coverage[${counter}]}"
-	pyani_coverage_array[${temp_isolate}]=${percents_aniM_coverage[${counter}]}
+	pyani_coverage_array["${temp_isolate}"]=${percents_aniM_coverage[${counter}]}
 	counter=$(( counter + 1 ))
 done
 echo "Making pyani_identity_array"
@@ -288,9 +289,10 @@ declare -A identity_array
 counter=0
 for isolate in "${samples_aniM_identity[@]}"; do
 	#echo "${isolate}"
-	temp_isolate=$(echo ${isolate} | cut -d'.' -f1)
+	#temp_isolate=$(echo ${isolate} | cut -d'.' -f1)
+	temp_isolate=${isolate}
 	echo "${temp_isolate}-${percents_aniM_identity[${counter}]}"
-	pyani_identity_array[${temp_isolate}]=${percents_aniM_identity[${counter}]}
+	pyani_identity_array["${temp_isolate}"]=${percents_aniM_identity[${counter}]}
 	counter=$(( counter + 1 ))
 done
 echo "Making fastANI_identity_array"
@@ -300,7 +302,7 @@ while IFS='' read -r line;
 do
 	temp_isolate=$(echo ${line} | cut -d' ' -f2 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
 	temp_percent=$(echo ${line} | cut -d' ' -f3)
-	echo "Tax:${current_tax}"
+	echo "Tax:${temp_isolate}"
 	echo "%:${temp_percent}"
 	#temp_isolate=$(echo ${tax} | cut -d'.' -f1)
 	echo "${temp_isolate}-${temp_percent}"
@@ -313,10 +315,10 @@ fi
 echo "ANI summary for ${sample}" >> ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
 echo -e "reference	pyani_%_ID	pyani_coverage	fastANI_%_ID" >> ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
 for isolate in "${samples_aniM_identity[@]}"; do
-	temp_isolate=${isolate}
-	pyani_percent_ID=${pyani_identity_array[${temp_isolate}]}
-	pyani_coverage=${pyani_coverage_array[${temp_isolate}]}
-	fastANI_percent_ID=${fastANI_identity_array[${temp_isolate}]}
+	temp_isolate=$(echo ${isolate} | rev | cut -d'.' -f2 | rev)
+	pyani_percent_ID=${pyani_identity_array["${temp_isolate}"]}
+	pyani_coverage=${pyani_coverage_array["${temp_isolate}"]}
+	fastANI_percent_ID=${fastANI_identity_array["${temp_isolate}"]}
 	echo "${isolate}:${temp_isolate}:${pyani_percent_ID}:${pyani_coverage}:${fastANI_percent_ID}"
 	if [[ -z ${fastANI_percent_ID} ]]; then
 		fastANI_percent_ID="<<80"
