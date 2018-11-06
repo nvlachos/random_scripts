@@ -311,6 +311,7 @@ do
 	fi
 	echo "Tax:${temp_isolate}"
 	echo "Temp_tax:${temp_isolate_tax}"
+	echo "Sample:${sample}"
 	echo "%:${temp_percent}"
 	#temp_isolate=$(echo ${tax} | cut -d'.' -f1)
 	echo "${temp_isolate}-${temp_percent}"
