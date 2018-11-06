@@ -282,7 +282,7 @@ for isolate in "${samples_aniM_coverage[@]}"; do
 	temp_isolate=${isolate//./_dot_}
 	echo "${temp_isolate}=${percents_aniM_coverage[${counter}]}"
 	temp_percent=${percents_aniM_coverage[${counter}]}
-	if [[ ${temp_percent} -eq 1 ]]; then
+	if [[ "${temp_percent}" = "1" ]]; then
 		temp_percent=100
 	else
 		temp_percent_digits=$(echo ${temp_percent} | cut -d'.' -f2)
@@ -301,7 +301,7 @@ for isolate in "${samples_aniM_identity[@]}"; do
 	temp_isolate=${isolate//./_dot_}
 	echo "${temp_isolate}=${percents_aniM_identity[${counter}]}"
 	temp_percent=${percents_aniM_identity[${counter}]}
-	if [[ ${temp_percent} -eq 1 ]]; then
+	if [[ "${temp_percent}" = "1" ]]; then
 		temp_percent=100
 	else
 		temp_percent_digits=$(echo ${temp_percent} | cut -d'.' -f2)
