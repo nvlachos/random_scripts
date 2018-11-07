@@ -238,6 +238,7 @@ OUTDATADIR="${local_DBs}/aniDB"
 #Extracts the query sample info line for percentage identity from the percent identity file
 for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
 	sample=$(basename ${ref_tax} | rev | cut -d'/' -f1 | rev)
+	echo "Sample:${sample}"
 	while IFS='' read -r line;
 	do
 	#	echo "!-${line}"
