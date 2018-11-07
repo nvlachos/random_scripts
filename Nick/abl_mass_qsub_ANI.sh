@@ -102,6 +102,9 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			#	domain=$(echo "${line}" | awk -F ' ' '{print $4}')
 			fi
 		done < "${processed}/${project}/${sample}/${sample}.tax"
+		if [[ ! -f "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
+			rm -r "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})"
+		fi
 	 	if [[ ${counter} -lt ${max_subs} ]]; then
 			if [[ ! -f "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
 				echo  "Index is below max submissions, submitting"
