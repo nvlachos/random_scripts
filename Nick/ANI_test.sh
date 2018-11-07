@@ -111,6 +111,7 @@ mkdir ${main_dir}
 
 for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
 	echo "${ref_tax}"
+	sub_counter=$(( sub_counter + 1 ))
 	continue
 	sample=$(basename ${ref_tax} | rev | cut -d'/' -f1 | rev)
 	echo "sample: ${sample}"
