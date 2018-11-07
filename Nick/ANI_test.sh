@@ -215,6 +215,7 @@ for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
 	fi
 	sub_counter=$(( counter + 1 ))
  done
+echo "Count-${sub_counter}"
 exit
 timer=0
 waiting_sample=$(echo "${samples[${counter}]}")
