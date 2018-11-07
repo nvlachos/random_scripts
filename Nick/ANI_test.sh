@@ -111,8 +111,8 @@ mkdir ${main_dir}
 
 for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
 	echo "${ref_tax}"
-	sub_counter=$(( sub_counter + 1 ))
-	continue
+	#sub_counter=$(( sub_counter + 1 ))
+	#continue
 	sample=$(basename ${ref_tax} | rev | cut -d'/' -f1 | rev)
 	echo "sample: ${sample}"
 	echo "Looking in ${ref_tax}/localANIDB for ${sample}*.fasta"
@@ -216,8 +216,8 @@ for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
 	fi
 	sub_counter=$(( counter + 1 ))
  done
-echo "Count-${sub_counter}"
-exit
+#echo "Count-${sub_counter}"
+#exit
 timer=0
 waiting_sample=$(echo "${samples[${counter}]}")
 while :
