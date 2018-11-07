@@ -136,7 +136,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				fi
 				if [[ -f "${main_dir}/complete/${waiting_sample}_ani_complete.txt" ]]; then
 					if [[ ! -f "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
-						echo  "Index is below max submissions, submitting"
+						echo  "${waiting_sample}(${waiting_for_index}) is not complete, submitting ${sample} ($counter)"
 						echo -e "#!/bin/bash -l\n" > "${main_dir}/ani_${sample}_${start_time}.sh"
 						echo -e "#$ -o ani_${sample}.out" >> "${main_dir}/ani_${sample}_${start_time}.sh"
 						echo -e "#$ -e ani_${sample}.err" >> "${main_dir}/ani_${sample}_${start_time}.sh"
