@@ -236,8 +236,10 @@ OUTDATADIR="${local_DBs}/aniDB"
 # done
 
 #Extracts the query sample info line for percentage identity from the percent identity file
-for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
-	sample=$(basename ${ref_tax} | rev | cut -d'/' -f1 | rev)
+#for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
+while IFS= read -r var; do
+	#sample=$(basename ${ref_tax} | rev | cut -d'/' -f1 | rev)
+	sample=${var}
 	echo "Sample:${sample}"
 	while IFS='' read -r line;
 	do
@@ -393,4 +395,5 @@ for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
 	sort -k2 -nr -o ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
 	tail -n +2 "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv" > "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv.tmp" && mv "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv.tmp" "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv"
 	echo -e "ANI summary for ${sample}\nreference	pyani_%_ID	pyani_coverage	fastANI_%_ID	mash_dist mash_kmers\n $(cat ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv)" > ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_ani_summary.tsv
-done
+done < /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/ani_list.txt
+#done
