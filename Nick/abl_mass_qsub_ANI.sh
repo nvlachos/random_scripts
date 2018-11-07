@@ -66,6 +66,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	echo "${counter}-${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta"
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
 		rm -r "${processed}/${project}/${sample}/ANI/"
+	fi
 	#	genus="Acinetobacter"
 	#	species="baumannii"
 	if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
