@@ -56,6 +56,7 @@ elif [[ ! -d "${share}/mass_subs/ANI_subs/complete" ]]; then
 fi
 
 start_time=$(date)
+start_time=${start_time// /_}
 
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
