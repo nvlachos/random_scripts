@@ -55,11 +55,12 @@ elif [[ ! -d "${share}/mass_subs/ANI_subs/complete" ]]; then
 	mkdir "${share}/mass_subs/ANI_subs/complete"
 fi
 
-start_time=$(date)
-start_time=${start_time// /_}
+start_time=$(date '+%Y-%m-%d_%H:%M:%S')
+#start_time=${start_time// /_}
 
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
+	short_sample=${sample:0:20}
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	#genus=$(echo "${arr[${counter}]}" | cut -d'/' -f3 | cut -d'_' -f1)
 	#species=$(echo "${arr[${counter}]}" | cut -d'/' -f3 | cut -d'_' -f1)
@@ -108,17 +109,17 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	 	if [[ ${counter} -lt ${max_subs} ]]; then
 			if [[ ! -f "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
 				echo  "Index is below max submissions, submitting"
-				echo "Going to make ${main_dir}/ani_${sample}_${start_time}.sh"
-				echo -e "#!/bin/bash -l\n" > "${main_dir}/ani_${sample}_${start_time}.sh"
-				echo -e "#$ -o ani_${sample}.out" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-				echo -e "#$ -e ani_${sample}.err" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-				echo -e "#$ -N ani_${sample}"   >> "${main_dir}/ani_${sample}_${start_time}.sh"
-				echo -e "#$ -cwd"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
-				echo -e "#$ -q short.q\n"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
+				echo "Going to make ${main_dir}/ani_${short_sample}_${start_time}.sh"
+				echo -e "#!/bin/bash -l\n" > "${main_dir}/ani_${short_sample}_${start_time}.sh"
+				echo -e "#$ -o ani_${sample}.out" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
+				echo -e "#$ -e ani_${sample}.err" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
+				echo -e "#$ -N ani_${sample}"   >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
+				echo -e "#$ -cwd"  >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
+				echo -e "#$ -q short.q\n"  >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				# Defaulting to gapped/98, change if you want to include user preferences
-				echo -e "\"${shareScript}/run_ANI.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_ani_complete.txt\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-				qsub "${main_dir}/ani_${sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/run_ANI.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
+				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${short_sample}_ani_complete.txt\"" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
+				qsub "${main_dir}/ani_${short_sample}_${start_time}.sh"
 			else
 				echo "${project}/${sample} already has ANI summary"
 				echo "$(date)" > "${main_dir}/complete/${sample}_ani_complete.txt"
