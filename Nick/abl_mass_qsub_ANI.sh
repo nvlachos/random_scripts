@@ -66,40 +66,40 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	echo "${counter}-${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta"
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
 		rm -r "${processed}/${project}/${sample}/ANI/"
-		genus="Acinetobacter"
-		species="baumannii"
-	# if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
-	# 	while IFS= read -r line;
-	# 	do
-	# 		# Grab first letter of line (indicating taxonomic level)
-	# 		first=${line::1}
-	# 		# Assign taxonomic level value from 4th value in line (1st-classification level,2nd-% by kraken, 3rd-true % of total reads, 4th-identifier)
-	# 		if [ "${first}" = "S" ]
-	# 		then
-	# 			species=$(echo "${line}" | awk -F ' ' '{print $4}')
-	# 		elif [ "${first}" = "G" ]
-	# 		then
-	# 			genus=$(echo "${line}" | awk -F ' ' '{print $4}')
-	# 		#elif [ "${first}" = "F" ]
-	# 		#then
-	# 		#	family=$(echo "${line}" | awk -F ' ' '{print $4}')
-	# 		#elif [ "${first}" = "O" ]
-	# 		#then
-	# 		#	order=$(echo "${line}" | awk -F ' ' '{print $4}')
-	# 		#elif [ "${first}" = "C" ]
-	# 		#then
-	# 		#	class=$(echo "${line}" | awk -F ' ' '{print $4}')
-	# 		#elif [ "${first}" = "P" ]
-	# 		#then
-	# 		#	phylum=$(echo "${line}" | awk -F ' ' '{print $4}')
-	# 		#elif [ "${first}" = "K" ]
-	# 		#then
-	# 		#	kingdom=$(echo "${line}" | awk -F ' ' '{print $4}')
-	# 		#elif [ "${first}" = "D" ]
-	# 		#then
-	# 		#	domain=$(echo "${line}" | awk -F ' ' '{print $4}')
-	# 		fi
-	# 	done < "${processed}/${project}/${sample}/${sample}.tax"
+	#	genus="Acinetobacter"
+	#	species="baumannii"
+	if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
+		while IFS= read -r line;
+		do
+			# Grab first letter of line (indicating taxonomic level)
+			first=${line::1}
+			# Assign taxonomic level value from 4th value in line (1st-classification level,2nd-% by kraken, 3rd-true % of total reads, 4th-identifier)
+			if [ "${first}" = "S" ]
+			then
+				species=$(echo "${line}" | awk -F ' ' '{print $4}')
+			elif [ "${first}" = "G" ]
+			then
+				genus=$(echo "${line}" | awk -F ' ' '{print $4}')
+			#elif [ "${first}" = "F" ]
+			#then
+			#	family=$(echo "${line}" | awk -F ' ' '{print $4}')
+			#elif [ "${first}" = "O" ]
+			#then
+			#	order=$(echo "${line}" | awk -F ' ' '{print $4}')
+			#elif [ "${first}" = "C" ]
+			#then
+			#	class=$(echo "${line}" | awk -F ' ' '{print $4}')
+			#elif [ "${first}" = "P" ]
+			#then
+			#	phylum=$(echo "${line}" | awk -F ' ' '{print $4}')
+			#elif [ "${first}" = "K" ]
+			#then
+			#	kingdom=$(echo "${line}" | awk -F ' ' '{print $4}')
+			#elif [ "${first}" = "D" ]
+			#then
+			#	domain=$(echo "${line}" | awk -F ' ' '{print $4}')
+			fi
+		done < "${processed}/${project}/${sample}/${sample}.tax"
 	 	if [[ ${counter} -lt ${max_subs} ]]; then
 			if [[ ! -f "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
 				echo  "Index is below max submissions, submitting"
