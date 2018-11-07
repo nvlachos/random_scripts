@@ -55,7 +55,7 @@ elif [[ ! -d "${share}/mass_subs/ANI_subs/complete" ]]; then
 	mkdir "${share}/mass_subs/ANI_subs/complete"
 fi
 
-start_time=$(date '+%Y-%m-%d_%H:%M:%S')
+start_time=$(date '+%Y-%m-%d_%H-%M-%S')
 #start_time=${start_time// /_}
 
 while [ ${counter} -lt ${arr_size} ] ; do
