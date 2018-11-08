@@ -54,7 +54,7 @@ while IFS= read -r var; do
 	else
 		ohsixoheightp="-"
 	fi
-	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181003.gapped_98_sstar_summary.txt" ]]; then
+	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_${2}.gapped_98_sstar_summary.txt" ]]; then
 		newestDB="X"
 	elif [[ ! -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
 		newestDB="A"
@@ -62,7 +62,7 @@ while IFS= read -r var; do
 		newestDB="M"
 	fi
 	if [[ -d "${processed}/${project}/${sample_name}/c-sstar_plasmid" ]]; then
-		if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_20181003.gapped_40_sstar_summary.txt" ]]; then
+		if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt" ]]; then
 			newestDBp="X"
 		elif [[ ! -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
 			newestDBp="A"
@@ -77,7 +77,7 @@ while IFS= read -r var; do
 	else
 		ohsixoheights="M"
 	fi
-	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_20181003_srst2__results.txt" ]] || [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__ResGANNOT_20180817_srst2__results.txt" ]]; then
+	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_${2}_srst2__results.txt" ]] || [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__ResGANNOT_20180817_srst2__results.txt" ]]; then
 		newestDBs="X"
 	else
 		newestDBs="M"
@@ -89,5 +89,5 @@ done < "${share}/${1}"
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)
-printf "%s %s" "Act_by_list.sh has completed ${2} " "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
+printf "%s %s" "Act_by_list.sh has completed 20180608 & ${2}" "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
 exit 0
