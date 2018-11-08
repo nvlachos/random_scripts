@@ -137,6 +137,9 @@ while IFS= read -r var; do
 	echo "${sample}"
 	if [[ ${sub_counter} -lt ${max_subs} ]]; then
 		echo  "Index is below max submissions, submitting"
+		if [[ -d ${ref_tax}/aniM ]]; this_component_number
+			rm -r ${ref_tax}/aniM
+		fi
 		# echo -e "#!/bin/bash -l\n" > "${main_dir}/aniB_${sample}_${start_time}.sh"
 		# echo -e "#$ -o aniB_${sample}.out" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
 		# echo -e "#$ -e aniB_${sample}.err" >> "${main_dir}/aniB_${sample}_${start_time}.sh"
