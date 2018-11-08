@@ -219,7 +219,7 @@ while IFS= read -r var; do
 		done
 	fi
 	sub_counter=$(( counter + 1 ))
- done
+done < /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/ani_list.txt
 #echo "Count-${sub_counter}"
 #exit
 timer=0
