@@ -88,7 +88,7 @@ while IFS= read -r var; do
 	echo "${counter}:${project}/${sample_name}:	0608	:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:	0817	:${newestDB}:${newestDBp}:${newestDBs}:"
 	echo "${project}/${sample_name}:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:${newestDB}:${newestDBp}:${newestDBs}:" >> "${share}/current_DBS_in_samples.txt"
 	counter=$(( counter + 1 ))
-done < "${share}/${1}"
+done < "${1}"
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)
