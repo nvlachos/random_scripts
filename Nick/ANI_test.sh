@@ -108,12 +108,12 @@ samples=()
 main_dir="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs/ani_TEST"
 mkdir ${main_dir}
 
-while IFS= read -r var; do
+	#while IFS= read -r var; do
 	#sample=$(basename ${ref_tax} | rev | cut -d'/' -f1 | rev)
-	sample=${var}
-	echo "Sample:${sample}"
-	ref_tax=${local_DBs}/aniDB/${working_dir}/${sample}
-	#for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
+	#sample=${var}
+	#echo "Sample:${sample}"
+	#ref_tax=${local_DBs}/aniDB/${working_dir}/${sample}
+for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
 	echo "${ref_tax}"
 	#sub_counter=$(( sub_counter + 1 ))
 	#continue
@@ -222,7 +222,7 @@ while IFS= read -r var; do
 		done
 	fi
 	sub_counter=$(( counter + 1 ))
-done < /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/ani_list.txt
+done #< /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/ani_list.txt
 #echo "Count-${sub_counter}"
 #exit
 timer=0
