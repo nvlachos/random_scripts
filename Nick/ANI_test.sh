@@ -224,23 +224,23 @@ OUTDATADIR="${local_DBs}/aniDB"
 # 	sub_counter=$(( counter + 1 ))
 # done #< /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/ani_list.txt
 #echo "Count-${sub_counter}"
-#exit
-timer=0
-waiting_sample=$(echo "${samples[${counter}]}")
-while :
-do
- 	if [[ ${timer} -gt 1800 ]]; then
- 		echo "Timer exceeded limit of 1800 seconds 30 minutes"
- 		break
- 	fi
- 	if [[ -f "${main_dir}/complete/${waiting_sample}_aniM_complete.txt" ]] && [[ -f "${main_dir}/complete/${waiting_sample}_Fani_complete.txt" ]]; then
- 		break
-	else
-		echo  "Waited ${timer}s on ${waiting_sample} to finish ANI's"
-		sleep 5
-		timer=$(( timer + 5 ))
-	fi
-done
+# #exit
+# timer=0
+# waiting_sample=$(echo "${samples[${counter}]}")
+# while :
+# do
+#  	if [[ ${timer} -gt 1800 ]]; then
+#  		echo "Timer exceeded limit of 1800 seconds 30 minutes"
+#  		break
+#  	fi
+#  	if [[ -f "${main_dir}/complete/${waiting_sample}_aniM_complete.txt" ]] && [[ -f "${main_dir}/complete/${waiting_sample}_Fani_complete.txt" ]]; then
+#  		break
+# 	else
+# 		echo  "Waited ${timer}s on ${waiting_sample} to finish ANI's"
+# 		sleep 5
+# 		timer=$(( timer + 5 ))
+# 	fi
+# done
 
 #Extracts the query sample info line for percentage identity from the percent identity file
 #for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
