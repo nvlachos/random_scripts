@@ -56,7 +56,6 @@ echo "${alt_database}"
 alt_database=${alt_database//_srst2/}
 echo "${alt_database}"
 
-exit
 
 start_time=$(date "+%F-%T")
 
