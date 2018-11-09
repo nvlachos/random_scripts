@@ -43,6 +43,7 @@ while IFS= read -r var; do
 #		echo "Found-renaming"
 		mv "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608_srst2.gapped_98_sstar_summary.txt" "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608.gapped_98_sstar_summary.txt"
 	else
+		:
 #		echo "Not Found"
 	fi
 
@@ -51,6 +52,7 @@ while IFS= read -r var; do
 #		echo "Found - renaming"
 		mv ${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_srst2_gapped ${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_gapped
 	else
+		:
 #		echo "Not Found"
 	fi
 #	echo "Looking for ${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_gapped/${sample_name}.ResGANNOT_20180608_srst2.gapped_98.sstar_grouped"
@@ -58,6 +60,7 @@ while IFS= read -r var; do
 #		echo "Found - renaming"
 		mv "${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_gapped/${sample_name}.ResGANNOT_20180608_srst2.gapped_98.sstar_grouped" "${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_gapped/${sample_name}.ResGANNOT_20180608.gapped_98.sstar_grouped"
 	else
+		:
 #		echo "Not Found"
 	fi
 #	echo "Looking for ${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_gapped/${sample_name}.ResGANNOT_20180608_srst2.gapped_98.sstar"
@@ -65,6 +68,7 @@ while IFS= read -r var; do
 #		echo "Found - renaming"
 		mv "${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_gapped/${sample_name}.ResGANNOT_20180608_srst2.gapped_98.sstar" "${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_gapped/${sample_name}.ResGANNOT_20180608.gapped_98.sstar"
 	else
+		:
 #			echo "Not Found"
 	fi
 
