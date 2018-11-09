@@ -52,7 +52,7 @@ fi
 alt_database_path=$(basename -- "${5}")
 alt_database=$(echo ${alt_database_path##*/} | cut -d'.' -f1)
 alt_database=${alt_database//_srst2/}
-echo "${alt_DB}"
+echo "${alt_database}"
 
 exit
 
