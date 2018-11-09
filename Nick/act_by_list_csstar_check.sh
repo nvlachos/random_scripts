@@ -40,13 +40,13 @@ while IFS= read -r var; do
 #	echo "Looking for ${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_srst2_gapped"
 	if [[ -d "${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_srst2_gapped" ]]; then
 #		echo "Found - renaming"
-		rm -r ${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_srst2_gapped ${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_gapped
+		rm -r ${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_srst2_gapped # ${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_gapped
 	else
 		:
 #		echo "Not Found"
 	fi
 	if [[ -d "${processed}/${project}/${sample_name}/c-sstar_plasmid/ResGANNOT_20180608_srst2_gapped" ]]; then
-		rm -r ${processed}/${project}/${sample_name}/c-sstar_plasmid/ResGANNOT_20180608_srst2_gapped ${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_gapped
+		rm -r ${processed}/${project}/${sample_name}/c-sstar_plasmid/ResGANNOT_20180608_srst2_gapped # ${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_gapped
 	fi
 #	echo "Looking for ${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608_srst2.gapped_98_sstar_summary.txt"
 	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608_srst2.gapped_98_sstar_summary.txt" ]]; then
