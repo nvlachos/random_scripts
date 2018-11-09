@@ -52,14 +52,17 @@ fi
 alt_database_path=$(basename -- "${5}")
 alt_database=$(echo ${alt_database_path##*/} | cut -d'.' -f1)
 alt_database=${alt_database//_srst2/}
+echo "${alt_DB}"
+
+exit
 
 start_time=$(date "+%F-%T")
 
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
-	rm -r "${processed}/${project}/${sample}/c-sstar/alt_database=_gapped/"
-	rm -r "${processed}/${project}/${sample}/c-sstar/${sample}.alt_database=.gapped_98_sstar_summary.txt"
+	rm -r "${processed}/${project}/${sample}/c-sstar/alt_DB=_gapped/"
+	rm -r "${processed}/${project}/${sample}/c-sstar/${sample}.alt_DB=.gapped_98_sstar_summary.txt"
 	rm -r "${processed}/${project}/${sample}/c-sstar/${alt_database}_gapped/"
 	rm -r "${processed}/${project}/${sample}/c-sstar/${sample}.${alt_database}.gapped_98_sstar_summary.txt"
 	echo ${counter}
