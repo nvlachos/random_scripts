@@ -53,8 +53,6 @@ alt_database_path=$(basename -- "${5}")
 alt_database=$(echo ${alt_database_path##*/} | cut -d'.' -f1)
 alt_database=${alt_database//_srst2/}
 
-exit
-
 start_time=$(date "+%F-%T")
 
 while [ ${counter} -lt ${arr_size} ] ; do
