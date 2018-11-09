@@ -55,9 +55,7 @@ alt_DB_path=${3}
 alt_DB=$(echo ${alt_DB_path##*/} | cut -d'.' -f1)
 alt_DB=${alt_DB//_srst2/}
 echo ${alt_DB}
-start_time=$(DATE)
-
-exit
+start_time=$(date "+%F-%T")
 
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
