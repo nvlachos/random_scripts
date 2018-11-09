@@ -53,6 +53,8 @@ alt_DB=$(echo ${alt_DB_path##*/} | cut -d'.' -f1)
 alt_DB=${alt_DB//_srst2/}
 echo ${alt_DB}
 
+exit
+
 start_time=$(date "+%F-%T")
 
 while [ ${counter} -lt ${arr_size} ] ; do
