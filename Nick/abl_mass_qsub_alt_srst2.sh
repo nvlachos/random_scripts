@@ -53,6 +53,7 @@ fi
 
 alt_DB_path=${3}
 alt_DB=$(basename "${alt_DB_path}")
+alt_DB=${alt_DB//_srst2/}
 
 start_time=$(DATE)
 
