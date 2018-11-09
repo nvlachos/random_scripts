@@ -30,8 +30,8 @@ fi
 
 # Loop through and act on each sample name in the passed/provided list
 counter=0
-echo "c-sstar|c-sstar_plasmid|srst2"
-echo "ID|0608-c-sstar|0608-c-sstar_plasmid|0608-srst2|1003-c-sstar|1003-c-sstar_plasmid|1003-srst2" > "${share}/current_DBS_in_samples.txt"
+echo "c-sstar:c-sstar_plasmid:srst2"
+echo "Identification:0608-c-sstar:0608-c-sstar_plasmid:0608-srst2:1003-c-sstar:1003-c-sstar_plasmid:1003-srst2" > "${share}/current_DBS_in_samples.txt"
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
@@ -142,8 +142,8 @@ while IFS= read -r var; do
 	else
 		oheightseventeens="M"
 	fi
-	echo "${counter}|${project}/${sample_name}|	0608	|${ohsixoheight}|${ohsixoheightp}|${ohsixoheights}|	1003	|${oheightseventeen}|${oheightseventeenp}|${oheightseventeens}|"
-	echo "${project}/${sample_name}|${ohsixoheight}|${ohsixoheightp}|${ohsixoheights}|${oheightseventeen}|${oheightseventeenp}|${oheightseventeens}|" >> "${share}/current_DBS_in_samples.txt"
+	echo "${counter}:${project}/${sample_name}:	0608	:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:	1003	:${oheightseventeen}:${oheightseventeenp}:${oheightseventeens}:"
+	echo "${project}/${sample_name}:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:${oheightseventeen}:${oheightseventeenp}:${oheightseventeens}:" >> "${share}/current_DBS_in_samples.txt"
 	counter=$(( counter + 1 ))
 done < "${1}"
 echo "All isolates completed"
