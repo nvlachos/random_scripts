@@ -39,7 +39,6 @@ alt_DB=${alt_DB//_srst2/}
 echo ${alt_DB_path}
 echo ${alt_DB}
 
-exit
 
 mkdir "${processed}/${2}/${1}/srst2"
 
