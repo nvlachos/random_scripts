@@ -363,7 +363,7 @@ while IFS= read -r var; do
 		echo "Tax:${temp_isolate}"
 		echo "dist:${mash_dist}"
 		echo "kmer:${mash_kmer}"
-		temp_isolate=$(echo ${tax} | cut -d'.' -f1)
+		#temp_isolate=$(echo ${tax} | cut -d'.' -f1)
 		mash_dist_array[${temp_isolate}]=${mash_dist}
 		mash_kmers_array[${temp_isolate}]=${mash_kmer}
 	done < "${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_top30.dists"
