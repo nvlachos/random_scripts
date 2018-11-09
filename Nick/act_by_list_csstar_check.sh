@@ -35,7 +35,7 @@ echo "ID:0608-c-sstar:0608-c-sstar_plasmid:0608-srst2:1003-c-sstar:1003-c-sstar_
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	echo "${counter}"
+#	echo "${counter}"
 
 
 #	echo "Looking for ${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608_srst2.gapped_98_sstar_summary.txt"
@@ -142,7 +142,6 @@ while IFS= read -r var; do
 	else
 		oheightseventeens="M"
 	fi
-	continue
 	echo "${counter}:${project}/${sample_name}:	0608	:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:	1003	:${oheightseventeen}:${oheightseventeenp}:${oheightseventeens}:"
 	echo "${project}/${sample_name}:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:${oheightseventeen}:${oheightseventeenp}:${oheightseventeens}:" >> "${share}/current_DBS_in_samples.txt"
 	counter=$(( counter + 1 ))
