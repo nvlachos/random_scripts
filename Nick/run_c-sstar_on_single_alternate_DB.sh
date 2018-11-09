@@ -83,7 +83,7 @@ fi
 
 #alt_database="${5##*/}"
 alt_database=$(basename -- "${5}")
-alt_database="${alt_database%.*}"
+alt_database=alt_DB=$(echo ${alt_DB_path##*/} | cut -d'.' -f1)
 alt_DB=${alt_DB//_srst2/}
 echo ${alt_database}
 
