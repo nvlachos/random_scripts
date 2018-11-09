@@ -35,7 +35,7 @@ alt_DB_path=${3}
 alt_DB=$(basename "${alt_DB_path}")
 alt_DB=$(echo ${alt_DB_path##*/} | cut -d'.' -f1)
 postfix="_srst2"
-alt_DB=$(echo ${alt_DB#${postfix}})
+alt_DB=${alt_DB//${postfix}/}
 
 echo ${alt_DB_path}
 echo ${alt_DB}
