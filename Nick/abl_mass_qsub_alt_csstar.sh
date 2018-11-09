@@ -48,8 +48,11 @@ elif [[ ! -d  "${share}/mass_subs/csstar_alt_subs/complete" ]]; then
 	mkdir "${share}/mass_subs/csstar_alt_subs/complete"
 fi
 
+
 alt_DB_path=${3}
+echo ${alt_DB_path}
 alt_DB=$(echo ${alt_DB_path##*/} | cut -d'.' -f1)
+echo ${alt_DB}
 alt_DB=${alt_DB//_srst2/}
 echo ${alt_DB}
 
