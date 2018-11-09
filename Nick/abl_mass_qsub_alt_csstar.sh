@@ -49,7 +49,7 @@ elif [[ ! -d  "${share}/mass_subs/csstar_alt_subs/complete" ]]; then
 fi
 
 
-alt_database_path=$(basename -- "${5}")
+alt_database_path=$(basename -- "${3}")
 echo "${alt_database_path}"
 alt_database=$(echo ${alt_database_path##*/} | cut -d'.' -f1)
 echo "${alt_database}"
