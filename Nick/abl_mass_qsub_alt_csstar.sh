@@ -49,12 +49,9 @@ elif [[ ! -d  "${share}/mass_subs/csstar_alt_subs/complete" ]]; then
 fi
 
 
-alt_DB_path=${3}
-echo ${alt_DB_path}
-alt_DB=$(echo ${alt_DB_path##*/} | cut -d'.' -f1)
-echo ${alt_DB}
-alt_DB=${alt_DB//_srst2/}
-echo ${alt_DB}
+alt_database_path=$(basename -- "${5}")
+alt_database=$(echo ${alt_database_path##*/} | cut -d'.' -f1)
+alt_database=${alt_database//_srst2/}
 
 exit
 
@@ -63,14 +60,16 @@ start_time=$(date "+%F-%T")
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
-	rm -r "${processed}/${project}/${sample}/c-sstar/${alt_DB}_gapped/"
-	rm -r "${processed}/${project}/${sample}/c-sstar/${sample}.${alt_DB}.gapped_98_sstar_summary.txt"
+	rm -r "${processed}/${project}/${sample}/c-sstar/alt_database=_gapped/"
+	rm -r "${processed}/${project}/${sample}/c-sstar/${sample}.alt_database=.gapped_98_sstar_summary.txt"
+	rm -r "${processed}/${project}/${sample}/c-sstar/${alt_database}_gapped/"
+	rm -r "${processed}/${project}/${sample}/c-sstar/${sample}.${alt_database}.gapped_98_sstar_summary.txt"
 	echo ${counter}
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
 		if [[ ${counter} -lt ${max_subs} ]]; then
 			echo  "Index is below max submissions, submitting"
 
-			if [[ ! -f "${processed}/${project}/${sample}/c-sstar/${sample}.${alt_DB}.gapped_98_sstar_summary.txt" ]]; then
+			if [[ ! -f "${processed}/${project}/${sample}/c-sstar/${sample}.${alt_database}.gapped_98_sstar_summary.txt" ]]; then
 				echo  "Index is below max submissions, submitting"
 				echo -e "#!/bin/bash -l\n" > "${main_dir}/csstn_${sample}_${start_time}.sh"
 				echo -e "#$ -o csstn_${sample}.out" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
@@ -80,7 +79,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 				echo -e "module load Python/3.6.1\n" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 				# Defaulting to gapped/98, change if you want to include user preferences
-				echo -e "\"${shareScript}/run_c-sstar_on_single_alternate_DB.sh\" \"${sample}\" g h \"${project}\" \"${alt_DB_path}\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/run_c-sstar_on_single_alternate_DB.sh\" \"${sample}\" g h \"${project}\" \"${alt_database_path}\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarn_complete.txt\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 				qsub "${main_dir}/csstn_${sample}_${start_time}.sh"
 			else
@@ -89,7 +88,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			fi
 
 			if [[ -d "${processed}/${project}/${sample}/c-sstar_plasmid" ]]; then
-				if [[ ! -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_DB}.gapped_40_sstar_summary.txt" ]]; then
+				if [[ ! -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_40_sstar_summary.txt" ]]; then
 					echo -e "#!/bin/bash -l\n" > "${main_dir}/csstp_${sample}_${start_time}.sh"
 					echo -e "#$ -o csstp_${sample}.out" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 					echo -e "#$ -e csstp_${sample}.err" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
@@ -98,11 +97,11 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					echo -e "#$ -q short.q\n"  >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 					echo -e "module load Python/3.6.1\n" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 					# Defaulting to gapped/98, change if you want to include user preferences
-					echo -e "\"${shareScript}/run_c-sstar_on_single_alternate_DB.sh\" \"${sample}\" g o \"${project}\" \"${alt_DB_path}\" \"--plasmid\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
+					echo -e "\"${shareScript}/run_c-sstar_on_single_alternate_DB.sh\" \"${sample}\" g o \"${project}\" \"${alt_database_path}\" \"--plasmid\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarp_complete.txt\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 					qsub "${main_dir}/csstp_${sample}_${start_time}.sh"
-					if [[ -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_DB}.gapped_98_sstar_summary.txt" ]]; then
-						rm "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_DB}.gapped_98_sstar_summary.txt"
+					if [[ -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_98_sstar_summary.txt" ]]; then
+						rm "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_98_sstar_summary.txt"
 					fi
 				else
 					echo "${project}/${sample} already has 0608 PLASMID"
@@ -121,7 +120,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					break
 				fi
 				if [[ -f "${main_dir}/complete/${waiting_sample}_csstarn_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_scaffolds_trimmed.fasta" ]]; then
-					if [[ ! -f "${processed}/${project}/${sample}/c-sstar/${sample}.${alt_DB}.gapped_98_sstar_summary.txt" ]]; then
+					if [[ ! -f "${processed}/${project}/${sample}/c-sstar/${sample}.${alt_database}.gapped_98_sstar_summary.txt" ]]; then
 						echo  "Index is below max submissions, submitting"
 						echo -e "#!/bin/bash -l\n" > "${main_dir}/csstn_${sample}_${start_time}.sh"
 						echo -e "#$ -o csstn_${sample}.out" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
@@ -131,7 +130,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 						echo -e "module load Python/3.6.1\n" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 						# Defaulting to gapped/98, change if you want to include user preferences
-						echo -e "\"${shareScript}/run_c-sstar_on_single_alternate_DB.sh\" \"${sample}\" g h \"${project}\" \"${alt_DB_path}\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
+						echo -e "\"${shareScript}/run_c-sstar_on_single_alternate_DB.sh\" \"${sample}\" g h \"${project}\" \"${alt_database_path}\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarn_complete.txt\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 						qsub "${main_dir}/csstn_${sample}_${start_time}.sh"
 					else
@@ -140,7 +139,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					fi
 
 					if [[ -d "${processed}/${project}/${sample}/c-sstar_plasmid" ]]; then
-						if [[ ! -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_DB}.gapped_40_sstar_summary.txt" ]]; then
+						if [[ ! -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_40_sstar_summary.txt" ]]; then
 							echo -e "#!/bin/bash -l\n" > "${main_dir}/csstp_${sample}_${start_time}.sh"
 							echo -e "#$ -o csstp_${sample}.out" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 							echo -e "#$ -e csstp_${sample}.err" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
@@ -149,11 +148,11 @@ while [ ${counter} -lt ${arr_size} ] ; do
 							echo -e "#$ -q short.q\n"  >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 							echo -e "module load Python/3.6.1\n" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 							# Defaulting to gapped/98, change if you want to include user preferences
-							echo -e "\"${shareScript}/run_c-sstar_on_single_alternate_DB.sh\" \"${sample}\" g o \"${project}\" \"/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/${alt_DB}.fasta\" \"--plasmid\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
+							echo -e "\"${shareScript}/run_c-sstar_on_single_alternate_DB.sh\" \"${sample}\" g o \"${project}\" \"/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/${alt_database}.fasta\" \"--plasmid\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 							echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarp_complete.txt\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 							qsub "${main_dir}/csstp_${sample}_${start_time}.sh"
-							if [[ -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_DB}.gapped_98_sstar_summary.txt" ]]; then
-								rm "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_DB}.gapped_98_sstar_summary.txt"
+							if [[ -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_98_sstar_summary.txt" ]]; then
+								rm "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_98_sstar_summary.txt"
 							fi
 						else
 							echo "${project}/${sample} already has 0608 PLASMID"
