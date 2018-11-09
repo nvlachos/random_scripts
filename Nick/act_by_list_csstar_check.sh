@@ -31,7 +31,7 @@ fi
 # Loop through and act on each sample name in the passed/provided list
 counter=0
 echo "c-sstar:c-sstar_plasmid:srst2"
-echo "ID:0608-c-sstar:0608-c-sstar_plasmid:0608-srst2:0817-c-sstar:0817-c-sstar_plasmid:0817-srst2" > "${share}/current_DBS_in_samples.txt"
+echo "ID:0608-c-sstar:0608-c-sstar_plasmid:0608-srst2:1003-c-sstar:1003-c-sstar_plasmid:1003-srst2" > "${share}/current_DBS_in_samples.txt"
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
@@ -48,15 +48,15 @@ while IFS= read -r var; do
 		fi
 		mv -r ${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_srst2 ${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608
 	fi
-	if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_20180608_srst2.gapped_98_sstar_summary.txt" ]]; then
-		mv "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_20180608_srst2.gapped_98_sstar_summary.txt" "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608.gapped_98_sstar_summary.txt"
+	if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_20180608_srst2.gapped_40_sstar_summary.txt" ]]; then
+		mv "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_20180608_srst2.gapped_40_sstar_summary.txt" "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608.gapped_40_sstar_summary.txt"
 	fi
 	if [[ -d "${processed}/${project}/${sample_name}/c-sstar_plasmid/ResGANNOT_20180608_srst2" ]]; then
-		if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/ResGANNOT_20180608_srst2/${sample}.ResGANNOT_20180608_srst2.gapped_98.sstar_grouped" ]]; then
-			mv "${processed}/${project}/${sample_name}/c-sstar_plasmid/ResGANNOT_20180608_srst2/${sample}.ResGANNOT_20180608_srst2.gapped_98.sstar_grouped" "${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_srst2ResGANNOT_20180608.gapped_98.sstar_grouped"
+		if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/ResGANNOT_20180608_srst2/${sample}.ResGANNOT_20180608_srst2.gapped_40.sstar_grouped" ]]; then
+			mv "${processed}/${project}/${sample_name}/c-sstar_plasmid/ResGANNOT_20180608_srst2/${sample}.ResGANNOT_20180608_srst2.gapped_40.sstar_grouped" "${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_srst2ResGANNOT_20180608.gapped_40.sstar_grouped"
 		fi
-		if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/ResGANNOT_20180608_srst2/${sample}.ResGANNOT_20180608_srst2.gapped_98.sstar" ]]; then
-			mv "${processed}/${project}/${sample_name}/c-sstar_plasmid/ResGANNOT_20180608_srst2/${sample}.ResGANNOT_20180608_srst2.gapped_98.sstar" "${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_srst2ResGANNOT_20180608.gapped_98.sstar"
+		if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/ResGANNOT_20180608_srst2/${sample}.ResGANNOT_20180608_srst2.gapped_40.sstar" ]]; then
+			mv "${processed}/${project}/${sample_name}/c-sstar_plasmid/ResGANNOT_20180608_srst2/${sample}.ResGANNOT_20180608_srst2.gapped_40.sstar" "${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_srst2ResGANNOT_20180608.gapped_40.sstar"
 		fi
 		mv -r ${processed}/${project}/${sample_name}/c-sstar_plasmid/ResGANNOT_20180608_srst2 ${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608
 	fi
@@ -68,7 +68,7 @@ while IFS= read -r var; do
 	fi
 
 
-	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608.gapped_98_sstar_summary.txt" ]] || [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608_srst2.gapped_98_sstar_summary.txt" ]]; then
+	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608.gapped_98_sstar_summary.txt" ]]; then
 		ohsixoheight="X"
 	elif [[ ! -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
 		ohsixoheight="A"
@@ -76,7 +76,7 @@ while IFS= read -r var; do
 		ohsixoheight="M"
 	fi
 	if [[ -d "${processed}/${project}/${sample_name}/c-sstar_plasmid" ]]; then
-		if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_20180608.gapped_40_sstar_summary.txt" ]] || [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_20180608_srst2.gapped_40_sstar_summary.txt" ]]; then
+		if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_20180608.gapped_40_sstar_summary.txt" ]]; then
 			ohsixoheightp="X"
 		elif [[ ! -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
 			ohsixoheightp="A"
@@ -86,7 +86,7 @@ while IFS= read -r var; do
 	else
 		ohsixoheightp="-"
 	fi
-	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180817.gapped_98_sstar_summary.txt" ]]; then
+	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181003.gapped_98_sstar_summary.txt" ]]; then
 		oheightseventeen="X"
 	elif [[ ! -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
 		oheightseventeen="A"
@@ -94,7 +94,7 @@ while IFS= read -r var; do
 		oheightseventeen="M"
 	fi
 	if [[ -d "${processed}/${project}/${sample_name}/c-sstar_plasmid" ]]; then
-		if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_20180817.gapped_40_sstar_summary.txt" ]]; then
+		if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_20181003.gapped_40_sstar_summary.txt" ]]; then
 			oheightseventeenp="X"
 		elif [[ ! -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
 			oheightseventeenp="A"
@@ -106,16 +106,15 @@ while IFS= read -r var; do
 	fi
 	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_20180608_srst2__results.txt" ]] || [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__ResGANNOT_20180608_srst2__results.txt" ]]; then
 		ohsixoheights="X"
-	elif if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}_ResGANNOT_20180608_srst2.fasta__genes__ResGANNOT_20180608_srst2__results.txt" ]] || [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}_ResGANNOT_20180608_srst2.fasta__fullgenes__ResGANNOT_20180608_srst2__results.txt" ]]; then
 	else
 		ohsixoheights="M"
 	fi
-	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_20180817_srst2__results.txt" ]] || [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__ResGANNOT_20180817_srst2__results.txt" ]]; then
+	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_20181003_srst2__results.txt" ]] || [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__ResGANNOT_20181003_srst2__results.txt" ]]; then
 		oheightseventeens="X"
 	else
 		oheightseventeens="M"
 	fi
-	echo "${counter}:${project}/${sample_name}:	0608	:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:	0817	:${oheightseventeen}:${oheightseventeenp}:${oheightseventeens}:"
+	echo "${counter}:${project}/${sample_name}:	0608	:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:	1003	:${oheightseventeen}:${oheightseventeenp}:${oheightseventeens}:"
 	echo "${project}/${sample_name}:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:${oheightseventeen}:${oheightseventeenp}:${oheightseventeens}:" >> "${share}/current_DBS_in_samples.txt"
 	counter=$(( counter + 1 ))
 done < "${share}/${1}"
