@@ -54,14 +54,27 @@ fi
 alt_DB_path=${3}
 alt_DB=$(echo ${alt_DB_path##*/} | cut -d'.' -f1)
 alt_DB=${alt_DB//_srst2/}
-
+echo ${alt_DB}
 start_time=$(DATE)
+
+exit
 
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	echo ${counter}
 	if [ ${counter} -lt ${max_subs} ]; then
+		if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__genes__${alt_DB}_srst2__results.txt" ]]; then
+				mv "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__genes__${alt_DB}_srst2__results.txt" "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__${alt_DB}_srst2__results.txt"
+				if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__fullgenes__${alt_DB}_srst2__results.txt" ]]; then
+					mv "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__fullgenes__${alt_DB}_srst2__results.txt" "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__${alt_DB}_srst2__results.txt"
+				fi
+				continue
+		elif [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__fullgenes__${alt_DB}_srst2__results.txt" ]]; then
+			mv "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__fullgenes__${alt_DB}_srst2__results.txt" "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__${alt_DB}_srst2__results.txt"
+			continue
+		fi
+
 		if [[ ! -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__${alt_DB}_srst2__results.txt" ]] || [[ ! -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__${alt_DB}_srst2__results.txt" ]]; then
 			echo  "Index is below max submissions, submitting"
 			echo -e "#!/bin/bash -l\n" > "${main_dir}/srst2AR_${sample}_${start_time}.sh"
