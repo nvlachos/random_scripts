@@ -43,7 +43,7 @@ elif [ -z "$4" ]; then
 	echo "Empty project id supplied to run_c-sstar.sh, exiting"
 	exit 1
 elif [ -z "$5" ] || [ ! -f "${5}" ]; then
-	echo "Empty alternate ID supplied to run_c-sstar.sh, exiting"
+	echo "Empty alternate ID ${5} supplied to run_c-sstar.sh, exiting"
 	exit 1
 fi
 
