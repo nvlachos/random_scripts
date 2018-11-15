@@ -106,6 +106,9 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		if [[ ! -f "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
 			rm -r "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})"
 		fi
+		if [[ ! -d "${processed}/${sample}/ANI/aniM" ]]; then
+			rm -r "${processed}/${sample}/ANI/aniM"
+		fi
 	 	if [[ ${counter} -lt ${max_subs} ]]; then
 			if [[ ! -f "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
 				echo  "Index is below max submissions, submitting"
