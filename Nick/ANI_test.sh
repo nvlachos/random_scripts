@@ -103,7 +103,7 @@ OUTDATADIR="${local_DBs}/aniDB"
 
 
 sub_counter=0
-max_subs=50
+max_subs=1000
 samples=()
 main_dir="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs/ani_TEST"
 mkdir ${main_dir}
