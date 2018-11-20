@@ -51,8 +51,8 @@ while IFS= read -r var; do
 #			gunzip -c "${full_name2}" > "${OUTDATADIR}/${sample_name}_R2_001.fastq"
 			gunzip -c "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz" > "${OUTDATADIR}/${sample_name}_R2_001.fastq"
 		fi
-	fi	
-done < /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/${2}
+	fi
+done < ${2}
 
 #Script exited gracefully (unless something else inside failed)
 exit 0
