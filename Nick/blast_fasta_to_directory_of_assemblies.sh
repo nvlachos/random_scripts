@@ -42,7 +42,7 @@ do
 			echo "Attempting to blast ${assembly}"
 			blastOut=${assembly}.blast
 			blastn -query ${assembly} -db ${2} -out $blastOut -word_size 10 -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen"
-
+			sort -k4,4r $blastOut >> $blastOut.best
 			echo "completed ${assembly} in loop at ${current_time}"
 	else
 		echo "${assembly} is not a fasta file"
