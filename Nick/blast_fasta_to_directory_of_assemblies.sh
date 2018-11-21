@@ -44,6 +44,9 @@ do
 			blastn -query ${assembly} -db ${3} -out $blastOut -word_size 10 -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen"
 
 			echo "completed ${assembly} in loop at ${current_time}"
+	else
+		echo "${assembly} is not a fasta file"
+	fi
 done
 
 echo "All runs completed"
