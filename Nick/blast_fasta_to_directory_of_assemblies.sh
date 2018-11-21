@@ -38,10 +38,9 @@ fi
 
 for assembly in ${2}/*;
 do
-	if [[ "${assembly}" = *".fasta"]]; then
-			sample_name=$(basename ${assembly})
-
-			blastOut=${2}/${sample_name}.blast
+	if [[ "${assembly}" == *".fasta" ]]; then
+			echo "Attempting to blast ${assembly}"
+			blastOut=${assembly}.blast
 			blastn -query ${assembly} -db ${3} -out $blastOut -word_size 10 -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen"
 
 			echo "completed ${assembly} in loop at ${current_time}"
