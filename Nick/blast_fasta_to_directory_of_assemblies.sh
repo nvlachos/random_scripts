@@ -30,18 +30,18 @@ fi
 
 # Loop through and act on each sample name in the passed/provided list
 
-makeblastdb -in ${3} -out ${3} -dbtype nucl
+makeblastdb -in ${2} -out ${2} -dbtype nucl
 
-if [[ ! -d ${2} ]]; then
-	echo "Directory of fastas (${2}) don't exist... exiting"
+if [[ ! -d ${1} ]]; then
+	echo "Directory of fastas (${1}) don't exist... exiting"
 fi
 
-for assembly in ${2}/*;
+for assembly in ${1}/*;
 do
 	if [[ "${assembly}" == *".fasta" ]]; then
 			echo "Attempting to blast ${assembly}"
 			blastOut=${assembly}.blast
-			blastn -query ${assembly} -db ${3} -out $blastOut -word_size 10 -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen"
+			blastn -query ${assembly} -db ${2} -out $blastOut -word_size 10 -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen"
 
 			echo "completed ${assembly} in loop at ${current_time}"
 	else
