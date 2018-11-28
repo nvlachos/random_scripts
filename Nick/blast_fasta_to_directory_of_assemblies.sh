@@ -48,6 +48,7 @@ do
 			sort -k4,4r -k3,3nr -o ${blastOut} ${blastOut}
 			echo "Truly?"
 			$(head -n1 ${blastOut}) >> ${bestlist}
+			echo "After..."
 			echo "completed ${assembly} in loop at ${current_time}"
 	else
 		echo "${assembly} is not a fasta file"
