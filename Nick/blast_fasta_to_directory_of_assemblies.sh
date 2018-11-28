@@ -36,7 +36,7 @@ if [[ ! -d ${1} ]]; then
 	echo "Directory of fastas (${1}) don't exist... exiting"
 fi
 
-bestlist="${2}/best_hits.tsv"
+bestlist="${1}/best_hits.tsv"
 > ${bestlist}
 
 for assembly in ${1}/*;
