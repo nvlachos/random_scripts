@@ -47,7 +47,9 @@ do
 			blastn -query ${assembly} -db ${2} -out $blastOut -word_size 10 -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen"
 			sort -k4,4r -k3,3nr -o ${blastOut} ${blastOut}
 			echo "Truly?"
-			$(head -n1 ${blastOut}) >> ${bestlist}
+			info=$(head -n1 ${blastOut})
+			echo "${info}"
+			echo "${info}" >> ${bestlist}
 			echo "After..."
 			echo "completed ${assembly} in loop at ${current_time}"
 	else
