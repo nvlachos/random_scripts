@@ -8,6 +8,9 @@
 
 #Import the config file with shortcuts and settings
 . ./config.sh
+if [[ "$1" = "-h" ]]; then
+	echo "Usage is ./rename_sample.sh old_name new_name project_id
+	"
 old_name=${1}
 if [[ ! -z ${4} ]]; then
 	old_name=${4}
@@ -16,25 +19,21 @@ new_name=${2}
 project=${3}
 echo "Test 1-${old_name}-${new_name}"
 find /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/${old_name} -type f -name "*${old_name}*" | while read FILE ; do
-    dirname=$(dirname $FILE)
+  dirname=$(dirname $FILE)
 	filename=$(basename $FILE)
 	#echo "Found-${FILE}"
 	#echo "$dirname"
 	#echo "$filename"
-	newfile="$(echo ${filename/${old_name}/${new_name}})" 
+	newfile="$(echo ${filename/${old_name}/${new_name}})"
 	echo "${newfile}"
     mv "${FILE}" "${dirname}/${newfile}"
 done
 
 folders=()
 index=0
-find /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/${old_name} -type d > "/scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${3}/temp_folders.txt"
+find /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/${old_name} -type d > "/scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/temp_folders.txt"
 echo "Test 2"
-while read line; do
-	folders[${index}]="${line}"
-	#echo "$index-${folders[$index]}"
-	index=$(( index + 1 ))
-done < "/scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${3}/temp_folders.txt"
+find /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/${old_name} -type f -exec sed -i 's/{old_name}/${new_name}/g' {} +
 echo "Test 3"
 for (( idx=${index}-1 ; idx>=0 ; idx-- )) ; do
 	subpath=$(echo "${folders[${idx}]}" | cut -d'/' -f1-10)
@@ -50,4 +49,4 @@ for (( idx=${index}-1 ; idx>=0 ; idx-- )) ; do
 	fi
 done
 mv "/scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/${old_name}" "/scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/${new_name}"
-rm -r "/scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${3}/temp_folders.txt"
+rm -r "/scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/temp_folders.txt"
