@@ -36,17 +36,21 @@ if [[ ! -d ${1} ]]; then
 	echo "Directory of fastas (${1}) don't exist... exiting"
 fi
 
-bestlist="${2}/best_hits.tsv"
+bestlist="${1}/best_hits.tsv"
 > ${bestlist}
 
 for assembly in ${1}/*;
 do
 	if [[ "${assembly}" == *".fasta" ]]; then
 			echo "Attempting to blast ${assembly}"
-			blastOut=${assembly}.blast
+			blastOut="${assembly}.blast"
 			blastn -query ${assembly} -db ${2} -out $blastOut -word_size 10 -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen"
 			sort -k4,4r -k3,3nr -o ${blastOut} ${blastOut}
-			$(head -n1 ${blastOut}) >> $bestlist
+			echo "Truly?"
+			info=$(head -n1 ${blastOut})
+			echo "${info}"
+			echo "${info}" >> ${bestlist}
+			echo "After..."
 			echo "completed ${assembly} in loop at ${current_time}"
 	else
 		echo "${assembly} is not a fasta file"
