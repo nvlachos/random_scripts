@@ -34,7 +34,7 @@ folders=()
 index=0
 find /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/${old_name} -type d > "/scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/temp_folders.txt"
 echo "Test 2"
-find /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/${old_name} -type f -exec sed -i 's/{old_name}/${new_name}/g' {} +
+find /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/${old_name} -type f -exec sed -i 's/${old_name}/${new_name}/g' {} +
 echo "Test 3"
 for (( idx=${index}-1 ; idx>=0 ; idx-- )) ; do
 	subpath=$(echo "${folders[${idx}]}" | cut -d'/' -f1-10)
