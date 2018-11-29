@@ -32,7 +32,7 @@ done
 echo "Test 2, deep dive"
 for thing in /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/${old_name}/*; do
 	if [[ -f ${thing} ]]; then
-		sed -i -- 's/${old_name}/${new_name}/g' ${thing}
+		sed -i -- "s/${old_name}/${new_name}/g" ${thing}
 	elif [[ -d ${thing} ]]; then
 		if [[ "${thing}" = *"FASTQs" ]]; then
 			echo "Skipping FASTQs deep dive"
