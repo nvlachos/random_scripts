@@ -23,9 +23,8 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./act_by_list.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also))"
-	echo "Output location varies depending on which tasks are performed but will be found somewhere under ${processed}"
-	exit 0
+	echo "Usage is ./rename_by_list.sh path_to_list_file(single sample ID per line, e.g. B8VHYproject_ID/old_name:new_name)"
+		exit 0
 fi
 
 # Loop through and act on each sample name in the passed/provided list
