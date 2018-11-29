@@ -32,12 +32,14 @@ done
 echo "Test 2, deep dive"
 for thing in /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/${old_name}/*; do
 	if [[ -f ${thing} ]]; then
-		sed -i -- "s/${old_name}/${new_name}/g" ${thing}
+		echo "Doing normal - $thing"
+		sed -i "s/${old_name}/${new_name}/g" ${thing}
 	elif [[ -d ${thing} ]]; then
+		echo "doing directory - $thing"
 		if [[ "${thing}" = *"FASTQs" ]]; then
 			echo "Skipping FASTQs deep dive"
 		fi
-		find ${thing} -type f -exec sed -i 's/${old_name}/${new_name}/g' {} +
+		find ${thing} -type f -exec sed -i "s/${old_name}/${new_name}/g" {} +
 	else
 		echo "Thing (${thing}) is not file or directory"
 	fi
