@@ -34,7 +34,7 @@ for thing in /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/
 	if [[ -f ${thing} ]]; then
 		sed -i -- 's/${old_name}/${new_name}/g' ${thing}
 	elif [[ -d ${thing} ]]; then
-		if [[ "${thing}" = *"FASTQs"]]; then
+		if [[ "${thing}" = *"FASTQs" ]]; then
 			echo "Skipping FASTQs deep dive"
 		fi
 		find ${thing} -type f -exec sed -i 's/${old_name}/${new_name}/g' {} +
