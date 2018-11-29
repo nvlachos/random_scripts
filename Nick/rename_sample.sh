@@ -9,8 +9,9 @@
 #Import the config file with shortcuts and settings
 . ./config.sh
 if [[ "$1" = "-h" ]]; then
-	echo "Usage is ./rename_sample.sh old_name new_name project_id
-	"
+	echo "Usage is ./rename_sample.sh old_name new_name project_id"
+fi
+
 old_name=${1}
 if [[ ! -z ${4} ]]; then
 	old_name=${4}
