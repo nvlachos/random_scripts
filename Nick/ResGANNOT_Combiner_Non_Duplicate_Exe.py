@@ -78,7 +78,7 @@ def Duplicate_Gene_Remover(input_fasta, output_file, output_copy_file):
         else:
             Gene_Adder = 0
     for output in Gene_copies_out:
-        print(output)
+        #print(output)
         SeqIO.write(output, copies_fasta, 'fasta')
     copies_fasta.close()
     for output_genes in Gene_List_out:

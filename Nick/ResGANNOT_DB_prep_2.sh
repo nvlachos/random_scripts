@@ -77,9 +77,9 @@ done < "${share}/DBs/star/group_defs.txt"
 
 module load CD-HIT/4.6
 # #switch to python 2.7 temporarily for cdhit to csv scripts/config
-cp "${share}/DBs/star/cdhit_to_csv.py" "${DATADIR}"
-cp "${share}/DBs/star/csv_to_gene_db.py" "${DATADIR}"
- 
+cp "${local_DBs}/star/cdhit_to_csv.py" "${DATADIR}"
+cp "${local_DBs}/star/csv_to_gene_db.py" "${DATADIR}"
+
 cd "${DATADIR}"
 
 echo "--- About to CD-HIT-EST on ResGANNOT DB-${ResGANNOT_source} ---"
@@ -165,7 +165,7 @@ do
 			if [[ "${gene}" == *":"* ]]; then
 				gene=$(echo ${gene} | cut -d':' -f1)
 			fi
-			for (( i=0; i<${#gene}; i++ )); 
+			for (( i=0; i<${#gene}; i++ ));
 			do
 				if [[ "${gene:${i}:1}" == ")" ]]; then
 					i=$(( i + 1 ))
@@ -226,9 +226,9 @@ python "${DATADIR}/csv_to_gene_db.py" "-t" "${DATADIR}/ResGANNOT_${today}_cluste
 	# supp_info=$(echo ${line} | cut -d' ' -2)
 	# db=$(echo ${supp_info} | cut -d']' -f1 | cut -d'[' -f2)
 	# if [[ "${db}" == "ARG" ]]; then
-		# acc_info=$(echo ${line} 
+		# acc_info=$(echo ${line}
 	# elif [[ "${db}" == "RES" ]]; then
-		
+
 	# else
 		# echo "Unknown data, not editing line"
 	# fi
