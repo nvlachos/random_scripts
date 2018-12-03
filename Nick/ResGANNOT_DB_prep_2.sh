@@ -23,7 +23,7 @@ $(python2 -V)
 
 today=$(date '+%Y%m%d')
 
-DATADIR="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep"
+DATADIR="${local_DBs}/star/db_prep"
 ResGANNOT_source="${DATADIR}/ResGANNOT_${today}.fasta"
 
 # Checks for proper argumentation
