@@ -25,8 +25,9 @@ if [[ $# -eq 0 ]]; then
 	echo "No argument supplied to prep_ResGANNOT_DB_1.sh, using DEFAULT /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep"
 	DATADIR="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep"
 	if [ -d "${DATADIR}" ]; then
-		echo "Directory already exists, try another or delete ${DATADIR}, exiting"
-		exit
+		#echo "Directory already exists, try another or delete ${DATADIR}, exiting"
+		#exit
+		:
 	else
 		mkdir "${DATADIR}"
 	fi
