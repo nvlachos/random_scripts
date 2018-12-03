@@ -70,7 +70,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 	#echo ":${ARGANNOT_source}:${resFinder_source}:"
 	if [[ "${ARGANNOT_source}" == "" ]]; then
 		#echo "looking ar:${DATADIR}"
-		ARGANNOT_source=$(find ${DATADIR} -name *'annot-nt*')
+		ARGANNOT_source=$(find ${DATADIR} -name '*annot-nt*')
 	fi
 	echo ":${ARGANNOT_source}:${resFinder_source}:"
 
