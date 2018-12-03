@@ -23,7 +23,7 @@ $(python2 -V)
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
 	echo "No argument supplied to prep_ResGANNOT_DB_1.sh, using DEFAULT /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep"
-	DATADIR="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep"
+	DATADIR="${local_DBs}/star/db_prep"
 	if [ -d "${DATADIR}" ]; then
 		#echo "Directory already exists, try another or delete ${DATADIR}, exiting"
 		#exit
@@ -70,7 +70,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 	#echo ":${ARGANNOT_source}:${resFinder_source}:"
 	if [[ "${ARGANNOT_source}" == "" ]]; then
 		#echo "looking ar:${DATADIR}"
-		ARGANNOT_source=$(find ${DATADIR} -name '*annot-nt*')
+		ARGANNOT_source=$(find ${DATADIR} -name 'arg-annot-nt*')
 	fi
 	echo ":${ARGANNOT_source}:${resFinder_source}:"
 
