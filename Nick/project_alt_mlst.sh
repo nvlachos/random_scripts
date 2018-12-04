@@ -23,14 +23,14 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./project_alt_mlst.sh 
-	path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also) 
-	prefix_name_for_summary_file 
+	echo "Usage is ./project_alt_mlst.sh
+	path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)
+	prefix_name_for_summary_file
 	DB_to_look_for
 	"
 	echo "Output location varies depending on which tasks are performed but will be found somewhere under ${share}"
 	exit 0
-elif [[ ! -f ${share}/${1} ]]; then
+elif [[ ! -f ${1} ]]; then
 	echo "list does not exit...exiting"
 	exit 1
 fi
@@ -49,7 +49,7 @@ fi
  project=$(echo "${line}" | awk -F/ '{ print $1}' | tr -d '[:space:]')
  OUTDATADIR="${processed}/${project}/${sample_name}"
 
-	
+
 	# Pulls MLST type for sample and adds it to the summary file
 	header=$(head -n 1 ${OUTDATADIR}/MLST/${sample_name}_${3}.mlst)
 	IFS='	' read -r -a head_array <<< "$header"
@@ -57,11 +57,11 @@ fi
 	mlst=$(tail -n 1 ${OUTDATADIR}/MLST/${sample_name}_${3}.mlst)
 	IFS='	' read -r -a mlst_array <<< "$mlst"
 	echo "mlst-${#mlst_array[@]}-${mlst_array[@]}"
-	
+
 	#for index in ${#mlst_array}; do
 	#	mlst_array[${index}]=$(echo "${mlst_array[${index}]}" | tr -d '[:space:]')
 	#done
-	
+
 	echo -e "${mlst_array[1]}\t${project}\t${sample_name}\t${mlst_array[2]}\t${head_array[3]}(${mlst_array[3]})\t${head_array[4]}(${mlst_array[4]})\t${head_array[5]}(${mlst_array[5]})\t${head_array[6]}(${mlst_array[6]})\t${head_array[7]}(${mlst_array[7]})\t${head_array[8]}(${mlst_array[8]})\t${head_array[9]}(${mlst_array[9]})" >> ${share}/${2}-alt-mlst_summary.txt
-	
-done < ${share}/${1}
+
+done < ${1}
