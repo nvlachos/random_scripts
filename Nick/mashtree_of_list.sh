@@ -13,7 +13,7 @@ fi
 . ./config.sh
 
 module unload perl/5.22.1
-module load perl/5.12.3
+module load perl/5.16.1-MT
 
 #
 # Script to create mashtree of specified isolates that were processed by Quaisar pipeline
@@ -35,7 +35,7 @@ done < ${1}
 cd ${2}
 mashtree.pl --numcpus ${procs} *.fasta --tempdir ${2}/temp > "${2}/${3}.dnd";
 
-module unload perl/5.12.3
+module unload perl/5.16.1-MT
 module load perl/5.22.1
 
 exit
