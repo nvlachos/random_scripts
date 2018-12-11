@@ -34,6 +34,7 @@ while IFS= read -r line || [[ "$line" ]];  do
 done < ${1}
 
 arr_size="${#arr[@]}"
+last_index=$(( arr_size -1 ))
 echo "-${arr_size}:${arr[@]}-"
 
 if [[ -z ${2} ]]; then
@@ -78,7 +79,12 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
 			echo -e "\"${shareScript}/run_srst2_on_singleDB.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+			qsub -sync y "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+			if [[ "${counter}" -lt "${last_index}" ]]; then
+				qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+			else
+				qsub -sync y "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+			fi
 		else
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo "${project}/${sample} already has 20180608"
@@ -114,8 +120,12 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
 					echo -e "\"${shareScript}/run_srst2_on_singleDB.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-					qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+					if [[ "${counter}" -lt "${last_index}" ]]; then
+						qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					else
+						qsub -sync y "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+					fi
+				else
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo "${project}/${sample} already has 20180608"
 				fi
@@ -130,8 +140,25 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	counter=$(( counter + 1 ))
 done
 
-echo "All isolates completed"
-global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
-#Script exited gracefully (unless something else inside failed)
-printf "%s %s" "Act_by_list.sh has completed ${2}" "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
-exit 0
+# Check for completion of last sample
+finish_counter=0
+waiting_for_index=${last_index}
+waiting_sample=$(echo "${arr[${last_index}]}" | cut -d'/' -f2)
+timer=0
+while :
+do
+	if [[ ${timer} -gt 3600 ]]; then
+		echo "Timer exceeded limit of 3600 seconds = 60 minutes"
+		break
+	fi
+	if [[ -f "${main_dir}/complete/${waiting_sample}_csstarn_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_scaffolds_trimmed.fasta" ]]; then
+		echo "All isolates completed"
+		printf "%s %s" "Act_by_list.sh has completed ${2}" "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
+		exit 0
+	else
+		counter+$(( counter + 1))
+		timer=$(( timer + 5 ))
+		echo "sleeping for 5 seconds, so far slept for ${timer}"
+		sleep 5
+	fi
+done
