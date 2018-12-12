@@ -34,7 +34,7 @@ for j in ${1}/*.${2}; do
 		accession=$(echo ${j} | rev | cut -d'_' -f1,2 | rev | cut -d'.' -f1,2)
 		echo "${accession}"
 	else
-		echo "bad-${j}"
+		echo "Already completed or not a normal accession identifier-${j}"
 		continue
 		#echo "${j}" >> "${1}/bad.list"
 	fi
