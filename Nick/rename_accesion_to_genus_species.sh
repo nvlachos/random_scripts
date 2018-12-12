@@ -53,7 +53,6 @@ for j in ${1}/*.${2}; do
 	mv "${j}" "${1}/${genus}_${species}_${accession}.${2}"
 	echo "${counter}"
 	counter=$(( counter + 1))
-	if
 done
 
 echo ${command}
