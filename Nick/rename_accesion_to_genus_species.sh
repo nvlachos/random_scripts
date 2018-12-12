@@ -14,6 +14,8 @@ fi
 #	mkdir -p ${2}
 #fi
 
+gunzip ${1}/*.gz
+
 counter=0
 for j in ${1}/*.${2}; do
 	filename=$(basename ${j} | cut -d'_' -f1,2)
