@@ -60,7 +60,7 @@ for j in ${1}/*.${2}; do
 	#echo "${genus_species}" >> "${1}/species.list"
 	#echo "g-${genus};s-${species};a-${accession}"
 	#exit
-	#echo "${j} to ${2}/${genus}_${species}_${accession}.${3}"
+	echo "saving ${j} to ${1}/${genus}_${species}_${accession}.${3}"
 	mv "${j}" "${1}/${genus}_${species}_${accession}.${2}"
 	echo "${counter}"
 	counter=$(( counter + 1))
