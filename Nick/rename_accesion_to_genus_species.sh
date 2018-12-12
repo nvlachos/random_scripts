@@ -42,6 +42,7 @@ for j in ${1}/*.${2}; do
 	genus=""
 	species=""
 	sub_counter=0
+	echo "Into loop with ${sub_counter}:${genus}:${species}"
 	while [[ ${sub_counter} -lt 5 ]] && [[ ${genus} != "" ]] && [[ ${species} != "" ]]; do
 		genus_species_info=$(python ./entrez_get_taxon_from_accession.py ${accession} nvx4@cdc.gov)
 		genus=$(echo "${genus_species_info}" | cut -d' ' -f1)
