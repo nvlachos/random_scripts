@@ -25,7 +25,7 @@ counter=0
 for j in ${1}/*.${2}; do
 	filename=$(basename ${j} | cut -d'_' -f1,2)
 	prefix=${filename:0:2}
-	echo ":${prefix}:"
+	#echo ":${prefix}:"
 	if [[ "{$prefix}" = *"GC"* ]] || [[ "{$prefix}" = *"NZ"* ]]; then
 		#echo "good-${j}"
 		accession=$(head -n1 ${j} | cut -d' ' -f1 | cut -d'>' -f2)
