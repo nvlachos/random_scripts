@@ -14,7 +14,10 @@ fi
 #	mkdir -p ${2}
 #fi
 
-gunzip ${1}/*.gz
+zipped_num=$(ls *.gz | wc -l)
+if [[ "${zipped_num}" -gt 0 ]]; then
+	gunzip ${1}/*.gz
+fi
 
 counter=0
 for j in ${1}/*.${2}; do
@@ -31,6 +34,7 @@ for j in ${1}/*.${2}; do
 	fi
 	#echo ${accession}
 	genus_species_info=$(python ./entrez_get_taxon_from_accession.py ${accession} nvx4@cdc.gov)
+	sleep 2
 	genus=$(echo "${genus_species_info}" | cut -d' ' -f1)
 	species=$(echo "${genus_species_info}" | cut -d' ' -f2)
 	#echo ${genus_species}
