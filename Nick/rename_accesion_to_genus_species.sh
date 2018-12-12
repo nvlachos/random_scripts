@@ -28,6 +28,8 @@ for j in ${1}/*.${2}; do
 		#echo "good-${j}"
 		accession=$(head -n1 ${j} | cut -d' ' -f1 | cut -d'>' -f2)
 		#echo "${j}" >> "${1}/good.list"
+	elif [[ "${prefix}" = "__" ]]; then
+		accession=$(echo ${j} | rev | cut -d'_' -f1,2 | rev | cut -d'.' -f1,2)
 	else
 		echo "bad-${j}"
 		#echo "${j}" >> "${1}/bad.list"
