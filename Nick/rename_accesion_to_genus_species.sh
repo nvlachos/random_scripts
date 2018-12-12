@@ -23,12 +23,12 @@ counter=0
 for j in ${1}/*.${2}; do
 	filename=$(basename ${j} | cut -d'_' -f1,2)
 	prefix=${filename:0:2}
-	#echo ":${prefix}:"
+	echo ":${prefix}:"
 	if [[ "{$prefix}" = *"GC"* ]] || [[ "{$prefix}" = *"NZ"* ]]; then
 		#echo "good-${j}"
 		accession=$(head -n1 ${j} | cut -d' ' -f1 | cut -d'>' -f2)
 		#echo "${j}" >> "${1}/good.list"
-	elif [[ "${prefix}" = "__" ]]; then
+	elif [[ "${prefix}" = "__"* ]]; then
 		accession=$(echo ${j} | rev | cut -d'_' -f1,2 | rev | cut -d'.' -f1,2)
 	else
 		echo "bad-${j}"
