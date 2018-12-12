@@ -46,8 +46,13 @@ for j in ${1}/*.${2}; do
 	while [[ ${sub_counter} -lt 5 ]]; do
 		echo "in"
 		genus_species_info=$(python ./entrez_get_taxon_from_accession.py ${accession} nvx4@cdc.gov)
-		genus=$(echo "${genus_species_info}" | cut -d' ' -f1)
-		species=$(echo "${genus_species_info}" | cut -d' ' -f2)
+		if [[ ${genus_species_info} = *"UNVERIFIED"*]]; then
+			genus=$(echo ${genus_species} | rev | cut -d' ' -f2 | rev)
+			species=$(echo ${genus_species} | rev | cut -d' ' -f1 | rev)
+		else
+			genus=$(echo "${genus_species_info}" | cut -d' ' -f1)
+			species=$(echo "${genus_species_info}" | cut -d' ' -f2)
+		fi
 		if [[ ${genus} ]] && [[ ${species} ]]; then
 			break
 		else
