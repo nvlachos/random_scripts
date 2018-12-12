@@ -10,9 +10,9 @@
 if [[ ! -d ${1} ]]; then
 	echo "${1} does not exist"
 fi
-if [[ ! -d ${2} ]]; then
-	mkdir -p ${2}
-fi
+#if [[ ! -d ${2} ]]; then
+#	mkdir -p ${2}
+#fi
 
 counter=0
 for j in ${1}/*.${3}; do
@@ -36,7 +36,7 @@ for j in ${1}/*.${3}; do
 	#echo "g-${genus};s-${species};a-${accession}"
 	#exit
 	#echo "${j} to ${2}/${genus}_${species}_${accession}.${3}"
-	mv "${j}" "${2}/${genus}_${species}_${accession}.${3}"
+	mv "${j}" "${1}/${genus}_${species}_${accession}.${3}"
 	echo "${counter}"
 	counter=$(( counter + 1))
 done
