@@ -44,12 +44,14 @@ for j in ${1}/*.${2}; do
 	sub_counter=0
 	echo "Into loop with ${sub_counter}:${genus}:${species}"
 	while [[ ${sub_counter} -lt 5 ]] && [[ ${genus} != "" ]] && [[ ${species} != "" ]]; do
+		echo "in"
 		genus_species_info=$(python ./entrez_get_taxon_from_accession.py ${accession} nvx4@cdc.gov)
 		genus=$(echo "${genus_species_info}" | cut -d' ' -f1)
 		species=$(echo "${genus_species_info}" | cut -d' ' -f2)
 		sub_counter=$(( sub_counter + 1 ))
 		sleep 2
 	done
+	echo "out"
 	#echo ${genus_species}
 	#echo "${genus_species}" >> "${1}/species.list"
 	#echo "g-${genus};s-${species};a-${accession}"
