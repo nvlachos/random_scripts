@@ -42,9 +42,9 @@ for j in ${1}/*.${2}; do
 	genus=""
 	species=""
 	sub_counter=0
-	echo "Into loop with ${sub_counter}:${genus}:${species}"
+	#echo "Into loop with ${sub_counter}:${genus}:${species}"
 	while [[ ${sub_counter} -lt 5 ]]; do
-		echo "in"
+		#echo "in"
 		genus_species_info=$(python ./entrez_get_taxon_from_accession.py ${accession} nvx4@cdc.gov)
 		if [[ ${genus_species_info} = *"UNVERIFIED"* ]]; then
 			genus=$(echo ${genus_species} | rev | cut -d' ' -f2 | rev)
@@ -60,7 +60,7 @@ for j in ${1}/*.${2}; do
 		fi
 		sleep 2
 	done
-	echo "out"
+	#echo "out"
 	#echo ${genus_species}
 	#echo "${genus_species}" >> "${1}/species.list"
 	#echo "g-${genus};s-${species};a-${accession}"
