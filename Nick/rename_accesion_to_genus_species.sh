@@ -14,7 +14,7 @@ fi
 #	mkdir -p ${2}
 #fi
 
-zipped_num=$(ls ${1}*.gz | wc -l)
+zipped_num=$(ls ${1}/*.gz | wc -l)
 if [[ "${zipped_num}" -gt 0 ]]; then
 	gunzip ${1}/*.gz
 else
