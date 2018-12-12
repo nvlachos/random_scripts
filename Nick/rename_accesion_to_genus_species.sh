@@ -36,10 +36,9 @@ for j in ${1}/*.${3}; do
 	#echo "g-${genus};s-${species};a-${accession}"
 	#exit
 	#echo "${j} to ${2}/${genus}_${species}_${accession}.${3}"
-	cp "${j}" "${2}/${genus}_${species}_${accession}.${3}"
+	mv "${j}" "${2}/${genus}_${species}_${accession}.${3}"
 	echo "${counter}"
 	counter=$(( counter + 1))
 done
 
 echo ${command}
-
