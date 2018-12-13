@@ -18,7 +18,7 @@ if [[ ! -z ${4} ]]; then
 fi
 new_name=${2}
 project=${3}
-echo "Test 1-${old_name}-${new_name}, filename changing"
+echo "Test 1-${old_name}-${new_name}, Searching filenames"
 find /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/${old_name} -type f -name "*${old_name}*" | while read FILE ; do
   dirname=$(dirname $FILE)
 	filename=$(basename $FILE)
@@ -29,7 +29,7 @@ find /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/${old_na
 	echo "${newfile}"
     mv "${FILE}" "${dirname}/${newfile}"
 done
-echo "Test 2, deep dive"
+echo "Test 2, Searching contents of files"
 for thing in /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/${old_name}/*; do
 	if [[ -f ${thing} ]]; then
 		echo "Doing normal - $thing"
