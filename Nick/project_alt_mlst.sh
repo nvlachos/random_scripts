@@ -25,6 +25,7 @@ if [[ $# -eq 0 ]]; then
 elif [[ "$1" = "-h" ]]; then
 	echo "Usage is ./project_alt_mlst.sh
 	path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)
+	output_location (will create folder with next parameter also if not existent)
 	prefix_name_for_summary_file
 	DB_to_look_for
 	"
@@ -33,14 +34,17 @@ elif [[ "$1" = "-h" ]]; then
 elif [[ ! -f ${1} ]]; then
 	echo "list does not exit...exiting"
 	exit 1
+elif [[ ! -d ${2}/${3} ]]; then
+	mkdir -p "${2}/${3}"
 fi
 
+report_OUTDATADIR=${2}/${3}
 
 # # Remove any pre-existing files from previous runs
-if [[ ! -f ${share}/${2}-alt_mlst_summary.txt ]]; then
+if [[ ! -f ${report_OUTDATADIR}/${3}-alt_mlst_summary.txt ]]; then
 	:
 else
-	rm ${share}/${2}-alt-mlst_summary.txt
+	rm ${report_OUTDATADIR}/${3}-alt-mlst_summary.txt
 fi
 
 # Loop through and act on each sample name in the passed/provided list
@@ -62,6 +66,6 @@ fi
 	#	mlst_array[${index}]=$(echo "${mlst_array[${index}]}" | tr -d '[:space:]')
 	#done
 
-	echo -e "${mlst_array[1]}\t${project}\t${sample_name}\t${mlst_array[2]}\t${head_array[3]}(${mlst_array[3]})\t${head_array[4]}(${mlst_array[4]})\t${head_array[5]}(${mlst_array[5]})\t${head_array[6]}(${mlst_array[6]})\t${head_array[7]}(${mlst_array[7]})\t${head_array[8]}(${mlst_array[8]})\t${head_array[9]}(${mlst_array[9]})" >> ${share}/${2}-alt-mlst_summary.txt
+	echo -e "${mlst_array[1]}\t${project}\t${sample_name}\t${mlst_array[2]}\t${head_array[3]}(${mlst_array[3]})\t${head_array[4]}(${mlst_array[4]})\t${head_array[5]}(${mlst_array[5]})\t${head_array[6]}(${mlst_array[6]})\t${head_array[7]}(${mlst_array[7]})\t${head_array[8]}(${mlst_array[8]})\t${head_array[9]}(${mlst_array[9]})" >> ${report_OUTDATADIR}/${3}-alt-mlst_summary.txt
 
 done < ${1}

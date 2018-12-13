@@ -63,7 +63,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	#echo ${counter}"-${processed}/${project}/${sample}/kraken/postAssembly/${sample}_kraken_summary_assembled_BP_data.txt"
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
 		if [[ ${counter} -lt ${max_subs} ]]; then
-			if [[ ! -f "${processed}/${project}/${sample}/MLST/${sample}_.mlst" ]]; then
+			if [[ ! -f "${processed}/${project}/${sample}/MLST/${sample}.mlst" ]]; then
 				echo  "Index is below max submissions, submitting"
 				echo -e "#!/bin/bash -l\n" > "${main_dir}/mlst_${sample}_${start_time}.sh"
 				echo -e "#$ -o mlst_${sample}.out" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
@@ -72,7 +72,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -cwd"  >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 				# Defaulting to gapped/98, change if you want to include user preferences
-				echo -e "\"${shareScript}/run_MLST.sh\" \"${sample}\" \"${project}\" \"-f\" \"abaumannii\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/run_MLST.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_mlst_complete.txt\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 				qsub "${main_dir}/mlst_${sample}_${start_time}.sh"
 			else
@@ -91,7 +91,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					break
 				fi
 				if [[ -f "${main_dir}/complete/${waiting_sample}_mlst_complete.txt" ]]; then
-					if [[ ! -f "${processed}/${project}/${sample}/MLST/${sample}_.mlst" ]]; then
+					if [[ ! -f "${processed}/${project}/${sample}/MLST/${sample}.mlst" ]]; then
 						echo  "Index is below max submissions, submitting"
 						echo -e "#!/bin/bash -l\n" > "${main_dir}/mlst_${sample}_${start_time}.sh"
 						echo -e "#$ -o mlst_${sample}.out" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
@@ -99,7 +99,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -N mlst_${sample}"   >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 						echo -e "#$ -cwd"  >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/mlst_${sample}_${start_time}.sh"
-						echo -e "\"${shareScript}/run_MLST.sh\" \"${sample}\" \"${project}\" \"-f\" \"abaumannii\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
+						echo -e "\"${shareScript}/run_MLST.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_mlst_complete.txt\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 						qsub "${main_dir}/mlst_${sample}_${start_time}.sh"
 					else
