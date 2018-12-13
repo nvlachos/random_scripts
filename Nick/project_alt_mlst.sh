@@ -55,10 +55,10 @@ fi
 
 
 	# Pulls MLST type for sample and adds it to the summary file
-	header=$(head -n 1 ${OUTDATADIR}/MLST/${sample_name}_${3}.mlst)
+	header=$(head -n 1 ${OUTDATADIR}/MLST/${sample_name}_${4}.mlst)
 	IFS='	' read -r -a head_array <<< "$header"
 	echo "head-${#head_array[@]}-${head_array[@]}"
-	mlst=$(tail -n 1 ${OUTDATADIR}/MLST/${sample_name}_${3}.mlst)
+	mlst=$(tail -n 1 ${OUTDATADIR}/MLST/${sample_name}_${4}.mlst)
 	IFS='	' read -r -a mlst_array <<< "$mlst"
 	echo "mlst-${#mlst_array[@]}-${mlst_array[@]}"
 
