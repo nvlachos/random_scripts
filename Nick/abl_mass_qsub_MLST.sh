@@ -60,7 +60,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
 		if [[ ${counter} -lt ${max_subs} ]]; then
-			if [[ ! -f "${processed}/${project}/${sample}/MLST/${sample}.mlst" ]]; then
+			#if [[ ! -f "${processed}/${project}/${sample}/MLST/${sample}.mlst" ]]; then
 				echo  "Index is below max submissions, submitting"
 				echo -e "#!/bin/bash -l\n" > "${main_dir}/mlst_${sample}_${start_time}.sh"
 				echo -e "#$ -o mlst_${sample}.out" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
@@ -75,10 +75,10 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				else
 					qsub -sync y "${main_dir}/mlst_${sample}_${start_time}.sh"
 				fi
-			else
-				echo "${project}/${sample} already has mlst summary"
-				echo "$(date)" > "${main_dir}/complete/${sample}_mlst_complete.txt"
-			fi
+		#	else
+		#		echo "${project}/${sample} already has mlst summary"
+		#		echo "$(date)" > "${main_dir}/complete/${sample}_mlst_complete.txt"
+		#	fi
 		else
 			waiting_for_index=$(( counter - max_subs ))
 			waiting_sample=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
