@@ -12,40 +12,38 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list.sh list_name(currently has to be placed in /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR folder) description of list function
-#
-# script changes depending on what needs to be run through the list
+# Usage ./abl_mass_qsub_MLST.sh path_to_list max_concurrent_submissions
 #
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to act_by_list.sh, exiting"
+	echo "No argument supplied to ./abl_mass_qsub_MLST.sh, exiting"
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_template.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_submissions"
-	echo "Output location varies depending on which tasks are performed but will be found somewhere under ${processed}"
-	exit 0
+	echo "Usage is ./abl_mass_qsub_MLST.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent__submissions"
+	exit 1
+elif [[ ! -f "${1}" ]]; then
+	echo "${1} (list) does not exist...exiting"
+	exit 1
 fi
 
+# create an array of all samples in the list
 arr=()
 while IFS= read -r line || [[ "$line" ]];  do
-	line=$(echo "${line}" | tr -d [:space:] )
-	arr+=("${line}")
+  arr+=("$line")
 done < ${1}
 
 arr_size="${#arr[@]}"
+last_index=$(( arr_size -1 ))
 echo "-${arr_size}:${arr[@]}-"
 
-if [[ ! -z "${2}" ]]; then
-	max_subs="${2}"
-else
-	max_subs=10
-fi
 
-# Loop through and act on each sample name in the passed/provided list
+# Create direcory to hold all temporary qsub scripts
 counter=0
 max_subs=${2}
+
+# Set script directory
 main_dir="${share}/mass_subs/mlst_subs"
 if [[ ! -d "${share}/mass_subs/mlst_subs" ]]; then
 	mkdir "${share}/mass_subs/mlst_subs"
@@ -54,13 +52,12 @@ elif [[ ! -d "${share}/mass_subs/mlst_subs/complete" ]]; then
 	mkdir "${share}/mass_subs/mlst_subs/complete"
 fi
 
-start_time=$(date)
+start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 
+# Creates and submits qsub script to determine MlST of all samples on the list
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
-	#rm -r "${processed}/${project}/${sample}/MLST/${sample}.mlst"
-	#echo ${counter}"-${processed}/${project}/${sample}/kraken/postAssembly/${sample}_kraken_summary_assembled_BP_data.txt"
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
 		if [[ ${counter} -lt ${max_subs} ]]; then
 			if [[ ! -f "${processed}/${project}/${sample}/MLST/${sample}.mlst" ]]; then
@@ -71,10 +68,13 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -N mlst_${sample}"   >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 				echo -e "#$ -cwd"  >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/mlst_${sample}_${start_time}.sh"
-				# Defaulting to gapped/98, change if you want to include user preferences
-				echo -e "\"${shareScript}/run_MLST.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/run_MLST.sh\" \"${sample}\" \"${project}\" \"-f\" \"abaumannii\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_mlst_complete.txt\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
-				qsub "${main_dir}/mlst_${sample}_${start_time}.sh"
+				if [[ "${counter}" -lt "${last_index}" ]]; then
+					qsub "${main_dir}/mlst_${sample}_${start_time}.sh"
+				else
+					qsub -sync y "${main_dir}/mlst_${sample}_${start_time}.sh"
+				fi
 			else
 				echo "${project}/${sample} already has mlst summary"
 				echo "$(date)" > "${main_dir}/complete/${sample}_mlst_complete.txt"
@@ -101,7 +101,11 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 						echo -e "\"${shareScript}/run_MLST.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_mlst_complete.txt\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
-						qsub "${main_dir}/mlst_${sample}_${start_time}.sh"
+						if [[ "${counter}" -lt "${last_index}" ]]; then
+							qsub "${main_dir}/mlst_${sample}_${start_time}.sh"
+						else
+							qsub -sync y "${main_dir}/mlst_${sample}_${start_time}.sh"
+						fi
 					else
 						echo "${project}/${sample} already has mlst summary"
 						echo "$(date)" > "${main_dir}/complete/${sample}_mlst_complete.txt"
@@ -121,7 +125,4 @@ while [ ${counter} -lt ${arr_size} ] ; do
 done
 
 echo "All isolates completed"
-global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
-#Script exited gracefully (unless something else inside failed)
-printf "%s %s" "Act_by_list.sh has completed ${2}" "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
 exit 0
