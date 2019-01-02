@@ -10,43 +10,39 @@
 . ./config.sh
 #Import the module file that loads all necessary mods
 . "${mod_changers}/pipeline_mods"
-shareScript="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/scripts/Quaisar-H"
+
 #
-# Usage ./act_by_list.sh list_name(currently has to be placed in /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR folder) description of list function
-#
-# script changes depending on what needs to be run through the list
+# Usage ./abl_mass_qsub_ANI.sh path_to_list max_concurrent_submissions
 #
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to act_by_list.sh, exiting"
+	echo "No argument supplied to ./abl_mass_qsub_ANI.sh, exiting"
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_template.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_submissions"
-	echo "Output location varies depending on which tasks are performed but will be found somewhere under ${processed}"
-	exit 0
+	echo "Usage is ./abl_mass_qsub_ANI.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions"
+	exit 1
+elif [[ ! -f "${1}" ]]; then
+	echo "${1} (list) does not exist...exiting"
+	exit 1
 fi
 
+# Create an array of all samples in the list
 arr=()
 while IFS= read -r line || [[ "$line" ]];  do
-echo "${line}"
-	line=$(echo "${line}" | tr -d [:space:] )
-	arr+=("${line}")
+  arr+=("$line")
 done < ${1}
 
 arr_size="${#arr[@]}"
+last_index=$(( arr_size -1 ))
 echo "-${arr_size}:${arr[@]}-"
 
-if [[ ! -z "${2}" ]]; then
-	max_subs="${2}"
-else
-	max_subs=10
-fi
-
-# Loop through and act on each sample name in the passed/provided list
+# Create counter and set max number of concurrent submissions
 counter=0
 max_subs=${2}
+
+# Set script directory
 main_dir="${share}/mass_subs/ANI_subs"
 if [[ ! -d "${share}/mass_subs/ANI_subs" ]]; then
 	mkdir "${share}/mass_subs/ANI_subs"
@@ -55,22 +51,19 @@ elif [[ ! -d "${share}/mass_subs/ANI_subs/complete" ]]; then
 	mkdir "${share}/mass_subs/ANI_subs/complete"
 fi
 
-start_time=$(date '+%Y-%m-%d_%H-%M-%S')
-#start_time=${start_time// /_}
+start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 
+# Create and submit qsub scripts to get ANI for all isolates
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	short_sample=${sample:0:20}
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
-	#genus=$(echo "${arr[${counter}]}" | cut -d'/' -f3 | cut -d'_' -f1)
-	#species=$(echo "${arr[${counter}]}" | cut -d'/' -f3 | cut -d'_' -f1)
 	echo "${sample} and ${project}:"
 	echo "${counter}-${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta"
+	# If sample has assembly, then delete old ANI folder to allow rerun
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
-		rm -r "${processed}/${project}/${sample}/ANI/"
+		mv -r "${processed}/${project}/${sample}/ANI_original/"
 	fi
-	#	genus="Acinetobacter"
-	#	species="baumannii"
 	if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
 		while IFS= read -r line;
 		do
@@ -83,24 +76,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			elif [ "${first}" = "G" ]
 			then
 				genus=$(echo "${line}" | awk -F ' ' '{print $2}')
-			#elif [ "${first}" = "F" ]
-			#then
-			#	family=$(echo "${line}" | awk -F ' ' '{print $4}')
-			#elif [ "${first}" = "O" ]
-			#then
-			#	order=$(echo "${line}" | awk -F ' ' '{print $4}')
-			#elif [ "${first}" = "C" ]
-			#then
-			#	class=$(echo "${line}" | awk -F ' ' '{print $4}')
-			#elif [ "${first}" = "P" ]
-			#then
-			#	phylum=$(echo "${line}" | awk -F ' ' '{print $4}')
-			#elif [ "${first}" = "K" ]
-			#then
-			#	kingdom=$(echo "${line}" | awk -F ' ' '{print $4}')
-			#elif [ "${first}" = "D" ]
-			#then
-			#	domain=$(echo "${line}" | awk -F ' ' '{print $4}')
 			fi
 		done < "${processed}/${project}/${sample}/${sample}.tax"
 		if [[ ! -f "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
@@ -119,10 +94,13 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -N ani_${sample}"   >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				echo -e "#$ -cwd"  >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
-				# Defaulting to gapped/98, change if you want to include user preferences
 				echo -e "\"${shareScript}/run_ANI.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${short_sample}_ani_complete.txt\"" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
-				qsub "${main_dir}/ani_${short_sample}_${start_time}.sh"
+				if [[ "${counter}" -lt "${last_index}" ]]; then
+					qsub "${main_dir}/ani_${short_sample}_${start_time}.sh"
+				else
+					qsub -sync y "${main_dir}/ani_${short_sample}_${start_time}.sh"
+				fi
 			else
 				echo "${project}/${sample} already has ANI summary"
 				echo "$(date)" > "${main_dir}/complete/${sample}_ani_complete.txt"
@@ -147,10 +125,13 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -N ani_${sample}"   >> "${main_dir}/ani_${sample}_${start_time}.sh"
 						echo -e "#$ -cwd"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
-						# Defaulting to gapped/98, change if you want to include user preferences
 						echo -e "\"${shareScript}/run_ANI.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_ani_complete.txt\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-						qsub "${main_dir}/ani_${sample}_${start_time}.sh"
+						if [[ "${counter}" -lt "${last_index}" ]]; then
+							qsub "${main_dir}/ani_${short_sample}_${start_time}.sh"
+						else
+							qsub -sync y "${main_dir}/ani_${short_sample}_${start_time}.sh"
+						fi
 					else
 						echo "${project}/${sample} already has ANI summary"
 						echo "$(date)" > "${main_dir}/complete/${sample}_ani_complete.txt"
@@ -170,7 +151,4 @@ while [ ${counter} -lt ${arr_size} ] ; do
 done
 
 echo "All isolates completed"
-global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
-#Script exited gracefully (unless something else inside failed)
-#printf "%s %s" "Act_by_list.sh has completed ${2}" "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
 exit 0
