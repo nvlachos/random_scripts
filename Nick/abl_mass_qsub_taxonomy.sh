@@ -70,7 +70,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		### echo -e "module load XXX" >> "${main_dir}/tax_${sample}_${start_time}.sh"
 
 		# Can we somehow consolidate into one taxonomy analysis to do MLST/AR/SEROTYPE
-		echo -e "\"${shareScript}/run_taxonomy_on_singleDB_alternateDB.sh\" \"${sample}\" \"${project}\" \"${share}/DBs/star/ResGANNOT_20180608_taxonomy.fasta\"" >> "${main_dir}/tax_${sample}_${start_time}.sh"
+		echo -e "\"${shareScript}/determine_taxID.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/tax_${sample}_${start_time}.sh"
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_taxonomy_complete.txt\"" >> "${main_dir}/tax_${sample}_${start_time}.sh"
 		if [[ "${counter}" -lt "${last_index}" ]]; then
 			qsub "${main_dir}/tax_${sample}_${start_time}.sh"
@@ -99,17 +99,14 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -N tax_${sample}"   >> "${main_dir}/tax_${sample}_${start_time}.sh"
 				echo -e "#$ -cwd"  >> "${main_dir}/tax_${sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/tax_${sample}_${start_time}.sh"
-				# Add all necessary modules
-				### echo -e "module load XXX" >> "${main_dir}/tax_${sample}_${start_time}.sh"
-
-				# Can we somehow consolidate into one taxonomy analysis to do MLST/AR/SEROTYPE
-				echo -e "\"${shareScript}/run_taxonomy_on_singleDB_alternateDB.sh\" \"${sample}\" \"${project}\" \"${share}/DBs/star/ResGANNOT_20180608_taxonomy.fasta\"" >> "${main_dir}/tax_${sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/determine_taxID.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/tax_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_taxonomy_complete.txt\"" >> "${main_dir}/tax_${sample}_${start_time}.sh"
 				if [[ "${counter}" -lt "${last_index}" ]]; then
 					qsub "${main_dir}/tax_${sample}_${start_time}.sh"
 				else
 					qsub -sync y "${main_dir}/tax_${sample}_${start_time}.sh"
 				fi
+			fi
 		done
 	fi
 	counter=$(( counter + 1 ))
