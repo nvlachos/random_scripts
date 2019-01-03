@@ -67,6 +67,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	if [[ -d "${processed}/${project}/${sample}/ANI_original" ]]; then
 		mv  "${processed}/${project}/${sample}/ANI_original" "${processed}/${project}/${sample}/ANI"
 	fi
+	counter=$(( counter + 1 ))
 	continue
 	if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
 		while IFS= read -r line;
