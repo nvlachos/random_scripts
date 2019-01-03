@@ -56,10 +56,10 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	echo ${counter}
-	mv "${processed}/${project}/${sample_name}/ANI" "${processed}/${project}/${sample_name}/ANI_NO_CALCO)"
-	mv "${processed}/${project}/${sample_name}/ANI_WITH_CALCO" "${processed}/${project}/${sample_name}/ANI"
-	if [[ -f "${processed}/${project}/${sample_name}/${sample_name}.tax" ]]; then
-		mv "${processed}/${project}/${sample_name}/${sample_name}.tax" "${processed}/${project}/${sample_name}/${sample_name}_no_calc.tax"
+	mv "${processed}/${project}/${sample}/ANI" "${processed}/${project}/${sample}/ANI_NO_CALCO)"
+	mv "${processed}/${project}/${sample}/ANI_WITH_CALCO" "${processed}/${project}/${sample}/ANI"
+	if [[ -f "${processed}/${project}/${sample}/${sample}.tax" ]]; then
+		mv "${processed}/${project}/${sample}/${sample}.tax" "${processed}/${project}/${sample}/${sample}_no_calc.tax"
 	fi
 
 
