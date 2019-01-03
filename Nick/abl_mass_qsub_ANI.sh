@@ -64,9 +64,10 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	#if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
 	#	rm -r "${processed}/${project}/${sample}/ANI/"
 	#fi
-	if [[ -d "${processed}/${project}/${sample}/ANI" ]]; then
-		mv  "${processed}/${project}/${sample}/ANI" "${processed}/${project}/${sample}/ANI_original"
+	if [[ -d "${processed}/${project}/${sample}/ANI_original" ]]; then
+		mv  "${processed}/${project}/${sample}/ANI_original" "${processed}/${project}/${sample}/ANI"
 	fi
+	continue
 	if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
 		while IFS= read -r line;
 		do
