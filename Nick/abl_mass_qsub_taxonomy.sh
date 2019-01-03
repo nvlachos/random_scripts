@@ -34,6 +34,7 @@ while IFS= read -r line || [[ "$line" ]];  do
 done < ${1}
 
 arr_size="${#arr[@]}"
+last_index=$(( arr_size -1 ))
 echo "-${arr_size}:${arr[@]}-"
 
 if [[ -z ${2} ]]; then
