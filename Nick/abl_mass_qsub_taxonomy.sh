@@ -56,10 +56,13 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	echo ${counter}
+	#if [[ -f "${processed}/${project}/${sample_name}/${sample_name}.tax" ]]; then
+	#	mv "${processed}/${project}/${sample_name}/${sample_name}.tax" "${processed}/${project}/${sample_name}/${sample_name}_no_calc.tax"
+	#fi
+
+
 	if [ ${counter} -lt ${max_subs} ]; then
-		if [[ -f "${processed}/${project}/${sample_name}/${sample_name}.tax" ]]; then
-			mv "${processed}/${project}/${sample_name}/${sample_name}.tax" "${processed}/${project}/${sample_name}/${sample_name}_original.tax"
-		fi
+
 		echo  "Index is below max submissions, submitting"
 		echo -e "#!/bin/bash -l\n" > "${main_dir}/tax_${sample}_${start_time}.sh"
 		echo -e "#$ -o tax_${sample}.out" >> "${main_dir}/tax_${sample}_${start_time}.sh"
@@ -90,9 +93,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				break
 			fi
 			if [ -f "${main_dir}/complete/${waiting_sample}_taxonomy_complete.txt" ]; then
-				if [[ -f "${processed}/${project}/${sample_name}/${sample_name}.tax" ]]; then
-					mv "${processed}/${project}/${sample_name}/${sample_name}.tax" "${processed}/${project}/${sample_name}/${sample_name}_original.tax"
-				fi
 				echo  "Index is below max submissions, submitting"
 				echo -e "#!/bin/bash -l\n" > "${main_dir}/tax_${sample}_${start_time}.sh"
 				echo -e "#$ -o tax_${sample}.out" >> "${main_dir}/tax_${sample}_${start_time}.sh"
