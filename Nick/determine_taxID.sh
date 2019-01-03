@@ -49,7 +49,7 @@ Family="Not_assigned"
 Genus="Not_assigned"
 species="Not_assigned"
 
-if [[ -s "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_All).txt" ]]; then
+if [[ -s "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_Acinetobacter).txt" ]]; then
 	source="ANI"
 	#echo "${source}"
 	# Lookup Taxonomy
