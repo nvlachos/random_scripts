@@ -65,7 +65,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	#	rm -r "${processed}/${project}/${sample}/ANI/"
 	#fi
 	if [[ -d "${processed}/${project}/${sample}/ANI" ]]; then
-		mv  "${processed}/${project}/${sample}/ANI" "${processed}/${project}/${sample}/ANI_original"
+		mv  "${processed}/${project}/${sample}/ANI" "${processed}/${project}/${sample}/ANI_WITH_CALCO"
 	fi
 	if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
 		while IFS= read -r line;
