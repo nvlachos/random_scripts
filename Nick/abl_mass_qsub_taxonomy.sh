@@ -58,19 +58,19 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	echo ${counter}
 	if [[ -f "${processed}/${project}/${sample}/${sample}.tax" ]]; then
 		source=$(head -n1 "${processed}/${project}/${sample}/${sample}.tax" | tr -d '[:space:]')
-		if [[ "${source}" = "(ANI)" ]]; then
-			counter=$(( counter + 1 ))
-			echo "$(date)" > "${main_dir}/complete/${sample}_taxonomy_complete.txt"
-			continue
-		else
-			mv "${processed}/${project}/${sample}/${sample}.tax" "${processed}/${project}/${sample}/${sample}_preANI.tax"
-		fi
 	fi
 	if [[ -f "${processed}/${project}/${sample}/${sample}_no_calc.tax" ]]; then
 		rm "${processed}/${project}/${sample}/${sample}_no_calc.tax"
 	fi
 	if [[ -d "${processed}/${project}/${sample}/ANI_NO_CALCO)" ]]; then
 		rm -r "${processed}/${project}/${sample}/ANI_NO_CALCO)"
+	fi
+	if [[ "${source}" = "(ANI)" ]]; then
+		counter=$(( counter + 1 ))
+		echo "$(date)" > "${main_dir}/complete/${sample}_taxonomy_complete.txt"
+		continue
+	else
+		mv "${processed}/${project}/${sample}/${sample}.tax" "${processed}/${project}/${sample}/${sample}_preANI.tax"
 	fi
 
 	if [ ${counter} -lt ${max_subs} ]; then
