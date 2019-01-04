@@ -51,7 +51,7 @@ for path in ${processed}/*; do
 	elif [[ -f "${path}/${run_ID}_list_ordered.txt" ]]; then
 		cat "${path}/${run_ID}_list_ordered.txt" >> "${sample_list}"
 	else
-		echo $(ls -d */)
+		echo $(ls -d ${path}/)
 		echo "${run_ID} does not have a list file"
 	fi
 
