@@ -11,7 +11,7 @@
 
 #
 # Script to make a list of all isolates in our database
-# 
+#
 # Usage ./make_sample_list_from_run_list.sh path_and_name_of_sample_output_file path_and_name_of_directory_output_file
 #
 #
@@ -46,10 +46,15 @@ for path in ${processed}/*; do
 	if [[ "${dir_list}" != "" ]]; then
 		echo "${run_ID}" >> "${dir_list}"
 	fi
-	for isolate in $path/*; do
-		[ -d "${isolate}" ] || continue # if not a directory, skip
-		isolate_name="$(basename "${isolate}")"
-		echo "${run_ID}/${isolate_name}" >> "${sample_list}"
+	if [[ -f ${path}/${run_id}_list.txt ]]; then
+		cat "${path}/${run_id}_list.txt" >> "${sample_list}"
+	else
+		echo "${run_id} does not have a list file"
+	fi
+	#for isolate in $path/*; do
+	#	[ -d "${isolate}" ] || continue # if not a directory, skip
+	#	isolate_name="$(basename "${isolate}")"
+	#	echo "${run_ID}/${isolate_name}" >> "${sample_list}"
 	done
 done
 
