@@ -60,7 +60,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		source=$(head -n1 "${processed}/${project}/${sample}/${sample}.tax" | tr -d '[:space:]')
 		if [[ "${source}" = "(ANI)" ]]; then
 			counter=$(( counter + 1 ))
-			echo "$(date)" > \"${main_dir}/complete/${sample}_taxonomy_complete.txt\"
+			echo "$(date)" > "${main_dir}/complete/${sample}_taxonomy_complete.txt"
 			continue
 		else
 			mv "${processed}/${project}/${sample}/${sample}.tax" "${processed}/${project}/${sample}/${sample}_preANI.tax"
