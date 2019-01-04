@@ -39,6 +39,8 @@ echo "-${arr_size}:${arr[@]}-"
 
 if [[ -z ${2} ]]; then
 	max_subs=10
+else
+	max_subs=${2}
 fi
 
 # Loop through and act on each sample name in the passed/provided list
@@ -56,25 +58,16 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	echo ${counter}
-	if [[ -f "${processed}/${project}/${sample}/${sample}.tax" ]]; then
-		source=$(head -n1 "${processed}/${project}/${sample}/${sample}.tax" | tr -d '[:space:]')
-	fi
 	if [[ -f "${processed}/${project}/${sample}/${sample}_no_calc.tax" ]]; then
 		rm "${processed}/${project}/${sample}/${sample}_no_calc.tax"
 	fi
 	if [[ -d "${processed}/${project}/${sample}/ANI_NO_CALCO)" ]]; then
 		rm -r "${processed}/${project}/${sample}/ANI_NO_CALCO)"
 	fi
-	if [[ "${source}" = "(ANI)" ]]; then
-		counter=$(( counter + 1 ))
-		echo "$(date)" > "${main_dir}/complete/${sample}_taxonomy_complete.txt"
-		continue
-	else
-		mv "${processed}/${project}/${sample}/${sample}.tax" "${processed}/${project}/${sample}/${sample}_preANI.tax"
+	if [[ -f "${processed}/${project}/${sample}/${sample}_preANI.tax" ]]; then
+		rm "${processed}/${project}/${sample}/${sample}_preANI.tax"
 	fi
-
 	if [ ${counter} -lt ${max_subs} ]; then
-
 		echo  "Index is below max submissions, submitting"
 		echo -e "#!/bin/bash -l\n" > "${main_dir}/tax_${sample}_${start_time}.sh"
 		echo -e "#$ -o tax_${sample}.out" >> "${main_dir}/tax_${sample}_${start_time}.sh"
@@ -82,10 +75,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		echo -e "#$ -N tax_${sample}"   >> "${main_dir}/tax_${sample}_${start_time}.sh"
 		echo -e "#$ -cwd"  >> "${main_dir}/tax_${sample}_${start_time}.sh"
 		echo -e "#$ -q short.q\n"  >> "${main_dir}/tax_${sample}_${start_time}.sh"
-		# Add all necessary modules
-		### echo -e "module load XXX" >> "${main_dir}/tax_${sample}_${start_time}.sh"
-
-		# Can we somehow consolidate into one taxonomy analysis to do MLST/AR/SEROTYPE
 		echo -e "\"${shareScript}/determine_taxID.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/tax_${sample}_${start_time}.sh"
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_taxonomy_complete.txt\"" >> "${main_dir}/tax_${sample}_${start_time}.sh"
 		if [[ "${counter}" -lt "${last_index}" ]]; then
