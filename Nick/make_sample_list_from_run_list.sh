@@ -56,7 +56,7 @@ for path in ${processed}/*; do
 	 		isolate_name="$(basename "${isolate}")"
 	 		echo "${run_ID}/${isolate_name}" >> "${path}/${run_ID}_list.txt"
 		done
-		cat "${path}/${run_ID}_list_ordered.txt" >> "${sample_list}"
+		cat "${path}/${run_ID}_list.txt" >> "${sample_list}"
 fi
 
 	#for isolate in $path/*; do
