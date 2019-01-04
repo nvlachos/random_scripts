@@ -108,6 +108,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				else
 					qsub -sync y "${main_dir}/tax_${sample}_${start_time}.sh"
 				fi
+				break
 			fi
 		done
 	fi
