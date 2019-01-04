@@ -51,15 +51,16 @@ for path in ${processed}/*; do
 	elif [[ -f "${path}/${run_ID}_list_ordered.txt" ]]; then
 		cat "${path}/${run_ID}_list_ordered.txt" >> "${sample_list}"
 	else
-		cd "${path}"
-		echo $(ls -d */)
-		echo "${run_ID} does not have a list file"
-	fi
+		for isolate in ${path}/*; do
+			[ -d "${isolate}" ] || continue # if not a directory, skip
+	 		isolate_name="$(basename "${isolate}")"
+	 		echo "${run_ID}/${isolate_name}" >> "${path}/${run_ID}_list.txt"
+		done
+		cat "${path}/${run_ID}_list_ordered.txt" >> "${sample_list}"
+fi
 
 	#for isolate in $path/*; do
-	#	[ -d "${isolate}" ] || continue # if not a directory, skip
-	#	isolate_name="$(basename "${isolate}")"
-	#	echo "${run_ID}/${isolate_name}" >> "${sample_list}"
+
 
 done
 
