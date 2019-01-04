@@ -53,6 +53,7 @@ for path in ${processed}/*; do
 	else
 		echo "${run_ID} does not have a list file"
 	fi
+	
 	#for isolate in $path/*; do
 	#	[ -d "${isolate}" ] || continue # if not a directory, skip
 	#	isolate_name="$(basename "${isolate}")"
