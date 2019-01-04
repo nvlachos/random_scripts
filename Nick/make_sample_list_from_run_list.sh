@@ -46,8 +46,10 @@ for path in ${processed}/*; do
 	if [[ "${dir_list}" != "" ]]; then
 		echo "${run_ID}" >> "${dir_list}"
 	fi
-	if [[ -f ${path}/${run_ID}_list.txt ]]; then
+	if [[ -f "${path}/${run_ID}_list.txt" ]]; then
 		cat "${path}/${run_ID}_list.txt" >> "${sample_list}"
+	elif [[ -f "${path}/${run_ID}_list_ordered.txt" ]]; then
+		cat "${path}/${run_ID}_list_ordered.txt" >> "${sample_list}"
 	else
 		echo "${run_ID} does not have a list file"
 	fi
