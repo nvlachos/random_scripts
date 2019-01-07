@@ -50,7 +50,11 @@ Genus="Not_assigned"
 species="Not_assigned"
 ani_files=0
 
-ani_files=$(ls -t "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered"* | wc -l)
+if [[ $(ls -t "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered"* | wc -l) -ne 0 ]]; then
+	ani_files=$(ls -t "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered"* | wc -l)
+else
+	ani_files=0
+fi
 
 if [[ ${ani_files} -gt 0 ]]; then
 	source="ANI"
