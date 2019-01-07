@@ -50,7 +50,9 @@ Genus="Not_assigned"
 species="Not_assigned"
 
 
-if [[ -d "${processed}/${project}/${sample}/ANI" ]]; then
+ani_files=$(ls -t "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered"* | wc -l)
+
+if [[ ${ani_files} -gt 0 ]]; then
 	source="ANI"
 	echo "${source}"
 	if [[ -f "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_All).txt" ]]; then
