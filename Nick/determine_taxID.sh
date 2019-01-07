@@ -50,6 +50,7 @@ Genus="Not_assigned"
 species="Not_assigned"
 ani_files=0
 
+shopt -s nullglob
 if [[ $(ls -t "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered"* | wc -l) -ne 0 ]]; then
 	ani_files=$(ls -t "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered"* | wc -l)
 else
