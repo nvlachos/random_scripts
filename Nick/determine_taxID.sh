@@ -56,6 +56,7 @@ if [[ $(ls -t "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered"* | w
 else
 	ani_files=0
 fi
+echo ani_files
 
 if [[ ${ani_files} -gt 0 ]]; then
 	source="ANI"
