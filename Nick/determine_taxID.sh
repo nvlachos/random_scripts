@@ -49,13 +49,17 @@ Family="Not_assigned"
 Genus="Not_assigned"
 species="Not_assigned"
 
-if [[ -s "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_Acinetobacter).txt" ]]; then
+
+if [[ -s "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered("* ]]; then
 	source="ANI"
-	#echo "${source}"
+	echo "${source}"
 	# Lookup Taxonomy
   #echo "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_All).txt"
-	header=$(find "${processed}/${project}/${sample}/ANI/" -name "best_ANI_hits_ordered" ... -print0 | xargs -0 ls -1 -t | head -1)
-	#header=$(head -n 1 "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_All).txt")
+	if [[ -f "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_All).txt" ]]; then
+		header=$(head -n 1 "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_All).txt")
+	else
+		header=$(find "${processed}/${project}/${sample}/ANI/" -name "best_ANI_hits_ordered" ... -print0 | xargs -0 ls -1 -t | head -1)
+	fi
 	echo "${header}"
 	Genus=$(echo "${header}" | cut -d' ' -f1 | cut -d'-' -f2)
 	species=$(echo "${header}" | cut -d' ' -f2 | cut -d'(' -f1)
