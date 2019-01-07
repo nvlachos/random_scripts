@@ -50,16 +50,15 @@ Genus="Not_assigned"
 species="Not_assigned"
 
 
-if [[ -s "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered("* ]]; then
+if [[ -d "${processed}/${project}/${sample}/ANI" ]]; then
 	source="ANI"
 	echo "${source}"
-	# Lookup Taxonomy
-  #echo "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_All).txt"
 	if [[ -f "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_All).txt" ]]; then
-		header=$(head -n 1 "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_All).txt")
+		source_file="${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_All).txt")
 	else
-		header=$(find "${processed}/${project}/${sample}/ANI/" -name "best_ANI_hits_ordered" ... -print0 | xargs -0 ls -1 -t | head -1)
+		source_file=$(ls -t "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered"* | head n -1)
 	fi
+	header=$(head -n 1 "${source_file}")
 	echo "${header}"
 	Genus=$(echo "${header}" | cut -d' ' -f1 | cut -d'-' -f2)
 	species=$(echo "${header}" | cut -d' ' -f2 | cut -d'(' -f1)
