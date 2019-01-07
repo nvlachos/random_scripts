@@ -56,7 +56,7 @@ if [[ -d "${processed}/${project}/${sample}/ANI" ]]; then
 	if [[ -f "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_All).txt" ]]; then
 		source_file="${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_All).txt"
 	else
-		source_file=$(ls -t "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered"* | head n -1)
+		source_file=$(ls -t "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered"* | head -n 1)
 	fi
 	header=$(head -n 1 "${source_file}")
 	echo "${header}"
