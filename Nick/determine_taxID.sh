@@ -54,7 +54,7 @@ if [[ -s "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_
 	#echo "${source}"
 	# Lookup Taxonomy
   #echo "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_All).txt"
-	header=$(find "${processed}/${project}/${sample}/ANI" -name "best_ANI_hits_ordered" ... -print0 | xargs -0 ls -1 -t | head -1)
+	header=$(find "${processed}/${project}/${sample}/ANI/" -name "best_ANI_hits_ordered" ... -print0 | xargs -0 ls -1 -t | head -1)
 	#header=$(head -n 1 "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_All).txt")
 	echo "${header}"
 	Genus=$(echo "${header}" | cut -d' ' -f1 | cut -d'-' -f2)
