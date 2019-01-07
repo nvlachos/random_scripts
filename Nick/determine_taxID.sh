@@ -50,13 +50,13 @@ Genus="Not_assigned"
 species="Not_assigned"
 ani_files=0
 
-shopt -s nullglob
-if [[ $(ls -t "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered"* | wc -l) -ne 0 ]]; then
-	ani_files=$(ls -t "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered"* | wc -l)
-else
-	ani_files=0
-fi
-echo ani_files
+for f in ${processed}/${project}/${sample}/ANI/*; do
+	if [[ "${f}" = *"best_ANI_hits_ordered"* ]]; then
+    ani_files=1
+    break
+	fi
+done
+echo "${ani_files}"
 
 if [[ ${ani_files} -gt 0 ]]; then
 	source="ANI"
