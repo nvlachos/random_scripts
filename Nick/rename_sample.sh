@@ -46,4 +46,15 @@ for thing in /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/
 done
 #extra
 mv "/scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/${old_name}" "/scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/${new_name}"
+# Trying to find summary and list files
+for thing in /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/*; do
+	if [[ -f ${thing} ]]; then
+		echo "Doing normal - $thing"
+		sed -i "s/${old_name}/${new_name}/g" ${thing}
+	elif [[ -d ${thing} ]]; then
+		echo "doing nothing on directory - $thing"
+	else
+		echo "Thing (${thing}) is not file or directory"
+	fi
+done
 #rm -r "/scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${project}/temp_folders.txt"
