@@ -70,18 +70,23 @@ if [[ ${ani_files} -gt 0 ]]; then
 	echo "${header}"
 	Genus=$(echo "${header}" | cut -d' ' -f1 | cut -d'-' -f2)
 	species=$(echo "${header}" | cut -d' ' -f2 | cut -d'(' -f1)
+	confidence_index=$(echo "${header}" | cut -d' ' -f1 | cut -d'-' -f1)
 	echo "${Genus}-${species}"
-elif [[ -s "${processed}/${project}/${sample}/16s/${sample}_16s_blast_id.txt" ]]; then
+elif [[ -s "${processed}/${project}/${sample}/16s/${sample}.nt.RemoteBLASTN.sorted" ]]; then
 	source="16s"
 	#echo "${source}"
 		# Lookup Taxonomy
 		line=$(tail -n 1 "${processed}/${project}/${sample}/16s/${sample}_16s_blast_id.txt")
-		source_file="${processed}/${project}/${sample}/16s/${sample}_16s_blast_id.txt"
 		Genus=$(echo "${line}" | cut -d"	" -f3 | cut -d" " -f1)
 		species=$(echo "${line}" | cut -d"	" -f3 | cut -d" " -f2)
+		source_file="${processed}/${project}/${sample}/16s/${sample}.nt.RemoteBLASTN.sorted"
+		confidence_index=$(head -n1 ${source_file} | cut -d'	' -f3)
+		confidence_index="${confidence_index}%"
 elif [[ -s "${processed}/${project}/${sample}/gottcha/${sample}_gottcha_species_summary.txt" ]]; then
 	source="GOTTCHA"
 	source_file="${processed}/${project}/${sample}/gottcha/${sample}_gottcha_species_summary.txt"
+	confidence_index=$(tail -n1 "${source_file}" | cut -d' ' -f2)
+	confidence_index="${confidence_index}%"
 	#echo "${source}"
 	while IFS= read -r line;
 	do
@@ -99,6 +104,8 @@ elif [[ -s "${processed}/${project}/${sample}/gottcha/${sample}_gottcha_species_
 elif [[ -s "${processed}/${project}/${sample}/kraken/postAssembly/${sample}_kraken_summary_assembled_BP_data.txt" ]]; then
 	source="Kraken"
 	source_file="${processed}/${project}/${sample}/kraken/postAssembly/${sample}_kraken_summary_assembled_BP_data.txt"
+	confidence_index=$(tail -n1 "${source_file}" | cut -d' ' -f2)
+	confidence_index="${confidence_index}%"
 	#echo "${source}"
 	while IFS= read -r line;
 	do
@@ -137,4 +144,4 @@ do
 			break
 	fi
 done < "${local_DBs}/taxes.csv"
-printf "(${source})-${source_file}\nD:	${Domain}\nP:	${Phylum}\nC:	${Class}\nO:	${Order}\nF:	${Family}\nG:	${Genus}\ns:	${species}\n" > "${processed}/${project}/${sample}/${sample}.tax"
+printf "(${source})-${confidence_index}-${source_file}\nD:	${Domain}\nP:	${Phylum}\nC:	${Class}\nO:	${Order}\nF:	${Family}\nG:	${Genus}\ns:	${species}\n" > "${processed}/${project}/${sample}/${sample}.tax"
