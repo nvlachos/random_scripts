@@ -39,7 +39,7 @@ while IFS= read -r var; do
 	OUTDATADIR="${processed}/${project}/${sample_name}"
 	echo "doing normal for ${sample_name}"
 	"${shareScript}/rename_sample.sh" "${sample_name}" "${new_sample_name}" "${project}"
-done < "${share}/${1}"
+done < "${1}"
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)
