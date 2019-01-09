@@ -33,16 +33,18 @@ if [[ ! -d ${1} ]]; then
 	echo "${1} does not exist"
 fi
 
-for j in ${1}/*.${2}; do
-	genus=$(basename ${j} | cut -d'_' -f1)
-	species=$(basename ${j} | cut -d'_' -f2)
-	accession=$(basename ${j} | cut -d'_' -f3,4)
+for i in ${1}/*; do
+	for j in ${i}/*; do
+		genus=$(basename ${j} | cut -d'_' -f1)
+		species=$(basename ${j} | cut -d'_' -f2)
+		accession=$(basename ${j} | cut -d'_' -f3,4)
 
-		if [[ "${species}" = "sp." ]]; then
-			header=$(head -n1 ${j})
-			species=$(echo "${header}" | cut -d' ' -f4 | sed 's/,//g')
-			echo "${genus}-${species}-${accession}"
-			echo "saving ${j} to ${1}/${genus}_${species}_${accession}"
-			mv "${j}" "${1}/${genus}_${species}_${accession}"
-		fi
+			if [[ "${species}" = "sp." ]]; then
+				header=$(head -n1 ${j})
+				species=$(echo "${header}" | cut -d' ' -f4 | sed 's/,//g')
+				echo "${genus}-${species}-${accession}"
+				echo "saving ${j} to ${1}/${genus}_${species}_${accession}"
+				mv "${j}" "${1}/${genus}_${species}_${accession}"
+			fi
+		done
 done
