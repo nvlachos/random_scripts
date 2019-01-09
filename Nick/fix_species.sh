@@ -42,7 +42,7 @@ for j in ${1}/*.${2}; do
 			header=$(head -n1 ${j})
 			species=$(echo "${header}" | cut -d' ' -f4 | sed 's/,//g')
 			echo "${genus}-${species}-${accession}"
-			echo "saving ${j} to ${1}/${genus}_${species}_${accession}.${2}"
-			mv "${j}" "${1}/${genus}_${species}_${accession}.${2}"
+			echo "saving ${j} to ${1}/${genus}_${species}_${accession}"
+			mv "${j}" "${1}/${genus}_${species}_${accession}"
 		fi
 done
