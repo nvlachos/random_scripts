@@ -36,11 +36,11 @@ fi
 for j in ${1}/*.${2}; do
 	genus=$(basename ${j} | cut -d'_' -f1)
 	species=$(basename ${j} | cut -d'_' -f2)
-
+	accession=$(basename ${j} | cut -d'_' -f3,4)
 		if [[ "${species}" = "sp." ]]; then
 			header=$(head -n1 ${j})
-			species=$(echo "${header}" | cut -d' ' -f4)
-			echo "saving ${j} to ${1}/${genus}_${species}_${accession}.${3}"
+			species=$(echo "${header}" | cut -d' ' -f4 | sed 's/,//g')
+			echo "saving ${j} to ${1}/${genus}_${species}_${accession}.${2}"
 			mv "${j}" "${1}/${genus}_${species}_${accession}.${2}"
 		fi
 done
