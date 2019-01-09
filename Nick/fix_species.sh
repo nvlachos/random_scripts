@@ -1,0 +1,46 @@
+#!/bin/sh -l
+
+#$ -o fix_species.out
+#$ -e fix_species.err
+#$ -N fix_species
+#$ -cwd
+#$ -q all.q
+
+
+#
+# This will check all files in a directory to see if the species was extracted properly (e.g, no sp.)
+#
+# Usage is ./fix_species.sh directory_of_fastas extension_to_look_for
+#
+
+# Checks for proper argumentation
+if [[ $# -eq 0 ]]; then
+	echo "No argument supplied to rename_accession_to_genus_species.sh, exiting"
+	exit 1
+elif [[ -z "${1}" ]]; then
+	echo "Empty directory supplied to rename_accession_to_genus_species.sh, exiting"
+	exit 1
+# Gives the user a brief usage and help section if requested with the -h option argument
+elif [[ "${1}" = "-h" ]]; then
+	echo "Usage is ./make_scicomp_refseq_mash_sketch.sh	output_directory"
+	echo "Output is saved to ${1} & ${2}"
+	exit 0
+fi
+
+
+#echo ":${1}:"
+if [[ ! -d ${1} ]]; then
+	echo "${1} does not exist"
+fi
+
+for j in ${1}/*.${2}; do
+	genus=$(basename ${j} | cut -d'_' -f1)
+	species=$(basename ${j} | cut -d'_' -f2)
+
+		if [[ "${species}" = "sp." ]]; then
+			header=$(head -n1 ${j})
+			species=$(echo "${header}" | cut -d' ' -f4)
+			echo "saving ${j} to ${1}/${genus}_${species}_${accession}.${3}"
+			mv "${j}" "${1}/${genus}_${species}_${accession}.${2}"
+		fi
+done
