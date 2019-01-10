@@ -64,9 +64,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	#if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
 	#	rm -r "${processed}/${project}/${sample}/ANI/"
 	#fi
-	if [[ -d "${processed}/${project}/${sample}/ANI" ]]; then
-		mv  "${processed}/${project}/${sample}/ANI" "${processed}/${project}/${sample}/ANI_WITH_CALCO"
-	fi
 	if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
 		while IFS= read -r line;
 		do
@@ -81,6 +78,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				genus=$(echo "${line}" | awk -F ' ' '{print $2}')
 			fi
 		done < "${processed}/${project}/${sample}/${sample}.tax"
+		genus="Shewanella"
+		species="oneidis"
 		if [[ -f "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
 			rm -r "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})"
 		fi
