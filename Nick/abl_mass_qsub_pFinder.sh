@@ -12,39 +12,38 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list.sh list_name(currently has to be placed in /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR folder) description of list function
-#
-# script changes depending on what needs to be run through the list
+# Usage ./abl_mass_qsub_pFinder.sh path_to_list max_concurrent_submissions
 #
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to act_by_list.sh, exiting"
+	echo "No argument supplied to ./abl_mass_qsub_pFinder.sh, exiting"
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_template.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_submissions"
-	echo "Output location varies depending on which tasks are performed but will be found somewhere under ${processed}"
-	exit 0
+	echo "Usage is ./abl_mass_qsub_pFinder.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions"
+	exit 1
+elif [[ ! -f "${1}" ]]; then
+	echo "${1} (list) does not exist...exiting"
+	exit 1
 fi
 
+# create an array of all samples in the list
 arr=()
 while IFS= read -r line || [[ "$line" ]];  do
   arr+=("$line")
 done < ${1}
 
 arr_size="${#arr[@]}"
+last_index=$(( arr_size -1 ))
 echo "-${arr_size}:${arr[@]}-"
 
-if [[ ! -z "${2}" ]]; then
-	max_subs="${2}"
-else
-	max_subs=10
-fi
 
-# Loop through and act on each sample name in the passed/provided list
+# Create direcory to hold all temporary qsub scripts
 counter=0
 max_subs=${2}
+
+# Set script directory
 main_dir="${share}/mass_subs/pFinder_subs"
 if [[ ! -d "${share}/mass_subs/pFinder_subs" ]]; then
 	mkdir "${share}/mass_subs/pFinder_subs"
@@ -53,8 +52,9 @@ elif [[ ! -d "${share}/mass_subs/pFinder_subs/complete" ]]; then
 	mkdir "${share}/mass_subs/pFinder_subs/complete"
 fi
 
-start_time=$(date)
+start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 
+# Creates and submits qsub scripts to try to find plasmid replicons in all the samples in the list
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
@@ -71,28 +71,10 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			elif [ "${first}" = "G" ]
 			then
 				genus=$(echo "${line}" | awk -F ' ' '{print $2}')
-			#elif [ "${first}" = "F" ]
-			#then
-			#	family=$(echo "${line}" | awk -F ' ' '{print $4}')
-			#elif [ "${first}" = "O" ]
-			#then
-			#	order=$(echo "${line}" | awk -F ' ' '{print $4}')
-			#elif [ "${first}" = "C" ]
-			#then
-			#	class=$(echo "${line}" | awk -F ' ' '{print $4}')
-			#elif [ "${first}" = "P" ]
-			#then
-			#	phylum=$(echo "${line}" | awk -F ' ' '{print $4}')
-			#elif [ "${first}" = "K" ]
-			#then
-			#	kingdom=$(echo "${line}" | awk -F ' ' '{print $4}')
-			#elif [ "${first}" = "D" ]
-			#then
-			#	domain=$(echo "${line}" | awk -F ' ' '{print $4}')
 			fi
 		done < "${processed}/${project}/${sample}/${sample}.tax"
 	else
-		echo "No kraken summary found for ${project}/${sample}"
+		echo "No taxonomy summary found for ${project}/${sample}"
 		break
 	fi
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
@@ -107,7 +89,15 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/pFn_${sample}_${start_time}.sh"
 				echo -e "\"${shareScript}/run_plasmidFinder.sh\" \"${sample}\" \"${project}\" \"plasmid\"" >> "${main_dir}/pFn_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFn_complete.txt\"" >> "${main_dir}/pFn_${sample}_${start_time}.sh"
-				qsub "${main_dir}/pFn_${sample}_${start_time}.sh"
+				if [[ "${counter}" -lt "${last_index}" ]]; then
+					qsub "${main_dir}/pFn_${sample}_${start_time}.sh"
+				else
+					if [[ -d "${processed}/${project}/${sample}/c-sstar_plasmid" ]]; then
+						qsub "${main_dir}/pFn_${sample}_${start_time}.sh"
+					else
+						qsub -sync y "${main_dir}/pFn_${sample}_${start_time}.sh"
+					fi
+				fi
 			else
 				echo "${project}/${sample} already has plasmid"
 				echo "$(date)" > "${main_dir}/complete/${sample}_pFn_complete.txt"
@@ -123,7 +113,11 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					echo -e "#$ -q short.q\n"  >> "${main_dir}/pFp_${sample}_${start_time}.sh"
 					echo -e "\"${shareScript}/run_plasmidFinder.sh\" \"${sample}\" \"${project}\" \"plasmid_on_plasmidAssembly\"" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFp_complete.txt\"" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-					qsub "${main_dir}/pFp_${sample}_${start_time}.sh"
+					if [[ "${counter}" -lt "${last_index}" ]]; then
+						qsub "${main_dir}/pFn_${sample}_${start_time}.sh"
+					else
+						qsub -sync y "${main_dir}/pFn_${sample}_${start_time}.sh"
+					fi
 				else
 					echo "${project}/${sample} already has plasmidFinder on plasmid"
 					echo "$(date)" > "${main_dir}/complete/${sample}_pFp_complete.txt"
@@ -153,7 +147,15 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/pFn_${sample}_${start_time}.sh"
 						echo -e "\"${shareScript}/run_plasmidFinder.sh\" \"${sample}\" \"${project}\" \"plasmid\"" >> "${main_dir}/pFn_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFn_complete.txt\"" >> "${main_dir}/pFn_${sample}_${start_time}.sh"
-						qsub "${main_dir}/pFn_${sample}_${start_time}.sh"
+						if [[ "${counter}" -lt "${last_index}" ]]; then
+							qsub "${main_dir}/pFn_${sample}_${start_time}.sh"
+						else
+							if [[ -d "${processed}/${project}/${sample}/c-sstar_plasmid" ]]; then
+								qsub "${main_dir}/pFn_${sample}_${start_time}.sh"
+							else
+								qsub -sync y "${main_dir}/pFn_${sample}_${start_time}.sh"
+							fi
+						fi
 					else
 						echo "${project}/${sample} already has plasmid"
 						echo "$(date)" > "${main_dir}/complete/${sample}_pFn_complete.txt"
@@ -169,7 +171,11 @@ while [ ${counter} -lt ${arr_size} ] ; do
 							echo -e "#$ -q short.q\n"  >> "${main_dir}/pFp_${sample}_${start_time}.sh"
 							echo -e "\"${shareScript}/run_plasmidFinder.sh\" \"${sample}\" \"${project}\" \"plasmid_on_plasmidAssembly\"" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
 							echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFp_complete.txt\"" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-							qsub "${main_dir}/pFp_${sample}_${start_time}.sh"
+							if [[ "${counter}" -lt "${last_index}" ]]; then
+								qsub "${main_dir}/pFn_${sample}_${start_time}.sh"
+							else
+								qsub -sync y "${main_dir}/pFn_${sample}_${start_time}.sh"
+							fi
 						else
 							echo "${project}/${sample} already has plasmidFinder on plasmid"
 							echo "$(date)" > "${main_dir}/complete/${sample}_pFp_complete.txt"
@@ -188,7 +194,4 @@ while [ ${counter} -lt ${arr_size} ] ; do
 done
 
 echo "All isolates completed"
-global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
-#Script exited gracefully (unless something else inside failed)
-printf "%s %s" "Act_by_list.sh has completed ${2}" "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
 exit 0
