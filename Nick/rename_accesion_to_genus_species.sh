@@ -6,6 +6,28 @@
 #$ -cwd
 #$ -q all.q
 
+
+#
+# This will rename all files in a directory according to their NCBI accession number. It will prepend the genus species to the accession in the filename
+#
+# Usage is ./rename_accession_to_genus_species.sh directory_of_fastas extension to lok for
+#
+
+# Checks for proper argumentation
+if [[ $# -eq 0 ]]; then
+	echo "No argument supplied to rename_accession_to_genus_species.sh, exiting"
+	exit 1
+elif [[ -z "${1}" ]]; then
+	echo "Empty Genus_species supplied to rename_accession_to_genus_species.sh, exiting"
+	exit 1
+# Gives the user a brief usage and help section if requested with the -h option argument
+elif [[ "${1}" = "-h" ]]; then
+	echo "Usage is ./make_scicomp_refseq_mash_sketch.sh	output_directory"
+	echo "Output is saved to ${1} & ${2}"
+	exit 0
+fi
+
+
 #echo ":${1}:"
 if [[ ! -d ${1} ]]; then
 	echo "${1} does not exist"
@@ -13,6 +35,7 @@ fi
 #if [[ ! -d ${2} ]]; then
 #	mkdir -p ${2}
 #fi
+
 
 zipped_num=$(ls ${1}/*.gz | wc -l)
 if [[ "${zipped_num}" -gt 0 ]]; then
@@ -52,6 +75,10 @@ for j in ${1}/*.${2}; do
 		else
 			genus=$(echo "${genus_species_info}" | cut -d' ' -f1)
 			species=$(echo "${genus_species_info}" | cut -d' ' -f2)
+		fi
+		if [[ "${species}" = "sp." ]]; then
+			header=$(head -n1 ${j})
+			species=$(echo "${header}" | cut -d' ' -f4)
 		fi
 		if [[ ${genus} ]] && [[ ${species} ]]; then
 			break
