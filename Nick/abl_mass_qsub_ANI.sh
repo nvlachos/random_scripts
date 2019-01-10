@@ -78,8 +78,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				genus=$(echo "${line}" | awk -F ' ' '{print $2}')
 			fi
 		done < "${processed}/${project}/${sample}/${sample}.tax"
-		genus="Shewanella"
-		species="test"
+		genus="Escherichia"
+		species="coli"
 		if [[ -f "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
 			rm -r "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})"
 		fi
