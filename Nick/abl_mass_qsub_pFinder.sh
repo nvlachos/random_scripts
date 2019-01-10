@@ -114,9 +114,9 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					echo -e "\"${shareScript}/run_plasmidFinder.sh\" \"${sample}\" \"${project}\" \"plasmid_on_plasmidAssembly\"" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFp_complete.txt\"" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
 					if [[ "${counter}" -lt "${last_index}" ]]; then
-						qsub "${main_dir}/pFn_${sample}_${start_time}.sh"
+						qsub "${main_dir}/pFp_${sample}_${start_time}.sh"
 					else
-						qsub -sync y "${main_dir}/pFn_${sample}_${start_time}.sh"
+						qsub -sync y "${main_dir}/pFp_${sample}_${start_time}.sh"
 					fi
 				else
 					echo "${project}/${sample} already has plasmidFinder on plasmid"
@@ -172,9 +172,9 @@ while [ ${counter} -lt ${arr_size} ] ; do
 							echo -e "\"${shareScript}/run_plasmidFinder.sh\" \"${sample}\" \"${project}\" \"plasmid_on_plasmidAssembly\"" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
 							echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFp_complete.txt\"" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
 							if [[ "${counter}" -lt "${last_index}" ]]; then
-								qsub "${main_dir}/pFn_${sample}_${start_time}.sh"
+								qsub "${main_dir}/pFp_${sample}_${start_time}.sh"
 							else
-								qsub -sync y "${main_dir}/pFn_${sample}_${start_time}.sh"
+								qsub -sync y "${main_dir}/pFp_${sample}_${start_time}.sh"
 							fi
 						else
 							echo "${project}/${sample} already has plasmidFinder on plasmid"
