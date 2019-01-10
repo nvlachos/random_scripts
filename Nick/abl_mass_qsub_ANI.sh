@@ -61,9 +61,9 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	echo "${sample} and ${project}:"
 	echo "${counter}-${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta"
 	# If sample has assembly, then delete old ANI folder to allow rerun
-	#if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
-	#	rm -r "${processed}/${project}/${sample}/ANI/"
-	#fi
+	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
+		rm -r "${processed}/${project}/${sample}/ANI/"
+	fi
 	if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
 		while IFS= read -r line;
 		do
