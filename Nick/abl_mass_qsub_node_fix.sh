@@ -45,7 +45,6 @@ fi
 
 # Loop through and act on each sample name in the passed/provided list
 counter=0
-max_subs=${2}
 main_dir="${share}/mass_subs/node_subs"
 if [[ ! -d "${share}/mass_subs/node_subs" ]]; then
 	mkdir "${share}/mass_subs/node_subs"
@@ -59,24 +58,29 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	echo ${counter}
 	if [ ${counter} -lt ${max_subs} ]; then
-		header=$(head -n1 "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" | cut -d'_' -f1)
-		if [[ "${header}" = "NODE" ]]; then
-			echo  "Index is below max submissions, submitting"
-			echo -e "#!/bin/bash -l\n" > "${main_dir}/node_${sample}_${start_time}.sh"
-			echo -e "#$ -o node_${sample}.out" >> "${main_dir}/node_${sample}_${start_time}.sh"
-			echo -e "#$ -e node_${sample}.err" >> "${main_dir}/node_${sample}_${start_time}.sh"
-			echo -e "#$ -N node_${sample}"   >> "${main_dir}/node_${sample}_${start_time}.sh"
-			echo -e "#$ -cwd"  >> "${main_dir}/node_${sample}_${start_time}.sh"
-			echo -e "#$ -q short.q\n"  >> "${main_dir}/node_${sample}_${start_time}.sh"
-			echo -e "python \"${shareScript}/fasta_headers.py\" \"${sample}\" \"${project}\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
-			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_node_complete.txt\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
-			if [[ "${counter}" -lt "${last_index}" ]]; then
-				qsub "${main_dir}/node_${sample}_${start_time}.sh"
+		if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
+			header=$(head -n1 "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" | cut -d'_' -f1)
+			if [[ "${header}" = "NODE" ]]; then
+				echo  "Index is below max submissions, submitting"
+				echo -e "#!/bin/bash -l\n" > "${main_dir}/node_${sample}_${start_time}.sh"
+				echo -e "#$ -o node_${sample}.out" >> "${main_dir}/node_${sample}_${start_time}.sh"
+				echo -e "#$ -e node_${sample}.err" >> "${main_dir}/node_${sample}_${start_time}.sh"
+				echo -e "#$ -N node_${sample}"   >> "${main_dir}/node_${sample}_${start_time}.sh"
+				echo -e "#$ -cwd"  >> "${main_dir}/node_${sample}_${start_time}.sh"
+				echo -e "#$ -q short.q\n"  >> "${main_dir}/node_${sample}_${start_time}.sh"
+				echo -e "python \"${shareScript}/fasta_headers.py\" \"${sample}\" \"${project}\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_node_complete.txt\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+				if [[ "${counter}" -lt "${last_index}" ]]; then
+					qsub "${main_dir}/node_${sample}_${start_time}.sh"
+				else
+					qsub -sync y "${main_dir}/node_${sample}_${start_time}.sh"
+				fi
 			else
-				qsub -sync y "${main_dir}/node_${sample}_${start_time}.sh"
+				echo "${project}/${sample} already had its nodes removed"
+				echo "$(date)" > "${main_dir}/complete/${sample}_node_complete.txt"
 			fi
 		else
-			echo "${project}/${sample} already had its nodes removed"
+			echo "${project}/${sample} has no Assembly to fix"
 			echo "$(date)" > "${main_dir}/complete/${sample}_node_complete.txt"
 		fi
 	else
@@ -91,26 +95,33 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				break
 			fi
 			if [ -f "${main_dir}/complete/${waiting_sample}_node_complete.txt" ]; then
-				header=$(head -n1 "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" | cut -d'_' -f1)
-				if [[ "${header}" = "NODE" ]]; then
-					echo  "Index is below max submissions, submitting"
-					echo -e "#!/bin/bash -l\n" > "${main_dir}/node_${sample}_${start_time}.sh"
-					echo -e "#$ -o node_${sample}.out" >> "${main_dir}/node_${sample}_${start_time}.sh"
-					echo -e "#$ -e node_${sample}.err" >> "${main_dir}/node_${sample}_${start_time}.sh"
-					echo -e "#$ -N node_${sample}"   >> "${main_dir}/node_${sample}_${start_time}.sh"
-					echo -e "#$ -cwd"  >> "${main_dir}/node_${sample}_${start_time}.sh"
-					echo -e "#$ -q short.q\n"  >> "${main_dir}/node_${sample}_${start_time}.sh"
-					echo -e "python \"${shareScript}/fasta_headers.py\" \"${sample}\" \"${project}\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
-					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_node_complete.txt\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
-					if [[ "${counter}" -lt "${last_index}" ]]; then
-						qsub "${main_dir}/node_${sample}_${start_time}.sh"
+				if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
+					header=$(head -n1 "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" | cut -d'_' -f1)
+					if [[ "${header}" = "NODE" ]]; then
+						echo  "Index is below max submissions, submitting"
+						echo -e "#!/bin/bash -l\n" > "${main_dir}/node_${sample}_${start_time}.sh"
+						echo -e "#$ -o node_${sample}.out" >> "${main_dir}/node_${sample}_${start_time}.sh"
+						echo -e "#$ -e node_${sample}.err" >> "${main_dir}/node_${sample}_${start_time}.sh"
+						echo -e "#$ -N node_${sample}"   >> "${main_dir}/node_${sample}_${start_time}.sh"
+						echo -e "#$ -cwd"  >> "${main_dir}/node_${sample}_${start_time}.sh"
+						echo -e "#$ -q short.q\n"  >> "${main_dir}/node_${sample}_${start_time}.sh"
+						echo -e "python \"${shareScript}/fasta_headers.py\" \"${sample}\" \"${project}\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_node_complete.txt\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+						if [[ "${counter}" -lt "${last_index}" ]]; then
+							qsub "${main_dir}/node_${sample}_${start_time}.sh"
+						else
+							qsub -sync y "${main_dir}/node_${sample}_${start_time}.sh"
+						fi
+						break
 					else
-						qsub -sync y "${main_dir}/node_${sample}_${start_time}.sh"
+						echo "${project}/${sample} already had its nodes removed"
+						echo "$(date)" > "${main_dir}/complete/${sample}_node_complete.txt"
+						break
 					fi
-					break
 				else
-					echo "${project}/${sample} already had its nodes removed"
+					echo "${project}/${sample} has no Assembly to fix"
 					echo "$(date)" > "${main_dir}/complete/${sample}_node_complete.txt"
+					break
 				fi
 			fi
 		done
