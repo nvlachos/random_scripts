@@ -68,7 +68,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			echo -e "#$ -N node_${sample}"   >> "${main_dir}/node_${sample}_${start_time}.sh"
 			echo -e "#$ -cwd"  >> "${main_dir}/node_${sample}_${start_time}.sh"
 			echo -e "#$ -q short.q\n"  >> "${main_dir}/node_${sample}_${start_time}.sh"
-			echo -e "python \"${shareScript}/fasta_header.py\" \"${sample}\" \"${project}\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+			echo -e "python \"${shareScript}/fasta_headers.py\" \"${sample}\" \"${project}\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_node_complete.txt\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
 			if [[ "${counter}" -lt "${last_index}" ]]; then
 				qsub "${main_dir}/node_${sample}_${start_time}.sh"
@@ -99,7 +99,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					echo -e "#$ -N node_${sample}"   >> "${main_dir}/node_${sample}_${start_time}.sh"
 					echo -e "#$ -cwd"  >> "${main_dir}/node_${sample}_${start_time}.sh"
 					echo -e "#$ -q short.q\n"  >> "${main_dir}/node_${sample}_${start_time}.sh"
-					echo -e "python \"${shareScript}/fasta_header.py\" \"${sample}\" \"${project}\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+					echo -e "python \"${shareScript}/fasta_headers.py\" \"${sample}\" \"${project}\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_node_complete.txt\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
 					if [[ "${counter}" -lt "${last_index}" ]]; then
 						qsub "${main_dir}/node_${sample}_${start_time}.sh"
