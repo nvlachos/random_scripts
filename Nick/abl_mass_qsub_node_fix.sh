@@ -78,6 +78,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		else
 			echo "${project}/${sample} already had its nodes removed"
 			echo "$(date)" > "${main_dir}/complete/${sample}_node_complete.txt"
+		fi
 	else
 		waiting_for_index=$(( counter - max_subs ))
 		waiting_sample=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
