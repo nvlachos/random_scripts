@@ -60,7 +60,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	echo ${counter}
 	if [ ${counter} -lt ${max_subs} ]; then
 		header=$(head -n1 "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" | cut -d'_' -f1)
-		if [[ "${header}" = "NODE" ]], then
+		if [[ "${header}" = "NODE" ]]; then
 			echo  "Index is below max submissions, submitting"
 			echo -e "#!/bin/bash -l\n" > "${main_dir}/node_${sample}_${start_time}.sh"
 			echo -e "#$ -o node_${sample}.out" >> "${main_dir}/node_${sample}_${start_time}.sh"
@@ -91,7 +91,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			fi
 			if [ -f "${main_dir}/complete/${waiting_sample}_node_complete.txt" ]; then
 				header=$(head -n1 "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" | cut -d'_' -f1)
-				if [[ "${header}" = "NODE" ]], then
+				if [[ "${header}" = "NODE" ]]; then
 					echo  "Index is below max submissions, submitting"
 					echo -e "#!/bin/bash -l\n" > "${main_dir}/node_${sample}_${start_time}.sh"
 					echo -e "#$ -o node_${sample}.out" >> "${main_dir}/node_${sample}_${start_time}.sh"
