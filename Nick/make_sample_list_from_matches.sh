@@ -1,8 +1,8 @@
 #!/bin/bash -l
 
-#$ -o do_all.out
-#$ -e do_all.err
-#$ -N rekrak
+#$ -o matcher.out
+#$ -e matcher.err
+#$ -N matcher
 #$ -cwd
 #$ -q all.q
 
@@ -10,15 +10,15 @@
 . ./config.sh
 
 #
-# Script to make a list of all matching isolates in our database with match genus species
-# 
-# Usage ./make_sample_list_from_matches.sh Genus_species path_and_name_of output_file
+# Script to make a list of all matching isolates in our database which matches genus species
+#
+# Usage ./make_sample_list_from_matches.sh Genus_species path_and_name_of_output_file
 #
 #
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to make_sample_list_from_matches.sh.sh, exiting"
+	echo "No argument supplied to make_sample_list_from_matches.sh, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
 	echo "Empty Genus_species supplied to make_sample_list_from_matches.sh.sh, exiting"
@@ -58,7 +58,7 @@ for path in ${processed}/*; do
 			echo "Match-${1} at ${run_ID}/${isolate_name}"
 			echo "${run_ID}/${isolate_name}" >> "${sample_list}"
 		else
-			echo "No match of ${1} to ${sample_genus,,}_${sample} in ${run_id}/${isolate_name}"
+			echo "No match of ${1} to ${sample_genus,,} ${sample_species} from ${isolate_name} in ${run_id}/${isolate_name}"
 		fi
 	done
 done
