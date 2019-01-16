@@ -31,7 +31,7 @@ fi
 # Loop through and act on each sample name in the passed/provided list
 counter=0
 echo "c-sstar:c-sstar_plasmid:srst2"
-echo "Identification:0608-c-sstar:0608-c-sstar_plasmid:0608-srst2:1003-c-sstar:1003-c-sstar_plasmid:1003-srst2" > "${share}/current_DBS_in_samples.txt"
+echo "Identification:0608-c-sstar:0608-c-sstar_plasmid:0608-srst2:1204-c-sstar:1204-c-sstar_plasmid:1204-srst2" > "${share}/current_DBS_in_samples.txt"
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
@@ -120,44 +120,44 @@ while IFS= read -r var; do
 	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_${2}.gapped_98_sstar_summary.txt" ]]; then
 		header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_${2}.gapped_98_sstar_summary.txt")
 		if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
-			ohsixoheight="None"
+			input_DB_csstar="None"
 		else
-			ohsixoheight="AR_Found"
+			input_DB_csstar="AR_Found"
 		fi
 	elif [[ ! -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
-		oheightseventeen="0_size"
+		input_DB_csstar="0_size"
 	else
-		oheightseventeen="File_Missing"
+		input_DB_csstar="File_Missing"
 	fi
 	if [[ -d "${processed}/${project}/${sample_name}/c-sstar_plasmid" ]]; then
 		if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt" ]]; then
 			header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt")
 			if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
-				ohsixoheightp="None"
+				input_DB_csstar_plasmid="None"
 			else
-				ohsixoheightp="AR_Found"
+				input_DB_csstar_plasmid="AR_Found"
 			fi
 		elif [[ ! -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
-			ohsixoheightp="0_size"
+			input_DB_csstar_plasmid="0_size"
 		else
-			ohsixoheightp="File_Missing"
+			input_DB_csstar_plasmid="File_Missing"
 		fi
 	else
-		ohsixoheightp="No_plasmid_Assembly"
+		input_DB_csstar_plasmid="No_plasmid_Assembly"
 	fi
 	# Brief check if srst2 files exist, dont really have time to check for content at the moment
 	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_20180608_srst2__results.txt" ]] || [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__ResGANNOT_20180608_srst2__results.txt" ]]; then
-		ohsixoheights="X"
+		input_DB_srst2="X"
 	else
-		ohsixoheights="M"
+		input_DB_srst2="M"
 	fi
 	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_${2}_srst2__results.txt" ]] || [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__ResGANNOT_${2}_srst2__results.txt" ]]; then
-		oheightseventeens="X"
+		input_DB_srst2="X"
 	else
-		oheightseventeens="M"
+		input_DB_srst2="M"
 	fi
-	echo "${counter}:${project}/${sample_name}:	20180608	:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:	${2}	:${oheightseventeen}:${oheightseventeenp}:${oheightseventeens}:"
-	echo "${project}/${sample_name}:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:${oheightseventeen}:${oheightseventeenp}:${oheightseventeens}:" >> "${share}/current_DBS_in_samples.txt"
+	echo "${counter}:${project}/${sample_name}:	20180608	:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:	${2}	:${input_DB_csstar}:${input_DB_csstar_plasmid}:${input_DB_srst2}:"
+	echo "${project}/${sample_name}:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:${input_DB_csstar}:${input_DB_csstar_plasmid}:${input_DB_srst2}:" >> "${share}/current_DBS_in_samples.txt"
 	counter=$(( counter + 1 ))
 done < "${1}"
 echo "All isolates completed"
