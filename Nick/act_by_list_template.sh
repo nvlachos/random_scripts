@@ -23,9 +23,6 @@ if [[ $# -eq 0 ]]; then
 elif [[ "$1" = "-h" ]]; then
 	echo "Usage is ./act_by_list_AR_completion_check.sh path_to_list_file ResGANNOT_Identifier(YYYYMMDD)"
 	exit 0
-elif [[ -z "${2}" ]]; then
-	echo "ResGANNOT identifier is empty, please input the DB identifier using YYYYMMDD that it was created, exiting..."
-	exit 1
 fi
 
 # Loop through and act on each sample name in the passed/provided list
