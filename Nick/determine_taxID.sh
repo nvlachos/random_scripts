@@ -191,6 +191,13 @@ fi
 if [[ ${Genus} == "Peptoclostridium" ]]; then
 	Genus="Clostridium"
 fi
+if [[ "${species}" == "N/A" ]]; then
+	species="Not_assigned"
+fi
+if [[ "${Genus}" == "N/A" ]]; then
+	Genus="Not_assigned"
+fi
+
 
 while IFS= read -r line;
 do
