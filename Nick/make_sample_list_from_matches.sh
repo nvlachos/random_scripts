@@ -42,26 +42,30 @@ sample_list="${2}"
 
 for path in ${processed}/*; do
     if [ ! -d "${path}" ]; then
-		echo "$path is not counted as path"
-		continue
-	fi
+			echo "$path is not counted as path"
+			continue
+		fi
     run_ID="$(basename "${path}")"
     for isolate in $path/*; do
-		[ -d "${isolate}" ] || continue # if not a directory, skip
-		isolate_name="$(basename "${isolate}")"
-		if [[ ! -f "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" ]]; then
-			"${shareScript}/determine_taxID.sh" "${isolate_name}" "${run_ID}"
-		fi
-		sample_genus=$(tail -n2 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax")
-		sample_genus=$(echo "${smaple_genus}" | head -n1 | cut -d'	' -f2)
-		sample_species=$(tail -n1 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" | cut -d'	' -f2)
-		if [[ "${1,,}" == "${sample_genus,,}_${sample_species,,}" ]]; then
-			echo "Match-${1} at ${run_ID}/${isolate_name}"
-			echo "${run_ID}/${isolate_name}" >> "${sample_list}"
-		else
-			echo "No match of ${1} to ${sample_genus,,} ${sample_species} from ${isolate_name} in ${run_id}/${isolate_name}"
-		fi
-	done
+			[ -d "${isolate}" ] || continue # if not a directory, skip
+			isolate_name="$(basename "${isolate}")"
+			if [[ ! -f "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" ]]; then
+				"${shareScript}/determine_taxID.sh" "${isolate_name}" "${run_ID}"
+			fi
+			echo "Trying ${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax"
+			sample_genus=$(tail -n2 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax")
+			echo "Trying ${sample_genus}"
+			sample_genus=$(echo "${smaple_genus}" | head -n1 | cut -d'	' -f2)
+			echo "Trying ${sample_genus}"
+			sample_species=$(tail -n1 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" | cut -d'	' -f2)
+			echo "Trying ${sample_species}"
+			if [[ "${1,,}" == "${sample_genus,,}_${sample_species,,}" ]]; then
+				echo "Match-${1} at ${run_ID}/${isolate_name}"
+				echo "${run_ID}/${isolate_name}" >> "${sample_list}"
+			else
+				echo "No match of ${1} to ${sample_genus,,} ${sample_species} from ${isolate_name} in ${run_ID}/${isolate_name}"
+			fi
+		done
 done
 
 exit
