@@ -59,7 +59,7 @@ for path in ${processed}/*; do
 			echo "Trying ${sample_genus}"
 			sample_species=$(tail -n1 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" | cut -d'	' -f2)
 			echo "Trying ${sample_species}"
-			if [[ -z "${sample_species}" ]] || [[ "${$sample_genus}" = "Not_assigned"]]; then
+			if [[ -z "${sample_species}" ]] || [[ "${$sample_genus}" = "Not_assigned" ]]; then
 				rm ${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax
 				"${shareScript}/determine_taxID.sh" "${isolate_name}" "${run_ID}"
 				echo "2 Trying ${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax"
