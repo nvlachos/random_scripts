@@ -53,7 +53,7 @@ for path in ${processed}/*; do
 				"${shareScript}/determine_taxID.sh" "${isolate_name}" "${run_ID}"
 			fi
 			echo "Trying1 ${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax"
-			sample_genus=$(tail -n2 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" | head -n1 | cut -d' ' -f2)
+			sample_genus=$(tail -n2 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" | head -n1 | cut -d'	' -f2)
 			echo "Trying2 ${sample_genus}"
 			#sample_genus=$(echo "${sample_genus}" | head -n1 | cut -d'	' -f2)
 			#echo "Trying3 ${sample_genus}"
@@ -63,7 +63,7 @@ for path in ${processed}/*; do
 				rm ${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax
 				"${shareScript}/determine_taxID.sh" "${isolate_name}" "${run_ID}"
 				echo "Trying5 ${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax"
-				sample_genus=$(tail -n2 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" | head -n1 | cut -d' ' -f2)
+				sample_genus=$(tail -n2 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" | head -n1 | cut -d'	' -f2)
 				echo "Trying6 ${sample_genus}"
 				#sample_genus=$(echo "${smaple_genus}" | head -n1 | cut -d'	' -f2)
 				#echo "Trying7 ${sample_genus}"
