@@ -76,6 +76,10 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			elif [ "${first}" = "G" ]
 			then
 				genus=$(echo "${line}" | awk -F ' ' '{print $2}')
+				# Only until ANI gets fixed
+				if [[ ${genus} == "Clostridioides" ]]; then
+					genus="Clostridium"
+				fi
 			fi
 		done < "${processed}/${project}/${sample}/${sample}.tax"
 		#genus="Acinetobacter"
