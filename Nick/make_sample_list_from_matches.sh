@@ -74,7 +74,7 @@ for path in ${processed}/*; do
 				echo "Match-${1} at ${run_ID}/${isolate_name}"
 				echo "${run_ID}/${isolate_name}" >> "${sample_list}"
 			else
-				echo "No match of ${1} to ${sample_genus,,} ${sample_species} from ${isolate_name} in ${run_ID}/${isolate_name}"
+				echo "No match of ${1} to ${sample_genus}_${sample_species} from ${isolate_name} in ${run_ID}/${isolate_name}"
 			fi
 		done
 done
