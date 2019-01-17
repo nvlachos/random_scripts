@@ -57,7 +57,7 @@ for path in ${processed}/*; do
 			echo "Trying2 ${sample_genus}"
 			#sample_genus=$(echo "${sample_genus}" | head -n1 | cut -d'	' -f2)
 			#echo "Trying3 ${sample_genus}"
-			sample_species=$(tail -n2 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" | head -n1 | cut -d'	' -f2)
+			sample_species=$(tail -n1 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" | cut -d'	' -f2)
 			echo "Trying4 ${sample_species}"
 			if [[ -z "${sample_species}" ]] || [[ "${sample_genus}" = "Not_assigned" ]] || [[ "${sample_genus}" = "N/A" ]]; then
 				rm ${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax
