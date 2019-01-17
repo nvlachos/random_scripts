@@ -53,11 +53,11 @@ for path in ${processed}/*; do
 				"${shareScript}/determine_taxID.sh" "${isolate_name}" "${run_ID}"
 			fi
 			echo "Trying1 ${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax"
-			sample_genus=$(tail -n2 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax")
+			sample_genus=$(tail -n3 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax")
 			echo "Trying2 ${sample_genus}"
 			sample_genus=$(echo "${smaple_genus}" | head -n1 | cut -d'	' -f2)
 			echo "Trying3 ${sample_genus}"
-			sample_species=$(tail -n1 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" | cut -d'	' -f2)
+			sample_species=$(tail -n2 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" | head -n1 | cut -d'	' -f2)
 			echo "Trying4 ${sample_species}"
 			if [[ -z "${sample_species}" ]] || [[ "${sample_genus}" = "Not_assigned" ]] || [[ "${sample_genus}" = "N/A" ]]; then
 				rm ${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax
