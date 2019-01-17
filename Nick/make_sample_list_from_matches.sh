@@ -52,23 +52,24 @@ for path in ${processed}/*; do
 			if [[ ! -f "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" ]]; then
 				"${shareScript}/determine_taxID.sh" "${isolate_name}" "${run_ID}"
 			fi
-			echo "Trying1 ${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax"
+			#echo "Trying1 ${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax"
 			sample_genus=$(tail -n2 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" | head -n1 | cut -d'	' -f2)
-			echo "Trying2 ${sample_genus}"
+			#echo "Trying2 ${sample_genus}"
 			#sample_genus=$(echo "${sample_genus}" | head -n1 | cut -d'	' -f2)
 			#echo "Trying3 ${sample_genus}"
 			sample_species=$(tail -n1 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" | cut -d'	' -f2)
-			echo "Trying4 ${sample_species}"
+			#echo "Trying4 ${sample_species}"
 			if [[ -z "${sample_species}" ]] || [[ "${sample_genus}" = "Not_assigned" ]] || [[ "${sample_genus}" = "N/A" ]]; then
+				echo "Doing determine_texID.sh"
 				rm ${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax
 				"${shareScript}/determine_taxID.sh" "${isolate_name}" "${run_ID}"
-				echo "Trying5 ${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax"
+				#echo "Trying5 ${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax"
 				sample_genus=$(tail -n2 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" | head -n1 | cut -d'	' -f2)
-				echo "Trying6 ${sample_genus}"
+				#echo "Trying6 ${sample_genus}"
 				#sample_genus=$(echo "${smaple_genus}" | head -n1 | cut -d'	' -f2)
 				#echo "Trying7 ${sample_genus}"
 				sample_species=$(tail -n1 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" | cut -d'	' -f2)
-				echo "Trying8 ${sample_species}"
+				#echo "Trying8 ${sample_species}"
 			fi
 			if [[ "${1,,}" == "${sample_genus,,}_${sample_species,,}" ]]; then
 				echo "Match-${1} at ${run_ID}/${isolate_name}"
