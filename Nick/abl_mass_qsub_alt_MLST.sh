@@ -124,6 +124,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		fi
 	else
 		echo "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta not found"
+		echo "$(date)" > "${main_dir}/complete/${sample}_alt_mlst_complete.txt"
 	fi
 	counter=$(( counter + 1 ))
 done
