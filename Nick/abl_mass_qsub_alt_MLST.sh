@@ -95,7 +95,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					break
 				fi
 				if [[ -f "${main_dir}/complete/${waiting_sample}_alt_mlst_complete.txt" ]]; then
-					if [[ ! -f "${processed}/${project}/${sample}/MLST/${sample}.mlst" ]]; then
+					if [[ ! -f "${processed}/${project}/${sample}/MLST/${sample}_${alt_DB}.mlst" ]]; then
 						echo  "Index is below max submissions, submitting"
 						echo -e "#!/bin/bash -l\n" > "${main_dir}/alt_mlst_${sample}_${start_time}.sh"
 						echo -e "#$ -o alt_mlst_${sample}.out" >> "${main_dir}/alt_mlst_${sample}_${start_time}.sh"
