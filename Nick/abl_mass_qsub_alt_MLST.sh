@@ -79,10 +79,10 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				else
 					qsub -sync y "${main_dir}/alt_mlst_${sample}_${start_time}.sh"
 				fi
-		#	else
-		#		echo "${project}/${sample} already has mlst summary"
-		#		echo "$(date)" > "${main_dir}/complete/${sample}_alt_mlst_complete.txt"
-		#	fi
+			else
+				echo "${project}/${sample} already has mlst summary"
+				echo "$(date)" > "${main_dir}/complete/${sample}_alt_mlst_complete.txt"
+			fi
 		else
 			waiting_for_index=$(( counter - max_subs ))
 			waiting_sample=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
