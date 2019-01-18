@@ -27,13 +27,16 @@ fi
 
 # Loop through and act on each sample name in the passed/provided list
 counter=0
-echo "c-sstar:c-sstar_plasmid:srst2"
-echo "Identification:0608-c-sstar:0608-c-sstar_plasmid:0608-srst2:1003-c-sstar:1003-c-sstar_plasmid:1003-srst2" > "${share}/current_DBS_in_samples.txt"
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	rm -r "${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20181204_gapped"
-	rm "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181204.gapped_98_sstar_summary.txt"
+	if [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
+		ST_type=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" | cut -d'	' -f3)
+		echo "${ST_type}"
+		if [[ "${ST_type}" = "208" ]]; then
+			echo "${project}/${sample_name}"
+		fi
+	fi
 done < "${1}"
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
