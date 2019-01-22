@@ -39,6 +39,7 @@ genus=$(echo ${1} | cut -d'_' -f1)
 species=$(echo ${1} | cut -d'_' -f2)
 sample_list="${2}"
 > "${sample_list}"
+counter=0
 
 for path in ${processed}/*; do
     if [ ! -d "${path}" ]; then
@@ -71,13 +72,14 @@ for path in ${processed}/*; do
 				sample_species=$(tail -n1 "${processed}/${run_ID}/${isolate_name}/${isolate_name}.tax" | cut -d'	' -f2)
 				#echo "Trying8 ${sample_species}"
 			fi
-			if [[ "${1,,}" == "${sample_genus,,}_${sample_species,,}" ]]; then
-				echo "Match-${1} at ${run_ID}/${isolate_name}"
+			if [[ "${genus,,}" == "${sample_genus,,}" ]]; then
+				echo "${counter} Match-${1} at ${run_ID}/${isolate_name}"
 				echo "${run_ID}/${isolate_name}" >> "${sample_list}"
 			else
-				echo "No match of ${1} to ${sample_genus}_${sample_species} from ${isolate_name} in ${run_ID}/${isolate_name}"
+				echo "${counter} No match of ${1} to ${sample_genus}_${sample_species} from ${isolate_name} in ${run_ID}/${isolate_name}"
 			fi
 		done
+		counter=$(( counter + 1 ))
 done
 
 exit
