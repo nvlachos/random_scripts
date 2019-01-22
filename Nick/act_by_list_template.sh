@@ -40,6 +40,7 @@ while IFS= read -r var; do
 		if [[ "${gene}" = "blasst" ]]; then
 			echo "${project}/${sample_name}	[${id}/${length}]"
 		fi
+	fi
 
 
 
