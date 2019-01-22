@@ -78,8 +78,8 @@ for path in ${processed}/*; do
 			else
 				echo "${counter} No match of ${1} to ${sample_genus}_${sample_species} from ${isolate_name} in ${run_ID}/${isolate_name}"
 			fi
+			counter=$(( counter + 1 ))
 		done
-		counter=$(( counter + 1 ))
 done
 
 exit
