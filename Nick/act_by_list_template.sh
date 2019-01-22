@@ -35,7 +35,7 @@ while IFS= read -r var; do
 		echo "${ST_type}"
 		if [[ "${ST_type}" = "208"* ]]; then
 			echo "${project}/${sample_name}"
-			echo "${project}/${sample_name}" > "${2}"
+			echo "${ST_type}	${project}/${sample_name}" > "${2}"
 		fi
 	fi
 done < "${1}"
