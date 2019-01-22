@@ -30,14 +30,37 @@ counter=0
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	if [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
-		ST_type=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" | cut -d'	' -f3)
-		echo "${ST_type}"
-		if [[ "${ST_type}" = "208"* ]]; then
-			echo "${project}/${sample_name}"
-			echo "${ST_type}	${project}/${sample_name}" >> "${2}"
+	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181204.gapped_80_sstar_summary.txt" ]]; then
+		while IFS= read -r var; do
+				gene=$(echo "${var}" | cut -d'	' -f3)
+				id=$(echo "${var}" | cut -d'	' -f7)
+				length=$(echo "${var}" | cut -d'	' -f10)
+				break
+		done < "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181204.gapped_80_sstar_summary.txt"
+		if [[ "${gene}" = "blasst" ]]; then
+			echo "${project}/${sample_name}	[${id}/${length}]"
 		fi
-	fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+	# if [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
+	# 	ST_type=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" | cut -d'	' -f3)
+	# 	echo "${ST_type}"
+	# 	if [[ "${ST_type}" = "208"* ]]; then
+	# 		echo "${project}/${sample_name}"
+	# 		echo "${ST_type}	${project}/${sample_name}" >> "${2}"
+	# 	fi
+	# fi
 done < "${1}"
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
