@@ -33,7 +33,7 @@ while IFS= read -r var; do
 	if [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
 		ST_type=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" | cut -d'	' -f3)
 		echo "${ST_type}"
-		if [[ "${ST_type}" = "208" ]]; then
+		if [[ "${ST_type}" = "208"* ]]; then
 			echo "${project}/${sample_name}"
 		fi
 	fi
