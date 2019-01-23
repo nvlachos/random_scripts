@@ -35,11 +35,13 @@ while IFS= read -r var; do
 				gene=$(echo "${var}" | cut -d'	' -f5)
 				id=$(echo "${var}" | cut -d'	' -f7)
 				length=$(echo "${var}" | cut -d'	' -f10)
-				break
+
+				if [[ "${gene}" = "blaoxa-72" ]]; then
+					echo "${project}/${sample_name}	[${id}/${length}]"
+					break
+				fi
 		done < "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181204.gapped_80_sstar_summary.txt"
-		if [[ "${gene}" = "blaoxa-72" ]]; then
-			echo "${project}/${sample_name}	[${id}/${length}]"
-		fi
+
 	fi
 
 
