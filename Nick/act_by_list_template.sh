@@ -40,8 +40,7 @@ while IFS= read -r var; do
 					echo "${project}/${sample_name}	[${id}/${length}]"
 					break
 				fi
-		done < "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181204.gapped_80_sstar_summary.txt"
-
+		done < "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181204.gapped_98_sstar_summary.txt"
 	fi
 
 
