@@ -30,7 +30,7 @@ counter=0
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181204.gapped_80_sstar_summary.txt" ]]; then
+	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181204.gapped_98_sstar_summary.txt" ]]; then
 		while IFS= read -r var; do
 				gene=$(echo "${var}" | cut -d'	' -f5)
 				id=$(echo "${var}" | cut -d'	' -f7)
