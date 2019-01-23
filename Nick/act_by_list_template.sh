@@ -37,7 +37,7 @@ while IFS= read -r var; do
 				length=$(echo "${var}" | cut -d'	' -f10)
 				break
 		done < "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181204.gapped_80_sstar_summary.txt"
-		if [[ "${gene}" = "blasst" ]]; then
+		if [[ "${gene}" = "blaoxa-72" ]]; then
 			echo "${project}/${sample_name}	[${id}/${length}]"
 		fi
 	fi
