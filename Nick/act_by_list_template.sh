@@ -30,17 +30,17 @@ counter=0
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181204.gapped_98_sstar_summary.txt" ]]; then
+	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181204.gapped_80_sstar_summary.txt" ]]; then
 		while IFS= read -r var; do
 				gene=$(echo "${var}" | cut -d'	' -f5)
 				id=$(echo "${var}" | cut -d'	' -f7)
 				length=$(echo "${var}" | cut -d'	' -f10)
 
-				if [[ "${gene}" = "blaoxa-72" ]]; then
+				if [[ "${gene}" = "blasst" ]]; then
 					echo "${project}/${sample_name}	[${id}/${length}]"
 					break
 				fi
-		done < "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181204.gapped_98_sstar_summary.txt"
+		done < "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181204.gapped_80_sstar_summary.txt"
 	fi
 
 
