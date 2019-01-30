@@ -15,14 +15,15 @@ fi
 new_project_name=${2}
 old_project_name=${1}
 
-
-# Finding all internal instances of old project name and changing them to new preoject name
-echo "Testing new internal finder"
-find ${processed}/${old_project_name} -not -name "*.fq" -not -name "*.fastq" -not -name "*.fsq" -not -name "*.fasta" -type f -print0 | xargs -0 sed -i 's/${old_project_name}/${new_project_name}/g'
-
 # Changing all files names containing old project name
 echo "Testing new filename changer"
 rename 's/${old_project_name}/${new_project_name}/g' ${processed}/${old_project_name}/${old_project_name}*
+
+
+# Finding all internal instances of old project name and changing them to new preoject name
+echo "Testing new internal finder"
+find ${processed}/${old_project_name}/ -not -name "*.fq" -not -name "*.fastq" -not -name "*.fsq" -not -name "*.fasta" -type f -print0 | xargs -0 sed -i 's/${old_project_name}/${new_project_name}/g'
+
 
 
 
