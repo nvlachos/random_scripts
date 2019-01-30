@@ -20,7 +20,7 @@ echo "Testing new filename changer"
 cd ${processed}/${old_project_name}
 for thing in ${processed}/${old_project_name}/*; do
 	if [[ "${thing}" = *"${old_project_name}"* ]]; then
-		rename 's/${old_project_name}/${new_project_name}/g' ${thing}
+		rename ${old_project_name} ${new_project_name} ${thing}
 	fi
 done
 
