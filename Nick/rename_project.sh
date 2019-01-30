@@ -15,20 +15,30 @@ fi
 new_project_name=${2}
 old_project_name=${1}
 
-echo "Test 1, Searching contents of files"
-for thing in /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${old_project_name}/*; do
-	if [[ -f ${thing} ]]; then
-		echo "Doing normal - $thing"
-		sed -i "s/${old_project_name}/${new_project_name}/g" ${thing}
-	elif [[ -d ${thing} ]]; then
-		echo "doing directory - $thing"
-		if [[ "${thing}" = *"FASTQs" ]]; then
-			echo "Skipping FASTQs deep dive"
-		fi
-		find ${thing} -type f -exec sed -i "s/${old_project_name}/${new_project_name}/g" {} +
-	else
-		echo "Thing (${thing}) is not file or directory"
-	fi
-done
 
-mv "/scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${old_project_name}" "/scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${new_project_name}"
+# Finding all internal instances of old project name and changing them to new preoject name
+echo "Testing new internal finder"
+find ${processed}/${old_project_name} -type f -print0 | xargs -0 sed -i 's/${old_project_name}/${new_project_name}/g'
+
+# Changing all files names containing old project name
+echo "Testing new filename changer"
+rename -n 's/${old_project_name}/${new_project_name}/g' ${processed}/${old_project_name}/${old_project_name}*
+
+
+
+#echo "Test 1, Searching contents of files"
+#for thing in /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${old_project_name}/*; do
+#	if [[ -f ${thing} ]]; then
+#		echo "Doing normal - $thing"
+#	elif [[ -d ${thing} ]]; then
+#		echo "doing directory - $thing"
+#		if [[ "${thing}" = *"FASTQs" ]]; then
+#			echo "Skipping FASTQs deep dive"
+#		fi
+#		find ${thing} -type f -exec sed -i "s/${old_project_name}/${new_project_name}/g" {} +
+#	else
+#		echo "Thing (${thing}) is not file or directory"
+#	fi
+#done
+
+mv "${processed}/${old_project_name}" "/${propcessed}/${new_project_name}"
