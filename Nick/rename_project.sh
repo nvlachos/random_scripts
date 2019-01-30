@@ -18,11 +18,15 @@ old_project_name=${1}
 # Changing all files names containing old project name
 echo "Testing new filename changer"
 cd ${processed}/${old_project_name}
-for thing in ${processed}/${old_project_name}/*; do
-	if [[ "${thing}" = *"${old_project_name}"* ]]; then
-		rename ${old_project_name} ${new_project_name} ${thing}
-	fi
-done
+
+
+for i in ./*foo*;do mv -- "$i" "${i//${old_project_name}/${new_project_name}}";done
+
+#for thing in ${processed}/${old_project_name}/*; do
+#	if [[ "${thing}" = *"${old_project_name}"* ]]; then
+#		rename ${old_project_name} ${new_project_name} ${thing}
+#	fi
+#done
 
 
 # Finding all internal instances of old project name and changing them to new preoject name
