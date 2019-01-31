@@ -54,7 +54,7 @@ grep -lr --exclude-dir="removedAdapters" --exclude-dir="trimmed" --exclude-dir="
 echo "Testing new filename changer"
 
 
-for i in ${processed}/*${old_project_name}*;do mv -- "$i" "${i//${old_project_name}/${new_project_name}}";done
+for i in ${processed}/${old_project_name}/* ;do mv -- "$i" "${i//${old_project_name}/${new_project_name}}";done
 
 #for thing in ${processed}/${old_project_name}/*; do
 #	if [[ "${thing}" = *"${old_project_name}"* ]]; then
