@@ -92,11 +92,16 @@ def main():
 			raise Exception("Selected path does not exist: " + path)
 
 		# Walks through directory structure looking for files matching patterns
-		matchingFileList = \
-			[os.path.join(dp, f) \
-				for dp, dn, filenames in os.walk(path) #\
-					#for f in filenames \
-						#if os.path.splitext(f)[1] in patterns]
+		#matchingFileList = \
+		#	[os.path.join(dp, f) \
+		#		for dp, dn, filenames in os.walk(path) #\
+		#			for f in filenames \
+		#				if os.path.splitext(f)[1] in patterns]
+
+		matchingFileList = list()
+
+		for (dirpath, dirnames, filenames) in os.walk(dirName):
+    		matchingFileList += [os.path.join(dirpath, file) for file in filenames]
 
 		print('Files found: ' + str(len(matchingFileList)))
 		fileCount = 0
