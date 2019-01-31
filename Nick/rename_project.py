@@ -82,7 +82,7 @@ def main():
 		else:
 			oldString = sys.argv[1]
 			newString = sys.argv[2]
-			path = sys.argv[3]
+			path = sys.argv[3]+"/"+oldString
 
 		print('[Old String]         : ' + oldString)
 		print('[New String]         : ' + newString)
@@ -117,6 +117,8 @@ def main():
 		print("Total Files Replaced/Updated : " + str(filesReplaced))
 
 		rename_filenames(path, old_name, new_name)
+
+		os.rename(path, argv[3]+"/"+newString)
 
 	except Exception as err:
 		print(traceback.format_exception_only(type(err), err)[0].rstrip())
