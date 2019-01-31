@@ -100,7 +100,7 @@ def main():
 
 		matchingFileList = list()
 
-		for (dirpath, dirnames, filenames) in os.walk(dirName):
+		for (dirpath, dirnames, filenames) in os.walk(path):
 			matchingFileList += [os.path.join(dirpath, file) for file in filenames]
 
 		print('Files found: ' + str(len(matchingFileList)))
