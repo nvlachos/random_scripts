@@ -21,7 +21,7 @@ echo "Testing new filename changer"
 
 #for i in ${processed}/*${old_project_name}*;do mv -- "$i" "${i//${old_project_name}/${new_project_name}}";done
 
-find "${processed}/${old_project_name}/" -type f -exec rename 's/${old_project_name}/${new_project_name}/g' {} +
+find ${processed}/${old_project_name} -type f -exec rename 's/${old_project_name}/${new_project_name}/g' {} +
 
 #for thing in ${processed}/${old_project_name}/*; do
 #	if [[ "${thing}" = *"${old_project_name}"* ]]; then
@@ -33,7 +33,7 @@ find "${processed}/${old_project_name}/" -type f -exec rename 's/${old_project_n
 # Finding all internal instances of old project name and changing them to new preoject name
 echo "Testing new internal finder"
 #find . -not -name "*.fq" -not -name "*.fastq" -not -name "*.fsq" -not -name "*.fasta" -type f -print0 | xargs -0 sed -i 's/${old_project_name}/${new_project_name}/g'
-for thing in ${processed}/${old_project_name}/*; then
+for thing in ${processed}/${old_project_name}/*; do
 	if [[ -d ${thing} ]]; then
 		if [[ "${thing}" = *"FASTQs" ]] || [[ "${thing}" = *"removedAdapters" ]] || [[ "${thing}" = *"trimmed" ]]; then
 			continue
