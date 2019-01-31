@@ -60,4 +60,4 @@ grep -lr --exclude-dir="removedAdapters" --exclude-dir="trimmed" --exclude-dir="
 #	fi
 #done
 
-mv "${processed}/${old_project_name}" "/${processed}/${new_project_name}"
+# mv "${processed}/${old_project_name}" "/${processed}/${new_project_name}"
