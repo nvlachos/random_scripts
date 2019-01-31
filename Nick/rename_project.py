@@ -116,7 +116,7 @@ def main():
 		print("Total Files Searched         : " + str(fileCount))
 		print("Total Files Replaced/Updated : " + str(filesReplaced))
 
-		rename_filenames(path, old_name, new_name)
+		rename_filenames(path, oldString, newString)
 
 		os.rename(path, argv[3]+"/"+newString)
 
