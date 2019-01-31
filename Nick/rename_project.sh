@@ -20,7 +20,9 @@ echo "Testing new filename changer"
 cd ${processed}/${old_project_name}
 
 
-for i in ./*${old_project_name}*;do mv -- "$i" "${i//${old_project_name}/${new_project_name}}";done
+#for i in ${processed}/*${old_project_name}*;do mv -- "$i" "${i//${old_project_name}/${new_project_name}}";done
+
+find ${processed}/${old_project_name} -type f -exec rename 's/${old_project_name}/${new_project_name}/g' {} +
 
 #for thing in ${processed}/${old_project_name}/*; do
 #	if [[ "${thing}" = *"${old_project_name}"* ]]; then
@@ -32,9 +34,16 @@ for i in ./*${old_project_name}*;do mv -- "$i" "${i//${old_project_name}/${new_p
 # Finding all internal instances of old project name and changing them to new preoject name
 echo "Testing new internal finder"
 find . -not -name "*.fq" -not -name "*.fastq" -not -name "*.fsq" -not -name "*.fasta" -type f -print0 | xargs -0 sed -i 's/${old_project_name}/${new_project_name}/g'
-
-
-
+for thing in ${processed}/${old_project_name}/*; then
+	if [[ -d ${thing} ]]; then
+		if [[ "${thing}" = *"FASTQs" ]] || [[ "${thing}" = *"removedAdapters" ]] || [[ "${thing}" = *"trimmed" ]]; then
+			continue
+		else
+			echo "Trying ${thing}"
+			find ${thing} -type f -exec sed -i 's/${old_project_name}/${new_sample_name}/g' {} +
+		fi
+	fi
+done
 
 #echo "Test 1, Searching contents of files"
 #for thing in /scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/${old_project_name}/*; do
@@ -51,4 +60,4 @@ find . -not -name "*.fq" -not -name "*.fastq" -not -name "*.fsq" -not -name "*.f
 #	fi
 #done
 
-mv "${processed}/${old_project_name}" "/${propcessed}/${new_project_name}"
+mv "${processed}/${old_project_name}" "/${processed}/${new_project_name}"
