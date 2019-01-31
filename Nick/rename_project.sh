@@ -20,8 +20,8 @@ old_project_name=${1}
 echo "Testing new internal finder"
 #find . -not -name "*.fq" -not -name "*.fastq" -not -name "*.fsq" -not -name "*.fasta" -type f -print0 | xargs -0 sed -i 's/${old_project_name}/${new_project_name}/g'
 
-#grep -lr --exclude-dir="removedAdapters" --exclude-dir="trimmed" --exclude-dir="FASTQs" --exclude-dir="ANI" -e "${old_project_name}" ${processed}/${old_project_name} | xargs sed -i '' -e 's/${old_project_name}/${new_project_name}/g'
-grep -lr --exclude-dir="removedAdapters" --exclude-dir="trimmed" --exclude-dir="FASTQs" --exclude-dir="ANI" -e "${old_project_name}" ${processed}/${old_project_name} > ${processed}/${old_project_name}/groutput.txt
+grep -lr --exclude-dir="removedAdapters" --exclude-dir="trimmed" --exclude-dir="FASTQs" --exclude-dir="ANI" -e "${old_project_name}" ${processed}/${old_project_name} | xargs sed -i '' -e 's/${old_project_name}/${new_project_name}/g'
+#grep -lr --exclude-dir="removedAdapters" --exclude-dir="trimmed" --exclude-dir="FASTQs" --exclude-dir="ANI" -e "${old_project_name}" ${processed}/${old_project_name} > ${processed}/${old_project_name}/groutput.txt
 
 # for thing in ${processed}/${old_project_name}/*; do
 # 	if [[ -d ${thing} ]]; then
