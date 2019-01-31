@@ -15,18 +15,6 @@ fi
 new_project_name=${2}
 old_project_name=${1}
 
-# Changing all files names containing old project name
-echo "Testing new filename changer"
-
-
-for i in ${processed}/*${old_project_name}*;do mv -- "$i" "${i//${old_project_name}/${new_project_name}}";done
-
-#for thing in ${processed}/${old_project_name}/*; do
-#	if [[ "${thing}" = *"${old_project_name}"* ]]; then
-#		rename ${old_project_name} ${new_project_name} ${thing}
-#	fi
-#done
-
 
 # Finding all internal instances of old project name and changing them to new preoject name
 echo "Testing new internal finder"
@@ -59,5 +47,20 @@ grep -lr --exclude-dir="removedAdapters" --exclude-dir="trimmed" --exclude-dir="
 #		echo "Thing (${thing}) is not file or directory"
 #	fi
 #done
+
+
+# Changing all files names containing old project name
+echo "Testing new filename changer"
+
+
+for i in ${processed}/*${old_project_name}*;do mv -- "$i" "${i//${old_project_name}/${new_project_name}}";done
+
+#for thing in ${processed}/${old_project_name}/*; do
+#	if [[ "${thing}" = *"${old_project_name}"* ]]; then
+#		rename ${old_project_name} ${new_project_name} ${thing}
+#	fi
+#done
+
+
 
 # mv "${processed}/${old_project_name}" "/${processed}/${new_project_name}"
