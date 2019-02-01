@@ -118,7 +118,7 @@ def main():
 
 		rename_filenames(path, oldString, newString)
 
-		os.rename(path, argv[3]+"/"+newString)
+		os.rename(path, sys.argv[3]+"/"+newString)
 
 	except Exception as err:
 		print(traceback.format_exception_only(type(err), err)[0].rstrip())
