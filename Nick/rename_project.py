@@ -99,21 +99,29 @@ def main():
 		#				if os.path.splitext(f)[1] in patterns]
 
 		matchingFileList = list()
+		skip_folders=['c-sstar','16s', 'FASTQs', 'kraken', 'plasmid_on_plasmidAssembly', 'removedAdapters', 'srst2', 'trimmed']
 
 		for (dirpath, dirnames, filenames) in os.walk(path):
 			matchingFileList += [os.path.join(dirpath, file) for file in filenames]
 
 		print('Files found: ' + str(len(matchingFileList)))
 		fileCount = 0
+		filesSkipped = 0
 		filesReplaced = 0
 
 		for currentFile in matchingFileList:
 			fileCount+=1
-			fileReplaced = replaceStringInFile(currentFile, oldString, newString)
-			if fileReplaced:
-				filesReplaced+=1
+			for skip in skip_folders:
+				if skip in currentFile:
+					filesSkipped+=1
+					break
+				else:
+					fileReplaced = replaceStringInFile(currentFile, oldString, newString)
+					if fileReplaced:
+						filesReplaced+=1
 
 		print("Total Files Searched         : " + str(fileCount))
+		print("Total Files Skipped          : " + str(filesSkipped))
 		print("Total Files Replaced/Updated : " + str(filesReplaced))
 
 		rename_filenames(path, oldString, newString)
