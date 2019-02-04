@@ -113,6 +113,7 @@ def main():
 			fileCount+=1
 			for skip in skip_folders:
 				if skip in currentFile:
+					echo "Skipped", currentfile
 					filesSkipped+=1
 					break
 				else:
