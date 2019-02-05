@@ -64,6 +64,7 @@ def rename_filenames(workingDIR, old_name, new_name):
 	counter = 0
 	path = workingDIR
 	for file in os.listdir(path):
+		print(file)
 	    if file.find(old_name) > 0:
 	            counter = counter + 1
 	            os.rename(path + "\\"+file, path + "\\"+file.replace(old_name, new_name))
@@ -99,7 +100,7 @@ def main():
 		#				if os.path.splitext(f)[1] in patterns]
 
 		matchingFileList = list()
-		skip_folders=['c-sstar','16s', 'FASTQs', 'kraken', 'plasmid_on_plasmidAssembly', 'removedAdapters', 'srst2', 'trimmed']
+		skip_folders=['/c-sstar/','/16s/', '/FASTQs/', '/kraken/', '/plasmid_on_plasmidAssembly/', '/removedAdapters/', '/srst2/', '/trimmed/']
 
 		for (dirpath, dirnames, filenames) in os.walk(path):
 			matchingFileList += [os.path.join(dirpath, file) for file in filenames]
