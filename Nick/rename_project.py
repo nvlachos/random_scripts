@@ -65,7 +65,7 @@ def rename_filenames(workingDIR, old_name, new_name):
 	path = workingDIR
 	for file in os.listdir(path):
 		print("	",file)
-	    if file.find(old_name) > 0:
+		if file.find(old_name) > 0:
 	            counter = counter + 1
 	            os.rename(path + "\\"+file, path + "\\"+file.replace(old_name, new_name))
 	if counter == 0:
