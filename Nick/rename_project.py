@@ -114,7 +114,7 @@ def main():
 			fileCount+=1
 			print("Looking at", currentFile)
 			for skip in skip_folders:
-				if skip in currentFile:
+				if skip in str(currentFile):
 					print("Skipped", currentFile)
 					filesSkipped+=1
 					break
