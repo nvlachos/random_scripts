@@ -122,7 +122,7 @@ def main():
 
 		for currentFile in matchingFileList:
 			fileCount+=1
-			print("Looking at", currentFile)
+		#	print("Looking at", currentFile)
 		#	for skip in skip_folders:
 		#		print("Testing skip:", skip)
 		#		if skip in strcurrentFile:
