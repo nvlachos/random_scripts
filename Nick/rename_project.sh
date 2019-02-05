@@ -15,4 +15,4 @@ fi
 new_project_name=${2}
 old_project_name=${1}
 directory_to_scan=${3}
- python "${shareScript}/rename_project.py" ${1} ${2} ${3}
+ python3 "${shareScript}/rename_project.py" ${1} ${2} ${3}
