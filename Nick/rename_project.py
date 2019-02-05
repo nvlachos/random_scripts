@@ -109,8 +109,11 @@ def main():
 		for counter in range(0, len(matchingFileList)):
 			for skip in skip_folders:
 				if skip in matchingFileList[counter]:
-					del matchingFileList[counter]
+					matchingFileList[counter] = ""
 					filesSkipped+=1
+					break
+
+		matchingFileList = list(filter(None, matchingFileList))	
 
 		print('Files found: ' + str(len(matchingFileList)))
 		print('Files skipped: ' + str(filesSkipped))
