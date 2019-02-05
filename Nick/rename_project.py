@@ -111,12 +111,13 @@ def main():
 		filesReplaced = 0
 
 		for currentFile in matchingFileList:
+			strcurrentFile=str(currentFile)
 			fileCount+=1
-			print("Looking at", currentFile)
+			print("Looking at", strcurrentFile)
 			for skip in skip_folders:
 				print("Testing skip:", skip)
-				if skip in str(currentFile):
-					print("Skipped", currentFile)
+				if skip in strcurrentFile:
+					print("Skipped", strcurrentFile)
 					filesSkipped+=1
 					break
 				else:
