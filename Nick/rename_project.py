@@ -105,25 +105,32 @@ def main():
 		for (dirpath, dirnames, filenames) in os.walk(path):
 			matchingFileList += [os.path.join(dirpath, file) for file in filenames]
 
-		print('Files found: ' + str(len(matchingFileList)))
-		fileCount = 0
 		filesSkipped = 0
+		for counter in range(0, len(matchingFileList)):
+			for skip in skip_folders:
+				if skip in matchingFileList[counter]:
+					del matchingFileList[counter]
+					filesSkipped+=1
+
+		print('Files found: ' + str(len(matchingFileList)))
+		print('Files skipped: ' + str(filesSkipped))
+		fileCount = 0
 		filesReplaced = 0
 
 		for currentFile in matchingFileList:
 			strcurrentFile=str(currentFile)
 			fileCount+=1
 			print("Looking at", strcurrentFile)
-			for skip in skip_folders:
-				print("Testing skip:", skip)
-				if skip in strcurrentFile:
-					print("Skipped", strcurrentFile)
-					filesSkipped+=1
-					break
-				else:
-					fileReplaced = replaceStringInFile(currentFile, oldString, newString)
-					if fileReplaced:
-						filesReplaced+=1
+		#	for skip in skip_folders:
+		#		print("Testing skip:", skip)
+		#		if skip in strcurrentFile:
+		#			print("Skipped", strcurrentFile)
+		#			filesSkipped+=1
+		#			break
+		#		else:
+			fileReplaced = replaceStringInFile(currentFile, oldString, newString)
+				if fileReplaced:
+					filesReplaced+=1
 
 		print("Total Files Searched         : " + str(fileCount))
 		print("Total Files Skipped          : " + str(filesSkipped))
