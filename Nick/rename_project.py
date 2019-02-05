@@ -64,7 +64,7 @@ def rename_filenames(workingDIR, old_name, new_name):
 	counter = 0
 	path = workingDIR
 	for file in os.listdir(path):
-		print(file, old_name, new_name)
+		#rint(file, old_name, new_name)
 		if old_name in file:
 	            counter += 1
 	            os.rename(path + "/"+file, path + "/"+file.replace(old_name, new_name))
@@ -100,7 +100,9 @@ def main():
 		#				if os.path.splitext(f)[1] in patterns]
 
 		matchingFileList = list()
-		skip_folders=['c-sstar/','16s/', 'FASTQs/', 'kraken/', 'plasmid_on_plasmidAssembly/', 'removedAdapters/', 'rst2/', '/trimmed/', '.fastq']
+
+		# List of all patterns that can be skipped when found in path name while trudging through ALL files in a project folder
+		skip_folders=['c-sstar/','16s/', 'FASTQs/', 'kraken/', 'plasmid_on_plasmidAssembly/', 'removedAdapters/', 'srst2/', '/trimmed/', '.fastq']
 
 		for (dirpath, dirnames, filenames) in os.walk(path):
 			matchingFileList += [os.path.join(dirpath, file) for file in filenames]
