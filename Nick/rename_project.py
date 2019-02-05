@@ -111,9 +111,10 @@ def main():
 
 		for currentFile in matchingFileList:
 			fileCount+=1
+			print("Looking at", currentFile)
 			for skip in skip_folders:
 				if skip in currentFile:
-					echo "Skipped", currentfile
+					print("Skipped", currentfile)
 					filesSkipped+=1
 					break
 				else:
