@@ -100,7 +100,7 @@ def main():
 		#				if os.path.splitext(f)[1] in patterns]
 
 		matchingFileList = list()
-		skip_folders=['c-sstar/','16s/', 'FASTQs/', 'kraken/', 'plasmid_on_plasmidAssembly/', 'removedAdapters/', 'rst2/', '/trimmed/', '.fastq.gz', '.pdf']
+		skip_folders=['c-sstar/','16s/', 'FASTQs/', 'kraken/', 'plasmid_on_plasmidAssembly/', 'removedAdapters/', 'rst2/', '/trimmed/', '.fastq.gz', '.pdf', '.pac']
 
 		for (dirpath, dirnames, filenames) in os.walk(path):
 			matchingFileList += [os.path.join(dirpath, file) for file in filenames]
