@@ -129,8 +129,8 @@ def main():
 		#			break
 		#		else:
 			fileReplaced = replaceStringInFile(currentFile, oldString, newString)
-				if fileReplaced:
-					filesReplaced+=1
+			if fileReplaced:
+				filesReplaced+=1
 
 		print("Total Files Searched         : " + str(fileCount))
 		print("Total Files Skipped          : " + str(filesSkipped))
