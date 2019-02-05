@@ -100,7 +100,7 @@ def main():
 		#				if os.path.splitext(f)[1] in patterns]
 
 		matchingFileList = list()
-		skip_folders=['c-sstar/','16s/', 'FASTQs/', 'kraken/', 'plasmid_on_plasmidAssembly/', 'removedAdapters/', 'rst2/', '/trimmed/', '.fastq.gz']
+		skip_folders=['c-sstar/','16s/', 'FASTQs/', 'kraken/', 'plasmid_on_plasmidAssembly/', 'removedAdapters/', 'rst2/', '/trimmed/', '.fastq.gz', '.pdf']
 
 		for (dirpath, dirnames, filenames) in os.walk(path):
 			matchingFileList += [os.path.join(dirpath, file) for file in filenames]
@@ -113,7 +113,7 @@ def main():
 					filesSkipped+=1
 					break
 
-		matchingFileList = list(filter(None, matchingFileList))	
+		matchingFileList = list(filter(None, matchingFileList))
 
 		print('Files found: ' + str(len(matchingFileList)))
 		print('Files skipped: ' + str(filesSkipped))
