@@ -39,16 +39,12 @@ def replaceStringInFile(fileName, oldStringToReplace, newString):
 
 	# credit/taken/adapted from: http://stackoverflow.com/a/4128194
 	# Read in old file
-	with open(fileName, 'r') as f:
-		print("1")
+	with open(fileName, 'r', errors='ignore') as f:
 		newlines = []
 		for line in f.readlines():
-			print("2")
 			if (oldStringToReplace in line) :
 				fileUpdated = True
-				prtin("3")
 			line = line.replace(oldStringToReplace, newString)
-			print("4")
 			newlines.append(line)
 
 	# Write changes to same file
