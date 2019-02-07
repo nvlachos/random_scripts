@@ -71,7 +71,7 @@ do
 	fi
 	confers=$(echo "${line}" | cut -d ':' -f2)
 	groups[${gene}]="${confers}"
-done < "${share}/DBs/star/group_defs.txt"
+done < "${local_DBs}/star/group_defs.txt"
 
 
 

@@ -128,17 +128,17 @@ do
 	groups[${gene}]="${confers}"
 	#echo "${counter}:${gene}:${confers}"
 	counter=$(( counter + 1))
-done < "${share}/DBs/star/group_defs.txt"
+done < "${local_DBs}/star/group_defs.txt"
 #echo "${#groups[@]}"
 
 for gene in "${!groups[@]}"; do
-	echo "${gene}:${groups[${gene}]}:" >> "${share}/DBs/star/test_groups.txt"
+	echo "${gene}:${groups[${gene}]}:" >> "${local_DBs}/star/test_groups.txt"
 done
 
 # unique_groups=($(echo "${groups[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
 
 # for gene in ${unique_groups[@]}; do
-	# echo ${gene} >> "${share}/DBs/star/test_groups_after.txt"
+	# echo ${gene} >> "${local_DBs}/star/test_groups_after.txt"
 # done
 
 
@@ -165,7 +165,7 @@ do
 					#read -p "${gene_type,,} is not in the group definitions...what resistance does it confer?" new_conf
 					#echo "OK, ${gene_type,,} will confer ${new_conf} resistance"
 					#groups[${gene_type,,}]="${new_conf}"
-					#echo -e  "${gene_type,,}:${new_conf}_resistance:" >> "${share}/DBs/star/group_defs.txt"
+					#echo -e  "${gene_type,,}:${new_conf}_resistance:" >> "${local_DBs}/star/group_defs.txt"
 				else
 					echo "${line} is malformed, please investigate and rerun"
 					exit
@@ -200,12 +200,12 @@ do
 		read -p "${i} is not in the group definitions...what resistance does it confer?" new_conf
 		echo "OK, ${i} will confer ${new_conf} resistance"
 		groups[${i}]="${new_conf}"
-		echo -e  "${i}:${new_conf}_resistance:" >> "${share}/DBs/star/group_defs.txt"
+		echo -e  "${i}:${new_conf}_resistance:" >> "${local_DBs}/star/group_defs.txt"
 	fi
 done
 
 # Create the gene lookup file to match gene and conferred resistance downstream
 echo "There are ${#groups[@]} different groups"
-echo -e "Please be sure to check ${share}/DBs/star/group_defs.txt for proper assignment of resistance to new groups\nand ${DATADIR}/ResGANNOT_${today}.bad for any actual sequences that might be able to be added"
+echo -e "Please be sure to check ${local_DBs}/star/group_defs.txt for proper assignment of resistance to new groups\nand ${DATADIR}/ResGANNOT_${today}.bad for any actual sequences that might be able to be added"
 
 exit
