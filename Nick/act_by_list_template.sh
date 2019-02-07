@@ -30,39 +30,7 @@ counter=0
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181204.gapped_80_sstar_summary.txt" ]]; then
-		while IFS= read -r var; do
-				gene=$(echo "${var}" | cut -d'	' -f3)
-				id=$(echo "${var}" | cut -d'	' -f7)
-				length=$(echo "${var}" | cut -d'	' -f10)
-
-				if [[ "${gene}" = "blasst" ]]; then
-					echo "${project}/${sample_name}	[${id}/${length}]"
-					break
-				fi
-		done < "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181204.gapped_80_sstar_summary.txt"
-	fi
-
-
-
-
-
-
-
-
-
-
-
-
-
-	# if [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
-	# 	ST_type=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" | cut -d'	' -f3)
-	# 	echo "${ST_type}"
-	# 	if [[ "${ST_type}" = "208"* ]]; then
-	# 		echo "${project}/${sample_name}"
-	# 		echo "${ST_type}	${project}/${sample_name}" >> "${2}"
-	# 	fi
-	# fi
+	/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/scripts/Quaisar-H/sample_cleaner.sh ${sample_name} ${project} >> /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/clean.out
 done < "${1}"
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
