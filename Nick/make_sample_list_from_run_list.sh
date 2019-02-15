@@ -43,9 +43,9 @@ sample_list="${1}"
 for path in ${processed}/*; do
     [ -d "${path}" ] || continue # if not a directory, skip
     run_ID="$(basename "${path}")"
-	if [[ "${dir_list}" != "" ]]; then
+	#if [[ "${dir_list}" != "" ]]; then
 		echo "${run_ID}" >> "${dir_list}"
-	fi
+	#fi
 	if [[ -f "${path}/${run_ID}_list.txt" ]]; then
 		cat "${path}/${run_ID}_list.txt" >> "${sample_list}"
 	elif [[ -f "${path}/${run_ID}_list_ordered.txt" ]]; then
@@ -56,7 +56,9 @@ for path in ${processed}/*; do
 	 		isolate_name="$(basename "${isolate}")"
 	 		echo "${run_ID}/${isolate_name}" >> "${path}/${run_ID}_list.txt"
 		done
-		cat "${path}/${run_ID}_list.txt" >> "${sample_list}"
+		if [[ -f "${path}/${run_ID}_list.txt" ]]; then
+			cat "${path}/${run_ID}_list.txt" >> "${sample_list}"
+		fi
 fi
 
 	#for isolate in $path/*; do
