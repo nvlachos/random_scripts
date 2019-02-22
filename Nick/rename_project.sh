@@ -18,4 +18,4 @@ directory_to_scan=${3}
 python -V
 python2 -V
 python3 -V
-#python3 "${shareScript}/rename_project.py" ${1} ${2} ${3}
+python3 "${shareScript}/rename_project.py" ${1} ${2} ${3}
