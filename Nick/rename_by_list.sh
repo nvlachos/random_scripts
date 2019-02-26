@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o rename_by_list_barebones.out
-#$ -e rename_by_list_barebones.err
-#$ -N ablb
+#$ -o rename_by_list.out
+#$ -e rename_by_list.err
+#$ -N rbl
 #$ -cwd
 #$ -q all.q
 
