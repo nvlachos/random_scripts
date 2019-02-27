@@ -12,10 +12,19 @@ if [[ "$1" = "-h" ]]; then
 	echo "Usage is ./rename_sample.sh old_name new_name project_id"
 fi
 
-old_name=${1}
-if [[ ! -z ${4} ]]; then
-	old_name=${4}
+if [[ -z "${1}" ]] || [[ -z "${2}" ]] || [[ -z "${3}" ]]; then
+		echo "One of the parameters was empty,
+		1-(old_name): ${1}
+		2-(new_name): ${2}
+		3-(project_id): ${3}
+		Can not continue..."
+		exit 23
 fi
+
+old_name=${1}
+#if [[ ! -z ${4} ]]; then
+#	old_name=${4}
+#fi
 new_name=${2}
 project=${3}
 echo "Test 1-${old_name}-${new_name}, Searching filenames"

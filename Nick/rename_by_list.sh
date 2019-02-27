@@ -12,11 +12,10 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./rename_by_list.sh list_name(currently has to be placed in /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR folder)
+# Usage ./rename_by_list.sh path_to_list
 # The list needs to have project/old_name:new_name
 #
-# script changes depending on what needs to be run through the list
-#
+
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
