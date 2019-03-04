@@ -91,6 +91,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		#	rm -r "${processed}/${sample}/ANI/aniM"
 		#fi
 		rm -r "${processed}/${sample}/ANI"
+		rm -r "${processed}/${sample}/${sample}.tax"
 		"${shareScript}/determine_taxID.sh" "${sample}" "${project}"
 	 	if [[ ${counter} -lt ${max_subs} ]]; then
 			if [[ ! -f "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
