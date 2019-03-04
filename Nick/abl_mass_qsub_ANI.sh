@@ -12,7 +12,7 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./abl_mass_qsub_ANI.sh path_to_list max_concurrent_submissions
+# Usage ./abl_mass_qsub_ANI.sh path_to_list max_concurrent_submissions output_directory_for_scripts
 #
 
 # Checks for proper argumentation
@@ -21,7 +21,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_ANI.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions"
+	echo "Usage is ./abl_mass_qsub_ANI.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions output_directory_for_scripts"
 	exit 1
 elif [[ ! -f "${1}" ]]; then
 	echo "${1} (list) does not exist...exiting"
@@ -43,12 +43,12 @@ counter=0
 max_subs=${2}
 
 # Set script directory
-main_dir="${share}/mass_subs/ANI_subs"
-if [[ ! -d "${share}/mass_subs/ANI_subs" ]]; then
-	mkdir "${share}/mass_subs/ANI_subs"
-	mkdir "${share}/mass_subs/ANI_subs/complete"
-elif [[ ! -d "${share}/mass_subs/ANI_subs/complete" ]]; then
-	mkdir "${share}/mass_subs/ANI_subs/complete"
+main_dir="${3}/ANI_subs"
+if [[ ! -d "${3}/ANI_subs" ]]; then
+	mkdir "${3}/ANI_subs"
+	mkdir "${3}/ANI_subs/complete"
+elif [[ ! -d "${3}/ANI_subs/complete" ]]; then
+	mkdir "${3}/ANI_subs/complete"
 fi
 
 start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
@@ -59,6 +59,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	short_sample=${sample:0:20}
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	echo "${sample} and ${project}:"
+	echo "Determining taxID"
+	"${shareScript}/determine_taxID.sh" "${sample}" "${project}"
 	echo "${counter}-${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta"
 	# If sample has assembly, then delete old ANI folder to allow rerun
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
@@ -102,6 +104,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				echo -e "\"${shareScript}/run_ANI.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${short_sample}_ani_complete.txt\"" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
+				cd "${main_dir}"
 				if [[ "${counter}" -lt "${last_index}" ]]; then
 					qsub "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				else
@@ -133,6 +136,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
 						echo -e "\"${shareScript}/run_ANI.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_ani_complete.txt\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
+						cd "${main_dir}"
 						if [[ "${counter}" -lt "${last_index}" ]]; then
 							qsub "${main_dir}/ani_${short_sample}_${start_time}.sh"
 						else
