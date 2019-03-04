@@ -44,7 +44,7 @@ max_subs=${2}
 
 # Set script directory
 main_dir="${3}/ANI_subs"
-cp ./config ${main_dir}
+cp ./config.sh ${main_dir}
 if [[ ! -d "${3}/ANI_subs" ]]; then
 	mkdir "${3}/ANI_subs"
 	mkdir "${3}/ANI_subs/complete"
