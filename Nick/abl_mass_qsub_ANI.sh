@@ -59,8 +59,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	short_sample=${sample:0:20}
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	echo "${sample} and ${project}:"
-	echo "Determining taxID"
-	"${shareScript}/determine_taxID.sh" "${sample}" "${project}"
 	echo "${counter}-${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta"
 	# If sample has assembly, then delete old ANI folder to allow rerun
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
@@ -86,12 +84,14 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		done < "${processed}/${project}/${sample}/${sample}.tax"
 		#genus="Acinetobacter"
 		#species="baumannii"
-		if [[ -f "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
-			rm -r "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})"
-		fi
-		if [[ -d "${processed}/${sample}/ANI/aniM" ]]; then
-			rm -r "${processed}/${sample}/ANI/aniM"
-		fi
+		#if [[ -f "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
+		#	rm -r "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})"
+		#fi
+		#if [[ -d "${processed}/${sample}/ANI/aniM" ]]; then
+		#	rm -r "${processed}/${sample}/ANI/aniM"
+		#fi
+		rm -r "${processed}/${sample}/ANI"
+		"${shareScript}/determine_taxID.sh" "${sample}" "${project}"
 	 	if [[ ${counter} -lt ${max_subs} ]]; then
 			if [[ ! -f "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
 				echo  "Index is below max submissions, submitting"
@@ -103,6 +103,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -cwd"  >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				echo -e "\"${shareScript}/run_ANI.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/determine_taxID.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${short_sample}_ani_complete.txt\"" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				cd "${main_dir}"
 				if [[ "${counter}" -lt "${last_index}" ]]; then
@@ -135,6 +136,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -cwd"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
 						echo -e "\"${shareScript}/run_ANI.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
+						echo -e "\"${shareScript}/determine_taxID.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_ani_complete.txt\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
 						cd "${main_dir}"
 						if [[ "${counter}" -lt "${last_index}" ]]; then
