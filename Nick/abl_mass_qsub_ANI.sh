@@ -104,6 +104,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -N ani_${sample}"   >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				echo -e "#$ -cwd"  >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
+				echo -e "cd ${shareScript}" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				echo -e "\"${shareScript}/run_ANI.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				echo -e "\"${shareScript}/determine_taxID.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${short_sample}_ani_complete.txt\"" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
@@ -113,6 +114,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				else
 					qsub -sync y "${main_dir}/ani_${short_sample}_${start_time}.sh"
 				fi
+				mv "${shareScript}/ani_${sample}.out" ${main_dir}
+				mv "${shareScript}/ani_${sample}.err" ${main_dir}
 			else
 				echo "${project}/${sample} already has ANI summary"
 				echo "$(date)" > "${main_dir}/complete/${sample}_ani_complete.txt"
@@ -137,6 +140,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -N ani_${sample}"   >> "${main_dir}/ani_${sample}_${start_time}.sh"
 						echo -e "#$ -cwd"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
+						echo -e "cd ${shareScript}" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 						echo -e "\"${shareScript}/run_ANI.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
 						echo -e "\"${shareScript}/determine_taxID.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/ani_${short_sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_ani_complete.txt\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
@@ -146,6 +150,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						else
 							qsub -sync y "${main_dir}/ani_${short_sample}_${start_time}.sh"
 						fi
+						mv "${shareScript}/ani_${sample}.out" ${main_dir}
+						mv "${shareScript}/ani_${sample}.err" ${main_dir}
 					else
 						echo "${project}/${sample} already has ANI summary"
 						echo "$(date)" > "${main_dir}/complete/${sample}_ani_complete.txt"
