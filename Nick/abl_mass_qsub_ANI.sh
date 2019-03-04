@@ -60,6 +60,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	echo "${sample} and ${project}:"
 	echo "${counter}-${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta"
+	rm -r "${processed}/${sample}/${sample}.tax"
+	"${shareScript}/determine_taxID.sh" "${sample}" "${project}"
 	# If sample has assembly, then delete old ANI folder to allow rerun
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
 		rm -r "${processed}/${project}/${sample}/ANI/"
@@ -91,8 +93,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		#	rm -r "${processed}/${sample}/ANI/aniM"
 		#fi
 		rm -r "${processed}/${sample}/ANI"
-		rm -r "${processed}/${sample}/${sample}.tax"
-		"${shareScript}/determine_taxID.sh" "${sample}" "${project}"
+
 	 	if [[ ${counter} -lt ${max_subs} ]]; then
 			if [[ ! -f "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
 				echo  "Index is below max submissions, submitting"
