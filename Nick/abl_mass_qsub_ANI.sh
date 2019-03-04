@@ -60,7 +60,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	echo "${sample} and ${project}:"
 	echo "${counter}-${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta"
-	rm -r "${processed}/${sample}/${sample}.tax"
+	rm -r "${processed}/${project}/${sample}/${sample}.tax"
 	"${shareScript}/determine_taxID.sh" "${sample}" "${project}"
 	# If sample has assembly, then delete old ANI folder to allow rerun
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
