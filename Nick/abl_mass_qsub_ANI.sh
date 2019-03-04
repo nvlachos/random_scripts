@@ -44,6 +44,7 @@ max_subs=${2}
 
 # Set script directory
 main_dir="${3}/ANI_subs"
+cp ./config ${main_dir}
 if [[ ! -d "${3}/ANI_subs" ]]; then
 	mkdir "${3}/ANI_subs"
 	mkdir "${3}/ANI_subs/complete"
@@ -169,6 +170,10 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	fi
 	counter=$(( counter + 1 ))
 done
+
+if [[ -f "${main_dir}/config.sh" ]]; then
+	rm "${main_dir}/config.sh"
+fi
 
 echo "All isolates completed"
 exit 0
