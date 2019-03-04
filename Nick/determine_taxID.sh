@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o getTax.out
-#$ -e getTax.err
-#$ -N getTax
+#$ -o getTaxQ.out
+#$ -e getTaxQ.err
+#$ -N getTaxQ
 #$ -cwd
 #$ -q short.q
 
@@ -23,7 +23,7 @@ fi
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied todetermine_taxID.sh, exiting"
+	echo "No argument supplied to determine_taxID.sh, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
 	echo "Empty sample_id supplied to determine_taxID.sh, exiting"
@@ -59,7 +59,7 @@ Check_source() {
 		for f in ${processed}/${project}/${sample}/ANI/*; do
 			if [[ "${f}" = *"best_ANI_hits_ordered"* ]]; then
 				header=$(head -n1 ${f})
-				if [[ ${header} != "No matching ANI database found for"* ]]; then
+				if [[ ${header} != "No matching ANI database found for"* ]] && [[ ${header} != "0.00%-(.fna)" ]] ; then
 		    	do_ANI
 		    	return
 				fi
@@ -79,14 +79,14 @@ Check_source() {
 			#echo "largest:${largest_species}:"
 			#echo "best:${best_species}:"
 			if [[ "${largest_arr_size}" -ge 3 ]]; then
-				if [[ "${largest_array[2]}" == "Unidentified" ]]; then
+				if [[ "${largest_array[2]}" == "Unidentified" ]] || [[ "${largest_array[2]}" == "No_16s_"* ]]; then
 					:
 				else
 					do_16s "largest"
 					return
 				fi
-			elif [[ "${best_arr_size}" -ge 3 ]]; then
-				if [[ "${best_array[2]}" == "Unidentified" ]]; then
+			elif [[ "${best_arr_size}" -ge 3 ]] ; then
+				if [[ "${best_array[2]}" == "Unidentified" ]]  || [[ "${best_array[2]}" == "No_16s_"* ]]; then
 					:
 				else
 					do_16s "best"
@@ -131,13 +131,21 @@ do_16s() {
 		source_file="${processed}/${project}/${sample}/16s/${sample}_16s_blast_id.txt"
 		line=$(tail -n 1 "${processed}/${project}/${sample}/16s/${sample}_16s_blast_id.txt")
 		source="16s_largest"
-		confidence_index=$(head -n1 "${processed}/${project}/${sample}/16s/${sample}.nt.RemoteBLASTN.sorted" | cut -d'	' -f3)
-		confidence_index="${confidence_index}"
+		if [[ -f "${processed}/${project}/${sample}/16s/${sample}.nt.RemoteBLASTN.sorted" ]]; then
+			confidence_index=$(head -n1 "${processed}/${project}/${sample}/16s/${sample}.nt.RemoteBLASTN.sorted" | cut -d'	' -f3)
+			confidence_index="${confidence_index}"
+		else
+			confidence_index=0
+		fi
 	elif [[ "${1}" = "best" ]]; then
 		line=$(head -n 1 "${processed}/${project}/${sample}/16s/${sample}_16s_blast_id.txt")
 		source="16s_best"
-		confidence_index=$(head -n1 "${processed}/${project}/${sample}/16s/${sample}.nt.RemoteBLASTN" | cut -d'	' -f3)
-		confidence_index="${confidence_index}"
+		if [[ -f "${processed}/${project}/${sample}/16s/${sample}.nt.RemoteBLASTN.sorted" ]]; then
+			confidence_index=$(head -n1 "${processed}/${project}/${sample}/16s/${sample}.nt.RemoteBLASTN.sorted" | cut -d'	' -f3)
+			confidence_index="${confidence_index}"
+		else
+			confidence_index=0
+		fi
 	else
 		break
 	fi
