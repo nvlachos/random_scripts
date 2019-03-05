@@ -29,7 +29,7 @@ fi
 
 # Makes list of ALL samples in MiSeqAnalysisFiles
 today=$(date "+%Y%m%d")
-${shareScript}/make_sample_list_from_run_list.sh ${shareScript}/sample_list_${today}.txt ${shareScript}/directory_list_${today}.txt
+#${shareScript}/make_sample_list_from_run_list.sh ${shareScript}/sample_list_${today}.txt ${shareScript}/directory_list_${today}.txt
 
 # Exits if a sample list from TODAY was not creaetd
 if [[ ! -f ${shareScript}/sample_list_${today}.txt ]]; then
@@ -47,7 +47,7 @@ fi
 # Gets the date that the ResGANNOT database was made
 resGANNOT_date=$(echo ${resGANNOT_srst2_filename} | cut -d'_' -f2)
 
-# Submit the list of samples for csstar and srst2 
+# Submit the list of samples for csstar and srst2
 qsub "${shareScript}/abl_mass_qsub_csstar.sh" "${shareScript}/sample_list_${today}.txt" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs"
 qsub -sync y "${shareScript}/abl_mass_qsub_srst2.sh" "${shareScript}/sample_list_${today}.txt" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs"
 qsub -sync y "${shareScript}/act_by_list_AR_completion_check.sh" "${shareScript}/sample_list_${today}.txt" "${resGANNOT_date}" "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/AR_check_${today}"
