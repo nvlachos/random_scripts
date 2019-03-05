@@ -12,17 +12,13 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list.sh path_to_list max_concurrent_submission output_directory_for_scripts
+# Usage ./AR_updater.sh
 #
 #
 #
 
 # Checks for proper argumentation
-if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to AR-updater.sh, exiting"
-	exit 1
-# Shows a brief uasge/help section if -h option used as first argument
-elif [[ "$1" = "-h" ]]; then
+if [[ "$1" = "-h" ]]; then
 	echo "Usage is ./AR-updater.sh max_submissions output_directory_for_scripts"
 	exit 0
 fi
