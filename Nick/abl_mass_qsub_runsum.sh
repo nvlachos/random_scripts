@@ -63,6 +63,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	if [[ ${counter} -lt ${max_subs} ]]; then
 		echo  "Index is below max submissions, submitting"
 		echo -e "#!/bin/bash -l\n" > "${main_dir}/runsum_${project}_${time_run}.sh"
+		echo "Saving to ${main_dir}/runsum_${project}_${time_run}.sh"
 		echo -e "#$ -o runsum_${project}.out" >> "${main_dir}/runsum_${project}_${time_run}.sh"
 		echo -e "#$ -e runsum_${project}.err" >> "${main_dir}/runsum_${project}_${time_run}.sh"
 		echo -e "#$ -N runsum_${project}"   >> "${main_dir}/runsum_${project}_${time_run}.sh"
