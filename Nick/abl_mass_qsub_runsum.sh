@@ -37,7 +37,7 @@ while IFS= read -r line || [[ "$line" ]];  do
 	echo ${line}
   arr+=$(echo "$line" | tr '\n' '' | tr '\r' '')
 done < ${1}
-
+exit
 arr_size="${#arr[@]}"
 last_index=$(( arr_size -1 ))
 echo "-${arr_size}:${arr[@]}-"
