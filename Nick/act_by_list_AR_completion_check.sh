@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o act_by_list_barebones_4.out
-#$ -e act_by_list_barebones_4.err
-#$ -N abl-prokka
+#$ -o abl-ARC.out
+#$ -e abl-ARC.err
+#$ -N abl-AR_checker
 #$ -cwd
 #$ -q all.q
 
@@ -21,17 +21,20 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./act_by_list_AR_completion_check.sh path_to_list_file ResGANNOT_Identifier(YYYYMMDD)"
+	echo "Usage is ./act_by_list_AR_completion_check.sh path_to_list_file ResGANNOT_Identifier(YYYYMMDD) path_for_output_file"
 	exit 0
 elif [[ -z "${2}" ]]; then
 	echo "ResGANNOT identifier is empty, please input the DB identifier using YYYYMMDD that it was created, exiting..."
+	exit 1
+elif [[ -z "${3}" ]]; then
+	echo  "No output file input, exiting..."
 	exit 1
 fi
 
 # Loop through and act on each sample name in the passed/provided list
 counter=0
 echo "c-sstar:c-sstar_plasmid:srst2"
-echo "Identification:0608-c-sstar:0608-c-sstar_plasmid:0608-srst2:1204-c-sstar:1204-c-sstar_plasmid:1204-srst2" > "${share}/current_DBS_in_samples.txt"
+echo "Identification:0608-c-sstar:0608-c-sstar_plasmid:0608-srst2:1204-c-sstar:1204-c-sstar_plasmid:1204-srst2" > "${3}"
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
@@ -147,17 +150,17 @@ while IFS= read -r var; do
 	fi
 	# Brief check if srst2 files exist, dont really have time to check for content at the moment
 	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_20180608_srst2__results.txt" ]] || [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__ResGANNOT_20180608_srst2__results.txt" ]]; then
-		input_DB_srst2="X"
+		ohsixoheights="File Found"
 	else
-		input_DB_srst2="M"
+		ohsixoheights="File Missing"
 	fi
 	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_${2}_srst2__results.txt" ]] || [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__ResGANNOT_${2}_srst2__results.txt" ]]; then
-		input_DB_srst2="X"
+		input_DB_srst2="File Found"
 	else
-		input_DB_srst2="M"
+		input_DB_srst2="File Missing"
 	fi
 	echo "${counter}:${project}/${sample_name}:	20180608	:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:	${2}	:${input_DB_csstar}:${input_DB_csstar_plasmid}:${input_DB_srst2}:"
-	echo "${project}/${sample_name}:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:${input_DB_csstar}:${input_DB_csstar_plasmid}:${input_DB_srst2}:" >> "${share}/current_DBS_in_samples.txt"
+	echo "${project}/${sample_name}:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:${input_DB_csstar}:${input_DB_csstar_plasmid}:${input_DB_srst2}:" >> "${3}"
 	counter=$(( counter + 1 ))
 done < "${1}"
 echo "All isolates completed"
