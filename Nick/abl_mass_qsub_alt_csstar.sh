@@ -103,6 +103,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						qsub -sync y "${main_dir}/csstn_${sample}_${start_time}.sh"
 					fi
 				fi
+				mv "${shareScript}/csstn_${sample}.out" "${main_dir}"
+				mv "${shareScript}/csstn_${sample}.err" "${main_dir}"
 			else
 				echo "${project}/${sample} already has 0608"
 				echo "$(date)" > "${main_dir}/complete/${sample}_csstarn_complete.txt"
@@ -128,6 +130,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					if [[ -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_98_sstar_summary.txt" ]]; then
 						rm "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_98_sstar_summary.txt"
 					fi
+					mv "${shareScript}/csstp_${sample}.out" "${main_dir}"
+					mv "${shareScript}/csstp_${sample}.err" "${main_dir}"
 				else
 					echo "${project}/${sample} already has 0608 PLASMID"
 					echo "$(date)" > "${main_dir}/complete/${sample}_csstarp_complete.txt"
@@ -166,6 +170,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 								qsub -sync y "${main_dir}/csstn_${sample}_${start_time}.sh"
 							fi
 						fi
+						mv "${shareScript}/csstn_${sample}.out" "${main_dir}"
+						mv "${shareScript}/csstn_${sample}.err" "${main_dir}"
 					else
 						echo "${project}/${sample} already has 0608"
 						echo "$(date)" > "${main_dir}/complete/${sample}_csstarn_complete.txt"
@@ -191,6 +197,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 							if [[ -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_98_sstar_summary.txt" ]]; then
 								rm "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_98_sstar_summary.txt"
 							fi
+							mv "${shareScript}/csstp_${sample}.out" "${main_dir}"
+							mv "${shareScript}/csstp_${sample}.err" "${main_dir}"
 						else
 							echo "${project}/${sample} already has 0608 PLASMID"
 							echo "$(date)" > "${main_dir}/complete/${sample}_csstarp_complete.txt"
