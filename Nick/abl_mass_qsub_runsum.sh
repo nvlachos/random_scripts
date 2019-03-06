@@ -34,6 +34,7 @@ fi
 # create an array of all samples in the list
 arr=()
 while IFS= read -r line || [[ "$line" ]];  do
+	echo ${line}
   arr+=$(echo "$line" | tr '\n' '' | tr '\r' '')
 done < ${1}
 
