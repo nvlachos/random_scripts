@@ -54,7 +54,7 @@ elif [[ ! -d "${3}/runsum_subs/complete" ]]; then
 	mkdir "${3}/runsum_subs/complete"
 fi
 
-time_run=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
+time_run=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 
 # Creates and submits qsub scripts to perform summaries of each run in the list
 while [ ${counter} -lt ${arr_size} ] ; do
