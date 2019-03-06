@@ -26,8 +26,8 @@ elif [[ "$1" = "-h" ]]; then
 elif [[ ! -f "${1}" ]]; then
 	echo "${1} (list) does not exist...exiting"
 	exit 1
-elif [[ ! -f "${3}" ]]; then
-	echo "${3} (alt_db) does not exist...exiting"
+elif [[ ! -d "${3}" ]]; then
+	echo "${3} location does not exist...exiting"
 	exit 1
 fi
 
