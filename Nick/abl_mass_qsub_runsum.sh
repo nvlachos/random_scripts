@@ -35,7 +35,9 @@ fi
 arr=()
 while IFS= read -r line || [[ "$line" ]];  do
 	echo ${line}
-  arr+=$(echo "$line" | tr '\n' '' | tr '\r' '')
+	if [[ ! -z ${line} ]]; then
+  	arr+=$(echo "$line" | tr '\n' '' | tr '\r' '')
+	fi
 done < ${1}
 exit
 arr_size="${#arr[@]}"
