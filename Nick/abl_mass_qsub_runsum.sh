@@ -12,49 +12,51 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list.sh list_name(currently has to be placed in /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR folder) description of list function
-#
-# script changes depending on what needs to be run through the list
+# Usage ./abl_mass_qsub_srst2.sh path_to_list max_concurrent_submissions output_directory_for_scripts
 #
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to act_by_list.sh, exiting"
+	echo "No argument supplied to abl_mass_qsub_runsum.sh, exiting"
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_template.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_submissions"
-	echo "Output location varies depending on which tasks are performed but will be found somewhere under ${processed}"
-	exit 0
+	echo "Usage is ./abl_mass_qsub_runsum.sh path_to_list_file(single runs per line) max_concurrent_submissions output_directory_for_scripts"
+	exit 1
+elif [[ ! -f "${1}" ]]; then
+	echo "${1} (list) does not exist...exiting"
+	exit 1
+elif [[ ! -f "${3}" ]]; then
+	echo "${3} (alt_db) does not exist...exiting"
+	exit 1
 fi
 
+# create an array of all samples in the list
 arr=()
 while IFS= read -r line || [[ "$line" ]];  do
   arr+=("$line")
 done < ${1}
 
 arr_size="${#arr[@]}"
+last_index=$(( arr_size -1 ))
 echo "-${arr_size}:${arr[@]}-"
 
-if [[ ! -z "${2}" ]]; then
-	max_subs="${2}"
-else
-	max_subs=10
-fi
-
-# Loop through and act on each sample name in the passed/provided list
+# Create counter and set max number of concurrent submissions
 counter=0
 max_subs=${2}
-main_dir="${share}/mass_subs/runsum_subs"
-if [[ ! -d "${share}/mass_subs/runsum_subs" ]]; then
-	mkdir "${share}/mass_subs/runsum_subs"
-	mkdir "${share}/mass_subs/runsum_subs/complete"
-elif [[ ! -d "${share}/mass_subs/runsum_subs/complete" ]]; then
-	mkdir "${share}/mass_subs/runsum_subs/complete"
+
+# Set script directory
+main_dir="${3}/runsum_subs"
+if [[ ! -d "${3}/runsum_subs" ]]; then
+	mkdir "${3}/runsum_subs"
+	mkdir "${3}/runsum_subs/complete"
+elif [[ ! -d "${3}/runsum_subs/complete" ]]; then
+	mkdir "${3}/runsum_subs/complete"
 fi
 
 time_run=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 
+# Creates and submits qsub scripts to perform summaries of each run in the list
 while [ ${counter} -lt ${arr_size} ] ; do
 	project=${arr[${counter}]}
 	#echo ${counter}"-${processed}/${project}/${project}/kraken/postAssembly/${project}_kraken_summary_assembled_BP_data.txt"
@@ -68,7 +70,12 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		echo -e "#$ -q short.q\n"  >> "${main_dir}/runsum_${project}_${time_run}.sh"
 		echo -e "\"${shareScript}/run_sum.sh\" \"${project}\"" >> "${main_dir}/runsum_${project}_${time_run}.sh"
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${project}_runsum_complete.txt\"" >> "${main_dir}/runsum_${project}_${time_run}.sh"
-		qsub "${main_dir}/runsum_${project}_${time_run}.sh"
+		cd "${main_dir}"
+		if [[ "${counter}" -lt "${last_index}" ]]; then
+			qsub "${main_dir}/runsum_${project}_${time_run}.sh"
+		else
+			qsub -sync y "${main_dir}/runsum_${project}_${time_run}.sh"
+		fi
 	else
 		waiting_for_index=$(( counter - max_subs ))
 		waiting_project=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
@@ -90,7 +97,12 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/runsum_${project}_${time_run}.sh"
 				echo -e "\"${shareScript}/run_runsum.sh\" \"${project}\"" >> "${main_dir}/runsum_${project}_${time_run}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${project}_runsum_complete.txt\"" >> "${main_dir}/runsum_${project}_${time_run}.sh"
-				qsub "${main_dir}/runsum_${project}_${time_run}.sh"
+				cd "${main_dir}"
+				if [[ "${counter}" -lt "${last_index}" ]]; then
+					qsub "${main_dir}/runsum_${project}_${time_run}.sh"
+				else
+					qsub -sync y "${main_dir}/runsum_${project}_${time_run}.sh"
+				fi
 				break
 			else
 				timer=$(( timer + 5 ))
