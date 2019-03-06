@@ -89,8 +89,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			else
 				qsub -sync y "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			fi
-			mv "srst2AR_${sample}.err" ${main_dir}
-			mv "srst2AR_${sample}.out" ${main_dir}
+			mv "${shareScript}/srst2AR_${sample}.err" ${main_dir}
+			mv "${shareScript}/srst2AR_${sample}.out" ${main_dir}
 		else
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo "${project}/${sample} already has newest srst2 ResGANNOT ${resGANNOT_srst2_filename}"
@@ -133,8 +133,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					else
 						qsub -sync y "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					fi
-					mv "srst2AR_${sample}.err" ${main_dir}
-					mv "srst2AR_${sample}.out" ${main_dir}
+					mv "${shareScript}/srst2AR_${sample}.err" ${main_dir}
+					mv "${shareScript}/srst2AR_${sample}.out" ${main_dir}
 				else
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo "${project}/${sample} already has newest srst2 ResGANNOT ${resGANNOT_srst2_filename}"
