@@ -30,7 +30,18 @@ counter=0
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/scripts/Quaisar-H/sample_cleaner.sh ${sample_name} ${project} >> /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/clean.out
+	if [[ -f ${processed}/${project}/${sample_name}/srst2/${sample_name}_ResGANNOT_20180608__genes__ResGANNOT_20180608_srst2__results.txt ]]; then
+		mv ${processed}/${project}/${sample_name}/srst2/${sample_name}_ResGANNOT_20180608__genes__ResGANNOT_20180608_srst2__results.txt ${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_20180608_srst2__results.txt
+	fi
+	if [[ -f ${processed}/${project}/${sample_name}/srst2/${sample_name}_ResGANNOT_20180608__fullgenes__ResGANNOT_20180608_srst2__results.txt ]]; then
+		mv ${processed}/${project}/${sample_name}/srst2/${sample_name}_ResGANNOT_20180608__fullgenes__ResGANNOT_20180608_srst2__results.txt ${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_20180608_srst2__results.txt
+	fi
+	if [[ -f ${processed}/${project}/${sample_name}/srst2/${sample_name}_S1_L001_R1_001.fastq.gz ]]; then
+		rm ${processed}/${project}/${sample_name}/srst2/${sample_name}_S1_L001_R1_001.fastq.gz
+	fi
+	if [[ -f ${processed}/${project}/${sample_name}/srst2/${sample_name}_S1_L001_R2_001.fastq.gz ]]; then
+		rm ${processed}/${project}/${sample_name}/srst2/${sample_name}_S1_L001_R2_001.fastq.gz
+	fi
 done < "${1}"
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
