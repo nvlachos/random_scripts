@@ -12,56 +12,62 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list.sh list_name(currently has to be placed in /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR folder) description of list function
-#
-# script changes depending on what needs to be run through the list
+# Usage ./abl_mass_qsub_alt_srst2.sh path_to_list max_concurrent_submissions path_to_alt_database output_directory_for_scripts
 #
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to act_by_list.sh, exiting"
+	echo "No argument supplied to ./abl_mass_qsub_alt_srst2.sh, exiting"
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_template.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_submissions path_to_alt_database"
-	echo "Output location varies depending on which tasks are performed but will be found somewhere under ${processed}"
-	exit 0
+	echo "Usage is ./abl_mass_qsub_alt_srst2.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions path_to_alt_database output_directory_for_scripts"
+	exit 1
+elif [[ ! -f "${1}" ]]; then
+	echo "${1} (list) does not exist...exiting"
+	exit 1
+elif [[ ! -f "${3}" ]]; then
+	echo "${3} (alt_db) does not exist...exiting"
+	exit 1
 fi
 
+# create an array of all samples in the list
 arr=()
 while IFS= read -r line || [[ "$line" ]];  do
   arr+=("$line")
 done < ${1}
 
 arr_size="${#arr[@]}"
+last_index=$(( arr_size -1 ))
 echo "-${arr_size}:${arr[@]}-"
 
-if [[ -z ${2} ]]; then
-	max_subs=10
-fi
-
-# Loop through and act on each sample name in the passed/provided list
+# Create counter and set max number of concurrent submissions
 counter=0
 max_subs=${2}
-main_dir="${share}/mass_subs/srst2_alt_subs"
-if [[ ! -d "${share}/mass_subs/srst2_alt_subs" ]]; then
-	mkdir "${share}/mass_subs/srst2_alt_subs"
-	mkdir "${share}/mass_subs/srst2_alt_subs/complete"
-elif [[ ! -d  "${share}/mass_subs/srst2_alt_subs/complete" ]]; then
-	mkdir "${share}/mass_subs/srst2_alt_subs/complete"
+
+# Set script directory
+main_dir="${4}/srst2_alt_subs"
+if [[ ! -d "${4}/srst2_alt_subs" ]]; then
+	mkdir "${4}/srst2_alt_subs"
+	mkdir "${4}/srst2_alt_subs/complete"
+elif [[ ! -d  "${4}/srst2_alt_subs/complete" ]]; then
+	mkdir "${4}/srst2_alt_subs/complete"
 fi
 
+# Format name of DB used from filrname for srst2
 alt_DB_path=${3}
 alt_DB=$(echo ${alt_DB_path##*/} | cut -d'.' -f1)
 alt_DB=${alt_DB//_srst2/}
 echo ${alt_DB}
-start_time=$(date "+%F-%T")
+start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 
+# Create and submit srst2 qsub scripts for each isolate in the list
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	echo ${counter}
 	if [ ${counter} -lt ${max_subs} ]; then
+		# Fix any improperly named (older style) files
 		if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__genes__${alt_DB}_srst2__results.txt" ]]; then
 				mv "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__genes__${alt_DB}_srst2__results.txt" "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__${alt_DB}_srst2__results.txt"
 				if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__fullgenes__${alt_DB}_srst2__results.txt" ]]; then
@@ -92,7 +98,12 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
 			echo -e "\"${shareScript}/run_srst2_on_singleDB_alternateDB.sh\" \"${sample}\" \"${project}\" \"${alt_DB_path}\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+			cd "${main_dir}"
+			if [[ "${counter}" -lt "${last_index}" ]]; then
+				qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+			else
+				qsub -sync y "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+			fi
 		else
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo "${project}/${sample} already has ${alt_DB}"
@@ -128,7 +139,12 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
 					echo -e "\"${shareScript}/run_srst2_on_singleDB_alternateDB.sh\" \"${sample}\" \"${project}\" \"${alt_DB_path}\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-					qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+					cd "${main_dir}"
+					if [[ "${counter}" -lt "${last_index}" ]]; then
+						qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+					else
+						qsub -sync y "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+					fi
 				else
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo "${project}/${sample} already has 20180608"
@@ -145,7 +161,4 @@ while [ ${counter} -lt ${arr_size} ] ; do
 done
 
 echo "All isolates completed"
-global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
-#Script exited gracefully (unless something else inside failed)
-#printf "%s %s" "Act_by_list.sh has completed ${2}" "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
 exit 0
