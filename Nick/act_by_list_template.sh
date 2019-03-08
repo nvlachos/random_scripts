@@ -34,7 +34,7 @@ while IFS= read -r var; do
 		mv ${processed}/${project}/${sample_name}/srst2/${sample_name}_ResGANNOT_20180608__genes__ResGANNOT_20180608_srst2__results.txt ${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_20180608_srst2__results.txt
 	fi
 	if [[ -f ${processed}/${project}/${sample_name}/srst2/${sample_name}_ResGANNOT_20180608__fullgenes__ResGANNOT_20180608_srst2__results.txt ]]; then
-		mv ${processed}/${project}/${sample_name}/srst2/${sample_name}_ResGANNOT_20180608__fullgenes__ResGANNOT_20180608_srst2__results.txt ${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_20180608_srst2__results.txt
+		mv ${processed}/${project}/${sample_name}/srst2/${sample_name}_ResGANNOT_20180608__fullgenes__ResGANNOT_20180608_srst2__results.txt ${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__ResGANNOT_20180608_srst2__results.txt
 	fi
 	if [[ -f ${processed}/${project}/${sample_name}/srst2/${sample_name}_S1_L001_R1_001.fastq.gz ]]; then
 		rm ${processed}/${project}/${sample_name}/srst2/${sample_name}_S1_L001_R1_001.fastq.gz
