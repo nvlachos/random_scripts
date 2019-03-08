@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o act_by_list_barebones_4.out
-#$ -e act_by_list_barebones_4.err
-#$ -N abl-prokka
+#$ -o abl_template.out
+#$ -e abl-template.err
+#$ -N abl-temp
 #$ -cwd
 #$ -q all.q
 
