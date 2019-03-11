@@ -7,6 +7,7 @@
 #$ -q all.q
 
 #Import the config file with shortcuts and settings
+echo $(pwd)
 if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
