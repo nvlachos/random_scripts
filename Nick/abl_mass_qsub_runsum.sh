@@ -70,6 +70,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		echo -e "#$ -N runsum_${project}"   >> "${main_dir}/runsum_${project}_${time_run}.sh"
 		echo -e "#$ -cwd"  >> "${main_dir}/runsum_${project}_${time_run}.sh"
 		echo -e "#$ -q short.q\n"  >> "${main_dir}/runsum_${project}_${time_run}.sh"
+		echo -e "cd ${shareScript}" >> "${main_dir}/runsum_${project}_${time_run}.sh"
 		echo -e "\"${shareScript}/run_sum.sh\" \"${project}\"" >> "${main_dir}/runsum_${project}_${time_run}.sh"
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${project}_runsum_complete.txt\"" >> "${main_dir}/runsum_${project}_${time_run}.sh"
 		cd "${main_dir}"
@@ -78,6 +79,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		else
 			qsub -sync y "${main_dir}/runsum_${project}_${time_run}.sh"
 		fi
+		mv "${shareScript}/runsum_${project}.out" ${main_dir}
+		mv "${shareScript}/runsum_${project}.err" ${main_dir}
 	else
 		waiting_for_index=$(( counter - max_subs ))
 		waiting_project=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
@@ -97,6 +100,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -N runsum_${project}"   >> "${main_dir}/runsum_${project}_${time_run}.sh"
 				echo -e "#$ -cwd"  >> "${main_dir}/runsum_${project}_${time_run}.sh"
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/runsum_${project}_${time_run}.sh"
+				echo -e "cd ${shareScript}" >> "${main_dir}/runsum_${project}_${time_run}.sh"
 				echo -e "\"${shareScript}/run_runsum.sh\" \"${project}\"" >> "${main_dir}/runsum_${project}_${time_run}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${project}_runsum_complete.txt\"" >> "${main_dir}/runsum_${project}_${time_run}.sh"
 				cd "${main_dir}"
@@ -105,6 +109,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				else
 					qsub -sync y "${main_dir}/runsum_${project}_${time_run}.sh"
 				fi
+				mv "${shareScript}/runsum_${project}.out" ${main_dir}
+				mv "${shareScript}/runsum_${project}.err" ${main_dir}
 				break
 			else
 				timer=$(( timer + 5 ))
