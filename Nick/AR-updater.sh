@@ -30,7 +30,7 @@ today=$(date "+%Y%m%d")
 # Exits if a sample list from TODAY was not creaetd
 if [[ ! -f ${shareScript}/sample_list_${today}.txt ]]; then
 	echo "No sample list file was created, must exit..."
-	exit 245
+	exit 245	
 fi
 
 # Checks the last time isolates were updated for AR. If databases havent changed since then, then no need to do any updating
