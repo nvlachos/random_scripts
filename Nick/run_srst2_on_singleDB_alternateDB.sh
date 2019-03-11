@@ -87,7 +87,10 @@ rm -r "${processed}/${2}/${1}/srst2/"*".pileup"
 find ${processed}/${2}/${1}/srst2 -type f -name "*ResGANNOT__*" | while read FILE ; do
   dirname=$(dirname $FILE)
 	filename=$(basename $FILE)
-	filename="${filename/_ResGANNOT__/__}"
+	second_word=$(echo ${filename} | cut -d'_' -f2,3)
+	if [[ "${second_word}" = "ResGANNOT_"* ]]; then
+		filename="${filename/_${second_word__}/__}"
+	fi
 	#echo "Found-${FILE}"
 	#echo "${filename}"
     mv "${FILE}" "${dirname}/${filename}"
