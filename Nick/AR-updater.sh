@@ -24,7 +24,7 @@ if [[ "$1" = "-h" ]]; then
 fi
 
 # Makes list of ALL samples in MiSeqAnalysisFiles
-today=$(date "+%Y%m%d")
+
 #${shareScript}/make_sample_list_from_run_list.sh ${shareScript}/sample_list_${today}.txt ${shareScript}/directory_list_${today}.txt
 
 # Exits if a sample list from TODAY was not creaetd
@@ -54,7 +54,7 @@ qsub -sync y "${shareScript}/act_by_list_AR_completion_check.sh" "${shareScript}
 
 
 echo "All isolates are UTD on AR files, check /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/AR_check_${today} to see if anyhing failed or is missing"
-echo "${today}" >> ${local_DBs}/ar_updater.txt
+echo "${resGANNOT_srst2_filename}" >> ${local_DBs}/ar_updater.txt
 
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 rm ${shareScript}/sample_list_${today}.txt
