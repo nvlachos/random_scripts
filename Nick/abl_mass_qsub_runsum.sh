@@ -36,7 +36,7 @@ arr=()
 while IFS= read -r line;  do
 	if [[ ! -z "${line}" ]]; then
 		line=$(echo ${line} | tr -d '\n' | tr -d '\r')
-		arr+=$(echo "$line")
+		arr+="$line"
 	fi
 done < ${1}
 
