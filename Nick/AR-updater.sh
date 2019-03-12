@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o AR-updater.out
-#$ -e AR-updater.err
-#$ -N AR-updater
+#$ -o AR_updater.out
+#$ -e AR_updater.err
+#$ -N AR_updater
 #$ -cwd
 #$ -q short.q
 
@@ -19,7 +19,7 @@
 
 # Checks for proper argumentation
 if [[ "$1" = "-h" ]]; then
-	echo "Usage is ./AR-updater.sh max_submissions output_directory_for_scripts"
+	echo "Usage is ./AR-updater.sh"
 	exit 0
 fi
 
