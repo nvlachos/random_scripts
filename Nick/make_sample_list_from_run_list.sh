@@ -12,7 +12,7 @@
 #
 # Script to make a list of all isolates in our database
 #
-# Usage ./make_sample_list_from_run_list.sh path_and_name_of_sample_output_file path_and_name_of_directory_output_file
+# Usage ./make_sample_list_from_run_list.sh path_and_name_of_sample_output_file path_and_name_of_directory_output_file -r (optional to remove FAILED isolates)
 #
 #
 
@@ -60,10 +60,20 @@ for path in ${processed}/*; do
 			cat "${path}/${run_ID}_list.txt" >> "${sample_list}"
 		fi
 fi
-
-	#for isolate in $path/*; do
-
-
 done
+
+if [[ "${3}" = "-r" ]]; then
+	mv "${sample_list}" "${sample_list}_temp"
+	> "${sample_list}"
+	while IFS= read -r var; do
+		if [[ "${var}" = *"_FAILED"]]; then
+			echo "Removing ${var} from the list"
+		else
+			echo "${var}" >> "${sample_list}"
+	done < "${sample_list}_temp"
+	rm "${sample_list}_temp"
+fi
+
+
 
 exit
