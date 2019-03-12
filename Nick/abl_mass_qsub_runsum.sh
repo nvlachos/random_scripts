@@ -37,7 +37,7 @@ while IFS= read -r line;  do
 	echo "L:${line}"
 	if [[ ! -z "${line}" ]]; then
 		line=$(echo ${line} | tr -d '\n' | tr -d '\r')
-		arr+="$line"
+		arr+=($line)
 	fi
 	echo "A:${arr[@]}"
 done < ${1}
