@@ -38,7 +38,7 @@ arr=()
 #	arr+=$(echo "$line")
 #done < ${1}
 
-IFS=$'\n' read -d '' -r -a arr < ${1}
+IFS=$'\n' read -r -a arr < ${1}
 
 arr_size="${#arr[@]}"
 last_index=$(( arr_size -1 ))
