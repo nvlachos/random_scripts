@@ -33,14 +33,17 @@ fi
 
 # create an array of all samples in the list
 arr=()
-#while IFS= read -r line || [[ "$line" ]];  do
-#	echo ${line}
-#	arr+=$(echo "$line")
-#done < ${1}
+while IFS= read -r line;  do
+	if [[ ! -z "${line}" ]]; then
+		line=$(echo ${line} | tr -d '\n' | tr -d '\r')
+		arr+=$(echo "$line")
+	fi
+done < ${1}
+
 
 #IFS=$'\n' read -d '' -r -a arr < ${1}
 
-readarray arr < ${1}
+#readarray arr < ${1}
 
 arr_size="${#arr[@]}"
 last_index=$(( arr_size -1 ))
