@@ -50,7 +50,7 @@ done < ${1}
 arr_size="${#arr[@]}"
 last_index=$(( arr_size -1 ))
 echo "-${arr_size}:${arr[@]}-"
-exit
+
 # Create counter and set max number of concurrent submissions
 counter=0
 max_subs=${2}
