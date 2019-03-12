@@ -94,7 +94,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			mv "${shareScript}/srst2AR_${sample}.err" ${main_dir}
 			mv "${shareScript}/srst2AR_${sample}.out" ${main_dir}
 		else
-			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+			echo -e $(date) > "${main_dir}/complete/${sample}_srst2_complete.txt"
 			echo "${project}/${sample} already has newest srst2 ResGANNOT ${resGANNOT_srst2_filename}"
 		fi
 	else
@@ -138,7 +138,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					mv "${shareScript}/srst2AR_${sample}.err" ${main_dir}
 					mv "${shareScript}/srst2AR_${sample}.out" ${main_dir}
 				else
-					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+					echo -e $(date) > "${main_dir}/complete/${sample}_srst2_complete.txt"
 					echo "${project}/${sample} already has newest srst2 ResGANNOT ${resGANNOT_srst2_filename}"
 				fi
 				break
