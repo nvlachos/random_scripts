@@ -40,7 +40,7 @@ arr=()
 
 #IFS=$'\n' read -d '' -r -a arr < ${1}
 
-readarray arr < $[1}
+readarray arr < ${1}
 
 arr_size="${#arr[@]}"
 last_index=$(( arr_size -1 ))
