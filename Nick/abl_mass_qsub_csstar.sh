@@ -36,7 +36,10 @@ fi
 # create an array of all samples in the list
 arr=()
 while IFS= read -r line || [[ "$line" ]];  do
-  arr+=("$line")
+	if [[ ! -z "${line}" ]]; then
+		line=$(echo ${line} | tr -d '\n' | tr -d '\r')
+		arr+=($line)
+	fi
 done < ${1}
 
 arr_size="${#arr[@]}"
