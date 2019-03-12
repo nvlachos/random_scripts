@@ -25,7 +25,7 @@ fi
 
 # Makes list of ALL samples in MiSeqAnalysisFiles
 today=$(date "+%Y%m%d")
-#${shareScript}/make_sample_list_from_run_list.sh ${shareScript}/sample_list_${today}.txt ${shareScript}/directory_list_${today}.txt
+# ${shareScript}/make_sample_list_from_run_list.sh ${shareScript}/sample_list_${today}.txt ${shareScript}/directory_list_${today}.txt
 
 # Exits if a sample list from TODAY was not creaetd
 if [[ ! -f ${shareScript}/sample_list_${today}.txt ]]; then
