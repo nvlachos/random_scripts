@@ -34,7 +34,7 @@ fi
 # Loop through and act on each sample name in the passed/provided list
 counter=0
 echo "c-sstar:c-sstar_plasmid:srst2"
-echo "Identification:0608-c-sstar:0608-c-sstar_plasmid:0608-srst2:1204-c-sstar:1204-c-sstar_plasmid:1204-srst2" > "${3}"
+echo "Identification:20180608-c-sstar:20180608-c-sstar_plasmid:20180608-srst2:${2}-c-sstar:${2}-c-sstar_plasmid:${2}-srst2" > "${3}"
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
@@ -123,7 +123,7 @@ while IFS= read -r var; do
 	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_${2}.gapped_98_sstar_summary.txt" ]]; then
 		header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_${2}.gapped_98_sstar_summary.txt")
 		if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
-			input_DB_csstar="None"
+			input_DB_csstar="No_ch"
 		else
 			input_DB_csstar="AR_Found"
 		fi
@@ -136,7 +136,7 @@ while IFS= read -r var; do
 		if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt" ]]; then
 			header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt")
 			if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
-				input_DB_csstar_plasmid="None"
+				input_DB_csstar_plasmid="No_plasmid_AR"
 			else
 				input_DB_csstar_plasmid="AR_Found"
 			fi

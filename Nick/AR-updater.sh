@@ -53,7 +53,7 @@ qsub -sync y "${shareScript}/act_by_list_AR_completion_check.sh" "${shareScript}
 
 
 
-echo "All isolates are UTD on AR files, check /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/AR_check_${today} to see if anyhing failed or is missing"
+echo "All isolates are UTD on AR files, check /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/AR_check_${today} to see if anything failed or is missing"
 echo "${resGANNOT_srst2_filename}" >> ${local_DBs}/ar_updater.txt
 
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
