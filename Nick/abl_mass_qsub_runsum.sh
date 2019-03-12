@@ -34,10 +34,12 @@ fi
 # create an array of all samples in the list
 arr=()
 while IFS= read -r line;  do
+	echo "L:${line}"
 	if [[ ! -z "${line}" ]]; then
 		line=$(echo ${line} | tr -d '\n' | tr -d '\r')
 		arr+="$line"
 	fi
+	echo "A:${arr[@]}"
 done < ${1}
 
 
