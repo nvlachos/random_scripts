@@ -12,7 +12,7 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list.sh path_to_list max_concurrent_submission
+# Usage ./act_by_list.sh path_to_list max_concurrent_submission output_directory_for_scripts
 #
 #
 #
@@ -23,7 +23,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_node.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_submissions"
+	echo "Usage is ./abl_mass_qsub_node.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_submissions output_directory_for_scripts"
 	echo "Output location varies depending on which tasks are performed but will be found somewhere under ${processed}"
 	exit 0
 fi
@@ -45,12 +45,12 @@ fi
 
 # Loop through and act on each sample name in the passed/provided list
 counter=0
-main_dir="${share}/mass_subs/node_subs"
-if [[ ! -d "${share}/mass_subs/node_subs" ]]; then
-	mkdir "${share}/mass_subs/node_subs"
-	mkdir "${share}/mass_subs/node_subs/complete"
-elif [[ ! -d  "${share}/mass_subs/node_subs/complete" ]]; then
-	mkdir "${share}/mass_subs/node_subs/complete"
+main_dir="${3}/node_subs"
+if [[ ! -d "${3}/node_subs" ]]; then
+	mkdir "${3}/node_subs"
+	mkdir "${3}/node_subs/complete"
+elif [[ ! -d  "${3}/node_subs/complete" ]]; then
+	mkdir "${3}/node_subs/complete"
 fi
 
 while [ ${counter} -lt ${arr_size} ] ; do
@@ -68,8 +68,9 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -N node_${sample}"   >> "${main_dir}/node_${sample}_${start_time}.sh"
 				echo -e "#$ -cwd"  >> "${main_dir}/node_${sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/node_${sample}_${start_time}.sh"
-				echo -e "python \"${shareScript}/fasta_headers.py\" \"${sample}\" \"${project}\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+				echo -e "python3 \"${shareScript}/fasta_headers.py\" \"${sample}\" \"${project}\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_node_complete.txt\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+				cd "${main_dir}"
 				if [[ "${counter}" -lt "${last_index}" ]]; then
 					qsub "${main_dir}/node_${sample}_${start_time}.sh"
 				else
@@ -107,6 +108,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/node_${sample}_${start_time}.sh"
 						echo -e "python \"${shareScript}/fasta_headers.py\" \"${sample}\" \"${project}\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_node_complete.txt\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+						cd "${main_dir}"
 						if [[ "${counter}" -lt "${last_index}" ]]; then
 							qsub "${main_dir}/node_${sample}_${start_time}.sh"
 						else
