@@ -30,9 +30,17 @@ counter=0
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	if [[ -f ${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_20180608_srst2__results.txt ]]; then
-		mv ${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_20180608_srst2__results.txt ${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__ResGANNOT_20180608_srst2__results.txt
+	if [[ -f ${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta ]]; then
+		identifier=$(head -n1 ${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta | cut -d'_' -f1)
+		if [[ "${identifier}" = "Node" ]]; then
+			echo "${project}/${sample_name}"
+		elif [[ "${identifier}" = "${sample_name}" ]]; then
+			echo "${counter}"
+		else
+			echo "I DONT KNOW - ${identifier}"
+		fi
 	fi
+	counter=$(( counter + 1 ))
 done < "${1}"
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
