@@ -107,7 +107,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -N node_${sample}"   >> "${main_dir}/node_${sample}_${start_time}.sh"
 						echo -e "#$ -cwd"  >> "${main_dir}/node_${sample}_${start_time}.sh"
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/node_${sample}_${start_time}.sh"
-						echo -e "python \"${shareScript}/fasta_headers.py\" \"${sample}\" \"${project}\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+						echo -e "mv \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta\" \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed_original.fasta\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+						echo -e "python3 \"${shareScript}/fasta_headers.py\" \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed_original.fasta\" \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_node_complete.txt\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
 						cd "${main_dir}"
 						if [[ "${counter}" -lt "${last_index}" ]]; then
