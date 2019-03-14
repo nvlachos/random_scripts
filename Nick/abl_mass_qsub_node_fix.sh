@@ -60,7 +60,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	if [ ${counter} -lt ${max_subs} ]; then
 		if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
 			header=$(head -n1 "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" | cut -d'_' -f1)
-			if [[ "${header}" = "NODE" ]]; then
+			if [[ "${header}" = ">NODE" ]]; then
 				echo  "Index is below max submissions, submitting"
 				echo -e "#!/bin/bash -l\n" > "${main_dir}/node_${sample}_${start_time}.sh"
 				echo -e "#$ -o node_${sample}.out" >> "${main_dir}/node_${sample}_${start_time}.sh"
@@ -68,7 +68,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -N node_${sample}"   >> "${main_dir}/node_${sample}_${start_time}.sh"
 				echo -e "#$ -cwd"  >> "${main_dir}/node_${sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/node_${sample}_${start_time}.sh"
-				echo -e "python3 \"${shareScript}/fasta_headers.py\" \"${sample}\" \"${project}\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+				echo -e "mv \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta\" \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed_original.fasta\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+				echo -e "python3 \"${shareScript}/fasta_headers.py\" \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed_original.fasta\" \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_node_complete.txt\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
 				cd "${main_dir}"
 				if [[ "${counter}" -lt "${last_index}" ]]; then
@@ -98,7 +99,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			if [ -f "${main_dir}/complete/${waiting_sample}_node_complete.txt" ]; then
 				if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
 					header=$(head -n1 "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" | cut -d'_' -f1)
-					if [[ "${header}" = "NODE" ]]; then
+					if [[ "${header}" = ">NODE" ]]; then
 						echo  "Index is below max submissions, submitting"
 						echo -e "#!/bin/bash -l\n" > "${main_dir}/node_${sample}_${start_time}.sh"
 						echo -e "#$ -o node_${sample}.out" >> "${main_dir}/node_${sample}_${start_time}.sh"
