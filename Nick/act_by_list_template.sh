@@ -32,9 +32,9 @@ while IFS= read -r var; do
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 	if [[ -f ${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta ]]; then
 		identifier=$(head -n1 ${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta | cut -d'_' -f1)
-		if [[ "${identifier}" = "Node" ]]; then
+		if [[ "${identifier}" = ">NODE" ]]; then
 			echo "${counter} - ${project}/${sample_name}"
-		elif [[ "${identifier}" = "${sample_name}" ]]; then
+		elif [[ "${identifier}" = ">${sample_name}" ]]; then
 			echo "${counter}"
 		else
 			echo "${counter} - I DONT KNOW - ${identifier}"
