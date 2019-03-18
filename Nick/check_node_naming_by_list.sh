@@ -30,7 +30,7 @@ counter=0
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	if [[ ! -s ${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta ]]; then
+	if  [[ -s ${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta ]]; then
 		identifier=$(head -n1 ${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta | cut -d'_' -f1)
 		if [[ "${identifier}" = ">NODE" ]]; then
 			echo "${counter} - ${project}/${sample_name}"
@@ -39,6 +39,8 @@ while IFS= read -r var; do
 		else
 			echo "${counter} - ${project}/${sample_name} - I DONT KNOW - ${identifier}"
 		fi
+	else
+		echo "XXX-${counter} - ${project}/${sample_name} - NO_ASSEMBLY"
 	fi
 	counter=$(( counter + 1 ))
 done < "${1}"
