@@ -69,13 +69,13 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	if [ ${counter} -lt ${max_subs} ]; then
 		# Fix any improperly named (older style) files
 		if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__genes__${alt_DB}_srst2__results.txt" ]]; then
-				mv "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__genes__${alt_DB}_srst2__results.txt" "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__${alt_DB}_srst2__results.txt"
+				rm "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__genes__${alt_DB}_srst2__results.txt" "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__${alt_DB}_srst2__results.txt"
 				if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__fullgenes__${alt_DB}_srst2__results.txt" ]]; then
-					mv "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__fullgenes__${alt_DB}_srst2__results.txt" "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__${alt_DB}_srst2__results.txt"
+					rm "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__fullgenes__${alt_DB}_srst2__results.txt" "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__${alt_DB}_srst2__results.txt"
 				fi
 				continue
 		elif [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__fullgenes__${alt_DB}_srst2__results.txt" ]]; then
-			mv "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__fullgenes__${alt_DB}_srst2__results.txt" "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__${alt_DB}_srst2__results.txt"
+			rm "${processed}/${project}/${sample_name}/srst2/${sample_name}_${alt_DB}__fullgenes__${alt_DB}_srst2__results.txt" "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__${alt_DB}_srst2__results.txt"
 			continue
 		fi
 
