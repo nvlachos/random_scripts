@@ -58,7 +58,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	echo ${counter}
 	if [ ${counter} -lt ${max_subs} ]; then
-		if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
+		if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed_original.fasta" ]]; then
 			rm "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta"
 			mv "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed_original.fasta" "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta"
 			header=$(head -n1 "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" | cut -d'_' -f1)
