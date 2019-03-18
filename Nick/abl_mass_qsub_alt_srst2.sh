@@ -105,6 +105,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			else
 				qsub -sync y "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			fi
+			mv "${shareScript}/srst2AR_${sample}.out" "${main_dir}"
+			mv "${shareScript}/srst2AR_${sample}.err" "${main_dir}"
 		else
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo "${project}/${sample} already has ${alt_DB}"
@@ -150,6 +152,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo "${project}/${sample} already has 20180608"
 				fi
+				mv "${shareScript}/srst2AR_${sample}.out" "${main_dir}"
+				mv "${shareScript}/srst2AR_${sample}.err" "${main_dir}"
 				break
 			else
 				timer=$(( timer + 5 ))
