@@ -12,7 +12,7 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list_AR_completion_check.sh path_to_list ResGANNOT_identifier(YYYYMMDD)
+# Usage ./check_and_fix_0608.sh path_to_list
 #
 
 # Checks for proper argumentation
@@ -32,7 +32,7 @@ while IFS= read -r var; do
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 	if [[ -s "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608.gapped_98_sstar_summary.txt" ]]; then
 		header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608.gapped_98_sstar_summary.txt")
-		if [[ "${header}" *"anti-microbial"* ]]; then 
+		if [[ "${header}" = *"anti-microbial"* ]]; then
 			echo "Fixing - ${counter} - ${project}/${sample_name}"
 			mv "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608.gapped_98_sstar_summary.txt" "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608.gapped_98_sstar_summary.txt_old"
 			cat "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608.gapped_98_sstar_summary.txt_old" | tr -s "\t" " " > "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608.gapped_98_sstar_summary.txt"
