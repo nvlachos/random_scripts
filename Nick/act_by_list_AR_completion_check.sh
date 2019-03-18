@@ -99,10 +99,10 @@ while IFS= read -r var; do
 		else
 			ohsixoheight="AR_Found"
 		fi
-	elif [[ ! -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
-		ohsixoheight="0_size"
+	elif [[ -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
+		ohsixoheight="CSSTAR_NOT_RUN(HAS_ASSEMBLY)"
 	else
-		ohsixoheight="File_Missing"
+		ohsixoheight="NO_ASSEMBLY_TO_RUN_CSSTAR_ON"
 	fi
 	if [[ -d "${processed}/${project}/${sample_name}/c-sstar_plasmid" ]]; then
 		if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_20180608.gapped_40_sstar_summary.txt" ]]; then
@@ -112,25 +112,25 @@ while IFS= read -r var; do
 			else
 				ohsixoheightp="AR_Found"
 			fi
-		elif [[ ! -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
-			ohsixoheightp="0_size"
+		elif [[ -s "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_plasmid_scaffolds_trimmed.fasta" ]]; then
+			ohsixoheightp="CSSTAR-plasmid_NOT_RUN(HAS_ASSEMBLY)"
 		else
-			ohsixoheightp="File_Missing"
+			ohsixoheightp="NO_PLASMID_ASSEMBLY_TO_RUN_CSSTAR_ON"
 		fi
 	else
-		ohsixoheightp="No_plasmid_Assembly"
+		ohsixoheightp="No_c-sstar_plasmid_folder"
 	fi
 	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_${2}.gapped_98_sstar_summary.txt" ]]; then
 		header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_${2}.gapped_98_sstar_summary.txt")
 		if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
-			input_DB_csstar="No_chr_AR"
+			input_DB_csstar="No_chromo_AR"
 		else
 			input_DB_csstar="AR_Found"
 		fi
-	elif [[ ! -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
-		input_DB_csstar="0_size"
+	elif [[ -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
+		input_DB_csstar="CSSTAR_NOT_RUN(HAS_ASSEMBLY)"
 	else
-		input_DB_csstar="File_Missing"
+		input_DB_csstar="NO_ASSEMBLY_TO_RUN_CSSTAR_ON"
 	fi
 	if [[ -d "${processed}/${project}/${sample_name}/c-sstar_plasmid" ]]; then
 		if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt" ]]; then
@@ -140,13 +140,13 @@ while IFS= read -r var; do
 			else
 				input_DB_csstar_plasmid="AR_Found"
 			fi
-		elif [[ ! -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
-			input_DB_csstar_plasmid="0_size"
+		elif [[ -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
+			input_DB_csstar_plasmid="CSSTAR-plasmid_NOT_RUN(HAS_ASSEMBLY)"
 		else
-			input_DB_csstar_plasmid="File_Missing"
+			input_DB_csstar_plasmid="NO_PLASMID_ASSEMBLY_TO_RUN_CSSTAR_ON"
 		fi
 	else
-		input_DB_csstar_plasmid="No_plasmid_Assembly"
+		input_DB_csstar_plasmid="No_c-sstar_plasmid_folder"
 	fi
 	# Brief check if srst2 files exist, dont really have time to check for content at the moment
 	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_20180608_srst2__results.txt" ]] || [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__ResGANNOT_20180608_srst2__results.txt" ]]; then
