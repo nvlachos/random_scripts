@@ -12,7 +12,7 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list_AR_completion_check.sh path_to_list ResGANNOT_identifier(YYYYMMDD)
+# Usage ./act_by_list_AR_completion_check.sh path_to_list ResGANNOT_identifier(YYYYMMDD) path_for_output_file
 #
 
 # Checks for proper argumentation
@@ -100,7 +100,7 @@ while IFS= read -r var; do
 			ohsixoheight="AR_Found"
 		fi
 	elif [[ -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
-		ohsixoheight="CSSTAR_NOT_RUN(HAS_ASSEMBLY)"
+		ohsixoheight="NO_CSSTAR_file(HAS_ASSEMBLY)"
 	else
 		ohsixoheight="NO_ASSEMBLY_TO_RUN_CSSTAR_ON"
 	fi
@@ -110,10 +110,10 @@ while IFS= read -r var; do
 			if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
 				ohsixoheightp="None"
 			else
-				ohsixoheightp="AR_Found"
+				ohsixoheightp="Plasmid_AR_Found"
 			fi
 		elif [[ -s "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_plasmid_scaffolds_trimmed.fasta" ]]; then
-			ohsixoheightp="CSSTAR-plasmid_NOT_RUN(HAS_ASSEMBLY)"
+				ohsixoheightp="NO_CSSTAR_Plasmid_file(HAS_PLASMID_ASSEMBLY)"
 		else
 			ohsixoheightp="NO_PLASMID_ASSEMBLY_TO_RUN_CSSTAR_ON"
 		fi
