@@ -35,12 +35,14 @@ while IFS= read -r var; do
 		if [[ "${identifier}" = ">NODE" ]]; then
 			echo "${counter} - ${project}/${sample_name}"
 		elif [[ "${identifier}" = ">${sample_name}" ]]; then
-			echo "${counter}"
+			#echo "${counter}"
+			:
 		else
 			echo "${counter} - ${project}/${sample_name} - I DONT KNOW - ${identifier}"
 		fi
 	else
-		echo "XXX-${counter} - ${project}/${sample_name} - NO_ASSEMBLY"
+		#echo "XXX-${counter} - ${project}/${sample_name} - NO_ASSEMBLY"
+		:
 	fi
 	counter=$(( counter + 1 ))
 done < "${1}"
