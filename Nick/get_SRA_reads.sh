@@ -34,7 +34,6 @@ elif [[ "${1}" = "-h" ]]; then
 	exit 0
 elif [[ -z "${2}" ]]; then
 	echo "No output directory given, using default ${processed}..."
-	exit 862
 fi
 
 if [ ! -d "${2}" ]; then
