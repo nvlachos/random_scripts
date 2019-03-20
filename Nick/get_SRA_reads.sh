@@ -33,7 +33,7 @@ elif [[ "${1}" = "-h" ]]; then
 	echo "Output is saved to ${processed}/References/SRA_Number/"
 	exit 0
 elif [[ -z "${2}" ]]; then
-	echo "No output directory given, exiting..."
+	echo "No output directory given, using default ${processed}..."
 	exit 862
 fi
 
