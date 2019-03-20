@@ -39,7 +39,7 @@ else
 	OUTDATADIR="${2}/${1}"
 fi
 
-if [ ! -d "${2}" ]; then
+if [ ! -d "${OUTDATADIR}" ]; then
 	echo "Empty output directory supplied to get_SRA_reads.sh...creating"
 	mkdir -p "${OUTDATADIR}/FASTQs"
 fi
@@ -54,13 +54,13 @@ fastq-dump --split-files --origfmt --gzip ${1}
 
 complete="true"
 if [[ -s "${OUTDATADIR}/FASTQs/${1}_1.fastq.gz" ]]; then
-	mv "${OUTDATADIR}/${1}_1.fastq.gz" "${OUTDATADIR}/${1}_R1_001.fastq.gz"
+	mv "${OUTDATADIR}/FASTQs/${1}_1.fastq.gz" "${OUTDATADIR}/FASTQs/${1}_R1_001.fastq.gz"
 else
 	echo "R1 does not exist for ${1}"
 	complete="false"
 fi
 if [[ -s "${OUTDATADIR}/FASTQs/${1}_2.fastq.gz" ]]; then
-	mv "${OUTDATADIR}/${1}_2.fastq.gz" "${OUTDATADIR}/${1}_R2_001.fastq.gz"
+	mv "${OUTDATADIR}/FASTQs/${1}_2.fastq.gz" "${OUTDATADIR}/FASTQs/${1}_R2_001.fastq.gz"
 else
 	echo "R2 does not exist for ${1}"
 	complete="false"
