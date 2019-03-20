@@ -35,7 +35,7 @@ elif [[ "${1}" = "-h" ]]; then
 elif [[ -z "${2}" ]]; then
 	echo "No output directory given, using default ${processed}..."
 	OUTDATADIR="${processed}/References/${1}/FASTQs"
-else;
+else
 	OUTDATADIR="${2}/${1}/FASTQs"
 fi
 
