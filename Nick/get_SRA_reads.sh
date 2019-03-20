@@ -34,15 +34,17 @@ elif [[ "${1}" = "-h" ]]; then
 	exit 0
 elif [[ -z "${2}" ]]; then
 	echo "No output directory given, using default ${processed}..."
+	OUTDATADIR="${processed}/References/${1}/FASTQs"
+else;
+	OUTDATADIR="${2}/${1}/FASTQs"
 fi
 
 if [ ! -d "${2}" ]; then
 	echo "Empty output directory supplied to get_SRA_reads.sh...creating"
-	mkdir -p "${2}/${1}/FASTQs"
+	mkdir -p "${OUTDATADIR}"
 fi
 
-# Sets the output folder to the sample_name folder in processed samples
-OUTDATADIR="${processed}/${2}/${1}/FASTQs"
+
 
 module load sratoolkit/2.9.1
 
