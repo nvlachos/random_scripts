@@ -67,7 +67,7 @@ else
 fi
 
 if [[ "${complete}" == "true" ]]; then
-	bbduk.sh -"${bbduk_mem}" threads="${procs}" in="${OUTDATADIR}/FASTQs/${filename}_R1_001.fastq" in2="${OUTDATADIR}/FASTQs/${filename}_R2_001.fastq" out="${OUTDATADIR}/removedAdapters/${filename}-noPhiX-R1.fsq" out2="${OUTDATADIR}/removedAdapters/${filename}-noPhiX-R2.fsq" ref="${phiX_location}" k="${bbduk_k}" hdist="${bbduk_hdist}"
+	bbduk.sh -"${bbduk_mem}" threads="${procs}" in="${OUTDATADIR}/FASTQs/${1}_R1_001.fastq" in2="${OUTDATADIR}/FASTQs/${1}_R2_001.fastq" out="${OUTDATADIR}/removedAdapters/${1}-noPhiX-R1.fsq" out2="${OUTDATADIR}/removedAdapters/${1}-noPhiX-R2.fsq" ref="${phiX_location}" k="${bbduk_k}" hdist="${bbduk_hdist}"
 	trimmomatic "${trim_endtype}" -"${trim_phred}" -threads "${procs}" "${OUTDATADIR}/removedAdapters/${1}-noPhiX-R1.fsq" "${OUTDATADIR}/removedAdapters/${1}-noPhiX-R2.fsq" "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R1_001.unpaired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.unpaired.fq"
 	cat "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq" > "${OUTDATADIR}/trimmed/${1}.paired.fq"
 	cat "${OUTDATADIR}/trimmed/${1}_R1_001.unpaired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.unpaired.fq" > "${OUTDATADIR}/trimmed/${1}.single.fq"
