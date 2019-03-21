@@ -52,7 +52,8 @@ module load trimmomatic/0.35
 
 cd ${OUTDATADIR}/FASTQs
 
-fastq-dump --split-files --origfmt --gzip -A ${1}
+sra_id=$(esearch -db sra -query ${1} </dev/null | efetch -format docsum | xtract -pattern Runs -element Run@acc)
+fastq-dump -A $sra_id --split-files --origfmt --gzip
 
 complete="true"
 if [[ -s "${OUTDATADIR}/FASTQs/${1}_1.fastq.gz" ]]; then
