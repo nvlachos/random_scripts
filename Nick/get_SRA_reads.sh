@@ -50,19 +50,17 @@ module load sratoolkit/2.9.1
 module load BBMap/38.26
 module load trimmomatic/0.35
 
-cd ${OUTDATADIR}/FASTQs
-
-fasterq-dump --split-files ${1}
+fasterq-dump --split-files ${1} -O ${OUTDATADIR}/FASTQs
 
 complete="true"
-if [[ -s "${OUTDATADIR}/FASTQs/${1}_1.fastq.gz" ]]; then
-	mv "${OUTDATADIR}/FASTQs/${1}_1.fastq.gz" "${OUTDATADIR}/FASTQs/${1}_R1_001.fastq.gz"
+if [[ -s "${OUTDATADIR}/FASTQs/${1}_1.fastq" ]]; then
+	gzip -c "${OUTDATADIR}/FASTQs/${1}_1.fastq" > "${OUTDATADIR}/FASTQs/${1}_R1_001.fastq.gz"
 else
 	echo "R1 does not exist for ${1}"
 	complete="false"
 fi
-if [[ -s "${OUTDATADIR}/FASTQs/${1}_2.fastq.gz" ]]; then
-	mv "${OUTDATADIR}/FASTQs/${1}_2.fastq.gz" "${OUTDATADIR}/FASTQs/${1}_R2_001.fastq.gz"
+if [[ -s "${OUTDATADIR}/FASTQs/${1}_2.fastq" ]]; then
+	gzip -c "${OUTDATADIR}/FASTQs/${1}_2.fastq" > "${OUTDATADIR}/FASTQs/${1}_R2_001.fastq.gz"
 else
 	echo "R2 does not exist for ${1}"
 	complete="false"
