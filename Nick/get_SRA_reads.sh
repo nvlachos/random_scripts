@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o run_MLST.out
-#$ -e run_MLST.err
-#$ -N run_MLST
+#$ -o getSRA.out
+#$ -e getSRA.err
+#$ -N getSRA
 #$ -cwd
 #$ -q all.q
 
@@ -47,6 +47,8 @@ fi
 
 
 module load sratoolkit/2.9.1
+module load BBMap/38.26
+module load trimmomatic/0.35
 
 cd ${OUTDATADIR}/FASTQs
 
@@ -73,9 +75,8 @@ if [[ "${complete}" == "true" ]]; then
 	cat "${OUTDATADIR}/trimmed/${1}_R1_001.unpaired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.unpaired.fq" > "${OUTDATADIR}/trimmed/${1}.single.fq"
 fi
 
-
-
-
-
 module unload sratoolkit/2.9.1
+module unload BBMap/38.26
+module unload trimmomatic/0.35
+
 exit 0
