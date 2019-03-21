@@ -70,6 +70,7 @@ if [[ "${3}" = "-r" ]]; then
 			echo "Removing ${var} from the list"
 		else
 			echo "${var}" >> "${sample_list}"
+		fi
 	done < "${sample_list}_temp"
 	rm "${sample_list}_temp"
 fi
