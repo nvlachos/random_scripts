@@ -52,7 +52,7 @@ module load trimmomatic/0.35
 
 cd ${OUTDATADIR}/FASTQs
 
-fasterq-dump --split-files --origfmt --gzip -A ${1}
+fasterq-dump --split-files ${1}
 
 complete="true"
 if [[ -s "${OUTDATADIR}/FASTQs/${1}_1.fastq.gz" ]]; then
