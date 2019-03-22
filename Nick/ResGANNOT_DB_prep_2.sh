@@ -176,6 +176,7 @@ do
 			allele=$(echo "${line_items[3]}" | cut -d':' -f1 | cut -d')' -f2-)
 			group_raw=$(echo "${line_items[2]}" | cut -d')' -f1 | cut -d'(' -f2)
 			accession=$(echo "${line_items[3]}" | cut -d':' -f2)
+			allele="${$allele}_${accession}"
 			allele_location=$(echo "${line_items[3]}" | cut -d':' -f3)
 			allele_length=$(echo "${line_items[3]}" | cut -d':' -f4)
 			group="${groups[${group_raw,,}]}"
@@ -193,7 +194,7 @@ do
 			else
 				from_source="${source}"
 			fi
-			allele=$(echo ${line_items[3]} | cut -d'_' -f1 | cut -d']' -f2)
+			allele=$(echo ${line_items[3]} | cut -d'_' -f1,2 | cut -d']' -f2)
 			DB_ID=${line_items[3]}
 			group_lookup=${gene:0:3}
 			#echo "Looking up group ${group_lookup,,} from ${line_items[3]}"
