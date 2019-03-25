@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/bin/sh -l
 
 #$ -o prepCSSTARDB_2.out
 #$ -e prepCSSTARDB_2.err
@@ -177,7 +177,7 @@ do
 			group_raw=$(echo "${line_items[2]}" | cut -d')' -f1 | cut -d'(' -f2)
 			accession=$(echo "${line_items[3]}" | cut -d':' -f2)
 			echo "allele-${allele}:accession-${accession}"
-			allele="${$allele}_${accession}"
+			allele+="_${accession}"
 			allele_location=$(echo "${line_items[3]}" | cut -d':' -f3)
 			allele_length=$(echo "${line_items[3]}" | cut -d':' -f4)
 			group="${groups[${group_raw,,}]}"
