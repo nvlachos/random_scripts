@@ -32,14 +32,14 @@ elif [[ ! -f "${1}" ]]; then
 elif [[ ! -f "${3}" ]]; then
 	echo "${3} (alt_db) does not exist...exiting"
 	exit 1
-elif [[ -z "${5}" ]] ||; then
+elif [[ -z "${5}" ]]; then
 	echo "Clobberness was not input, be sure to add keep or clobber as 4th parameter...exiting"
 	exit 1
 fi
 
 # Check that clobberness is a valid option
 if [[ "${5}" != "keep" ]] && [[ "${5}" != "clobber" ]]; then
-	echo "Clobberness was not input, be sure to add keep or clobber as 4th parameter...exiting"
+	echo "Clobberness was not input, be sure to add keep or clobber as 5th parameter...exiting"
 	exit 1
 else
 	clobberness="${5}"
