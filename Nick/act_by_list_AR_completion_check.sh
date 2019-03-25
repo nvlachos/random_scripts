@@ -65,6 +65,14 @@ while IFS= read -r var; do
 		echo "Found-renaming"
 		mv "${processed}/${project}/${sample_name}/srst2/${sample_name}_ResGANNOT_20180608_srst2.fasta__genes__ResGANNOT_20180608_srst2__results.txt" "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_20180608_srst2__results.txt"
 	fi
+	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}_ResGANNOT_20180608__fullgenes__ResGANNOT_20180608_srst2__results.txt" ]]; then
+		echo "Found-renaming"
+		rm "${processed}/${project}/${sample_name}/srst2/${sample_name}_ResGANNOT_20180608__fullgenes__ResGANNOT_20180608_srst2__results.txt" "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__ResGANNOT_20180608_srst2__results.txt"
+	fi
+	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}_ResGANNOT_20180608__genes__ResGANNOT_20180608_srst2__results.txt" ]]; then
+		echo "Found-renaming"
+		mv "${processed}/${project}/${sample_name}/srst2/${sample_name}_ResGANNOT_20180608__genes__ResGANNOT_20180608_srst2__results.txt" "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_20180608_srst2__results.txt"
+	fi
 	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_gapped/${sample_name}.ResGANNOT_20180608_srst2.gapped_98.sstar_grouped" ]]; then
 		echo "Found - renaming"
 		mv "${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_gapped/${sample_name}.ResGANNOT_20180608_srst2.gapped_98.sstar_grouped" "${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_gapped/${sample_name}.ResGANNOT_20180608.gapped_98.sstar_grouped"
