@@ -10,6 +10,7 @@
 if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
+. ./config
 #Import the module file that loads all necessary mods
 . "${mod_changers}/pipeline_mods"
 
