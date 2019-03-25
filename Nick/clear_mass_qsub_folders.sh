@@ -23,9 +23,12 @@ if [[ ${1} -eq 1 ]] || [[ ${1} -eq 3 ]]; then
 			for folder1 in ${folder}
 			do
 				echo "Deleting every .sh script in ${folder1}"
-				rm -r ${folder1}/*.sh
+				rm ${folder1}/*.sh
+				rm ${folder1}/*.out
+				rm ${folder1}/*.err
+
 				echo "Deleting every .txt in ${folder1}/complete"
-				rm -r ${folder1}/complete/*.txt
+				rm ${folder1}/complete/*.txt
 			done
 		fi
 	done
@@ -102,5 +105,7 @@ if [[ ${1} -eq 2 ]] || [[ ${1} -eq 3 ]]; then
 	rm ${shareScript}/aniB_*.err
 	rm ${shareScript}/aniM_*.out
 	rm ${shareScript}/aniM_*.err
+	rm ${shareScript}/node_*.out
+	rm ${shareScript}/node_*.err
 	rm ${shareScript}/core.*
 fi
