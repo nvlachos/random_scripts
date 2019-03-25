@@ -7,7 +7,9 @@
 #$ -q all.q
 
 #Import the config file with shortcuts and settings
-. ./config.sh
+if [[ ! -f "./config.sh" ]]; then
+	cp ./config_template.sh ./config.sh
+fi
 #. "${shareScript}/module_changers/perl_5221_to_5123.sh"
 #. ./module_changers/list_modules.sh
 module unload perl/5.22.1
@@ -17,7 +19,8 @@ module load perl 5.12.3
 # Creates a species prediction based on blasting the largest and also best hit of the suggested 16s sequences found using barrnap
 # Usage ./16s_blast.sh   sample_name   run_id
 #
-# barrnap/0.8
+# Required modules: barrnap/0.8
+# Sub-required modules (loaded by required modules): hmmer/3.1b2
 #
 
 # Checks for proper argumentation
@@ -30,10 +33,10 @@ elif [[ -z "${1}" ]]; then
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
 	echo "Usage is ./16s_blast.sh   sample_name   run_id"
-	echo "Output is saved to ${processed}/miseq_run_id/sample_name/16s"
+	echo "Output is saved to ${processed}/run_id/sample_name/16s"
 	exit 0
 elif [[ -z "${2}" ]]; then
-	echo "Empty miseq_run_id supplied to 16s_blast.sh, exiting"
+	echo "Empty run_id supplied to 16s_blast.sh, exiting"
 	exit 1
 fi
 
@@ -82,7 +85,7 @@ make_fasta() {
 owd=$(pwd)
 cd ${OUTDATADIR}/16s
 
-#Run rnammer to predict 16s RNA sequence
+#Run rnammer to predict 16s RNA sequence NO LONGER USED, but keeping for posterity
 #rnammer -S bac -m ssu -xml ${OUTDATADIR}/16s/${1}_scaffolds_trimmed.fasta_rRNA_seqs.xml -gff ${OUTDATADIR}/16s/${1}_scaffolds_trimmed.fasta_rRNA_seqs.gff -h ${OUTDATADIR}/16s/${1}_scaffolds_trimmed.fasta_rRNA_seqs.hmmreport -f ${OUTDATADIR}/16s/${1}_scaffolds_trimmed.fasta_rRNA_seqs.fasta < ${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta
 
 # Run barrnap to discover ribosomal sequences

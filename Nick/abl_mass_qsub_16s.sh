@@ -7,7 +7,13 @@
 #$ -q short.q
 
 #Import the config file with shortcuts and settings
-. ./config.sh
+if [[ ! -f "./config.sh" ]]; then
+	cp ./config_template.sh ./config.sh
+fi
+
+#List all currently loaded modules
+#. ./module_changers/list_modules.sh
+
 #Import the module file that loads all necessary mods
 . "${mod_changers}/pipeline_mods"
 
