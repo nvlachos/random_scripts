@@ -65,7 +65,7 @@ elif [[ ! -d  "${3}/detID_subs/complete" ]]; then
 fi
 
 # Go through whole list individually to analyze samples
-while [[ ${counter} -lt ${arr_size} ]]; do
+while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	if [[ "${clobberness}" == "clobber" ]]; then
@@ -73,7 +73,7 @@ while [[ ${counter} -lt ${arr_size} ]]; do
 	fi
 	echo ${counter}
 	# Check if counter is below max concurrent submissions limit
-	if [ ${counter} -lt ${max_subs} ]; then
+	if [[] ${counter} -lt ${max_subs} ]]; then
 		# Check if old data exists and skip if so
 		if [[ ! -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
 			echo  "Index is below max submissions, submitting"
