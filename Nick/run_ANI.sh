@@ -99,8 +99,6 @@ genus_in=${2}
 
 #Creates a local copy of the database folder
 echo "trying to copy ${local_DBs}/aniDB/${genus_in,}/"
-#cp "${local_DBs}/aniDB/${genus_in,}/"*".fna" "${OUTDATADIR}/ANI/localANIDB/"
-# temp locale chnage
 cp "${local_DBs}/aniDB/${genus_in,}/"*".fna" "${OUTDATADIR}/ANI/localANIDB/"
 gunzip ${OUTDATADIR}/ANI/localANIDB/*.gz
 
@@ -201,20 +199,15 @@ cd ${owd}
 # Resume normal ANI analysis after mashtree reduction
 
 # Checks for a previous copy of the aniM folder, removes it if found
-#if [ -d "${OUTDATADIR}/ANI/aniM" ]; then  #checks for and removes old results folder for ANIm
-#	echo "Removing old ANIm results in ${OUTDATADIR}/ANI/aniM"
-#	rm -r "${OUTDATADIR}/ANI/aniM"
-#fi
+if [ -d "${OUTDATADIR}/ANI/aniM" ]; then
+	echo "Removing old ANIm results in ${OUTDATADIR}/ANI/aniM"
+	rm -r "${OUTDATADIR}/ANI/aniM"
+fi
 
 #Calls pyani on local db folder
 python -V
 #python "${shareScript}/pyani/average_nucleotide_identity.py" -i "${OUTDATADIR}/ANI/localANIDB" -o "${OUTDATADIR}/ANI/aniM" --write_excel
 average_nucleotide_identity.py -i "${OUTDATADIR}/ANI/localANIDB" -o "${OUTDATADIR}/ANI/aniM" --write_excel
-
-#Calls pyani using scicomp module
-#. "${shareScript}/module_changers/load_python_3.6.sh"
-#`average_nucleotide_identity.py -i "${OUTDATADIR}/ANI/localANIDB" -o "${OUTDATADIR}/ANI/aniM"`
-#. "${shareScript}/module_changers/unload_python_3.6.sh"
 
 #Extracts the query sample info line for percentage identity from the percent identity file
 while IFS='' read -r line;
@@ -267,7 +260,7 @@ IFS=' ' read -r -a def_array <<< "${best}"
 best_file=${def_array[1]}
 #Formats the %id to standard percentage (xx.xx%)
 best_percent=$(awk -v per="${def_array[0]}" 'BEGIN{printf "%.2f", per * 100}')
-echo "${best_file}"
+#echo "${best_file}"
 # If the best match comes from the additional file, extract the taxonomy from that file
 if [[ "${best_file}" = *"_scaffolds_trimmed" ]]; then
 	best_outbreak_match=$(echo "${best_file}" | rev | cut -d'_' -f3- | rev)
@@ -292,11 +285,8 @@ else
 	#Extracts the accession number from the definition line
 	accession=$(echo "${def_array[2]}" | cut -d' ' -f1  | cut -d'>' -f2)
 	#Looks up the NCBI genus species from the accession number
-	echo ":Ass-${accession}:"
 	if [[ "${accession}" == "No_Accession_Number" ]]; then
-		echo ":DEF_ARR-${def_array[@]}:"
 		best_organism_guess="${def_array[3]} ${def_array[4]}"
-		echo ":BOG-${best_organism_guess}:"
 	else
 		best_organism_guess=$(python "${shareScript}/entrez_get_taxon_from_accession.py" "${accession}" "${me}")
 	fi
