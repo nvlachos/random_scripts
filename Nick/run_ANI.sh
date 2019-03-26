@@ -294,6 +294,7 @@ else
 	#Looks up the NCBI genus species from the accession number
 	echo ":Ass-${accession}:"
 	if [[ "${accession}" == "No_Accession_Number" ]]; then
+		echo ":DEF_ARR[2]-${def_array[2]}:"
 		best_organism_guess=$(echo "${def_array[2]}" | cut -d' ' -f2,3)
 		echo ":BOG-${best_organism_guess}:"
 	else
