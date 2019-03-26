@@ -201,15 +201,15 @@ cd ${owd}
 # Resume normal ANI analysis after mashtree reduction
 
 # Checks for a previous copy of the aniM folder, removes it if found
-if [ -d "${OUTDATADIR}/ANI/aniM" ]; then  #checks for and removes old results folder for ANIm
-	echo "Removing old ANIm results in ${OUTDATADIR}/ANI/aniM"
-	rm -r "${OUTDATADIR}/ANI/aniM"
-fi
+#if [ -d "${OUTDATADIR}/ANI/aniM" ]; then  #checks for and removes old results folder for ANIm
+#	echo "Removing old ANIm results in ${OUTDATADIR}/ANI/aniM"
+#	rm -r "${OUTDATADIR}/ANI/aniM"
+#fi
 
 #Calls pyani on local db folder
 python -V
 #python "${shareScript}/pyani/average_nucleotide_identity.py" -i "${OUTDATADIR}/ANI/localANIDB" -o "${OUTDATADIR}/ANI/aniM" --write_excel
-#average_nucleotide_identity.py -i "${OUTDATADIR}/ANI/localANIDB" -o "${OUTDATADIR}/ANI/aniM" --write_excel
+average_nucleotide_identity.py -i "${OUTDATADIR}/ANI/localANIDB" -o "${OUTDATADIR}/ANI/aniM" --write_excel
 
 #Calls pyani using scicomp module
 #. "${shareScript}/module_changers/load_python_3.6.sh"
