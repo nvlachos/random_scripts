@@ -65,7 +65,7 @@ elif [[ ! -d  "${3}/detID_subs/complete" ]]; then
 fi
 
 # Go through whole list individually to analyze samples
-while [ ${counter} -lt ${arr_size} ] ; do
+while [[ ${counter} -lt ${arr_size} ]]; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	if [[ "${clobberness}" == "clobber" ]]; then
