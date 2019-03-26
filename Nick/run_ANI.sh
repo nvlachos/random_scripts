@@ -292,7 +292,7 @@ else
 	#Extracts the accession number from the definition line
 	accession=$(echo "${def_array[2]}" | cut -d' ' -f1  | cut -d'>' -f2)
 	#Looks up the NCBI genus species from the accession number
-	echo "Ass-${accession}"
+	echo ":Ass-${accession}:"
 	if [[ "${accession}" == "No_Accession_Number" ]]; then
 		best_organism_guess=$(echo "${def_array[2]}" | cut -d' ' -f2,3)
 	else
