@@ -53,6 +53,7 @@ echo "-${arr_size}:${arr[@]}-"
 
 # Counter to track current isolate being worked on in list
 counter=0
+max_subs="${2}"
 clobberness="${4}"
 
 # Creates output directory for scripts if it does not exist yet
