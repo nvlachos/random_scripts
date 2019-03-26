@@ -73,7 +73,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	fi
 	echo ${counter}
 	# Check if counter is below max concurrent submissions limit
-	if [[] ${counter} -lt ${max_subs} ]]; then
+	if [[ ${counter} -lt ${max_subs} ]]; then
 		# Check if old data exists and skip if so
 		if [[ ! -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
 			echo  "Index is below max submissions, submitting"
