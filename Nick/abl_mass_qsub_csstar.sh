@@ -8,7 +8,7 @@
 
 #Import the config file with shortcuts and settings
 # Import the config file with shortcuts and settings
-pwd
+
 if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
@@ -19,6 +19,9 @@ fi
 #
 # Usage ./abl_mass_qsub_csstar.sh path_to_list max_concurrent_submissions output_folder_for_scripts clobberness (keep|clobber)
 #
+
+# Number regex to test max concurrent submission parametr
+number='^[0-9]+$'
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -31,16 +34,16 @@ elif [[ "$1" = "-h" ]]; then
 elif [[ ! -f "${1}" ]]; then
 	echo "${1} (list) does not exist...exiting"
 	exit 1
-elif [[ ! -f "${3}" ]]; then
-	echo "${3} (alt_db) does not exist...exiting"
-	exit 1
-elif [[ -z "${5}" ]]; then
+elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
+	echo "${2} is not a number or is empty. Please input max number of concurrent qsub submissions...exiting"
+	exit 2
+elif [[ -z "${4}" ]]; then
 	echo "Clobberness was not input, be sure to add keep or clobber as 4th parameter...exiting"
 	exit 1
 fi
 
 # Check that clobberness is a valid option
-if [[ "${5}" != "keep" ]] && [[ "${5}" != "clobber" ]]; then
+if [[ "${4}" != "keep" ]] && [[ "${4}" != "clobber" ]]; then
 	echo "Clobberness was not input, be sure to add keep or clobber as 5th parameter...exiting"
 	exit 1
 else
@@ -106,17 +109,15 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarn_complete.txt\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 				cd "${main_dir}"
 				echo "submitting ${main_dir}/csstn_${sample}_${start_time}.sh"
-				if [[ "${counter}" -lt "${last_index}" ]]; then
+				#if [[ "${counter}" -lt "${last_index}" ]]; then
 					qsub "${main_dir}/csstn_${sample}_${start_time}.sh"
-				else
-					if [[ -d "${processed}/${project}/${sample}/c-sstar_plasmid" ]]; then
-						qsub "${main_dir}/csstn_${sample}_${start_time}.sh"
-					else
-						qsub -sync y "${main_dir}/csstn_${sample}_${start_time}.sh"
-					fi
-				fi
-				mv "${shareScript}/csstn_${sample}.out" ${main_dir}
-				mv "${shareScript}/csstn_${sample}.err" ${main_dir}
+				#else
+				#	if [[ -d "${processed}/${project}/${sample}/c-sstar_plasmid" ]]; then
+				#		qsub "${main_dir}/csstn_${sample}_${start_time}.sh"
+				#	else
+				#		qsub -sync y "${main_dir}/csstn_${sample}_${start_time}.sh"
+				#	fi
+				#fi
 			# Old data exists
 			else
 				echo "${project}/${sample} already has the newest ResGANNOT (${resGANNOT_srst2_filename})"
@@ -139,18 +140,19 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					echo -e "\"${shareScript}/run_c-sstar_on_single.sh\" \"${sample}\" g o \"${project}\" \"--plasmid\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarp_complete.txt\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 					cd "${main_dir}"
-					if [[ "${counter}" -lt "${last_index}" ]]; then
+					#if [[ "${counter}" -lt "${last_index}" ]]; then
 						qsub "${main_dir}/csstp_${sample}_${start_time}.sh"
-					else
-						qsub -sync y "${main_dir}/csstp_${sample}_${start_time}.sh"
-					fi
-					mv "${shareScript}/csstp_${sample}.out" ${main_dir}
-					mv "${shareScript}/csstp_${sample}.err" ${main_dir}
+					#else
+					#	qsub -sync y "${main_dir}/csstp_${sample}_${start_time}.sh"
+					#fi
 				# Skipping because old data exists
 				else
 					echo "${project}/${sample} plasmid already has the newest ResGANNOT (${resGANNOT_srst2_filename})"
 					echo -e "$(date)" > "${main_dir}/complete/${sample}_csstarp_complete.txt"
 				fi
+			else
+				echo "${project}/${sample} doesnt have a plasmid folder, so no further actions required"
+				echo "$(date)" > "${main_dir}/complete/${sample}_csstarp_complete.txt"
 			fi
 		# Counter is above max number of submissions
 		else
@@ -182,17 +184,15 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "\"${shareScript}/run_c-sstar_on_single.sh\" \"${sample}\" g h \"${project}\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarn_complete.txt\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 						cd ${main_dir}
-						if [[ "${counter}" -lt "${last_index}" ]]; then
+						#if [[ "${counter}" -lt "${last_index}" ]]; then
 							qsub "${main_dir}/csstn_${sample}_${start_time}.sh"
-						else
-							if [[ -d "${processed}/${project}/${sample}/c-sstar_plasmid" ]]; then
-								qsub "${main_dir}/csstn_${sample}_${start_time}.sh"
-							else
-								qsub -sync y "${main_dir}/csstn_${sample}_${start_time}.sh"
-							fi
-						fi
-						mv "${shareScript}/csstn_${sample}.out" ${main_dir}
-						mv "${shareScript}/csstn_${sample}.err" ${main_dir}
+						#else
+						#	if [[ -d "${processed}/${project}/${sample}/c-sstar_plasmid" ]]; then
+						#		qsub "${main_dir}/csstn_${sample}_${start_time}.sh"
+						#	else
+						#		qsub -sync y "${main_dir}/csstn_${sample}_${start_time}.sh"
+						#	fi
+						#fi
 					# Skipping because old data exists
 					else
 						echo "${project}/${sample} already has the newest ResGANNOT (${resGANNOT_srst2_filename})"
@@ -214,18 +214,19 @@ while [ ${counter} -lt ${arr_size} ] ; do
 							echo -e "\"${shareScript}/run_c-sstar_on_single.sh\" \"${sample}\" g o \"${project}\" \"--plasmid\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 							echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarp_complete.txt\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 							cd ${main_dir}
-							if [[ "${counter}" -lt "${last_index}" ]]; then
+							#if [[ "${counter}" -lt "${last_index}" ]]; then
 								qsub "${main_dir}/csstp_${sample}_${start_time}.sh"
-							else
-								qsub -sync y "${main_dir}/csstp_${sample}_${start_time}.sh"
-							fi
-							mv "${shareScript}/csstp_${sample}.out" ${main_dir}
-							mv "${shareScript}/csstp_${sample}.err" ${main_dir}
+							#else
+							#	qsub -sync y "${main_dir}/csstp_${sample}_${start_time}.sh"
+							#fi
 						# Skipping because old data exists
 						else
 							echo "${project}/${sample} plasmid already has the newest ResGANNOT (${resGANNOT_srst2_filename})"
 							echo -e "$(date)" > "${main_dir}/complete/${sample}_csstarp_complete.txt"
 						fi
+					else
+						echo "${project}/${sample} doesnt have a plasmid folder, so no further actions required"
+						echo "$(date)" > "${main_dir}/complete/${sample}_csstarp_complete.txt"
 					fi
 					break
 				# If waiting sample has not completed, wait 5 more seconds and try again
@@ -247,6 +248,12 @@ for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
 	if [[ -f "${main_dir}/complete/${waiting_sample}_csstarn_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_scaffolds_trimmed.fasta" ]]; then
 		echo "${item} is complete normal"
+		if [[ -f "${shareScript}/csstp_${sample}.out" ]]; then
+			mv "${shareScript}/csstp_${sample}.out" "${main_dir}"
+		fi
+		if [[ -f "${shareScript}/csstp_${sample}.err" ]]; then
+			mv "${shareScript}/csstp_${sample}.err" "${main_dir}"
+		fi
 		# Check if plasmid csstar is complete also and wait a total of 30 minutes for all samples to be checked
 		if [[ -f "${main_dir}/complete/${waiting_sample}_csstarp_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/plasmidAssembly/${waiting_sample}_plasmid_scaffolds_trimmed.fasta" ]]; then
 			while :
@@ -257,9 +264,15 @@ for item in "${arr[@]}"; do
 					fi
 					if [[ -f "${main_dir}/complete/${waiting_sample}_csstarp_complete.txt" ]]; then
 						echo "${item} is complete plasmid"
+						if [[ -f "${shareScript}/csstp_${sample}.out" ]]; then
+							mv "${shareScript}/csstp_${sample}.out" "${main_dir}"
+						fi
+						if [[ -f "${shareScript}/csstp_${sample}.err" ]]; then
+							mv "${shareScript}/csstp_${sample}.err" "${main_dir}"
+						fi
 						break
 					else
-						timer=$(( ptimer + 5 ))
+						ptimer=$(( ptimer + 5 ))
 						echo "sleeping for 5 seconds, so far slept for ${ptimer}"
 						sleep 5
 					fi
@@ -269,8 +282,8 @@ for item in "${arr[@]}"; do
 		# Check every 5 seconds to see if the sample has completed normal csstar analysis
 		while :
 		do
-				if [[ ${timer} -gt 3600 ]]; then
-					echo "Timer exceeded limit of 3600 seconds = 60 minutes"
+				if [[ ${timer} -gt 1800 ]]; then
+					echo "Timer exceeded limit of 1800 seconds = 30 minutes"
 					exit 1
 				fi
 				if [[ -f "${main_dir}/complete/${waiting_sample}_csstarn_complete.txt" ]]; then
