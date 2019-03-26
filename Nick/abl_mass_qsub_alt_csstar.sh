@@ -14,6 +14,9 @@ fi
 #Import the module file that loads all necessary mods
 . "${mod_changers}/pipeline_mods"
 
+#List all currently loaded modules
+#. ./module_changers/list_modules.sh
+
 #
 # Usage ./abl_mass_qsub_alt_csstar.sh path_to_list max_concurrent_submissions path_to_alt_database output_directory_for_scripts cloberness (keep|clobber)
 #
@@ -127,7 +130,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				#		qsub -sync y "${main_dir}/csstn_${sample}_${start_time}.sh"
 				#	fi
 				#fi
-
 			else
 				echo "${project}/${sample} already has 0608"
 				echo "$(date)" > "${main_dir}/complete/${sample}_csstarn_complete.txt"
