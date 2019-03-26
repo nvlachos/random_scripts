@@ -295,7 +295,7 @@ else
 	echo ":Ass-${accession}:"
 	if [[ "${accession}" == "No_Accession_Number" ]]; then
 		echo ":DEF_ARR-${def_array[@]}:"
-		best_organism_guess=$(echo "${def_array[2]}" | cut -d' ' -f2,3)
+		best_organism_guess="${def_array[3]} ${def_array[4]}"
 		echo ":BOG-${best_organism_guess}:"
 	else
 		best_organism_guess=$(python "${shareScript}/entrez_get_taxon_from_accession.py" "${accession}" "${me}")
