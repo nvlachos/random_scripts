@@ -10,10 +10,12 @@
 if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
-#. "${shareScript}/module_changers/perl_5221_to_5123.sh"
+
 #. ./module_changers/list_modules.sh
+
+# Load modules necessary for barrnap (that arent automatically loaded)
 module unload perl/5.22.1
-module load perl 5.12.3
+module load perl/5.12.3
 
 #
 # Creates a species prediction based on blasting the largest and also best hit of the suggested 16s sequences found using barrnap
@@ -21,6 +23,8 @@ module load perl 5.12.3
 #
 # Required modules: barrnap/0.8
 # Sub-required modules (loaded by required modules): hmmer/3.1b2
+#
+# Required modules that arent automatically loaded: perl 5.12.3 (not 5.22.1)
 #
 
 # Checks for proper argumentation
@@ -118,8 +122,8 @@ done < "${OUTDATADIR}/16s/${1}_scaffolds_trimmed.fasta_rRNA_seqs.fasta"
 
 # Adds No hits found to output file in the case where no 16s ribosomal sequences were found
 if [[ "${found_16s}" == "false" ]]; then
-	echo -e "best_hit	${1}	No 16s" > "${OUTDATADIR}/16s/${1}_16s_blast_id.txt"
-	echo -e "largest_hit	${1}	No 16s" >> "${OUTDATADIR}/16s/${1}_16s_blast_id.txt"
+	echo -e "best_hit	${1}	No_16s_sequences_found" > "${OUTDATADIR}/16s/${1}_16s_blast_id.txt"
+	echo -e "largest_hit	${1}	No_16s_sequences_found" >> "${OUTDATADIR}/16s/${1}_16s_blast_id.txt"
 	exit
 fi
 
@@ -138,6 +142,9 @@ if [[ -s "${OUTDATADIR}/16s/${1}.nt.RemoteBLASTN" ]]; then
 	echo ${gb_acc}
 	blast_id=$(python ${shareScript}/entrez_get_taxon_from_accession.py "${gb_acc}" "${me}@cdc.gov")
 	echo ${blast_id}
+	if [[ -z ${blast_id} ]]; then
+		blast_id="No_16s_matches_found"
+	fi
 	#blast_id=$(echo ${blast_id} | tr -d '\n')
 	echo -e "best_hit	${1}	${blast_id}" > "${OUTDATADIR}/16s/${1}_16s_blast_id.txt"
 else
@@ -151,13 +158,22 @@ if [[ -s "${OUTDATADIR}/16s/${1}.nt.RemoteBLASTN.sorted" ]]; then
 #	echo ${accessions}
 	gb_acc=$(echo "${accessions}" | cut -d' ' -f2 | cut -d'|' -f4)
 	blast_id=$(python ${shareScript}/entrez_get_taxon_from_accession.py "${gb_acc}" "${me}@cdc.gov")
+	echo ${blast_id}
+	if [[ -z ${blast_id} ]]; then
+		blast_id="No_16s_matches_found"
+	fi
 #	blast_id$(echo ${blast_id} | tr -d '\n')
 	echo -e "largest	${1}	${blast_id}" >> "${OUTDATADIR}/16s/${1}_16s_blast_id.txt"
 else
 	echo "No sorted remote blast file"
 fi
 
+# Go back to original working directory
 cd ${owd}
+
+# Return modules to original versions
+module load perl/5.12.3
+module load perl/5.22.1
 
 #Script exited gracefully (unless something else inside failed)
 exit 0
