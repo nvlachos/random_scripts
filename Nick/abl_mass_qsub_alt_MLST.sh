@@ -27,11 +27,11 @@ number='^[0-9]+$'
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to ./abl_mass_qsub_MLST.sh, exiting"
+	echo "No argument supplied to ./abl_mass_qsub_alt_MLST.sh, exiting"
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_MLST.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions alt_databse output_directory_for_scripts clobberness[keep|clobber]"
+	echo "Usage is ./abl_mass_qsub_alt_MLST.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions alt_databse output_directory_for_scripts clobberness[keep|clobber]"
 	exit 1
 elif [[ ! -f "${1}" ]]; then
 	echo "${1} (list) does not exist...exiting"
@@ -118,6 +118,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -N alt_mlst_${sample}"   >> "${main_dir}/alt_mlst_${sample}_${start_time}.sh"
 				echo -e "#$ -cwd"  >> "${main_dir}/alt_mlst_${sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/alt_mlst_${sample}_${start_time}.sh"
+				echo -e "cd ${shareScript}" >> "${main_dir}/alt_mlst_${sample}_${start_time}.sh"
 				echo -e "\"${shareScript}/run_MLST.sh\" \"${sample}\" \"${project}\" \"-f\" \"${alt_DB}\"" >> "${main_dir}/alt_mlst_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_alt_mlst_complete.txt\"" >> "${main_dir}/alt_mlst_${sample}_${start_time}.sh"
 				cd "${main_dir}"
@@ -153,6 +154,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -N alt_mlst_${sample}"   >> "${main_dir}/alt_mlst_${sample}_${start_time}.sh"
 						echo -e "#$ -cwd"  >> "${main_dir}/alt_mlst_${sample}_${start_time}.sh"
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/alt_mlst_${sample}_${start_time}.sh"
+						echo -e "cd ${shareScript}" >> "${main_dir}/alt_mlst_${sample}_${start_time}.sh"
 						echo -e "\"${shareScript}/run_MLST.sh\" \"${sample}\" \"${project}\" \"-f\" \"${alt_DB}\"" >> "${main_dir}/alt_mlst_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_alt_mlst_complete.txt\"" >> "${main_dir}/alt_mlst_${sample}_${start_time}.sh"
 						cd "${main_dir}"
@@ -187,8 +189,14 @@ done
 timer=0
 for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
-	if [[ -f "${main_dir}/complete/${waiting_sample}_csstarn_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_scaffolds_trimmed.fasta" ]]; then
-		echo "${item} is complete normal"
+	if [[ -f "${main_dir}/complete/${waiting_sample}_alt_mlst_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_scaffolds_trimmed.fasta" ]]; then
+		echo "${item} is complete"
+		if [[ -f "${shareScript}/alt_mlst_${sample}.out" ]]; then
+			mv "${shareScript}/alt_mlst_${sample}.out" "${main_dir}"
+		fi
+		if [[ -f "${shareScript}/alt_mlst_${sample}.err" ]]; then
+			mv "${shareScript}/alt_mlst_${sample}.err" "${main_dir}"
+		fi
 	else
 		# Check every 5 seconds to see if the sample has completed normal csstar analysis
 		while :
@@ -197,8 +205,14 @@ for item in "${arr[@]}"; do
 					echo "Timer exceeded limit of 3600 seconds = 60 minutes"
 					exit 1
 				fi
-				if [[ -f "${main_dir}/complete/${waiting_sample}_csstarn_complete.txt" ]]; then
+				if [[ -f "${main_dir}/complete/${waiting_sample}_alt_mlst_complete.txt" ]]; then
 					echo "${item} is complete"
+					if [[ -f "${shareScript}/alt_mlst_${sample}.out" ]]; then
+						mv "${shareScript}/alt_mlst_${sample}.out" "${main_dir}"
+					fi
+					if [[ -f "${shareScript}/alt_mlst__${sample}.err" ]]; then
+						mv "${shareScript}/alt_mlst_${sample}.err" "${main_dir}"
+					fi
 					break
 				else
 					timer=$(( timer + 5 ))
@@ -210,4 +224,8 @@ for item in "${arr[@]}"; do
 done
 
 echo "All isolates completed"
+global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
+printf "%s %s" "abl_mass_qsub_alt_mlst.sh has completed" "${global_end_time}" | mail -s "abl_mass_qsub_alt_mlst.sh complete" nvx4@cdc.gov
+
+#Script exited gracefully (unless something else inside failed)
 exit 0

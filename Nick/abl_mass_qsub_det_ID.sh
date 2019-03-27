@@ -11,6 +11,9 @@
 #Import the module file that loads all necessary mods
 . "${mod_changers}/pipeline_mods"
 
+#List all currently loaded modules
+#. ./module_changers/list_modules.sh
+
 #
 # Usage ./abl_masss_qsub_det_ID.sh path_to_list max_concurrent_submission output_directory_for_scripts clobberness[keep|clobber]
 #
@@ -30,8 +33,8 @@ elif [[ "$1" = "-h" ]]; then
 elif [[ ! -f "${1}" ]]; then
 	echo "${1} (list) does not exist...exiting"
 	exit 1
-elif ! [[ ${2} =~ $number ]]; then
-	echo "${2} is not a number Please input max number of concurrent qsub submissions...exiting"
+elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
+	echo "${2} is not a number or is empty. Please input max number of concurrent qsub submissions...exiting"
 	exit 2
 elif [[ -z "${3}" ]]; then
 	echo "No script output directory given...exiting"
@@ -39,6 +42,14 @@ elif [[ -z "${3}" ]]; then
 elif [[ -z "${4}" ]]; then
 	echo "Clobberness was not input, be sure to add keep or clobber as 4th parameter...exiting"
 	exit 4
+fi
+
+# Check that clobberness is a valid option
+if [[ "${4}" != "keep" ]] && [[ "${4}" != "clobber" ]]; then
+	echo "Clobberness was not input correctly, be sure to add keep or clobber as 5th parameter...exiting"
+	exit 1
+else
+	clobberness="${4}"
 fi
 
 # Creates an array of all samples in the provided list
@@ -54,7 +65,6 @@ echo "-${arr_size}:${arr[@]}-"
 # Counter to track current isolate being worked on in list
 counter=0
 max_subs="${2}"
-clobberness="${4}"
 
 # Creates output directory for scripts if it does not exist yet
 main_dir="${3}/detID_subs"
@@ -88,12 +98,12 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			echo -e "${shareScript}/determine_taxID.sh ${sample} ${project}" >> "${main_dir}/detID_${sample}_${start_time}.sh"
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_detID_complete.txt\"" >> "${main_dir}/detID_${sample}_${start_time}.sh"
 			cd "${main_dir}"
-			if [[ "${counter}" -lt "${last_index}" ]]; then
+			#if [[ "${counter}" -lt "${last_index}" ]]; then
 				qsub "${main_dir}/detID_${sample}_${start_time}.sh"
-			else
-				qsub -sync y "${main_dir}/detID_${sample}_${start_time}.sh"
-			fi
-			# Sample had old data, skipping
+			#else
+			#	qsub -sync y "${main_dir}/detID_${sample}_${start_time}.sh"
+			#fi
+		# Sample had old data, skipping
 		else
 			echo "${project}/${sample} already had its detIDs removed"
 			echo "$(date)" > "${main_dir}/complete/${sample}_detID_complete.txt"
@@ -104,6 +114,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		waiting_sample=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
 		timer=0
 		echo "Index is above max submissions, waiting for index ${waiting_for_index}:${waiting_sample} to complete"
+		# Loop to check if "waiting" sample has completed
 		while :
 		do
 			#	Check if max time limit has been reached, exit if so
@@ -126,11 +137,11 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					echo -e "${shareScript}/determine_taxID.sh ${sample} ${project}" >> "${main_dir}/detID_${sample}_${start_time}.sh"
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_detID_complete.txt\"" >> "${main_dir}/detID_${sample}_${start_time}.sh"
 					cd "${main_dir}"
-					if [[ "${counter}" -lt "${last_index}" ]]; then
+					#if [[ "${counter}" -lt "${last_index}" ]]; then
 						qsub "${main_dir}/detID_${sample}_${start_time}.sh"
-					else
-						qsub -sync y "${main_dir}/detID_${sample}_${start_time}.sh"
-					fi
+					#else
+					#	qsub -sync y "${main_dir}/detID_${sample}_${start_time}.sh"
+					#fi
 					break
 				# Has old data, skipping
 				else
@@ -150,6 +161,12 @@ for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
 	if [[ -f "${main_dir}/complete/${waiting_sample}_detID_complete.txt" ]]; then
 		echo "${item} is complete"
+		if [[ -f "${shareScript}/detID_${sample}.out" ]]; then
+			mv "${shareScript}/detID_${sample}.out" "${main_dir}"
+		fi
+		if [[ -f "${shareScript}/detID_${sample}.err" ]]; then
+			mv "${shareScript}/detID_${sample}.err" "${main_dir}"
+		fi
 	else
 		while :
 		do
@@ -159,6 +176,12 @@ for item in "${arr[@]}"; do
 				fi
 				if [[ -f "${main_dir}/complete/${waiting_sample}_detID_complete.txt" ]]; then
 					echo "${item} is complete"
+					if [[ -f "${shareScript}/detID_${sample}.out" ]]; then
+						mv "${shareScript}/detID_${sample}.out" "${main_dir}"
+					fi
+					if [[ -f "${shareScript}/detID_${sample}.err" ]]; then
+						mv "${shareScript}/detID_${sample}.err" "${main_dir}"
+					fi
 					break
 				else
 					timer=$(( timer + 5 ))
@@ -172,6 +195,7 @@ done
 
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
-#Script exited gracefully (unless something else inside failed)
 printf "%s %s" "abl_mass_qsub_det_ID.sh has completed" "${global_end_time}" | mail -s "abl_mass_qsub_det_ID.sh complete" nvx4@cdc.gov
+
+#Script exited gracefully (unless something else inside failed)
 exit 0

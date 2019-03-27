@@ -10,16 +10,21 @@
 if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
-
-#List all currently loaded modules
-#. ./module_changers/list_modules.sh
+./config.sh
 
 #Import the module file that loads all necessary mods
 . "${mod_changers}/pipeline_mods"
 
+#List all currently loaded modules
+#. ./module_changers/list_modules.sh
+
 #
-# Usage ./abl_mass_qsub_16s.sh path_to_list max_concurrent_submission output_directory_for_scripts clobberness (clobber/keep)
+# Usage ./abl_mass_qsub_16s.sh path_to_list max_concurrent_submission output_directory_for_scripts clobberness[clobber/keep]
 #
+
+
+# Number regex to test max concurrent submission parametr
+number='^[0-9]+$'
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -27,17 +32,22 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_16s.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions output_directory_for_scripts"
+	echo "Usage is ./abl_mass_qsub_16s.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also) max_concurrent_submissions output_directory_for_scripts clobberness[keep|clobber]"
 	exit 0
-elif [[ -z "${2}" ]]; then
-	echo "No max submissions or qsub dir given...exiting"
+elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
+	echo "${2} is not a number or is empty. Please input max number of concurrent qsub submissions...exiting"
+	exit 2
+elif [[ -z "${4}" ]] ; then
+	echo "clobberness is empty please choose clobber or keep...exiting"
 	exit 1
-elif [[ -d "${3}" ]]; then
-	echo "Output folder for scripts with outs and errs not existant...exiting"
+fi
+
+# Check that clobberness is a valid option
+if [[ "${4}" != "keep" ]] && [[ "${4}" != "clobber" ]]; then
+	echo "Clobberness was not input, be sure to add keep or clobber as 5th parameter...exiting"
 	exit 1
-elif [[ "${4}" != "clobber" ]] && [[ "${4}" != "keep" ]] ; then
-	echo "Not a valid option for clobbering, please choose clobber or keep...exiting"
-	exit 1
+else
+	clobberness="${4}"
 fi
 
 # Creates an array of all samples in the provided list
@@ -50,10 +60,11 @@ done < ${1}
 arr_size="${#arr[@]}"
 echo "-${arr_size}:${arr[@]}-"
 
-# Create all sub output folders and set max submissions to be run concurrently
+ # Set known variables
 counter=0
 max_subs=${2}
-clobberness="${4}"
+
+# Create all sub output folders
 main_dir="${3}/blast16s_subs"
 if [[ ! -d "${3}/blast16s_subs" ]]; then
 	mkdir "${3}/blast16s_subs"
@@ -89,8 +100,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "cd ${shareScript}" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
 				echo -e "\"${shareScript}/16s_blast.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_blast16s_complete.txt\"" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
-				echo -e "mv \"${shareScript}/blast16s_${sample}.out\" \"${main_dir}\"" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
-				echo -e "mv \"${shareScript}/blast16s_${sample}.err\" \"${main_dir}\"" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
 				# Moves to working dir of mass qsub scripts
 				cd "${main_dir}"
 				# Checks o see if it is last entry to sync it, not allowing script to end
@@ -132,8 +141,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "cd ${shareScript}" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
 						echo -e "\"${shareScript}/16s_blast.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_blast16s_complete.txt\"" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
-						echo -e "mv \"${shareScript}/blast16s_${sample}.out\" \"${main_dir}\"" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
-						echo -e "mv \"${shareScript}/blast16s_${sample}.err\" \"${main_dir}\"" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
 						# Moves to working dir of mass qsub scripts
 						cd "${main_dir}"
 						# Checks o see if it is last entry to sync it, not allowing script to end
@@ -147,8 +154,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo "${project}/${sample} already has 16s summary"
 						echo "$(date)" > "${main_dir}/complete/${sample}_blast16s_complete.txt"
 					fi
-					# Break out of loop and move to next sample since this one is now submitted
-					break
 				# If waiting sample is not complete yet, then wait 5 seconds and try again
 				else
 					timer=$(( timer + 5 ))
@@ -172,7 +177,13 @@ for item in "${arr[@]}"; do
 	# Checks if the sample_complete file is existant or if not that an assembly file is also absent, indicating nothing can be done
 	if [[ -f "${main_dir}/complete/${waiting_sample}_blast16s_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_scaffolds_trimmed.fasta" ]]; then
 		echo "${item} is complete"
-		# If sample is not complete wait until time limit
+		if [[ -f "${shareScript}/blast16s_${sample}.out" ]]; then
+			mv "${shareScript}/blast16s_${sample}.out" "${main_dir}"
+		fi
+		if [[ -f "${shareScript}/blast16s_${sample}.err" ]]; then
+			mv "${shareScript}/blast16s_${sample}.err" "${main_dir}"
+		fi
+	# If sample is not complete wait until time limit
 	else
 		while :
 		do
@@ -184,6 +195,12 @@ for item in "${arr[@]}"; do
 				# Move to next sample if current isolate finishes
 				if [[ -f "${main_dir}/complete/${waiting_sample}_blast16s_complete.txt" ]]; then
 					echo "${item} is complete"
+					if [[ -f "${shareScript}/blast16s_${sample}.out" ]]; then
+						mv "${shareScript}/blast16s_${sample}.out" "${main_dir}"
+					fi
+					if [[ -f "${shareScript}/blast16s_${sample}.err" ]]; then
+						mv "${shareScript}/blast16s_${sample}.err" "${main_dir}"
+					fi
 					break
 				# Wait set time before checking for completion again
 				else
@@ -196,4 +213,8 @@ for item in "${arr[@]}"; do
 done
 
 echo "All isolates completed"
+global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
+printf "%s %s" "abl_mass_qsub_16s.sh has completed" "${global_end_time}" | mail -s "abl_mass_qsub_16s.sh complete" nvx4@cdc.gov
+
+#Script exited gracefully (unless something else inside failed)
 exit 0

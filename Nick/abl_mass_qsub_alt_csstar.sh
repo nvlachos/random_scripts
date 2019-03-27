@@ -5,12 +5,13 @@
 #$ -N amq-altc
 #$ -cwd
 #$ -q short.q
-
+pwd
 #Import the config file with shortcuts and settings
 if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
-. ./config
+. ./config.sh
+
 #Import the module file that loads all necessary mods
 . "${mod_changers}/pipeline_mods"
 
@@ -18,7 +19,7 @@ fi
 #. ./module_changers/list_modules.sh
 
 #
-# Usage ./abl_mass_qsub_alt_csstar.sh path_to_list max_concurrent_submissions path_to_alt_database output_directory_for_scripts cloberness (keep|clobber)
+# Usage ./abl_mass_qsub_alt_csstar.sh path_to_list max_concurrent_submissions path_to_alt_database output_directory_for_scripts cloberness[keep|clobber]
 #
 
 # Number regex to test max concurrent submission parametr
@@ -30,7 +31,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_alt_csstar.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions path_to_alt_database output_directory_for_scripts"
+	echo "Usage is ./abl_mass_qsub_alt_csstar.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions path_to_alt_database output_directory_for_scripts clobberness[keep|clobber]"
 	exit 1
 elif [[ ! -f "${1}" ]]; then
 	echo "${1} (list) does not exist...exiting"
@@ -39,7 +40,7 @@ elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
 	echo "${2} is not a number or is empty. Please input max number of concurrent qsub submissions...exiting"
 	exit 2
 elif [[ -z "${3}" ]]; then
-	echo "${3} (alt_db) does not exist or parameter is empty...exiting"
+	echo "alt_db parameter is empty...exiting"
 	exit 1
 elif [[ -z "${4}" ]]; then
 	echo "No script output directory given...exiting"
@@ -68,7 +69,7 @@ last_index=$(( arr_size -1 ))
 echo "-${arr_size}:${arr[@]}-"
 
 
-# Create direcory to hold all temporary qsub scripts
+# Set counter and max submission variables
 counter=0
 max_subs=${2}
 
@@ -119,6 +120,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 				echo -e "module load Python/3.6.1\n" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 				# Defaulting to gapped/98, change if you want to include user preferences
+				echo -e "cd ${shareScript}" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 				echo -e "\"${shareScript}/run_c-sstar_on_single_alternate_DB.sh\" \"${sample}\" g h \"${project}\" \"${3}\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarn_complete.txt\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 				#if [[ "${counter}" -lt "${last_index}" ]]; then
@@ -130,6 +132,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				#		qsub -sync y "${main_dir}/csstn_${sample}_${start_time}.sh"
 				#	fi
 				#fi
+			# Old data exists, skipping
 			else
 				echo "${project}/${sample} already has 0608"
 				echo "$(date)" > "${main_dir}/complete/${sample}_csstarn_complete.txt"
@@ -152,6 +155,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					echo -e "#$ -q short.q\n"  >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 					echo -e "module load Python/3.6.1\n" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 					# Defaulting to gapped/98, change if you want to include user preferences
+					echo -e "cd ${shareScript}" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 					echo -e "\"${shareScript}/run_c-sstar_on_single_alternate_DB.sh\" \"${sample}\" g o \"${project}\" \"${3}\" \"--plasmid\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarp_complete.txt\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 					#if [[ "${counter}" -lt "${last_index}" ]]; then
@@ -159,15 +163,18 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					#else
 					#	qsub -sync y "${main_dir}/csstp_${sample}_${start_time}.sh"
 					#fi
+					# Delete any version  of plasmid csstar run at high identity values
 					if [[ -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_98_sstar_summary.txt" ]]; then
 						rm "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_98_sstar_summary.txt"
 					fi
+				# Old data exists, skipping
 				else
 					echo "${project}/${sample} already has 0608 PLASMID"
 					echo "$(date)" > "${main_dir}/complete/${sample}_csstarp_complete.txt"
 				fi
+			# No plasmid folder for this isolate, skipping
 			else
-				echo "${project}/${sample} doesnt have a plasmid folder, so no further actions required"
+				echo "${project}/${sample} doesn't have a plasmid folder, so no further actions required"
 				echo "$(date)" > "${main_dir}/complete/${sample}_csstarp_complete.txt"
 			fi
 		# Counter has exceeded max submissions limit
@@ -196,6 +203,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 						echo -e "module load Python/3.6.1\n" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 						# Defaulting to gapped/98, change if you want to include user preferences
+						echo -e "cd ${shareScript}" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 						echo -e "\"${shareScript}/run_c-sstar_on_single_alternate_DB.sh\" \"${sample}\" g h \"${project}\" \"${3}\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarn_complete.txt\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 						#if [[ "${counter}" -lt "${last_index}" ]]; then
@@ -207,6 +215,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						#		qsub -sync y "${main_dir}/csstn_${sample}_${start_time}.sh"
 						#	fi
 						#fi
+					# Old data exists, skipping
 					else
 						echo "${project}/${sample} already has 0608"
 						echo "$(date)" > "${main_dir}/complete/${sample}_csstarn_complete.txt"
@@ -223,6 +232,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 							echo -e "#$ -q short.q\n"  >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 							echo -e "module load Python/3.6.1\n" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 							# Defaulting to gapped/98, change if you want to include user preferences
+							echo -e "cd ${shareScript}" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 							echo -e "\"${shareScript}/run_c-sstar_on_single_alternate_DB.sh\" \"${sample}\" g o \"${project}\" \"${3}\" \"--plasmid\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 							echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarp_complete.txt\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 							#if [[ "${counter}" -lt "${last_index}" ]]; then
@@ -230,13 +240,16 @@ while [ ${counter} -lt ${arr_size} ] ; do
 							#else
 							#	qsub -sync y "${main_dir}/csstp_${sample}_${start_time}.sh"
 							#fi
+							# Remove any plasmid cstarr output that was run at high identity values
 							if [[ -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_98_sstar_summary.txt" ]]; then
 								rm "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_98_sstar_summary.txt"
 							fi
+							# Old data exists, skipping
 						else
 							echo "${project}/${sample} already has 0608 PLASMID"
 							echo "$(date)" > "${main_dir}/complete/${sample}_csstarp_complete.txt"
 						fi
+					# No plasmid folder exists, skipping
 					else
 						echo "${project}/${sample} doesnt have a plasmid folder, so no further actions required"
 						echo "$(date)" > "${main_dir}/complete/${sample}_csstarp_complete.txt"
@@ -264,11 +277,11 @@ for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
 	if [[ -f "${main_dir}/complete/${waiting_sample}_csstarn_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_scaffolds_trimmed.fasta" ]]; then
 		echo "${item} is complete normal"
-		if [[ -f "${shareScript}/csstp_${sample}.out" ]]; then
-			mv "${shareScript}/csstp_${sample}.out" "${main_dir}"
+		if [[ -f "${shareScript}/csstn_${sample}.out" ]]; then
+			mv "${shareScript}/csstn_${sample}.out" "${main_dir}"
 		fi
-		if [[ -f "${shareScript}/csstp_${sample}.err" ]]; then
-			mv "${shareScript}/csstp_${sample}.err" "${main_dir}"
+		if [[ -f "${shareScript}/csstn_${sample}.err" ]]; then
+			mv "${shareScript}/csstn_${sample}.err" "${main_dir}"
 		fi
 		# Check if plasmid csstar is complete also and wait a total of 30 minutes for all samples to be checked
 		if [[ -f "${main_dir}/complete/${waiting_sample}_csstarp_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/plasmidAssembly/${waiting_sample}_plasmid_scaffolds_trimmed.fasta" ]]; then
@@ -303,7 +316,7 @@ for item in "${arr[@]}"; do
 					exit 1
 				fi
 				if [[ -f "${main_dir}/complete/${waiting_sample}_csstarn_complete.txt" ]]; then
-					echo "${item} is complete"
+					echo "${item} is complete normal"
 					break
 				else
 					timer=$(( timer + 5 ))
@@ -315,4 +328,8 @@ for item in "${arr[@]}"; do
 done
 
 echo "All isolates completed"
+global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
+printf "%s %s" "abl_mass_qsub_alt_csstar.sh has completed" "${global_end_time}" | mail -s "abl_mass_qsub_alt_csstar.sh complete" nvx4@cdc.gov
+
+#Script exited gracefully (unless something else inside failed)
 exit 0

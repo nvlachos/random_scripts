@@ -7,8 +7,6 @@
 #$ -q short.q
 
 #Import the config file with shortcuts and settings
-# Import the config file with shortcuts and settings
-
 if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
@@ -16,8 +14,11 @@ fi
 #Import the module file that loads all necessary mods
 . "${mod_changers}/pipeline_mods"
 
+#List all currently loaded modules
+#. ./module_changers/list_modules.sh
+
 #
-# Usage ./abl_mass_qsub_csstar.sh path_to_list max_concurrent_submissions output_folder_for_scripts clobberness (keep|clobber)
+# Usage ./abl_mass_qsub_csstar.sh path_to_list max_concurrent_submissions output_folder_for_scripts clobberness[keep|clobber]
 #
 
 # Number regex to test max concurrent submission parametr
@@ -29,7 +30,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_csstar.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions path_to_alt_database output_directory_for_scripts"
+	echo "Usage is ./abl_mass_qsub_csstar.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions output_directory_for_scripts clobberness[keep|clobber]"
 	exit 1
 elif [[ ! -f "${1}" ]]; then
 	echo "${1} (list) does not exist...exiting"
@@ -37,6 +38,9 @@ elif [[ ! -f "${1}" ]]; then
 elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
 	echo "${2} is not a number or is empty. Please input max number of concurrent qsub submissions...exiting"
 	exit 2
+elif [[ -z "${3}" ]]; then
+	echo "Output directory parameter is empty...exiting"
+	exit 1
 elif [[ -z "${4}" ]]; then
 	echo "Clobberness was not input, be sure to add keep or clobber as 4th parameter...exiting"
 	exit 1
@@ -248,11 +252,11 @@ for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
 	if [[ -f "${main_dir}/complete/${waiting_sample}_csstarn_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_scaffolds_trimmed.fasta" ]]; then
 		echo "${item} is complete normal"
-		if [[ -f "${shareScript}/csstp_${sample}.out" ]]; then
-			mv "${shareScript}/csstp_${sample}.out" "${main_dir}"
+		if [[ -f "${shareScript}/csstn_${sample}.out" ]]; then
+			mv "${shareScript}/csstn_${sample}.out" "${main_dir}"
 		fi
-		if [[ -f "${shareScript}/csstp_${sample}.err" ]]; then
-			mv "${shareScript}/csstp_${sample}.err" "${main_dir}"
+		if [[ -f "${shareScript}/csstn_${sample}.err" ]]; then
+			mv "${shareScript}/csstn_${sample}.err" "${main_dir}"
 		fi
 		# Check if plasmid csstar is complete also and wait a total of 30 minutes for all samples to be checked
 		if [[ -f "${main_dir}/complete/${waiting_sample}_csstarp_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/plasmidAssembly/${waiting_sample}_plasmid_scaffolds_trimmed.fasta" ]]; then
@@ -298,4 +302,9 @@ for item in "${arr[@]}"; do
 	fi
 done
 
+echo "All isolates completed"
+global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
+printf "%s %s" "abl_mass_qsub_csstar.sh has completed" "${global_end_time}" | mail -s "abl_mass_qsub_csstar.sh complete" nvx4@cdc.gov
+
+#Script exited gracefully (unless something else inside failed)
 exit 0
