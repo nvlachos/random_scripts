@@ -7,13 +7,19 @@
 #$ -q short.q
 
 #Import the config file with shortcuts and settings
+if [[ ! -f "./config.sh" ]]; then
+	cp ./config_template.sh ./config.sh
+fi
 . ./config.sh
 #Import the module file that loads all necessary mods
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./abl_mass_qsub_MLST.sh path_to_list max_concurrent_submissions
+# Usage ./abl_mass_qsub_MLST.sh path_to_list max_concurrent_submissions output_directory_for_scripts
 #
+
+# Number regex to test max concurrent submission parametr
+number='^[0-9]+$'
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -21,8 +27,11 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_MLST.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent__submissions"
+	echo "Usage is ./abl_mass_qsub_MLST.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions output_directory_for_scripts"
 	exit 1
+elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
+	echo "${2} is not a number or is empty. Please input max number of concurrent qsub submissions...exiting"
+	exit 2
 elif [[ ! -f "${1}" ]]; then
 	echo "${1} (list) does not exist...exiting"
 	exit 1
@@ -44,12 +53,12 @@ counter=0
 max_subs=${2}
 
 # Set script directory
-main_dir="${share}/mass_subs/mlst_subs"
-if [[ ! -d "${share}/mass_subs/mlst_subs" ]]; then
-	mkdir "${share}/mass_subs/mlst_subs"
-	mkdir "${share}/mass_subs/mlst_subs/complete"
-elif [[ ! -d "${share}/mass_subs/mlst_subs/complete" ]]; then
-	mkdir "${share}/mass_subs/mlst_subs/complete"
+main_dir="${3}/mlst_subs"
+if [[ ! -d "${3}/mlst_subs" ]]; then
+	mkdir "${3}/mlst_subs"
+	mkdir "${3}/mlst_subs/complete"
+elif [[ ! -d "${3}/mlst_subs/complete" ]]; then
+	mkdir "${3}/mlst_subs/complete"
 fi
 
 start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
@@ -68,17 +77,17 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -N mlst_${sample}"   >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 				echo -e "#$ -cwd"  >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/mlst_${sample}_${start_time}.sh"
+				echo -e "cd ${shareScript}" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 				echo -e "\"${shareScript}/run_MLST.sh\" \"${sample}\" \"${project}\" \"-f\" \"abaumannii\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_mlst_complete.txt\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
+				cd "${main_dir}"
 				if [[ "${counter}" -lt "${last_index}" ]]; then
 					qsub "${main_dir}/mlst_${sample}_${start_time}.sh"
 				else
 					qsub -sync y "${main_dir}/mlst_${sample}_${start_time}.sh"
 				fi
-		#	else
-		#		echo "${project}/${sample} already has mlst summary"
-		#		echo "$(date)" > "${main_dir}/complete/${sample}_mlst_complete.txt"
-		#	fi
+				mv "mlst_${sample}.out" ${main_dir}
+				mv "mlst_${sample}.err" ${main_dir}
 		else
 			waiting_for_index=$(( counter - max_subs ))
 			waiting_sample=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
@@ -99,13 +108,17 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -N mlst_${sample}"   >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 						echo -e "#$ -cwd"  >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/mlst_${sample}_${start_time}.sh"
+						echo -e "cd ${shareScript}" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 						echo -e "\"${shareScript}/run_MLST.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_mlst_complete.txt\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
+						#cd "${main_dir}"
 						if [[ "${counter}" -lt "${last_index}" ]]; then
 							qsub "${main_dir}/mlst_${sample}_${start_time}.sh"
 						else
 							qsub -sync y "${main_dir}/mlst_${sample}_${start_time}.sh"
 						fi
+						mv "mlst_${sample}.out" ${main_dir}
+						mv "mlst_${sample}.err" ${main_dir}
 					else
 						echo "${project}/${sample} already has mlst summary"
 						echo "$(date)" > "${main_dir}/complete/${sample}_mlst_complete.txt"
@@ -124,5 +137,30 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	counter=$(( counter + 1 ))
 done
 
-echo "All isolates completed"
+# Check for completion of all samples
+timer=0
+
+for item in "${arr[@]}"; do
+	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
+	if [[ -f "${main_dir}/complete/${waiting_sample}_csstarn_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_scaffolds_trimmed.fasta" ]]; then
+		echo "${item} is complete"
+	else
+		while :
+		do
+				if [[ ${timer} -gt 3600 ]]; then
+					echo "Timer exceeded limit of 3600 seconds = 60 minutes"
+					exit 1
+				fi
+				if [[ -f "${main_dir}/complete/${waiting_sample}_csstarn_complete.txt" ]]; then
+					echo "${item} is complete"
+					break
+				else
+					timer=$(( timer + 5 ))
+					echo "sleeping for 5 seconds, so far slept for ${timer}"
+					sleep 5
+				fi
+		done
+	fi
+done
+
 exit 0
