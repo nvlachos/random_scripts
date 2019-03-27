@@ -67,7 +67,8 @@ echo "-${arr_size}:${arr[@]}-"
 
 # Sets location of alt MLST database
 mlst_dbs=$(mlst -list)
-echo "${mlst_dbs}"
+mlst_array=$(echo $mlst_dbs | tr " ")
+echo "${mlst_array[4]}"
 exit
 
 # Create counter and set max concurrent submissions
