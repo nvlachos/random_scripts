@@ -77,7 +77,7 @@ for i in "${mlsts[@]}"; do
 		fi
 done
 if [[ "${mlst_db_found}" == "false" ]]; then
-	echo "Alternate DB (${alt_db)} not found, ...exiting"
+	echo "Alternate DB (${alt_db}) not found, ...exiting"
 	exit 6
 fi
 exit
