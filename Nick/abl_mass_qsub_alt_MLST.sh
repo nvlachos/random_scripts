@@ -65,18 +65,26 @@ arr_size="${#arr[@]}"
 last_index=$(( arr_size -1 ))
 echo "-${arr_size}:${arr[@]}-"
 
-# Sets location of alt MLST database
+# Checks existence of alternate database and sets all appropriate accompanying variables
+alt_DB="${3}"
+mlst_db_found="false"
 mlst_dbs=$(mlst -list)
 IFS=' ' read -ra mlsts <<< "${mlst_dbs}"
 for i in "${mlsts[@]}"; do
-    echo "${i}"
+		if [[ "${alt_db}" == "${i}" ]]; then
+			mlst_db_found="true"
+			echo "Found ${alt_db}"
+		fi
 done
-exit
+if [[ "${mlst_db_found}" == "false" ]]; then
+	echo "Alternate DB (${alt_db)} not found, ...exiting"
+	exit 6
+fi
 
 # Create counter and set max concurrent submissions
 counter=0
 max_subs=${2}
-alt_DB="${3}"
+
 
 # Create direcory to hold all temporary qsub scripts
 main_dir="${4}/mlst_subs"
