@@ -14,9 +14,15 @@ fi
 #Import the module file that loads all necessary mods
 . "${mod_changers}/pipeline_mods"
 
+#List all currently loaded modules
+#. ./module_changers/list_modules.sh
+
 #
-# Usage ./abl_mass_qsub_MLST.sh path_to_list max_concurrent_submissions  location_of_alt_mlst_DB output_directory_for_scripts clobberness (keep/clobber)
+# Usage ./abl_mass_qsub_MLST.sh path_to_list max_concurrent_submissions  alt_mlst_DB output_directory_for_scripts clobberness[keep/clobber]
 #
+
+# Number regex to test max concurrent submission parametr
+number='^[0-9]+$'
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -24,16 +30,25 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_MLST.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions alt_databse(optional) output_directory_for_scripts"
+	echo "Usage is ./abl_mass_qsub_MLST.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions alt_databse output_directory_for_scripts clobberness[keep|clobber]"
 	exit 1
 elif [[ ! -f "${1}" ]]; then
 	echo "${1} (list) does not exist...exiting"
 	exit 1
+elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
+	echo "${2} is not a number or is empty. Please input max number of concurrent qsub submissions...exiting"
+	exit 2
+elif [[ -z "${3}" ]]; then
+	echo "alt_db is empty, exiting...."
+elif [[ -z "${4}" ]]; then
+	echo "No output directory for scripts given, exiting..."
+elif [[ -z "${5}" ]]; then
+	echo "Clobberness is empty, exiting...."
 fi
 
 # Check that clobberness is a valid option
 if [[ "${5}" != "keep" ]] && [[ "${5}" != "clobber" ]]; then
-	echo "Clobberness was not input, be sure to add keep or clobber as 5th parameter...exiting"
+	echo "Clobberness was not input correctly [keep|clobber]...exiting"
 	exit 1
 else
 	clobberness="${5}"
@@ -50,15 +65,14 @@ last_index=$(( arr_size -1 ))
 echo "-${arr_size}:${arr[@]}-"
 
 # Sets location of alt MLST database
-alt_DB=""
-if [[ ! -z ${3} ]]; then
-	alt_DB="${3}"
-fi
+mlst_dbs=$(mlst -list)
+echo "${mlst_dbs}"
+exit
 
 # Create counter and set max concurrent submissions
 counter=0
 max_subs=${2}
-clobberness="${5}"
+alt_DB="${3}"
 
 # Create direcory to hold all temporary qsub scripts
 main_dir="${4}/mlst_subs"
@@ -75,6 +89,7 @@ start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
+	# Removes old data if clobbering is set
 	if [[ "${clobberness}" = "clobber'" ]]; then
 		rm "${processed}/${project}/${sample}/MLST/${sample}_${alt_DB}.mlst"
 	fi
