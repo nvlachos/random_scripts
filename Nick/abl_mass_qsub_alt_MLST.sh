@@ -67,8 +67,10 @@ echo "-${arr_size}:${arr[@]}-"
 
 # Sets location of alt MLST database
 mlst_dbs=$(mlst -list)
-mlst_array=$(echo $mlst_dbs | tr " ")
-echo "${mlst_array[4]}"
+IFS=';' read -ra mlsts <<< "${mlst_dbs}"
+for i in "${mlsts[@]}"; do
+    echo "${i}"
+done
 exit
 
 # Create counter and set max concurrent submissions
