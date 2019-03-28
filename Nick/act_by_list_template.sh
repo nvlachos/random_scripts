@@ -40,6 +40,7 @@ while IFS= read -r var; do
 	elif [[ -f "${processed}/${project}/${sample}/MLST/${sample}_ecoli_2.mlst" ]]; then
 		info=$(tail -n1 "${processed}/${project}/${sample}/MLST/${sample}_ecoli_2.mlst")
 	fi
+	echo "${info}"
 	info_out=$(echo "${info}" | cut -d'	' -f3-)
 	echo "${info_out}"
 	#for i in {3..10}; do
