@@ -34,7 +34,7 @@ counter=0
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	#echo "${counter}"
+	echo "${counter} - ${processed}/${project}/${sample}/MLST/"
 	if [[ -f "${processed}/${project}/${sample}/MLST/${sample}_abaumannii.mlst" ]]; then
 		info=$(tail -n1 "${processed}/${project}/${sample}/MLST/${sample}_abaumannii.mlst")
 	elif [[ -f "${processed}/${project}/${sample}/MLST/${sample}_ecoli_2.mlst" ]]; then
