@@ -45,7 +45,7 @@ while IFS= read -r var; do
 	#echo "${info_out}"
 	if [[ "${info_out}" == *","* ]] || [[ "${info_out}" == *"/"* ]]; then
 	#		echo "${project}/${sample}	dual!!!" >> "${2}"
-		echo "${project}/${sample}	${info_out}"
+		echo "${project}/${sample_name}	${info_out}"
 	else
 		#echo "${project}/${sample}	unknown?!" >> "${2}"
 		#echo "${project}/${sample}	unknown ?!"
