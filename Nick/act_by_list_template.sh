@@ -42,17 +42,15 @@ while IFS= read -r var; do
 	fi
 	#echo "${info}"
 	info_out=$(echo "${info}" | cut -d'	' -f3-)
-	echo "${info_out}"
-	#for i in {3..10}; do
-	#	item=$(echo "${info}" | cut -d'	' -f${i})
-	#	if [[ "${i}" == *","* ]] || [[ "${i}" == *"/"* ]]; then
+	#echo "${info_out}"
+	if [[ "${info_out}" == *","* ]] || [[ "${info_out}" == *"/"* ]]; then
 	#		echo "${project}/${sample}	dual!!!" >> "${2}"
-	#		echo "${project}/${sample}	dual!!!"
-	#		break
-	#	fi
-	#done
-	#echo "${project}/${sample}	unknown?!" >> "${2}"
-	#echo "${project}/${sample}	unknown ?!"
+		echo "${project}/${sample}	${info_out}"
+	else
+		#echo "${project}/${sample}	unknown?!" >> "${2}"
+		#echo "${project}/${sample}	unknown ?!"
+		:
+	fi
 done < "${1}"
 
 echo "All isolates completed"
