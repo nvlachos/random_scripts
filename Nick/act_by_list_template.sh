@@ -43,10 +43,12 @@ while IFS= read -r var; do
 	for i in {3..10}; do
 		if [[ "${i}" == *","* ]] || [[ "${i}" == *"/"* ]]; then
 			echo "${project}/${sample}	dual!!!" >> "${2}"
+			echo "${project}/${sample}	dual!!!"
 			break
 		fi
 	done
 	echo "${project}/${sample}	unknown?!" >> "${2}"
+	echo "${project}/${sample}	unknown ?!"
 done < "${1}"
 
 echo "All isolates completed"
