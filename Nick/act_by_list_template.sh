@@ -38,17 +38,19 @@ while IFS= read -r var; do
 	if [[ -f "${processed}/${project}/${sample}/MLST/${sample}_abaumannii.mlst" ]]; then
 		info=$(tail -n1 "${processed}/${project}/${sample}/MLST/${sample}_abaumannii.mlst")
 	elif [[ -f "${processed}/${project}/${sample}/MLST/${sample}_ecoli_2.mlst" ]]; then
-		info=$(tail -n1 )
+		info=$(tail -n1 "${processed}/${project}/${sample}/MLST/${sample}_ecoli_2.mlst")
 	fi
-	for i in {3..10}; do
-		if [[ "${i}" == *","* ]] || [[ "${i}" == *"/"* ]]; then
-			echo "${project}/${sample}	dual!!!" >> "${2}"
-			echo "${project}/${sample}	dual!!!"
-			break
-		fi
-	done
-	echo "${project}/${sample}	unknown?!" >> "${2}"
-	echo "${project}/${sample}	unknown ?!"
+	info_out=$(echo "${info}" | cut -d'	' -f3-)
+	#for i in {3..10}; do
+	#	item=$(echo "${info}" | cut -d'	' -f${i})
+	#	if [[ "${i}" == *","* ]] || [[ "${i}" == *"/"* ]]; then
+	#		echo "${project}/${sample}	dual!!!" >> "${2}"
+	#		echo "${project}/${sample}	dual!!!"
+	#		break
+	#	fi
+	#done
+	#echo "${project}/${sample}	unknown?!" >> "${2}"
+	#echo "${project}/${sample}	unknown ?!"
 done < "${1}"
 
 echo "All isolates completed"
