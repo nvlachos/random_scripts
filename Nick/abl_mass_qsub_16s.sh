@@ -154,6 +154,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo "${project}/${sample} already has 16s summary"
 						echo "$(date)" > "${main_dir}/complete/${sample}_blast16s_complete.txt"
 					fi
+					break
 				# If waiting sample is not complete yet, then wait 5 seconds and try again
 				else
 					timer=$(( timer + 5 ))
