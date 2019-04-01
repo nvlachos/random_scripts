@@ -53,6 +53,7 @@ if [[ "${5}" != "keep" ]] && [[ "${5}" != "clobber" ]]; then
 	exit 1
 else
 	clobberness="${5}"
+	echo ":${clobberness}:"
 fi
 
 # create an array of all samples in the list
