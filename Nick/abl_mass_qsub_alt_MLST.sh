@@ -102,7 +102,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	# Removes old data if clobbering is set
-	if [[ "${clobberness}" = "clobber'" ]]; then
+	if [[ "${clobberness}" == "clobber'" ]]; then
+		echo "Removing - ${processed}/${project}/${sample}/MLST/${sample}_${alt_DB}.mlst"
 		rm "${processed}/${project}/${sample}/MLST/${sample}_${alt_DB}.mlst"
 	fi
 	# Check to see if the sample has usable assembly data
