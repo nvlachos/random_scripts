@@ -47,18 +47,18 @@ while IFS= read -r var; do
 	#echo "${info_out}"
 	if [[ "${info_out}" == *","* ]] || [[ "${info_out}" == *"/"* ]]; then
 	#		echo "${project}/${sample}	dual!!!" >> "${2}"
-		echo "${project}/${sample_name}	${info_out}"
+		echo "${project}/${sample_name}	${info1}"
 	else
 		#echo "${project}/${sample}	unknown?!" >> "${2}"
 		#echo "${project}/${sample}	unknown ?!"
 		:
 	fi
-	if [[ ! -z "${info2}" ]]; then 
+	if [[ ! -z "${info2}" ]]; then
 		info_out2=$(echo "${info2}" | cut -d'	' -f3-)
 		#echo "${info_out}"
 		if [[ "${info_out2}" == *","* ]] || [[ "${info_out2}" == *"/"* ]]; then
 		#		echo "${project}/${sample}	dual!!!" >> "${2}"
-			echo "${project}/${sample_name}	${info_out2}"
+			echo "${project}/${sample_name}	${info2}"
 		else
 			#echo "${project}/${sample}	unknown?!" >> "${2}"
 			#echo "${project}/${sample}	unknown ?!"
