@@ -80,7 +80,7 @@ if [[ "${mlst_DB_found}" == "false" ]]; then
 	echo "Alternate DB (${alt_DB}) not found, ...exiting"
 	exit 6
 fi
-exit
+
 # Create counter and set max concurrent submissions
 counter=0
 max_subs=${2}
