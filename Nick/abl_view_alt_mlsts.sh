@@ -44,20 +44,28 @@ while IFS= read -r var; do
 	fi
 	#echo "${info}"
 	info_out=$(echo "${info}" | cut -d'	' -f3-)
+	type=$(echo ${info} | cut -d'	' -f3)
 	#echo "${info_out}"
 	if [[ "${info_out}" == *","* ]] || [[ "${info_out}" == *"/"* ]]; then
-	#		echo "${project}/${sample}	dual!!!" >> "${2}"
+		echo "DUAL - ${info}" >> "${2}"
 		echo "${project}/${sample_name}	${info1}"
+	elif [[ "${type}" == "-" ]]; then 
+		echo "UNKN - ${info}" >> "${2}"
+		echo "${project}/${sample_name}	${info}"
 	else
 		#echo "${project}/${sample}	unknown?!" >> "${2}"
 		#echo "${project}/${sample}	unknown ?!"
 		:
 	fi
 	if [[ ! -z "${info2}" ]]; then
+		type2=$(echo ${info2} | cut -d'	' -f3)
 		info_out2=$(echo "${info2}" | cut -d'	' -f3-)
 		#echo "${info_out}"
 		if [[ "${info_out2}" == *","* ]] || [[ "${info_out2}" == *"/"* ]]; then
-		#		echo "${project}/${sample}	dual!!!" >> "${2}"
+			echo "DUAL - ${info2}" >> "${2}"
+			echo "${project}/${sample_name}	${info2}"
+		elif [[ "${type}" == "-" ]]; then
+			echo "UNKN - ${info2}" >> "${2}"
 			echo "${project}/${sample_name}	${info2}"
 		else
 			#echo "${project}/${sample}	unknown?!" >> "${2}"
