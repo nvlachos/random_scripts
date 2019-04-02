@@ -15,9 +15,9 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		MLST_DB=MLST_items[1]
 		allele_count=len(MLST_items)
 		for allele in range(2, allele_count):
-			print(allele)
-			allele_Identifier=allele.split("(")[0]
-			alleles=allele.split("(")[1].split(")")[0].split(",")
+			print(MLST_items[allele])
+			allele_Identifier=MLST_items[allele].split("(")[0]
+			alleles=MLST_items[allele].split("(")[1].split(")")[0].split(",")
 			allele_list.append([allele_Identifier,alleles])
 		print(allele_list)
 	elif MLST_filetype == "srst2":
