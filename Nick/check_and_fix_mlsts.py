@@ -8,6 +8,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	schemes=[]
 	MLST_file=open(input_MLST_file,'r')
 	MLST_line = MLST_file.readline().strip()
+	print("\n".join(MLST_line))
 	if MLST_filetype == "standard":
 		sample=MLST_line[0]
 		MLST_DB=MLST_line[1]
