@@ -63,8 +63,8 @@ while IFS= read -r line_in; do
 	fi # Done with main mlst file
 	counter=0
 	echo "CAA=${#computed_allele_array}"
-	for allele in ${computed_allele_array[@]}; do
-		echo "${counter}-${allele}"
+	for i in ${#computed_allele_array}; do
+		echo "${counter}-${allele[$counter]}"
 		counter=$((counter + 1 ))
 	done
 done < ${1}
