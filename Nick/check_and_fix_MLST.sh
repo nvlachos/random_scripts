@@ -40,10 +40,10 @@ while IFS= read -r line_in; do
 	# Check main automated mlst file first
 	if [[ -f "${processed}/${project}/${sample}/MLST/${sample}.mlst" ]]; then
 		echo "Starting standard"
-		STtype=$(tail -n1 "${processed}/${projetc}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f3)
-		mlst_DB=$(tail -n1 "${processed}/${projetc}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f2)
+		STtype=$(tail -n1 "${processed}/${project}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f3)
+		mlst_DB=$(tail -n1 "${processed}/${project}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f2)
 		echo "ST-${STtype} from ${mlst_db}"
-		IFS='	' read -r -a source_allele_array <<< $(tail -n1 "${processed}/${projetc}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f4-)
+		IFS='	' read -r -a source_allele_array <<< $(tail -n1 "${processed}/${project}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f4-)
 		allele_count=${#aource_allele_array}
 		computed_allele_array=()
 		for allele in ${source_allele_array[@]}; do
