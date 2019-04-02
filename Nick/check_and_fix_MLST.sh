@@ -57,7 +57,7 @@ while IFS= read -r line_in; do
 			else
 				locus_array=(${allele_name} ${allele_type})
 			fi
-			echo "LA: ${locus_array}"
+			echo "LA: ${locus_array[@]}"
 		done
 		computed_allele_array+=("${locus_array}")
 	fi # Done with main mlst file
