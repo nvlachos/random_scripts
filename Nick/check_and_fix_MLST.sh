@@ -49,7 +49,7 @@ while IFS= read -r line_in; do
 		for allele in ${source_allele_array[@]}; do
 			allele_name=$(echo ${allele} | cut -d'(' -f1)
 			allele_type=$(echo ${allele} | cut -d'(' -f2 | cut -d')' -f1)
-			echo "${allele}"
+			echo "${allele}:${allele_name}:${allele_type}"
 			if [[ "${allele_type}" == *","* ]] || [[ "${allele_type}" == *"/"* ]]; then
 				echo "DUAL ALLELE"
 				IFS=',' read -r -a multilocus_array <<< "${allele_type}"
