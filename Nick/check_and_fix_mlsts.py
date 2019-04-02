@@ -7,12 +7,13 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	all_alleles_in_file=[]
 	schemes=[]
 	MLST_file=open(input_MLST_file,'r')
-	MLST_line = MLST_file.readline().strip()
-	print("\n".join(MLST_line))
+	MLST_line=MLST_file.readline().strip()
+	MLST_items=MLST_line.split("	")
+	print("\n".join(MLST_items))
 	if MLST_filetype == "standard":
-		sample=MLST_line[0]
-		MLST_DB=MLST_line[1]
-		allele_count=len(MLST_line)-2
+		sample=MLST_items[0]
+		MLST_DB=MLST_items[1]
+		allele_count=len(MLST_items)-2
 		for allele in allele_count:
 			allele_Identifier=allele.split("(")[0]
 			alleles=allele.split("(")[1].split(")")[0].split(",")
