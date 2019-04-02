@@ -38,7 +38,7 @@ while IFS= read -r line_in; do
 	sample=$(echo "${line_in}" | cut -d'/' -f2)
 	project=$(echo "${line_in}" | cut -d'/' -f1)
 	# Check main automated mlst file first
-	if [[ -f "${processed}/${projetc}/${sample}/MLST/${sample}.mlst" ]]; then
+	if [[ -f "${processed}/${project}/${sample}/MLST/${sample}.mlst" ]]; then
 		echo "Starting standard"
 		STtype=$(tail -n1 "${processed}/${projetc}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f3)
 		mlst_DB=$(tail -n1 "${processed}/${projetc}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f2)
@@ -60,6 +60,5 @@ while IFS= read -r line_in; do
 			computed_allele_array+=("${locus_array}")
 		done
 	fi # Done with main mlst file
+	echo "${computed_allele_array[@]}"
 done < ${1}
-
-echo "${computed_allele_array[@]}"
