@@ -268,5 +268,5 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 
 
 
-print("Parsing project AR files ...\n")
+print("Parsing MLST file ...\n")
 do_MLST_check(sys.argv[1], sys.argv[2])
