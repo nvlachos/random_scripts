@@ -42,7 +42,7 @@ while IFS= read -r line_in; do
 		echo "Starting standard"
 		STtype=$(tail -n1 "${processed}/${project}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f3)
 		mlst_DB=$(tail -n1 "${processed}/${project}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f2)
-		echo "ST-${STtype} from ${mlst_db}"
+		echo "ST-${STtype} from ${mlst_DB}"
 		IFS='	' read -r -a source_allele_array <<< $(tail -n1 "${processed}/${project}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f4-)
 		allele_count=${#aource_allele_array}
 		computed_allele_array=()
@@ -57,8 +57,9 @@ while IFS= read -r line_in; do
 			else
 				locus_array=(${allele_name} ${allele_type})
 			fi
-			computed_allele_array+=("${locus_array}")
+			echo "LA: ${locus_array}"
 		done
+		computed_allele_array+=("${locus_array}")
 	fi # Done with main mlst file
 	echo "${computed_allele_array[@]}"
 done < ${1}
