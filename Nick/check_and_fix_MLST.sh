@@ -44,7 +44,7 @@ while IFS= read -r line_in; do
 		IFS='	' read -r -a source_allele_array <<< $(tail -n1 "${processed}/${projetc}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f4-)
 		allele_count=${#aource_allele_array}
 		computed_allele_array=()
-		for allele in ${source_allele_array[@]}: do
+		for allele in ${source_allele_array[@]}; do
 			allele_name=$(echo ${allele} | cut -d'(' -f1)
 			allele_type=$(echo ${allele} | cut -d'(' -f2 | cut -d')' -f1)
 			if [[ "${allele_type}" == *","* ]] || [[ "${allele_type}" == *"/"* ]]; then
