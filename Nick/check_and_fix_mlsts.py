@@ -14,7 +14,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		sample=MLST_items[0]
 		MLST_DB=MLST_items[1]
 		allele_count=len(MLST_items)
-		for allele in range(2, allele_count)
+		for allele in range(2, allele_count):
 			allele_Identifier=allele.split("(")[0]
 			alleles=allele.split("(")[1].split(")")[0].split(",")
 			allele_list.append([allele_Identifier,alleles])
