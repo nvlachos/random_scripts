@@ -13,13 +13,17 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	if MLST_filetype == "standard":
 		sample=MLST_items[0]
 		MLST_DB=MLST_items[1]
-		allele_count=len(MLST_items)
-		for allele in range(2, allele_count):
-			print(MLST_items[allele])
-			allele_Identifier=MLST_items[allele].split("(")[0]
-			alleles=MLST_items[allele].split("(")[1].split(")")[0].split(",")
-			allele_list.append([allele_Identifier,alleles])
-		print(allele_list)
+		scheme=MLST_items[2]
+		if scheme != "-":
+			allele_count=len(MLST_items)
+			for allele in range(3, allele_count):
+				print(MLST_items[allele])
+				allele_Identifier=MLST_items[allele].split("(")[0]
+				alleles=MLST_items[allele].split("(")[1].split(")")[0].split(",")
+				allele_list.append([allele_Identifier,alleles])
+			print(allele_list)
+		else:
+			print("Scheme is undefined")
 	elif MLST_filetype == "srst2":
 		print("Not implemented yet")
 	else:
