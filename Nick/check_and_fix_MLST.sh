@@ -39,14 +39,17 @@ while IFS= read -r line_in; do
 	project=$(echo "${line_in}" | cut -d'/' -f1)
 	# Check main automated mlst file first
 	if [[ -f "${processed}/${projetc}/${sample}/MLST/${sample}.mlst" ]]; then
+		echo "Starting standard"
 		STtype=$(tail -n1 "${processed}/${projetc}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f3)
 		mlst_DB=$(tail -n1 "${processed}/${projetc}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f2)
+		echo "ST-${STtype} from ${mlst_db}"
 		IFS='	' read -r -a source_allele_array <<< $(tail -n1 "${processed}/${projetc}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f4-)
 		allele_count=${#aource_allele_array}
 		computed_allele_array=()
 		for allele in ${source_allele_array[@]}; do
 			allele_name=$(echo ${allele} | cut -d'(' -f1)
 			allele_type=$(echo ${allele} | cut -d'(' -f2 | cut -d')' -f1)
+			echo "${allele}"
 			if [[ "${allele_type}" == *","* ]] || [[ "${allele_type}" == *"/"* ]]; then
 				echo "DUAL ALLELE"
 				IFS=',' read -r -a multilocus_array <<< "${allele_type}"
