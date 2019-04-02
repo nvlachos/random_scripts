@@ -59,10 +59,11 @@ while IFS= read -r line_in; do
 			fi
 			echo "LA: ${locus_array[@]}"
 		done
-		computed_allele_array+=("${locus_array}")
+		computed_allele_array=("${locus_array}")
 	fi # Done with main mlst file
 	counter=0
 	echo "CAA=${#computed_allele_array}"
+	echo "${computed_allele_array[@]}"
 	for i in ${#computed_allele_array}; do
 		echo "${counter}-${allele[$counter]}"
 		counter=$((counter + 1 ))
