@@ -63,8 +63,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 
 def get_type(list_of_profiles, list_of_allele_names, DB_file):
 	with open(DB_file,'r') as f:
-	   	for line in f:
-	        # Do something with 'line'
+		for line in f:
 			db_line=f.strip()
 			db_items=db_line.split("	")
 			if db_items[0] == "ST":
