@@ -38,9 +38,10 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 				print("Unknown size "+str(list_size)+" of allele_list")
 			schemes=(list(schemes))
 			counter=0
-			for profile_index in range(0, len(schemes)+1):
+			for profile_index in range(0, len(schemes)):
 				print(profile_index, schemes[profile_index])
 				schemes[profile_index]=np.asarray(schemes[profile_index])
+				print(profile_index, schemes{profile_index})
 			if len(schemes) == 0:
 				print("No schemes found???")
 			elif len(schemes) == 1:
