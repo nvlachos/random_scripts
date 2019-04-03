@@ -22,8 +22,8 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				print(MLST_items[allele])
 				allele_Identifier=MLST_items[allele].split("(")[0]
 				alleles=MLST_items[allele].split("(")[1].split(")")[0].split(",")
-				allele_names.append([allele_Identifier])
-				allele_list.append([alleles])
+				allele_names.append(allele_Identifier)
+				allele_list.append(alleles)
 			print(allele_names)
 			print(allele_list)
 		else:
