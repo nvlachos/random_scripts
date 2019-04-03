@@ -68,7 +68,7 @@ def get_type(unknown_scheme, allele_names, type_list, DB_file):
 		print("Allele names match, yay!")
 	else:
 		print("db: "+db_items)
-		print("list:"+)
+		print("list:"+allele_names)
 
 
 
