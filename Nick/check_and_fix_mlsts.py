@@ -39,7 +39,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_name):
 			if len(schemes) == 0:
 				print("No schemes found???")
 			elif len(schemes) == 1:
-			 	if mlstype != "-":
+				if mlstype != "-":
 			 		print("This sample is singular and defined")
 				else:
 					print("This sample is singular and UNdefined")
@@ -315,4 +315,4 @@ def get_type(unknown_scheme, allele_names, type_list, DB_file):
 
 
 print("Parsing MLST file ...\n")
-do_MLST_check(sys.argv[1], sys.argv[2], sys.argv[3])
+do_MLST_check(sys.argv[1], sys.argv[2], "test") #sys.argv[3])
