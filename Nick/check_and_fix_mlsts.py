@@ -40,7 +40,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 				print(profile_index, schemes[profile_index])
 				temp_scheme=[]
 				for temp_allele in schemes[profile_index]:
-					temp_scheme.append(sort(temp_allele))
+					temp_scheme.append(temp_allele.sort())
 				schemes[profile_index]=temp_scheme
 				print(profile_index, schemes[profile_index])
 			if len(schemes) == 0:
