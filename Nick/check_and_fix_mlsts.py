@@ -26,6 +26,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				allele_names.append(allele_Identifier)
 				allele_list.append(alleles)
 				list_size=len(allele_list)
+			allele_list=[['1'], ['3'], ['3', '189'], ['2'], ['2,29'], ['96'], ['3']]
 			print(allele_names)
 			print(allele_list)
 			if list_size == 7:
