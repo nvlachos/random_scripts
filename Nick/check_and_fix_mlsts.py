@@ -45,7 +45,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 					print("This sample is singular and UNdefined")
 					types=get_type(schemes, allele_names, db_filename)
 			elif len(schemes) > 1:
-				if "-" not in mlstype && "," in mlstype:
+				if "-" not in mlstype and "," in mlstype:
 					print("This sample is a multiple and defined")
 				else:
 					print("This sample is a multiple and something is UNdefined")
