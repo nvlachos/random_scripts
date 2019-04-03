@@ -1,6 +1,7 @@
 import sys
 import glob
 import math
+import itertools as it
 
 # main function that sorts and formats all AR genes found using csstar and srst2 that have already been filtered for % identity and % length
 def do_MLST_check(input_MLST_file, MLST_filetype):
