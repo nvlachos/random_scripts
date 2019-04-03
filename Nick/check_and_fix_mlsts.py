@@ -73,11 +73,12 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 			break
 	print(db_items[1:profile_size])
 	print(list_of_allele_names)
-	#if db_items[1:len(allele_names)] == list_of_allele_names:
-	#	print("Allele names match, yay!")
-	#else:
-	#	print("db: "+db_items)
-	#	print("list:"+allele_names)
+	if db_items[1:profile_size] == list_of_allele_names:
+		print("Allele names match, yay!")
+	else:
+		print("We'll have to fix this if it ever comes up")
+		print("db: "+db_items)
+		print("list:"+allele_names)
 
 
 
