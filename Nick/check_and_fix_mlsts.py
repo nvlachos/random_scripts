@@ -50,7 +50,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 					print("This sample is a multiple and something is UNdefined")
 			for scheme in schemes:
 				print(scheme)
-				types=get_type(scheme, types, db_filename)
+				types=get_type(scheme, allele_names types, db_filename)
 		else:
 			print("Scheme is undefined")
 	elif MLST_filetype == "srst2":
