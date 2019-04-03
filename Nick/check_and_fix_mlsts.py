@@ -4,8 +4,8 @@ import math
 import itertools as it
 
 # main function that sorts and formats all AR genes found using csstar and srst2 that have already been filtered for % identity and % length
-def do_MLST_check(input_MLST_file, MLST_filetype):
-	all_alleles_in_file=[]
+def do_MLST_check(input_MLST_file, MLST_filetype, db_name):
+	types=""
 	schemes=[]
 	MLST_file=open(input_MLST_file,'r')
 	MLST_line=MLST_file.readline().strip()
@@ -14,10 +14,10 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	if MLST_filetype == "standard":
 		sample=MLST_items[0]
 		MLST_DB=MLST_items[1]
-		scheme=MLST_items[2]
+		mlstype=MLST_items[2]
 		allele_list=[]
 		allele_names=[]
-		if scheme == "-":
+		if mlstype == "-":
 			allele_count=len(MLST_items)
 			for allele in range(3, allele_count):
 				print(MLST_items[allele])
@@ -36,8 +36,21 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			else:
 				print("Unknown size "+str(list_size)+" of allele_list")
 			schemes=(list(schemes))
+			if len(schemes) == 0:
+				print("No schemes found???")
+			elif len(schemes) == 1:
+			 	if mlstype != "-":
+			 		print("This sample is singular and defined")
+				else:
+					print("This sample is singular and UNdefined")
+			elif len(schemes) > 1:
+				 if "-" not in mlstype:
+					print("This sample is a multiple and defined")
+				else
+					print("This sample is a multiple and something is UNdefined")
 			for scheme in schemes:
 				print(scheme)
+				types=get_type(scheme, types, db_name)
 		else:
 			print("Scheme is undefined")
 	elif MLST_filetype == "srst2":
@@ -46,6 +59,16 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		print("Unknown MLST filetype, can not continue")
 		exit()
 	counter=0
+
+def get_type(unknown_scheme, allele_names, type_list, DB_file):
+	db_data_file=open(DB_file,'r')
+	db_line=db_data_file.readline().strip()
+	db_items=db_line.split("	")
+	if db_items[1:len(allele_names)]  == allele_names:
+		print("Allele names match, yay!")
+	else:
+		print("db: "+db_items)
+		print("list:"+)
 
 
 
@@ -292,4 +315,4 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 
 
 print("Parsing MLST file ...\n")
-do_MLST_check(sys.argv[1], sys.argv[2])
+do_MLST_check(sys.argv[1], sys.argv[2], sys.argv[3])
