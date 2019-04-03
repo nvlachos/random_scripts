@@ -44,7 +44,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_name):
 				else:
 					print("This sample is singular and UNdefined")
 			elif len(schemes) > 1:
-				 if "-" not in mlstype:
+				if "-" not in mlstype:
 					print("This sample is a multiple and defined")
 				else
 					print("This sample is a multiple and something is UNdefined")
