@@ -52,7 +52,6 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 					types=get_type(schemes, allele_names, db_filename)
 			for scheme in schemes:
 				print(scheme)
-				types=
 		else:
 			print("Scheme is undefined")
 	elif MLST_filetype == "srst2":
