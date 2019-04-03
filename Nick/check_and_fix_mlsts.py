@@ -62,25 +62,28 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 	counter=0
 
 def get_type(list_of_profiles, list_of_allele_names, DB_file):
-	db_data_file=open(DB_file,'r')
-	db_line=db_data_file.readline().strip()
-	db_items=db_line.split("	")
-	profile_size=0
-	for item in db_items:
-		if item != "clonal_complex" and item != "species":
-			profile_size+=1
-		else:
-			break
-	print(db_items[1:profile_size])
-	print(list_of_allele_names)
-	if db_items[1:profile_size] == list_of_allele_names:
-		print("Allele names match, yay!")
-	else:
-		print("We'll have to fix this if it ever comes up")
-		print("db: "+db_items)
-		print("list:"+allele_names)
-
-
+	with open(DB_file,'r') as f:
+	   	for line in f:
+	        # Do something with 'line'
+			db_line=f.strip()
+			db_items=db_line.split("	")
+			if db_items[0] == "ST":
+				profile_size=0
+				for item in db_items:
+					if item != "clonal_complex" and item != "species":
+						profile_size+=1
+					else:
+						break
+				print(db_items[1:profile_size])
+				print(list_of_allele_names)
+				if db_items[1:profile_size] == list_of_allele_names:
+					print("Allele names match, yay!")
+				else:
+					print("We'll have to fix this if it ever comes up")
+					print("db: "+db_items)
+					print("list:"+allele_names)
+			else:
+				print(db_items[1:profile_size])
 
 
 
