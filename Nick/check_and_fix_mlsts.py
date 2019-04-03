@@ -2,7 +2,6 @@ import sys
 import glob
 import math
 import itertools as it
-import numpy as np
 
 # main function that sorts and formats all AR genes found using csstar and srst2 that have already been filtered for % identity and % length
 def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
@@ -37,10 +36,12 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 			else:
 				print("Unknown size "+str(list_size)+" of allele_list")
 			schemes=(list(schemes))
-			counter=0
 			for profile_index in range(0, len(schemes)):
 				print(profile_index, schemes[profile_index])
-				schemes[profile_index]=np.asarray(schemes[profile_index])
+				temp_scheme=[]
+				for temp_allele in schemes[profile_index]:
+					temp_scheme.append(temp_allele)
+				schemes[profile_index]=temp_scheme
 				print(profile_index, schemes[profile_index])
 			if len(schemes) == 0:
 				print("No schemes found???")
