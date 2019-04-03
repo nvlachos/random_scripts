@@ -43,14 +43,16 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 			 		print("This sample is singular and defined")
 				else:
 					print("This sample is singular and UNdefined")
+					types=get_type(schemes, allele_names, db_filename)
 			elif len(schemes) > 1:
-				if "-" not in mlstype:
+				if "-" not in mlstype && "," in mlstype:
 					print("This sample is a multiple and defined")
 				else:
 					print("This sample is a multiple and something is UNdefined")
+					types=get_type(schemes, allele_names, db_filename)
 			for scheme in schemes:
 				print(scheme)
-				types=get_type(scheme, allele_names, types, db_filename)
+				types=
 		else:
 			print("Scheme is undefined")
 	elif MLST_filetype == "srst2":
@@ -60,11 +62,11 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 		exit()
 	counter=0
 
-def get_type(unknown_scheme, allele_names, type_list, DB_file):
+def get_type(list_of_profiles, list_of_allele_names, DB_file):
 	db_data_file=open(DB_file,'r')
 	db_line=db_data_file.readline().strip()
 	db_items=db_line.split("	")
-	if db_items[1:len(allele_names)]  == allele_names:
+	if db_items[1:len(allele_names)]  == list_of_allele_names:
 		print("Allele names match, yay!")
 	else:
 		print("db: "+db_items)
@@ -315,4 +317,4 @@ def get_type(unknown_scheme, allele_names, type_list, DB_file):
 
 
 print("Parsing MLST file ...\n")
-do_MLST_check(sys.argv[1], sys.argv[2], "test") #sys.argv[3])
+do_MLST_check(sys.argv[1], sys.argv[2], "/scicomp/groups/NCEZID/DHQP/CEMB/databases/mlst/abaumannii_Pasteur.txt") #sys.argv[3])
