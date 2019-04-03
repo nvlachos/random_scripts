@@ -39,7 +39,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 			schemes=(list(schemes))
 			counter=0
 			for scheme in range(0, len(schemes)+1):
-				print(scheme)
+				print(scheme[counter])
 				scheme[counter]=np.asarray(scheme)
 			if len(schemes) == 0:
 				print("No schemes found???")
