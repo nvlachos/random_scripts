@@ -18,7 +18,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		allele_names=[]
 		if scheme == "-":
 			allele_count=len(MLST_items)
-			for allele in range(3, allele_count):
+			for allele in range(3, int(allele_count)):
 				print(MLST_items[allele])
 				allele_Identifier=MLST_items[allele].split("(")[0]
 				alleles=MLST_items[allele].split("(")[1].split(")")[0].split(",")
@@ -31,7 +31,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			elif allele_count == 8:
 				schemes = it.product(allele_list[0], allele_list[1], allele_list[2], allele_list[3], allele_list[4], allele_list[5], allele_list[6], allele_list[7])
 			else:
-				print("Unknown size "+allele_count+" of allele_list")
+				print("Unknown size "+int(allele_count)+" of allele_list")
 		else:
 			print("Scheme is undefined")
 	elif MLST_filetype == "srst2":
