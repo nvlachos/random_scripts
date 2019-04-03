@@ -41,7 +41,10 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 				temp_scheme=[]
 				for temp_allele in schemes[profile_index]:
 					temp_scheme.append(temp_allele)
-				schemes[profile_index]=temp_scheme.sort()
+				for temp_allele in temp_scheme:
+					if len(temp_allele) > 1:
+						temp_allele=temp_allele.sort()
+				schemes[profile_index]=temp_scheme
 				print(profile_index, schemes[profile_index])
 			if len(schemes) == 0:
 				print("No schemes found???")
