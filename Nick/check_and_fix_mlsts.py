@@ -89,7 +89,8 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 				current_profile=db_items[1:profile_size]
 				type(current_profile)
 				type(list_of_profiles)
-				print(current_profile+" vs. "+list_of_profiles[0])
+				print(current_profile)
+				print(list_of_profiles[0])
 				if current_profile == list_of_profiles[0]:
 					print("Match")
 					break
