@@ -26,10 +26,10 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				allele_list.append(alleles)
 			print(allele_names)
 			print(allele_list)
-			if allele_count == 7:
-				schemes = it.product(allele_list[0], allele_list[1], allele_list[2], allele_list[3], allele_list[4], allele_list[5], allele_list[6])
-			elif allele_count == 8:
-				schemes = it.product(allele_list[0], allele_list[1], allele_list[2], allele_list[3], allele_list[4], allele_list[5], allele_list[6], allele_list[7])
+			if allele_count == 10:
+				schemes = it.product(allele_list[2], allele_list[3], allele_list[4], allele_list[5], allele_list[6], allele_list[7], allele_list[8])
+			elif allele_count == 11:
+				schemes = it.product(allele_list[2], allele_list[3], allele_list[4], allele_list[5], allele_list[6], allele_list[7], allele_list[8], allele_list[9])
 			else:
 				print("Unknown size "+str(allele_count)+" of allele_list")
 		else:
