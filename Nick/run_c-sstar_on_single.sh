@@ -11,7 +11,9 @@ if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
 . ./config.sh
-# No modules needed
+
+module load Python/3.5.2
+module load ncbi-blast+/2.6.0
 
 #
 # Finds anti-microbial resistance genes in the resFinder and ARG-ANNOT databases and exports a file containing list of all genes found
