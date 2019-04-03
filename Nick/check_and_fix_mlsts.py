@@ -93,7 +93,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 				print(current_profile)
 				print(list_of_profiles[0])
 				if current_profile == list_of_profiles[0]:
-					print("Match")
+					print("Match-"+str(db_items[0]))
 					break
 				else:
 					print("No match")
