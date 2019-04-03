@@ -15,7 +15,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		MLST_DB=MLST_items[1]
 		scheme=MLST_items[2]
 		allele_list=[]
-		allel_names=[]
+		allele_names=[]
 		if scheme == "-":
 			allele_count=len(MLST_items)
 			for allele in range(3, allele_count):
