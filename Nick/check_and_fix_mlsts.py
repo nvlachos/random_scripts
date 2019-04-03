@@ -65,7 +65,14 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 	db_data_file=open(DB_file,'r')
 	db_line=db_data_file.readline().strip()
 	db_items=db_line.split("	")
-	if db_items[1:len(allele_names)]  == list_of_allele_names:
+	profile_size=0
+	for item in db_items:
+		if item != "clonal_complex" and item != "species":
+			profile_size+=1
+		else:
+			break
+	print(db_items[1:profile_size])		
+	if db_items[1:len(allele_names)] == list_of_allele_names:
 		print("Allele names match, yay!")
 	else:
 		print("db: "+db_items)
