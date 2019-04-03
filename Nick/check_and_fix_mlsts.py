@@ -316,4 +316,4 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 
 
 print("Parsing MLST file ...\n")
-do_MLST_check(sys.argv[1], sys.argv[2], "/scicomp/groups/NCEZID/DHQP/CEMB/databases/mlst/abaumannii_Pasteur.txt") #sys.argv[3])
+do_MLST_check(sys.argv[1], sys.argv[2], "/scicomp/groups/OID/NCEZID/DHQP/CEMB/databases/mlst/abaumannii_Pasteur.txt") #sys.argv[3])
