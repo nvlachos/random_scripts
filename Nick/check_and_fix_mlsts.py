@@ -87,6 +87,8 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 					print("list:"+allele_names)
 			else:
 				current_profile=db_items[1:profile_size]
+				type current_profile
+				type list_of_profiles
 				print(current_profile+" vs. "+list_of_profiles)
 				current_profile=db_items[1:profile_size]
 				if current_profile == list_of_profiles[0]:
