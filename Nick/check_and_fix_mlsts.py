@@ -36,7 +36,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			else:
 				print("Unknown size "+str(list_size)+" of allele_list")
 			schemes=(list(schemes))
-			for scheme in schemes
+			for scheme in schemes:
 				print(scheme)
 		else:
 			print("Scheme is undefined")
