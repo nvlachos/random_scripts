@@ -65,7 +65,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 	with open(DB_file,'r') as f:
 		for line in f:
 			#db_line=f.strip()
-			db_items=db_line.split("	")
+			db_items=dline.split("	")
 			if db_items[0] == "ST":
 				profile_size=0
 				for item in db_items:
