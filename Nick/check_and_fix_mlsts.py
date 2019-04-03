@@ -86,7 +86,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 				if db_items[1:profile_size] == list_of_profiles[0]:
 					print("Match")
 					break
-				else
+				else:
 					print("No match")
 
 
