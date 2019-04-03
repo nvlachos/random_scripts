@@ -4,7 +4,7 @@ import math
 import itertools as it
 
 # main function that sorts and formats all AR genes found using csstar and srst2 that have already been filtered for % identity and % length
-def do_MLST_check(input_MLST_file, MLST_filetype, db_name):
+def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 	types=""
 	schemes=[]
 	MLST_file=open(input_MLST_file,'r')
@@ -50,7 +50,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_name):
 					print("This sample is a multiple and something is UNdefined")
 			for scheme in schemes:
 				print(scheme)
-				types=get_type(scheme, types, db_name)
+				types=get_type(scheme, types, db_filename)
 		else:
 			print("Scheme is undefined")
 	elif MLST_filetype == "srst2":
