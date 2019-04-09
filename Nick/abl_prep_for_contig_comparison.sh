@@ -115,7 +115,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				# Check if an acceptable assembly is available to use
 				if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_contigs_trimmed.fasta" ]]; then
 					# Check if contig fixer has already been run on sample
-					echo  "Index is below max submissions, submitting"
+					echo  "Index is below max submissions, submitting wait"
 					echo -e "#!/bin/bash -l\n" > "${main_dir}/contig_${sample}_${start_time}.sh"
 					echo -e "#$ -o contig_${sample}.out" >> "${main_dir}/contig_${sample}_${start_time}.sh"
 					echo -e "#$ -e contig_${sample}.err" >> "${main_dir}/contig_${sample}_${start_time}.sh"
