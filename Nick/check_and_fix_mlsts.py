@@ -72,6 +72,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 def get_type(list_of_profiles, list_of_allele_names, DB_file):
 	with open(DB_file,'r') as f:
 		profile_size=0
+		profiles = ["-"] * len(list_of_profiles)
 		for line in f:
 			db_line=line.strip()
 			db_items=db_line.split("	")
@@ -90,17 +91,17 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 					print("db: "+db_items)
 					print("list:"+allele_names)
 			else:
-				current_profile=db_items[1:profile_size]
-				type(current_profile)
-				type(list_of_profiles)
-				print(current_profile)
-				print(list_of_profiles[0])
-				#if current_profile == list_of_profiles[0]:
-				#	print("Match-"+str(db_items[0]))
-
-				#	break
-				#else:
-				#	print("No match")
+				for index in range(0,len(profiles)):
+					current_profile=db_items[1:profile_size]
+					type(current_profile)
+					type(list_of_profiles)
+					print(current_profile)
+					print(list_of_profiles[0])
+					if current_profile == list_of_profiles[index]:
+						print("Match-"+str(db_items[0]))
+						profiles[index]=db_items[0])
+						break
+				print("Profiles:", profiles)
 
 
 
