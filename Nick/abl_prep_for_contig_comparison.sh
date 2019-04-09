@@ -73,7 +73,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	# echo ${counter}
 	if [ ${counter} -lt ${max_subs} ]; then
-		if [[ -s "${processed}/${project}/${sample}/Assembly/contig.fasta" ]]; then
+		if [[ -s "${processed}/${project}/${sample}/Assembly/contigs.fasta" ]]; then
 			echo  "Index is below max submissions, submitting"
 			echo -e "#!/bin/bash -l\n" > "${main_dir}/contig_${sample}_${start_time}.sh"
 			echo -e "#$ -o contig_${sample}.out" >> "${main_dir}/contig_${sample}_${start_time}.sh"
@@ -113,9 +113,9 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			# Check if "waiting" sample has completed
 			if [ -f "${main_dir}/complete/${waiting_sample}_contig_complete.txt" ]; then
 				# Check if an acceptable assembly is available to use
-				if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_contigs_trimmed.fasta" ]]; then
+				if [[ -s "${processed}/${project}/${sample}/Assembly/contigs.fasta" ]]; then
 					# Check if contig fixer has already been run on sample
-					echo  "Index is below max submissions, submitting wait"
+					echo  "Index is below max submissions, submitting"
 					echo -e "#!/bin/bash -l\n" > "${main_dir}/contig_${sample}_${start_time}.sh"
 					echo -e "#$ -o contig_${sample}.out" >> "${main_dir}/contig_${sample}_${start_time}.sh"
 					echo -e "#$ -e contig_${sample}.err" >> "${main_dir}/contig_${sample}_${start_time}.sh"
