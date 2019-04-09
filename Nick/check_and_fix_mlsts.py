@@ -29,8 +29,8 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 			allele_list=[['1'], ['3'], ['189','3'], ['2'], ['2', '29'], ['96'], ['3']]
 			print(allele_names)
 			print(allele_list)
-			for allele_index in range(0,len(allele_list)):
-				allele_list[allele_index]=allele_list[allele_index].sort()
+			#for allele_index in range(0,len(allele_list)):
+			#	allele_list[allele_index]=allele_list[allele_index].sort()
 			if list_size == 7:
 				schemes = it.product(allele_list[0], allele_list[1], allele_list[2], allele_list[3], allele_list[4], allele_list[5], allele_list[6])
 			elif list_size == 8:
