@@ -43,7 +43,7 @@ elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
 elif [[ -z "${3}" ]]; then
 	echo "No script output directory given...exiting"
 	exit 3
-
+fi
 
 # Make array to hold all sample names to be processed
 arr=()
