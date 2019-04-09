@@ -113,34 +113,26 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			# Check if "waiting" sample has completed
 			if [ -f "${main_dir}/complete/${waiting_sample}_contig_complete.txt" ]; then
 				# Check if an acceptable assembly is available to use
-				if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
+				if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_contigs_trimmed.fasta" ]]; then
 					# Check if contig fixer has already been run on sample
-					header=$(head -n1 "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" | cut -d'_' -f1)
-					if [[ "${header}" = ">contig" ]]; then
-						echo  "Index is below max submissions, submitting"
-						echo -e "#!/bin/bash -l\n" > "${main_dir}/contig_${sample}_${start_time}.sh"
-						echo -e "#$ -o contig_${sample}.out" >> "${main_dir}/contig_${sample}_${start_time}.sh"
-						echo -e "#$ -e contig_${sample}.err" >> "${main_dir}/contig_${sample}_${start_time}.sh"
-						echo -e "#$ -N contig_${sample}"   >> "${main_dir}/contig_${sample}_${start_time}.sh"
-						echo -e "#$ -cwd"  >> "${main_dir}/contig_${sample}_${start_time}.sh"
-						echo -e "#$ -q short.q\n"  >> "${main_dir}/contig_${sample}_${start_time}.sh"
-						echo -e "cd ${shareScript}" >> "${main_dir}/contig_${sample}_${start_time}.sh"
-						echo -e "python \"${shareScript}/removeShortContigs.py\" \"${processed}/${project}/${sample}/Assembly/contigs.fasta\" 500" >> "${main_dir}/contig_${sample}_${start_time}.sh"
-						echo -e "mkdir ${processed}/${project}/${sample}/Contig_check" >> "${main_dir}/contig_${sample}_${start_time}.sh"
-						echo -e "mv \"${processed}/${project}/${sample}/Assembly/contigs.fasta.TRIMMED.fasta" "${processed}/${project}/${sample}/Contig_check/${filename}_contigs_trimmed_original.fasta" >> "${main_dir}/contig_${sample}_${start_time}.sh"
-						echo -e "python3 \"${shareScript}/fasta_headers.py\" \"${processed}/${project}/${sample}/Contig_check/${sample}_contigs_trimmed_original.fasta\" \"${processed}/${project}/${sample}/Contig_check/${sample}_contigs_trimmed.fasta\"" >> "${main_dir}/contig_${sample}_${start_time}.sh"
-						echo -e "${shareScript}/run_c-sstar_on_contigs.sh \"${sample}\" g h \"${project}\"" >> "${main_dir}/contig_${sample}_${start_time}.sh"
-						echo -e "${shareScript}/run_plasmidFinder_on_contigs.sh \"${sample}\" \"${project}\" plasmid" >> "${main_dir}/contig_${sample}_${start_time}.sh"
-						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_contig_complete.txt\"" >> "${main_dir}/contig_${sample}_${start_time}.sh"
-						cd "${main_dir}"
-						qsub "${main_dir}/contig_${sample}_${start_time}.sh"
-						break
-					# contig fixer already run on sample
-					else
-						echo "${project}/${sample} already had its contigs removed"
-						echo "$(date)" > "${main_dir}/complete/${sample}_contig_complete.txt"
-						break
-					fi
+					echo  "Index is below max submissions, submitting"
+					echo -e "#!/bin/bash -l\n" > "${main_dir}/contig_${sample}_${start_time}.sh"
+					echo -e "#$ -o contig_${sample}.out" >> "${main_dir}/contig_${sample}_${start_time}.sh"
+					echo -e "#$ -e contig_${sample}.err" >> "${main_dir}/contig_${sample}_${start_time}.sh"
+					echo -e "#$ -N contig_${sample}"   >> "${main_dir}/contig_${sample}_${start_time}.sh"
+					echo -e "#$ -cwd"  >> "${main_dir}/contig_${sample}_${start_time}.sh"
+					echo -e "#$ -q short.q\n"  >> "${main_dir}/contig_${sample}_${start_time}.sh"
+					echo -e "cd ${shareScript}" >> "${main_dir}/contig_${sample}_${start_time}.sh"
+					echo -e "python \"${shareScript}/removeShortContigs.py\" \"${processed}/${project}/${sample}/Assembly/contigs.fasta\" 500" >> "${main_dir}/contig_${sample}_${start_time}.sh"
+					echo -e "mkdir ${processed}/${project}/${sample}/Contig_check" >> "${main_dir}/contig_${sample}_${start_time}.sh"
+					echo -e "mv \"${processed}/${project}/${sample}/Assembly/contigs.fasta.TRIMMED.fasta" "${processed}/${project}/${sample}/Contig_check/${filename}_contigs_trimmed_original.fasta" >> "${main_dir}/contig_${sample}_${start_time}.sh"
+					echo -e "python3 \"${shareScript}/fasta_headers.py\" \"${processed}/${project}/${sample}/Contig_check/${sample}_contigs_trimmed_original.fasta\" \"${processed}/${project}/${sample}/Contig_check/${sample}_contigs_trimmed.fasta\"" >> "${main_dir}/contig_${sample}_${start_time}.sh"
+					echo -e "${shareScript}/run_c-sstar_on_contigs.sh \"${sample}\" g h \"${project}\"" >> "${main_dir}/contig_${sample}_${start_time}.sh"
+					echo -e "${shareScript}/run_plasmidFinder_on_contigs.sh \"${sample}\" \"${project}\" plasmid" >> "${main_dir}/contig_${sample}_${start_time}.sh"
+					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_contig_complete.txt\"" >> "${main_dir}/contig_${sample}_${start_time}.sh"
+					cd "${main_dir}"
+					qsub "${main_dir}/contig_${sample}_${start_time}.sh"
+					break
 				# No assembly file to fix
 				else
 					echo "${project}/${sample} has no Assembly to fix"
@@ -162,7 +154,7 @@ done
 timer=0
 for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
-	if [[ -f "${main_dir}/complete/${waiting_sample}_contig_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_scaffolds_trimmed.fasta" ]]; then
+	if [[ -f "${main_dir}/complete/${waiting_sample}_contig_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_contigs_trimmed.fasta" ]]; then
 		echo "${item} is complete"
 		if [[ -f "${shareScript}/contig_${sample}.out" ]]; then
 			mv "${shareScript}/contig_${sample}.out" ${main_dir}
