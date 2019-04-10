@@ -102,7 +102,10 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		else:
 			print(input_MLST_file, "is as good as it gets with type", mlstype)
 		if '-' in MLST_items[2]:
-			filepath="/".join(input_MLST_file[::-1].split("/")[2:4][::-1])
+			filepath=input_MLST_file[::-1].split("/")[2:4]
+			for i in filepath:
+				filepath[i]=filepath[i][::-1]
+			filepath="/".join(filepath)
 			print("Must try srst2 on input:", filepath)
 	elif MLST_filetype == "srst2":
 		print("Not implemented yet")
