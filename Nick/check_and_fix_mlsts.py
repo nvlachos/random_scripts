@@ -14,7 +14,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 	if MLST_filetype == "standard":
 		sample=MLST_items[0]
 		MLST_DB=MLST_items[1]
-		mlst_temp_temp=MLST_items[2].replace("/", ",")
+		mlst_temp_type=MLST_items[2].replace("/", ",")
 		if "," not in mlst_temp_type:
 			mlstype=[MLST_items[2]]
 			for i in range(0, len(mlstype)):
