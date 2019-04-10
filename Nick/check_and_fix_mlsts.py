@@ -24,7 +24,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			mlstype.sort()
 		else:
 			mlstype=MLST_items[2].split(",")
-		print("MLSType:", mlstype)
+		print("Current MLST type:", mlstype, "\n")
 		allele_list=[]
 		allele_names=[]
 		allele_count=len(MLST_items)
@@ -37,7 +37,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			list_size=len(allele_list)
 		#allele_list=[['1'], ['3'], ['189','3'], ['2'], ['2'], ['96','107'], ['3']]
 		print("Allele_names:", allele_names)
-		print("Alleles_found:", allele_list)
+		print("Alleles_found:", allele_list, "\n")
 		#for allele_index in range(0,len(allele_list)):
 		#	allele_list[allele_index]=allele_list[allele_index].sort()
 		if list_size == 7:
@@ -49,6 +49,8 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		schemes=(list(schemes))
 		print("All possible schemes:")
 		print(*schemes, sep = "\n")
+		print()
+
 		checking=False
 		for profile_index in range(0, len(schemes)):
 			#print(profile_index, schemes[profile_index])
@@ -61,15 +63,15 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			print("No schemes found???")
 		elif len(schemes) == 1:
 			if mlstype[0] != "-":
-		 		print("This sample is singular and defined")
+		 		print("This sample is singular and defined\n")
 			else:
-				print("This sample is singular and UNdefined")
+				print("This sample is singular and UNdefined\n")
 				new_types=get_type(schemes, allele_names, db_name)
 				checking=True
 		elif len(schemes) > 1:
 			if "-" not in mlstype:
 				if len(schemes) == len(mlstype):
-					print("This sample is a multiple and defined")
+					print("This sample is a multiple and defined\n")
 				elif len(schemes) > len(mlstype):
 					print("Not enough types to match schemes")
 					new_types=get_type(schemes, allele_names, db_name)
@@ -82,9 +84,9 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				print("This sample is a multiple and something is UNdefined")
 				new_types=get_type(schemes, allele_names, db_name)
 				checking=True
-		print("Old types:", mlstype)
+		print("Old types:", mlstype, "\n")
 		if checking:
-			print("New types:", new_types)
+			print("New types:", new_types, "\n")
 			if mlstype != new_types:
 				for i in range(0, len(new_types)):
 					print(new_types[i])
