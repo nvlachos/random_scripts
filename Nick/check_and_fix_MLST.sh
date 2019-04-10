@@ -38,36 +38,14 @@ while IFS= read -r line_in; do
 	sample=$(echo "${line_in}" | cut -d'/' -f2)
 	project=$(echo "${line_in}" | cut -d'/' -f1)
 	# Check main automated mlst file first
-	if [[ -f "${processed}/${project}/${sample}/MLST/${sample}.mlst" ]]; then
-		echo "Starting standard"
-		python3 "${processed}/${project}/${sample}/MLST/${sample}.mlst" "standard"
-		# STtype=$(tail -n1 "${processed}/${project}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f3)
-		# mlst_DB=$(tail -n1 "${processed}/${project}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f2)
-		# echo "ST-${STtype} from ${mlst_DB}"
-		# IFS='	' read -r -a source_allele_array <<< $(tail -n1 "${processed}/${project}/${sample}/MLST/${sample}.mlst" | cut -d'	' -f4-)
-		# allele_list=()
-		# allele_count=${#source_allele_array}
-		# computed_allele_array=()
-		# for allele in ${source_allele_array[@]}; do
-		# 	allele_name=$(echo ${allele} | cut -d'(' -f1)
-		# 	allele_type=$(echo ${allele} | cut -d'(' -f2 | cut -d')' -f1)
-		# 	echo "${allele}:${allele_name}:${allele_type}"
-		# 	if [[ "${allele_type}" == *","* ]] || [[ "${allele_type}" == *"/"* ]]; then
-		# 		echo "DUAL ALLELE"
-		# 		IFS=',' read -r -a multilocus_array <<< "${allele_type}"
-		# 		locus_array=(${allele_name} ${multilocus_array[@]})
-		# 	else
-		# 		locus_array=(${allele_name} ${allele_type})
-		# 	fi
-		# 	echo "LA: ${locus_array[@]}"
-		# done
-		# computed_allele_array+=(${locus_array})
-	fi # Done with main mlst file
-	counter=0
-	echo "CAA=${#computed_allele_array}"
-	echo "${computed_allele_array[@]}"
-	for i in ${#computed_allele_array}; do
-		echo "${counter}-${allele[$counter]}"
-		counter=$((counter + 1 ))
+	for mlst_file in "${processed}/${project}/${sample}/MLST/*": do
+		if [[ "${mlst_file}" == *".mlst" ]]; then
+			if [[ "${mlst_file}" == *"srst2"* ]]; then
+				echo "Dont have srst2 checker yet, need to find good srst2 files"
+				echo "${mlst_file}" >> /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/srst2_mlsts.txt
+			else
+				python3 "${mlst_file}" "standard"
+			fi
+		fi # Done with main mlst file
 	done
 done < ${1}
