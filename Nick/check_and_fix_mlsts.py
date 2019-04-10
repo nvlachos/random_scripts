@@ -10,6 +10,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 	MLST_file=open(input_MLST_file,'r')
 	MLST_line=MLST_file.readline().strip()
 	MLST_items=MLST_line.split("	")
+	MLST_file.close()
 	print("\n".join(MLST_items))
 	if MLST_filetype == "standard":
 		sample=MLST_items[0]
@@ -76,14 +77,21 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 			else:
 				print("This sample is a multiple and something is UNdefined")
 				new_types=get_type(schemes, allele_names, db_filename)
+		print("Old types:", mlstype)
+		print("New types:", new_types)
+		new_types=','.join(new_types)
+		MLST_items[2]=new_types
+		new_info='	'.join(MLST_items)
+		MLST_file=open(input_MLST_file,'w')
+		MLST_file.write(new_info)
+
 	elif MLST_filetype == "srst2":
 		print("Not implemented yet")
 	else:
 		print("Unknown MLST filetype, can not continue")
 		exit()
 	counter=0
-	print("Old types:", mlstype)
-	print("New types:", new_types)
+
 
 def get_type(list_of_profiles, list_of_allele_names, DB_file):
 	types=["Not_initialized"]
