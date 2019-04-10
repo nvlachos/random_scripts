@@ -116,7 +116,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 						if problem[0] == "Profile_undefined":
 							problem[0]="Allele(s)-"+str(allele_names[j])
 						else:
-							if allele_names[j] not in problem:
+							if allele_names[j] not in problem and "Allele(s)-"+str(allele_names[j]) not in problem:
 								problem.append(allele_names[j])
 
 			print("Must try srst2 on input:", filepath)
