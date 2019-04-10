@@ -20,12 +20,13 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 		allele_count=len(MLST_items)
 		for allele in range(3, allele_count):
 			print(MLST_items[allele])
+
 			allele_Identifier=MLST_items[allele].split("(")[0]
 			alleles=MLST_items[allele].split("(")[1].split(")")[0].split(",")
 			allele_names.append(allele_Identifier)
 			allele_list.append(alleles)
 			list_size=len(allele_list)
-		#allele_list=[['1'], ['3'], ['189','3'], ['2'], ['2', '29'], ['96'], ['3']]
+		allele_list=[['1'], ['3'], ['189','3'], ['2'], ['2'], ['96','107'], ['3']]
 		print(allele_names)
 		print(allele_list)
 		#for allele_index in range(0,len(allele_list)):
