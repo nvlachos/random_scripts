@@ -109,11 +109,14 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				filepath[i]=filepath[i][::-1]
 			filepath=filepath[::-1]
 			filepath="/".join(filepath)
-			problem=["Profile_undefined"]
+			if MLST_items[2].count("-", 0, len(MLST_items[2])) = 1:
+				problem=["Profile_undefined"]
+			else:
+				problem=["Profiles_undefined"]
 			for i in range(0, len(schemes)):
 				for j in range(0, len(schemes[i])):
 					if "-" in schemes[i][j] or "~" in schemes[i][j] or "?" in schemes[i][j] or "*" in schemes[i][j]:
-						if problem[0] == "Profile_undefined":
+						if problem[0] == "Profile_undefined" or problem[0] == "Profiles_undefined":
 							problem[0]="Allele(s)-"+str(allele_names[j])
 						else:
 							if allele_names[j] not in problem and "Allele(s)-"+str(allele_names[j]) not in problem:
