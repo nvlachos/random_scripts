@@ -3,7 +3,7 @@
 set -e
 
 OUTDIR=/scicomp/groups/OID/NCEZID/DHQP/CEMB/databases/pubmlsts
-if [[ ! -d "$OUTDIR"]]; then
+if [[ ! -d "$OUTDIR" ]]; then
   mkdir -p "$OUTDIR"
 fi
 wget -P "$OUTDIR" http://pubmlst.org/data/dbases.xml
