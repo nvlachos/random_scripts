@@ -106,7 +106,8 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 						print("Match-"+str(db_items[0]), current_profile)
 						profiles[index] = db_items[0]
 						break
-				#print("Profiles:", profiles)
+	profiles=profiles.sort()
+	print("Profiles:", profiles)
 
 
 
