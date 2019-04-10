@@ -105,7 +105,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 					#print(list_of_profiles[index])
 					if current_profile == list_of_profiles[index]:
 						print("Match-"+str(db_items[0]), current_profile)
-						profiles[index] = db_items[0]
+						profiles[index] = int(db_items[0])
 						break
 	profiles.sort()
 	print("Profiles:", profiles)
