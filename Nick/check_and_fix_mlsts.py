@@ -14,7 +14,14 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 	if MLST_filetype == "standard":
 		sample=MLST_items[0]
 		MLST_DB=MLST_items[1]
-		mlstype=MLST_items[2]
+		if "," not in MLST_items[2]:
+			mlstype=[MLST_items[2]]
+			for i in range(0, len(mlstype)):
+				if mlstype != "-":
+					mlstype[i] = int(mlstype[i])
+			mlstype.sort()
+		else
+			mlstype=MLST_items[2].split(",")
 		allele_list=[]
 		allele_names=[]
 		allele_count=len(MLST_items)
@@ -53,13 +60,13 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 		 		print("This sample is singular and defined")
 			else:
 				print("This sample is singular and UNdefined")
-				types=get_type(schemes, allele_names, db_filename)
+				types=get_type(schemes, allele_names, db_filename, mlstype)
 		elif len(schemes) > 1:
 			if "-" not in mlstype and "," in mlstype:
 				print("This sample is a multiple and defined")
 			else:
 				print("This sample is a multiple and something is UNdefined")
-				types=get_type(schemes, allele_names, db_filename)
+				types=get_type(schemes, allele_names, db_filename, mlstype)
 	elif MLST_filetype == "srst2":
 		print("Not implemented yet")
 	else:
@@ -67,16 +74,12 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 		exit()
 	counter=0
 
-def get_type(list_of_profiles, list_of_allele_names, DB_file):
-	profiles=["Not_initialized"]
+def get_type(list_of_profiles, list_of_allele_names, DB_file, previous_types):
+	types=["Not_initialized"]
 	with open(DB_file,'r') as f:
 		profile_size=0
-		#profiles=[]
-		#for i in range(0, len(list_of_profiles)):
-		#	profiles.append("-")
-		profiles = ["-"] * len(list_of_profiles)
-
-		print("Size:", len(profiles), " &  contents:", profiles)
+		types = ["-"] * len(list_of_profiles)
+		print("Size:", len(types), " &  contents:", types)
 		for line in f:
 			db_line=line.strip()
 			db_items=db_line.split("	")
@@ -95,7 +98,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 					print("db: "+db_items)
 					print("list:"+allele_names)
 			else:
-				for index in range(0,len(profiles)):
+				for index in range(0,len(types)):
 					current_profile=db_items[1:profile_size]
 					type(current_profile)
 					type(list_of_profiles)
@@ -103,10 +106,11 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 					#print(list_of_profiles[index])
 					if current_profile == list_of_profiles[index]:
 						print("Match-"+str(db_items[0]), current_profile)
-						profiles[index] = int(db_items[0])
+						types[index] = int(db_items[0])
 						break
-	profiles.sort()
-	print("Profiles:", profiles)
+	types.sort()
+	print("Old types:", previous_types)
+	print("New types:", types)
 
 
 
