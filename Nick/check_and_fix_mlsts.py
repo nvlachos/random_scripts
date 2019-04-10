@@ -74,7 +74,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 		profile_size=0
 		#profiles=[]
 		#for i in range(0, len(list_of_profiles)):
-			profiles.append("-")
+		#	profiles.append("-")
 		profiles = ["-"] * len(list_of_profiles)
 
 		print("Size:", len(profiles), " &  contents:", profiles)
