@@ -19,9 +19,12 @@ for URL in $(grep '<url>' $OUTDIR/dbases.xml); do
     echo "# $PROFILE "
     PROFILEDIR="$OUTDIR/$PROFILE"
     echo "mkdir -p '$PROFILEDIR'"
+    mkdir -p '$PROFILEDIR'
     echo "(cd '$PROFILEDIR' && echo "$URL" && wget -q '$URL')"
+    cd '$PROFILEDIR' && echo "$URL" && wget -q '$URL'
   elif [ ${URL:(-4)} = ".tfa" ]; then
     echo "(cd '$PROFILEDIR' && echo "$URL" && wget -q '$URL')"
+    cd '$PROFILEDIR' && echo "$URL" && wget -q '$URL'
   fi
 done
 
