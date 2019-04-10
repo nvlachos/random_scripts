@@ -117,7 +117,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 							problem[0]="Allele(s)-"+str(allele_names[j])
 						else:
 							if allele_names[j] not in problem:
-								problem.append("Allele(s)-"+str(allele_names[j]))
+								problem.append(allele_names[j])
 
 			print("Must try srst2 on input:", filepath)
 			blanks_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/blank_MLSTs.txt"
