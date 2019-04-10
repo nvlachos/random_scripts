@@ -94,9 +94,9 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 					print("Updating MLST types in", input_MLST_file, "from", mlstype, "to", new_types)
 					MLST_items[2]=new_types
 					new_info='	'.join(MLST_items)
-					MLST_file=open(input_MLST_file,'w')
-					MLST_file.write(new_info)
-					MLST_file.close()
+				MLST_file=open(input_MLST_file,'w')
+				MLST_file.write(new_info)
+				MLST_file.close()
 		else:
 			print(input_MLST_file, "is as good as it gets with type", mlstype)
 
