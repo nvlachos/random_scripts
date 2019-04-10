@@ -62,28 +62,30 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 		 		print("This sample is singular and defined")
 			else:
 				print("This sample is singular and UNdefined")
-				types=get_type(schemes, allele_names, db_filename, mlstype)
+				new_types=get_type(schemes, allele_names, db_filename)
 		elif len(schemes) > 1:
 			if "-" not in mlstype:
 				if len(schemes) == len(mlstype):
 					print("This sample is a multiple and defined")
 				elif len(schemes) > len(mlstype):
 					print("Not enough types to match schemes")
-					types=get_type(schemes, allele_names, db_filename, mlstype)
+					new_types=get_type(schemes, allele_names, db_filename)
 				elif len(schemes) < len(mlstype):
 					print("Not enough schemes to match types")
-					types=get_type(schemes, allele_names, db_filename, mlstype)
+					new_types=get_type(schemes, allele_names, db_filename)
 			else:
 				print("This sample is a multiple and something is UNdefined")
-				types=get_type(schemes, allele_names, db_filename, mlstype)
+				new_types=get_type(schemes, allele_names, db_filename, mlstype)
 	elif MLST_filetype == "srst2":
 		print("Not implemented yet")
 	else:
 		print("Unknown MLST filetype, can not continue")
 		exit()
 	counter=0
+	print("Old types:", mlstype)
+	print("New types:", new_types)
 
-def get_type(list_of_profiles, list_of_allele_names, DB_file, previous_types):
+def get_type(list_of_profiles, list_of_allele_names, DB_file):
 	types=["Not_initialized"]
 	with open(DB_file,'r') as f:
 		profile_size=0
@@ -118,8 +120,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file, previous_types):
 						types[index] = int(db_items[0])
 						break
 	types.sort()
-	print("Old types:", previous_types)
-	print("New types:", types)
+	return types
 
 
 
