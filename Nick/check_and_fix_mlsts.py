@@ -47,7 +47,8 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		else:
 			print("Unknown size "+str(list_size)+" of allele_list")
 		schemes=(list(schemes))
-		print("All possible schemes:\n"+schemes)
+		print("All possible schemes:")
+		print(*schemes, sep = "\n") 
 		checking=False
 		for profile_index in range(0, len(schemes)):
 			print(profile_index, schemes[profile_index])
