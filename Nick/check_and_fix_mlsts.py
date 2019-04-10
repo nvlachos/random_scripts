@@ -2,6 +2,7 @@ import sys
 import glob
 import math
 import itertools as it
+import numpy
 
 # main function that sorts and formats all AR genes found using csstar and srst2 that have already been filtered for % identity and % length
 def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
@@ -73,6 +74,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 	with open(DB_file,'r') as f:
 		profile_size=0
 		profiles = ["-"] * len(list_of_profiles)
+		profiles_array = numpy.empty(4, dtype=int)
 		for line in f:
 			db_line=line.strip()
 			db_items=db_line.split("	")
