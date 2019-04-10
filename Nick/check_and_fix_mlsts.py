@@ -70,7 +70,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 	counter=0
 
 def get_type(list_of_profiles, list_of_allele_names, DB_file):
-	profiles=[]
+	profiles=["Not_initialized"]
 	with open(DB_file,'r') as f:
 		profile_size=0
 		#profiles=[]
@@ -107,7 +107,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 						print("Match-"+str(db_items[0]), current_profile)
 						profiles[index] = db_items[0]
 						break
-	profiles=profiles.sort()
+	profiles.sort()
 	print("Profiles:", profiles)
 
 
