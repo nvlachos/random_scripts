@@ -98,12 +98,12 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 					type(current_profile)
 					type(list_of_profiles)
 					print(current_profile)
-					print(list_of_profiles[0])
+					print(list_of_profiles[index])
 					if current_profile == list_of_profiles[index]:
 						print("Match-"+str(db_items[0])
-						profiles[index] = db_items[0])
+						profiles_array[index] = db_items[0])
 						break
-				print("Profiles:", profiles)
+				print("Profiles:", profiles_array)
 
 
 
