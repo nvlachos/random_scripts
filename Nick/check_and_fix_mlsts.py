@@ -20,7 +20,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 				if mlstype != "-":
 					mlstype[i] = int(mlstype[i])
 			mlstype.sort()
-		else
+		else:
 			mlstype=MLST_items[2].split(",")
 		allele_list=[]
 		allele_names=[]
