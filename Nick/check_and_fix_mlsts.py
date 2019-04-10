@@ -4,7 +4,7 @@ import math
 import itertools as it
 
 # main function that looks if all MLST types are defined for an outptu mlst file
-def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
+def do_MLST_check(input_MLST_file, MLST_filetype):
 	types=""
 	schemes=[]
 	MLST_file=open(input_MLST_file,'r')
@@ -14,7 +14,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 	print("\n".join(MLST_items))
 	if MLST_filetype == "standard":
 		sample=MLST_items[0]
-		MLST_DB=MLST_items[1]
+		db_name=MLST_items[1]
 		mlst_temp_type=MLST_items[2].replace("/", ",")
 		if "," not in mlst_temp_type:
 			mlstype=[MLST_items[2]]
@@ -64,7 +64,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 		 		print("This sample is singular and defined")
 			else:
 				print("This sample is singular and UNdefined")
-				new_types=get_type(schemes, allele_names, db_filename)
+				new_types=get_type(schemes, allele_names, db_name)
 				checking=True
 		elif len(schemes) > 1:
 			if "-" not in mlstype:
@@ -72,15 +72,15 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 					print("This sample is a multiple and defined")
 				elif len(schemes) > len(mlstype):
 					print("Not enough types to match schemes")
-					new_types=get_type(schemes, allele_names, db_filename)
+					new_types=get_type(schemes, allele_names, db_name)
 					checking=True
 				elif len(schemes) < len(mlstype):
 					print("Not enough schemes to match types")
-					new_types=get_type(schemes, allele_names, db_filename)
+					new_types=get_type(schemes, allele_names, db_name)
 					checking=True
 			else:
 				print("This sample is a multiple and something is UNdefined")
-				new_types=get_type(schemes, allele_names, db_filename)
+				new_types=get_type(schemes, allele_names, db_name)
 				checking=True
 		print("Old types:", mlstype)
 		if checking:
@@ -109,7 +109,8 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 
 def get_type(list_of_profiles, list_of_allele_names, DB_file):
 	types=["Not_initialized"]
-	with open(DB_file,'r') as f:
+	full_db_path="/scicomp/groups/OID/NCEZID/DHQP/CEMB/databases/pubmlsts/"+DB_file+"/"+DB_file+".txt"
+	with open(full_db_path,'r') as f:
 		profile_size=0
 		types = ["-"] * len(list_of_profiles)
 		print("Size:", len(types), " &  contents:", types)
