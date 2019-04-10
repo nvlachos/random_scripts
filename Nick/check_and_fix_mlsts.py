@@ -75,7 +75,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 					new_types=get_type(schemes, allele_names, db_filename)
 			else:
 				print("This sample is a multiple and something is UNdefined")
-				new_types=get_type(schemes, allele_names, db_filename, mlstype)
+				new_types=get_type(schemes, allele_names, db_filename)
 	elif MLST_filetype == "srst2":
 		print("Not implemented yet")
 	else:
