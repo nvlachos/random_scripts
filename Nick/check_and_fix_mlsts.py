@@ -87,6 +87,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			print("New types:", new_types)
 			if mlstype != new_types:
 				for i in range(0, len(new_types)):
+					print(new_types[i])
 					new_types[i] = str(new_types[i])
 					new_types.sort()
 					new_types=','.join(new_types)
