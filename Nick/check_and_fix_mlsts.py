@@ -22,6 +22,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 			mlstype.sort()
 		else:
 			mlstype=MLST_items[2].split(",")
+		print("MLSType:", mlstype)
 		allele_list=[]
 		allele_names=[]
 		allele_count=len(MLST_items)
