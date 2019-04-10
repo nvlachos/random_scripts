@@ -111,7 +111,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			filepath="/".join(filepath)
 			problem=["Profile_undefined"]
 			for i in range(0, len(schemes)):
-				for j in range(schemes[i])):
+				for j in range(0, len(schemes[i])):
 					if "-" in j or "~" in j or "?" in j or "*" in j:
 						if problem[0] == "Profile_undefined":
 							problem[0]=allele_names[j]
