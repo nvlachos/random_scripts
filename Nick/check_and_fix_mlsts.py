@@ -75,6 +75,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 		profile_size=0
 		profiles = ["-"] * len(list_of_profiles)
 		profiles_array = numpy.empty(4, dtype=int)
+		print("Size:", len(profiles_array), " &  contents:", profiles_array)
 		for line in f:
 			db_line=line.strip()
 			db_items=db_line.split("	")
