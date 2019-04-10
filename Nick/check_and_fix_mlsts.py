@@ -72,10 +72,10 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 def get_type(list_of_profiles, list_of_allele_names, DB_file):
 	with open(DB_file,'r') as f:
 		profile_size=0
-		profiles=[]
-		for i in range(0, len(list_of_profiles)):
+		#profiles=[]
+		#for i in range(0, len(list_of_profiles)):
 			profiles.append("-")
-		#profiles = ["-"] * len(list_of_profiles)
+		profiles = ["-"] * len(list_of_profiles)
 
 		print("Size:", len(profiles), " &  contents:", profiles)
 		for line in f:
@@ -100,8 +100,8 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 					current_profile=db_items[1:profile_size]
 					type(current_profile)
 					type(list_of_profiles)
-					print(current_profile)
-					print(list_of_profiles[index])
+					#print(current_profile)
+					#print(list_of_profiles[index])
 					if current_profile == list_of_profiles[index]:
 						print("Match-"+str(db_items[0]))
 						profiles[index] = db_items[0]
