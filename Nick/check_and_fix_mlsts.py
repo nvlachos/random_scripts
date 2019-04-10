@@ -112,7 +112,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			print("Must try srst2 on input:", filepath)
 			blanks_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/blank_MLSTs.txt"
 			blanks=open(blanks_file,'a+')
-			blanks.write(filepath+"	"+"	".join(MLST_items[1:])
+			blanks.write(filepath+"	"+"	".join(MLST_items[1:]))
 			blanks.close()
 	elif MLST_filetype == "srst2":
 		print("Not implemented yet")
