@@ -79,6 +79,9 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 				new_types=get_type(schemes, allele_names, db_filename)
 		print("Old types:", mlstype)
 		print("New types:", new_types)
+		for i in range(0, len(new_type)):
+			mlstype[i] = str(new_types[i])
+		mlstype.sort()
 		new_types=','.join(new_types)
 		MLST_items[2]=new_types
 		new_info='	'.join(MLST_items)
