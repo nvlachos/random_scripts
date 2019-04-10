@@ -48,15 +48,15 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			print("Unknown size "+str(list_size)+" of allele_list")
 		schemes=(list(schemes))
 		print("All possible schemes:")
-		print(*schemes, sep = "\n") 
+		print(*schemes, sep = "\n")
 		checking=False
 		for profile_index in range(0, len(schemes)):
-			print(profile_index, schemes[profile_index])
+			#print(profile_index, schemes[profile_index])
 			temp_scheme=[]
 			for temp_allele in schemes[profile_index]:
 				temp_scheme.append(temp_allele)
 			schemes[profile_index]=temp_scheme
-			print(profile_index, schemes[profile_index])
+			#print(profile_index, schemes[profile_index])
 		if len(schemes) == 0:
 			print("No schemes found???")
 		elif len(schemes) == 1:
