@@ -89,11 +89,11 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				for i in range(0, len(new_types)):
 					print(new_types[i])
 					new_types[i] = str(new_types[i])
-					new_types.sort()
-					new_types=','.join(new_types)
-					print("Updating MLST types in", input_MLST_file, "from", mlstype, "to", new_types)
-					MLST_items[2]=new_types
-					new_info='	'.join(MLST_items)
+				new_types.sort()
+				new_types=','.join(new_types)
+				print("Updating MLST types in", input_MLST_file, "from", mlstype, "to", new_types)
+				MLST_items[2]=new_types
+				new_info='	'.join(MLST_items)
 				MLST_file=open(input_MLST_file,'w')
 				MLST_file.write(new_info)
 				MLST_file.close()
