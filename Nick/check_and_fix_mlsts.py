@@ -3,7 +3,7 @@ import glob
 import math
 import itertools as it
 
-# main function that sorts and formats all AR genes found using csstar and srst2 that have already been filtered for % identity and % length
+# main function that looks if all MLST types are defined for an outptu mlst file
 def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 	types=""
 	schemes=[]
@@ -17,51 +17,48 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 		mlstype=MLST_items[2]
 		allele_list=[]
 		allele_names=[]
-		if mlstype == "-":
-			allele_count=len(MLST_items)
-			for allele in range(3, allele_count):
-				print(MLST_items[allele])
-				allele_Identifier=MLST_items[allele].split("(")[0]
-				alleles=MLST_items[allele].split("(")[1].split(")")[0].split(",")
-				allele_names.append(allele_Identifier)
-				allele_list.append(alleles)
-				list_size=len(allele_list)
-			#allele_list=[['1'], ['3'], ['189','3'], ['2'], ['2', '29'], ['96'], ['3']]
-			print(allele_names)
-			print(allele_list)
-			#for allele_index in range(0,len(allele_list)):
-			#	allele_list[allele_index]=allele_list[allele_index].sort()
-			if list_size == 7:
-				schemes = it.product(allele_list[0], allele_list[1], allele_list[2], allele_list[3], allele_list[4], allele_list[5], allele_list[6])
-			elif list_size == 8:
-				schemes = it.product(allele_list[0], allele_list[1], allele_list[2], allele_list[3], allele_list[4], allele_list[5], allele_list[6], allele_list[7])
-			else:
-				print("Unknown size "+str(list_size)+" of allele_list")
-			schemes=(list(schemes))
-			print(schemes)
-			for profile_index in range(0, len(schemes)):
-				print(profile_index, schemes[profile_index])
-				temp_scheme=[]
-				for temp_allele in schemes[profile_index]:
-					temp_scheme.append(temp_allele)
-				schemes[profile_index]=temp_scheme
-				print(profile_index, schemes[profile_index])
-			if len(schemes) == 0:
-				print("No schemes found???")
-			elif len(schemes) == 1:
-				if mlstype != "-":
-			 		print("This sample is singular and defined")
-				else:
-					print("This sample is singular and UNdefined")
-					types=get_type(schemes, allele_names, db_filename)
-			elif len(schemes) > 1:
-				if "-" not in mlstype and "," in mlstype:
-					print("This sample is a multiple and defined")
-				else:
-					print("This sample is a multiple and something is UNdefined")
-					types=get_type(schemes, allele_names, db_filename)
+		allele_count=len(MLST_items)
+		for allele in range(3, allele_count):
+			print(MLST_items[allele])
+			allele_Identifier=MLST_items[allele].split("(")[0]
+			alleles=MLST_items[allele].split("(")[1].split(")")[0].split(",")
+			allele_names.append(allele_Identifier)
+			allele_list.append(alleles)
+			list_size=len(allele_list)
+		#allele_list=[['1'], ['3'], ['189','3'], ['2'], ['2', '29'], ['96'], ['3']]
+		print(allele_names)
+		print(allele_list)
+		#for allele_index in range(0,len(allele_list)):
+		#	allele_list[allele_index]=allele_list[allele_index].sort()
+		if list_size == 7:
+			schemes = it.product(allele_list[0], allele_list[1], allele_list[2], allele_list[3], allele_list[4], allele_list[5], allele_list[6])
+		elif list_size == 8:
+			schemes = it.product(allele_list[0], allele_list[1], allele_list[2], allele_list[3], allele_list[4], allele_list[5], allele_list[6], allele_list[7])
 		else:
-			print("Scheme is undefined")
+			print("Unknown size "+str(list_size)+" of allele_list")
+		schemes=(list(schemes))
+		print(schemes)
+		for profile_index in range(0, len(schemes)):
+			print(profile_index, schemes[profile_index])
+			temp_scheme=[]
+			for temp_allele in schemes[profile_index]:
+				temp_scheme.append(temp_allele)
+			schemes[profile_index]=temp_scheme
+			print(profile_index, schemes[profile_index])
+		if len(schemes) == 0:
+			print("No schemes found???")
+		elif len(schemes) == 1:
+			if mlstype != "-":
+		 		print("This sample is singular and defined")
+			else:
+				print("This sample is singular and UNdefined")
+				types=get_type(schemes, allele_names, db_filename)
+		elif len(schemes) > 1:
+			if "-" not in mlstype and "," in mlstype:
+				print("This sample is a multiple and defined")
+			else:
+				print("This sample is a multiple and something is UNdefined")
+				types=get_type(schemes, allele_names, db_filename)
 	elif MLST_filetype == "srst2":
 		print("Not implemented yet")
 	else:
