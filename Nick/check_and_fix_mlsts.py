@@ -17,7 +17,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 		if "," not in MLST_items[2]:
 			mlstype=[MLST_items[2]]
 			for i in range(0, len(mlstype)):
-				if mlstype != "-":
+				if mlstype[i] != '-':
 					mlstype[i] = int(mlstype[i])
 			mlstype.sort()
 		else:
