@@ -70,6 +70,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 	counter=0
 
 def get_type(list_of_profiles, list_of_allele_names, DB_file):
+	profiles=[]
 	with open(DB_file,'r') as f:
 		profile_size=0
 		#profiles=[]
