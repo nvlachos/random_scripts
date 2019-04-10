@@ -14,7 +14,8 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 	if MLST_filetype == "standard":
 		sample=MLST_items[0]
 		MLST_DB=MLST_items[1]
-		if "," not in MLST_items[2]:
+		mlst_temp_temp=MLST_items[2].replace("/", ",")
+		if "," not in mlst_temp_type:
 			mlstype=[MLST_items[2]]
 			for i in range(0, len(mlstype)):
 				if mlstype[i] != '-':
@@ -57,14 +58,21 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 		if len(schemes) == 0:
 			print("No schemes found???")
 		elif len(schemes) == 1:
-			if mlstype != "-":
+			if mlstype[0] != "-":
 		 		print("This sample is singular and defined")
 			else:
 				print("This sample is singular and UNdefined")
 				types=get_type(schemes, allele_names, db_filename, mlstype)
 		elif len(schemes) > 1:
-			if "-" not in mlstype and "," in mlstype:
-				print("This sample is a multiple and defined")
+			if "-" not in mlstype:
+				if len(schemes) == len(mlstype):
+					print("This sample is a multiple and defined")
+				elif len(schemes) > len(mlstype):
+					print("Not enough types to match schemes")
+					types=get_type(schemes, allele_names, db_filename, mlstype)
+				elif len(schemes) < len(mlstype):
+					print("Not enough schemes to match types")
+					types=get_type(schemes, allele_names, db_filename, mlstype)
 			else:
 				print("This sample is a multiple and something is UNdefined")
 				types=get_type(schemes, allele_names, db_filename, mlstype)
