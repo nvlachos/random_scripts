@@ -49,6 +49,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 			print("Unknown size "+str(list_size)+" of allele_list")
 		schemes=(list(schemes))
 		print(schemes)
+		checking=False
 		for profile_index in range(0, len(schemes)):
 			print(profile_index, schemes[profile_index])
 			temp_scheme=[]
@@ -64,6 +65,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 			else:
 				print("This sample is singular and UNdefined")
 				new_types=get_type(schemes, allele_names, db_filename)
+				checking=True
 		elif len(schemes) > 1:
 			if "-" not in mlstype:
 				if len(schemes) == len(mlstype):
@@ -71,15 +73,18 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 				elif len(schemes) > len(mlstype):
 					print("Not enough types to match schemes")
 					new_types=get_type(schemes, allele_names, db_filename)
+					checking=True
 				elif len(schemes) < len(mlstype):
 					print("Not enough schemes to match types")
 					new_types=get_type(schemes, allele_names, db_filename)
+					checking=True
 			else:
 				print("This sample is a multiple and something is UNdefined")
 				new_types=get_type(schemes, allele_names, db_filename)
+				checking=True
 		print("Old types:", mlstype)
 		print("New types:", new_types)
-		if mlstype != new_types:
+		if checking and mlstype != new_types:
 			for i in range(0, len(new_types)):
 				new_types[i] = str(new_types[i])
 				mlstype.sort()
@@ -90,6 +95,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype, db_filename):
 				MLST_file=open(input_MLST_file,'w')
 				MLST_file.write(new_info)
 				MLST_file.close()
+				
 		else:
 			print(input_MLST_file, "is as good as it gets with type", mlstype)
 
