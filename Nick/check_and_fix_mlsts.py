@@ -107,6 +107,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			for i in range(0, len(filepath)):
 				print(filepath[i])
 				filepath[i]=filepath[i][::-1]
+			filepath=filepath[::-1]
 			filepath="/".join(filepath)
 			print("Must try srst2 on input:", filepath)
 	elif MLST_filetype == "srst2":
