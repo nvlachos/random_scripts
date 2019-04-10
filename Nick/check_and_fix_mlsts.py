@@ -109,10 +109,19 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				filepath[i]=filepath[i][::-1]
 			filepath=filepath[::-1]
 			filepath="/".join(filepath)
+			problem=["Profile_undefined"]
+			for i in range(0, len(schemes)):
+				for j in range(schemes[i])):
+					if "-" in j or "~" in j or "?" in j or "*" in j:
+						if problem[0] == "Profile_undefined":
+							problem[0]=allele_names[j]
+						else:
+							problem.append(allele_names[j])
+
 			print("Must try srst2 on input:", filepath)
 			blanks_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/blank_MLSTs.txt"
 			blanks=open(blanks_file,'a+')
-			blanks.write(filepath+"	"+"	".join(MLST_items[1:]))
+			blanks.write(filepath+"	"+",".join(problem)+"	".join(MLST_items[1:]))
 			blanks.close()
 	elif MLST_filetype == "srst2":
 		print("Not implemented yet")
