@@ -114,10 +114,10 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				for j in range(0, len(schemes[i])):
 					if "-" in schemes[i][j] or "~" in schemes[i][j] or "?" in schemes[i][j] or "*" in schemes[i][j]:
 						if problem[0] == "Profile_undefined":
-							problem[0]=allele_names[j]
+							problem[0]="Allele(s)-"+str(allele_names[j])
 						else:
 							if allele_names[j] not in problem:
-								problem.append(allele_names[j])
+								problem.append("Allele(s)-"+str(allele_names[j]))
 
 			print("Must try srst2 on input:", filepath)
 			blanks_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/blank_MLSTs.txt"
