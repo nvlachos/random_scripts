@@ -99,6 +99,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				for i in range(0, len(new_types)):
 					print(new_types[i])
 					if new_types[i] == -1:
+						print("Found a -1")
 						new_types[i] = "-"
 					new_types[i] = str(new_types[i])
 				#new_types.sort()
