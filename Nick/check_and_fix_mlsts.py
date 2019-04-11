@@ -13,7 +13,7 @@ def file_len(fname):
 def do_MLST_check(input_MLST_file, MLST_filetype):
 	# Must check if input_MLST_file has more than 1 line, different versions of MLST make different outputs
 	lines=file_len(input_MLST_file)
-    print(input_MLST_file,"has line count of:", lines)
+	print(input_MLST_file,"has line count of:", lines)
 	exit()
 
 	types=""
