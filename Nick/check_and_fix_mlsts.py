@@ -104,16 +104,16 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 					new_types[i] = str(new_types[i])
 				#new_types.sort()
 				new_types=','.join(new_types)
-				print("Updating MLST types in", input_MLST_file, "from", mlstype, "to", new_types)
+				print("Updating MLST types in", input_MLST_file, "from", ",".join(mlstype), "to", new_types)
 				MLST_items[2]=new_types
 				new_info='	'.join(MLST_items)
 				MLST_file=open(input_MLST_file,'w')
 				MLST_file.write(new_info)
 				MLST_file.close()
 				MLST_changed_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/updated_MLSTs.txt"
-				MLST_changed_file=open(input_MLST_file,'w')
-				MLST_changed_file.write(filepath+"	"+",".join(mlstype)+" to "+new_types)
-				MLST_changed_file.close()
+				MLST_changed_file_handler=open(MLST_changed_file,'w')
+				MLST_changed_file_handler.write(filepath+"	"+",".join(mlstype)+" to "+new_types)
+				MLST_changed_file_handler.close()
 		else:
 			print(input_MLST_file, "is as good as it gets with type", mlstype)
 		if '-' in MLST_items[2]:
