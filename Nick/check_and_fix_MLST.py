@@ -29,6 +29,8 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		allele_list=[]
 		allele_names=[]
 		allele_count=len(MLST_items)
+		# Default list size in case it is Empty
+		list_size=0
 		for allele in range(3, allele_count):
 			#print(MLST_items[allele])
 			allele_Identifier=MLST_items[allele].split("(")[0]
