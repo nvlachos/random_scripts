@@ -85,6 +85,13 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				new_types=get_type(schemes, allele_names, db_name)
 				checking=True
 		print("Old types:", mlstype, "\n")
+		filepath=input_MLST_file[::-1].split("/")[2:4]
+		print(filepath)
+		for i in range(0, len(filepath)):
+			print(filepath[i])
+			filepath[i]=filepath[i][::-1]
+		filepath=filepath[::-1]
+		filepath="/".join(filepath)
 		if checking:
 			print("New types:", new_types, "\n")
 			if mlstype != new_types:
@@ -99,16 +106,13 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				MLST_file=open(input_MLST_file,'w')
 				MLST_file.write(new_info)
 				MLST_file.close()
+				MLST_changed_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/updated_MLSTs.txt"
+				MLST_changed_file=open(input_MLST_file,'w')
+				MLST_changed_file.write(filepath+"	"+mlst_type+" to "+new_types)
+				MLST_changed_file.close()
 		else:
 			print(input_MLST_file, "is as good as it gets with type", mlstype)
 		if '-' in MLST_items[2]:
-			filepath=input_MLST_file[::-1].split("/")[2:4]
-			print(filepath)
-			for i in range(0, len(filepath)):
-				print(filepath[i])
-				filepath[i]=filepath[i][::-1]
-			filepath=filepath[::-1]
-			filepath="/".join(filepath)
 			if MLST_items[2].count("-", 0, len(MLST_items[2])) = 1:
 				problem=["Profile_undefined"]
 			else:
