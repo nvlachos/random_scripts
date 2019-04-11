@@ -46,6 +46,12 @@ while IFS= read -r line_in; do
 				echo "${mlst_file}" >> /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/srst2_mlsts.txt
 			else
 				echo "About to do ${mlst_file}"
+				lines=$(wc -l < ${mlst_file})
+				if [[ "${lines}" -eq 2 ]]; then
+					echo "Need to redo mlst file"
+					DB=$(tail -n1 ${mlst_file} | cut -d'	' -f2)
+					"${shareScript}/run_MLST.sh" "${sample}" "${project}" "-f" "${DB}"
+				fi
 				python3 "${shareScript}/check_and_fix_mlsts.py" "${mlst_file}" "standard"
 			fi
 		fi # Done with main mlst file
