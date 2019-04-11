@@ -145,7 +145,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 	full_db_path="/scicomp/groups/OID/NCEZID/DHQP/CEMB/databases/pubmlsts/"+DB_file+"/"+DB_file+".txt"
 	with open(full_db_path,'r') as f:
 		profile_size=0
-		types = ["-"] * len(list_of_profiles)
+		types = [-1] * len(list_of_profiles)
 		print("Size:", len(types), " &  contents:", types)
 		for line in f:
 			db_line=line.strip()
@@ -176,6 +176,9 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 						types[index] = int(db_items[0])
 						break
 	types.sort()
+	for i in types:
+		if i == -1:
+			i = "-"
 	return types
 
 
