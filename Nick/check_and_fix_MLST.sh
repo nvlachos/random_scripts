@@ -43,10 +43,10 @@ while IFS= read -r line_in; do
 		if [[ "${mlst_file}" == *".mlst" ]]; then
 			if [[ "${mlst_file}" == *"srst2"* ]]; then
 				echo "Dont have srst2 checker yet, need to find good srst2 files"
-				#echo "${mlst_file}" >> /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/srst2_mlsts.txt
+				echo "${mlst_file}" >> /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/srst2_mlsts.txt
 			else
 				echo "About to do ${mlst_file}"
-				#python3 "${mlst_file}" "standard"
+				python3 "${mlst_file}" "standard"
 			fi
 		fi # Done with main mlst file
 	done
