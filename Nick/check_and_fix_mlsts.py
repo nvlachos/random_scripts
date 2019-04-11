@@ -113,7 +113,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		else:
 			print(input_MLST_file, "is as good as it gets with type", mlstype)
 		if '-' in MLST_items[2]:
-			if MLST_items[2].count("-", 0, len(MLST_items[2])) = 1:
+			if MLST_items[2].count("-", 0, len(MLST_items[2])) == 1:
 				problem=["Profile_undefined"]
 			else:
 				problem=["Profiles_undefined"]
