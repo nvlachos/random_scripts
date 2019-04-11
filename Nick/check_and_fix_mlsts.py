@@ -111,7 +111,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				MLST_file.write(new_info)
 				MLST_file.close()
 				MLST_changed_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/updated_MLSTs.txt"
-				MLST_changed_file_handler=open(MLST_changed_file,'w')
+				MLST_changed_file_handler=open(MLST_changed_file,'a+')
 				MLST_changed_file_handler.write(filepath+"	"+",".join(mlstype)+" to "+new_types)
 				MLST_changed_file_handler.close()
 		else:
