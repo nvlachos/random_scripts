@@ -112,7 +112,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				MLST_file.close()
 				MLST_changed_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/updated_MLSTs.txt"
 				MLST_changed_file_handler=open(MLST_changed_file,'a+')
-				MLST_changed_file_handler.write(filepath+"	"+",".join(mlstype)+" to "+new_types)
+				MLST_changed_file_handler.write(filepath+"	"+",".join(mlstype)+" to "+new_types+"\n")
 				MLST_changed_file_handler.close()
 		else:
 			print(input_MLST_file, "is as good as it gets with type", mlstype)
@@ -182,6 +182,8 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 	for i in range(0, len(types)):
 		if types[i] == -1:
 			types[i] = "-"
+		else:
+			types[i] = str(types[i])
 	return types
 
 
