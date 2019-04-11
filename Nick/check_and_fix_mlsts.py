@@ -98,6 +98,8 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			if mlstype != new_types:
 				for i in range(0, len(new_types)):
 					print(new_types[i])
+					if new_types[i] == -1:
+						new_types[i] = "-"
 					new_types[i] = str(new_types[i])
 				#new_types.sort()
 				new_types=','.join(new_types)
@@ -109,7 +111,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				MLST_file.close()
 				MLST_changed_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/updated_MLSTs.txt"
 				MLST_changed_file=open(input_MLST_file,'w')
-				MLST_changed_file.write(filepath+"	"+mlstype+" to "+new_types)
+				MLST_changed_file.write(filepath+"	"+",".join(mlstype)+" to "+new_types)
 				MLST_changed_file.close()
 		else:
 			print(input_MLST_file, "is as good as it gets with type", mlstype)
@@ -176,9 +178,9 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 						types[index] = int(db_items[0])
 						break
 	types.sort()
-	for i in types:
-		if i == -1:
-			i = "-"
+#	for i in range(0, len(types)):
+#		if types[i] == -1:
+#			types[i] = "-"
 	return types
 
 
