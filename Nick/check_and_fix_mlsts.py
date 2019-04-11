@@ -98,9 +98,9 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			if mlstype != new_types:
 				for i in range(0, len(new_types)):
 					print(new_types[i])
-					if new_types[i] == -1:
-						print("Found a -1")
-						new_types[i] = "-"
+					#if new_types[i] == -1:
+					#	print("Found a -1")
+					#	new_types[i] = "-"
 					new_types[i] = str(new_types[i])
 				#new_types.sort()
 				new_types=','.join(new_types)
@@ -179,9 +179,9 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 						types[index] = int(db_items[0])
 						break
 	types.sort()
-#	for i in range(0, len(types)):
-#		if types[i] == -1:
-#			types[i] = "-"
+	for i in range(0, len(types)):
+		if types[i] == -1:
+			types[i] = "-"
 	return types
 
 
