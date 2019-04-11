@@ -46,7 +46,7 @@ while IFS= read -r line_in; do
 				echo "${mlst_file}" >> /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/srst2_mlsts.txt
 			else
 				echo "About to do ${mlst_file}"
-				python3 "${mlst_file}" "standard"
+				python3 "${shareScript}/check_and_fix_mlsts.py" "${mlst_file}" "standard"
 			fi
 		fi # Done with main mlst file
 	done
