@@ -86,9 +86,9 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				checking=True
 		print("Old types:", mlstype, "\n")
 		filepath=input_MLST_file[::-1].split("/")[2:4]
-		print(filepath)
+		#print(filepath)
 		for i in range(0, len(filepath)):
-			print(filepath[i])
+			#print(filepath[i])
 			filepath[i]=filepath[i][::-1]
 		filepath=filepath[::-1]
 		filepath="/".join(filepath)
