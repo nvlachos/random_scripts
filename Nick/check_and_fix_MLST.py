@@ -47,7 +47,10 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		MLST_temp_type=MLST_items_second[1]
 		sample=MLST_items_second[0]
 		for i in range(0, len(allele_names)):
-			allele_list.append(MLST_items_second[i])
+			if '*' in MLST_items_second[i] or '?' in MLST_items_second[i] or '-' in MLST_items_second[i]:
+				allele_list.append(MLST_items_second[i])
+			else:
+				allele_list.append(int(MLST_items_second[i]))
 		MLST_file.close()
 	else:
 		print("Unknown MLST filetype, can not continue")
@@ -150,8 +153,8 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			MLST_changed_file_handler.close()
 	else:
 		print(input_MLST_file, "is as good as it gets with type", mlstype)
-	if '-' in MLST_temp_types:
-		if MLST_temp_types.count("-", 0, len(MLST_temp_types)) == 1:
+	if '-' in MLST_temp_types or 'ND' in MLST_temp_types or 'NF' in MLST_temp_types:
+		if MLST_temp_types.count("-", 0, len(MLST_temp_types)) == 1 or MLST_temp_types.count("ND", 0, len(MLST_temp_types)) == 1 or or MLST_temp_types.count("NF", 0, len(MLST_temp_types)) == 1:
 			problem=["Profile_undefined"]
 		else:
 			problem=["Profiles_undefined"]
