@@ -154,7 +154,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	else:
 		print(input_MLST_file, "is as good as it gets with type", mlstype)
 	if '-' in MLST_temp_types or 'ND' in MLST_temp_types or 'NF' in MLST_temp_types:
-		if MLST_temp_types.count("-", 0, len(MLST_temp_types)) == 1 or MLST_temp_types.count("ND", 0, len(MLST_temp_types)) == 1 or or MLST_temp_types.count("NF", 0, len(MLST_temp_types)) == 1:
+		if MLST_temp_types.count("-", 0, len(MLST_temp_types)) + MLST_temp_types.count("ND", 0, len(MLST_temp_types)) + MLST_temp_types.count("NF", 0, len(MLST_temp_types)) == 1:
 			problem=["Profile_undefined"]
 		else:
 			problem=["Profiles_undefined"]
