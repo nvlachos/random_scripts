@@ -46,7 +46,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		MLST_items_second=MLST_line_two.split("	")
 		mlst_temp_type=MLST_items_second[1]
 		sample=MLST_items_second[0]
-		for i in range(3, len(Allele_names)):
+		for i in range(3, len(allele_names)):
 			allele_list.append(MLST_items_second[i])
 		MLST_file.close()
 	else:
