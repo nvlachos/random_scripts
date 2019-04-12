@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o run_ANI.out
-#$ -e run_ANI.err
-#$ -N run_ANI
+#$ -o run_ANIc.out
+#$ -e run_ANIc.err
+#$ -N run_ANIc
 #$ -cwd
 #$ -q all.q
 
@@ -11,6 +11,7 @@ if [[ ! -f "./config.sh" ]]; then
 	cp config_template.sh config.sh
 fi
 . ./config.sh
+module load pyani/0.2.3
 # ${mod_changers}/list_modules.sh
 
 #
