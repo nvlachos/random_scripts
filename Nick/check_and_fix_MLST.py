@@ -13,7 +13,6 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	MLST_file=open(input_MLST_file,'r')
 	MLST_line=MLST_file.readline().strip()
 	MLST_items=MLST_line.split("	")
-	MLST_file.close()
 	#print("\n".join(MLST_items))
 	if MLST_filetype == "standard":
 		sample=MLST_items[0]
@@ -30,7 +29,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			alleles=MLST_items[allele].split("(")[1].split(")")[0].split(",")
 			allele_names.append(allele_Identifier)
 			allele_list.append(alleles)
-
+		MLST_file.close()
 		#allele_list=[['1'], ['3'], ['189','3'], ['2'], ['2'], ['96','107'], ['3']]
 	elif MLST_filetype == "srst2":
 		genus=input_MLST_file.split("_")[-2]
@@ -49,6 +48,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		sample=MLST_items_second[0]
 		for i in range(3, len(Allele_names)):
 			allele_list.append(MLST_items_second[i])
+		MLST_file.close()
 	else:
 		print("Unknown MLST filetype, can not continue")
 		exit()
