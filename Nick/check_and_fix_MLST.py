@@ -238,6 +238,7 @@ def find_DB_taxonomy(genus, species):
 		return "bcc"
 	else:
 		db_test_species=str(genus[0:1])+species
+		print("Test_species_DB=", db_test_species)
 		species_exists = os.path.exists('/scicomp/groups/OID/NCEZID/DHQP/CEMB/datbases/'+db_test_species)
 		genus_exists = os.path.exists('/scicomp/groups/OID/NCEZID/DHQP/CEMB/datbases/'+db_test_species)
 		if species_exists:
