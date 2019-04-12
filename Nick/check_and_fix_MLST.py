@@ -17,7 +17,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	if MLST_filetype == "standard":
 		sample=MLST_items[0]
 		db_name=MLST_items[1]
-		mlst_temp_type=MLST_items[2]
+		MLST_temp_type=MLST_items[2]
 		allele_list=[]
 		allele_names=[]
 		allele_count=len(MLST_items)
@@ -44,7 +44,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				allele_names.append(MLST_items[i])
 		MLST_line_two=MLST_file.readline().strip()
 		MLST_items_second=MLST_line_two.split("	")
-		mlst_temp_type=MLST_items_second[1]
+		MLST_temp_type=MLST_items_second[1]
 		sample=MLST_items_second[0]
 		for i in range(3, len(allele_names)):
 			allele_list.append(MLST_items_second[i])
@@ -52,8 +52,8 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	else:
 		print("Unknown MLST filetype, can not continue")
 		exit()
-	mlst_temp_type=mlst_temp_type.replace("/", ",")
-	if "," not in mlst_temp_type:
+	MLST_temp_type=MLST_temp_type.replace("/", ",")
+	if "," not in MLST_temp_type:
 		mlstype=[MLST_temp_type]
 		for i in range(0, len(mlstype)):
 			if mlstype[i] != '-':
