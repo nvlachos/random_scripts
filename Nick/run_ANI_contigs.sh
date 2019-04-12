@@ -103,7 +103,7 @@ cp "${local_DBs}/aniDB/${genus_in,}/"*".fna" "${OUTDATADIR}/Contig_check/ANI/loc
 gunzip ${OUTDATADIR}/Contig_check/ANI/localANIDB/*.gz
 
 #Copies the samples assembly contigs to the local ANI db folder
-cp "${OUTDATADIR}/Assembly/${1}_contigs_trimmed.fasta" "${OUTDATADIR}/Contig_check/ANI/localANIDB/sample_${2}_${3}.fasta"
+cp "${OUTDATADIR}/Contig_check/${1}_contigs_trimmed.fasta" "${OUTDATADIR}/Contig_check/ANI/localANIDB/sample_${2}_${3}.fasta"
 
 
 # Add in all other assemblies to compare using list provided as argument
