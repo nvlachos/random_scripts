@@ -237,7 +237,7 @@ def find_DB_taxonomy(genus, species):
 	elif genus == "Burkholderia" and species == "cepacia":
 		return "bcc"
 	else:
-		db_test_species=str(genus[0:1])+species
+		db_test_species=str(genus[0:1]).lower()+species
 		print("Test_species_DB=", db_test_species)
 		species_exists = os.path.exists('/scicomp/groups/OID/NCEZID/DHQP/CEMB/datbases/'+db_test_species)
 		genus_exists = os.path.exists('/scicomp/groups/OID/NCEZID/DHQP/CEMB/datbases/'+db_test_species)
