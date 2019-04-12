@@ -38,7 +38,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		allele_list=[]
 		allele_names=[]
 		for i in range(3, len(MLST_items)):
-			if MLST_items == "mismatches":
+			if MLST_items[i] == "mismatches":
 				break
 			else:
 				allele_names.append(MLST_items[i])
