@@ -49,8 +49,10 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		for i in range(0, len(allele_names)):
 			if '*' in MLST_items_second[i] or '?' in MLST_items_second[i] or '-' in MLST_items_second[i]:
 				allele_list.append(MLST_items_second[i])
+				print ("Appending non-int:", MLST_items_second[i])
 			else:
 				allele_list.append(int(MLST_items_second[i]))
+				print ("Appending int:", MLST_items_second[i])
 		MLST_file.close()
 	else:
 		print("Unknown MLST filetype, can not continue")
