@@ -34,7 +34,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	elif MLST_filetype == "srst2":
 		genus=input_MLST_file.split("_")[-2]
 		species=input_MLST_file.split("_")[-1].split(".")[0]
-		db_name=find_DB_taxonopy(genus, species)
+		db_name=find_DB_taxonomy(genus, species)
 		allele_list=[]
 		allele_names=[]
 		for i in range(3, len(MLST_items)):
