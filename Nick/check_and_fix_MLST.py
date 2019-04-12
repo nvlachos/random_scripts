@@ -167,7 +167,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			if MLST_filetype == "standard":
 				print("Investigate/Submit allele or maybe try srst2 to fix allele issue on:", filepath)
 			else:
-				print("Investigate/Submit allele to fix allele issue on:", , filepath)
+				print("Investigate/Submit allele to fix allele issue on:", filepath)
 		blanks_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/blank_MLSTs.txt"
 		blanks=open(blanks_file,'a+')
 		blanks.write(filepath+"	"+",".join(problem)+"	"+"	".join(MLST_items[1:])+"\n")
