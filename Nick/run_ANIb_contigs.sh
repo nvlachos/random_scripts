@@ -206,8 +206,8 @@ fi
 
 #Calls pyani on local db folder
 python -V
-#python "${shareScript}/pyani/average_nucleotide_identity.py" -i "${OUTDATADIR}/Contig_check/ANI/localANIDB" -o "${OUTDATADIR}/Contig_check/ANI/aniM" --write_excel
-average_nucleotide_identity.py -i "${OUTDATADIR}/Contig_check/ANI/localANIDB" -o "${OUTDATADIR}/Contig_check/ANI/anib_contigs" -m ANIb --write_excel
+#python "${shareScript}/pyani/average_nucleotide_identity.py" -i "${OUTDATADIR}/Contig_check/ANI/localANIDB" -o "${OUTDATADIR}/Contig_check/ANI/aniB_contigs" --write_excel
+average_nucleotide_identity.py -i "${OUTDATADIR}/Contig_check/ANI/localANIDB" -o "${OUTDATADIR}/Contig_check/ANI/aniB_contigs" -m ANIb --write_excel
 
 #Extracts the query sample info line for percentage identity from the percent identity file
 while IFS='' read -r line;
@@ -218,13 +218,13 @@ do
 #		echo "found it-"$sampleline
 		break
 	fi
-done < "${OUTDATADIR}/Contig_check/ANI/aniM/ANIm_percentage_identity.tab"
+done < "${OUTDATADIR}/Contig_check/ANI/aniB_contigs/ANIb_percentage_identity.tab"
 
 #Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
-if [[ -s "${OUTDATADIR}/Contig_check/ANI/aniM/ANIm_percentage_identity.tab" ]]; then
-	firstline=$(head -n 1 "${OUTDATADIR}/Contig_check/ANI/aniM/ANIm_percentage_identity.tab")
+if [[ -s "${OUTDATADIR}/Contig_check/ANI/aniB_contigs/ANIb_percentage_identity.tab" ]]; then
+	firstline=$(head -n 1 "${OUTDATADIR}/Contig_check/ANI/aniB_contigs/ANIb_percentage_identity.tab")
 else
-	echo "No "${OUTDATADIR}/Contig_check/ANI/aniM/ANIm_percentage_identity.tab" file, exiting"
+	echo "No "${OUTDATADIR}/Contig_check/ANI/aniB_contigs/ANIb_percentage_identity.tab" file, exiting"
 	exit 1
 fi
 
