@@ -3,6 +3,7 @@ import os
 import glob
 import math
 import itertools as it
+from pathlib import Path
 
 # main function that looks if all MLST types are defined for an outptu mlst file
 def do_MLST_check(input_MLST_file, MLST_filetype):
@@ -241,10 +242,12 @@ def find_DB_taxonomy(genus, species):
 		print("Test_species_DB=", db_test_species)
 		species_exists = os.path.exists('/scicomp/groups/OID/NCEZID/DHQP/CEMB/datbases/'+db_test_species)
 		genus_exists = os.path.exists('/scicomp/groups/OID/NCEZID/DHQP/CEMB/datbases/'+genus.lower())
-		if species_exists:
+		species_path = Path('/scicomp/groups/OID/NCEZID/DHQP/CEMB/datbases/'+db_test_species)
+		genus_path = Path('/scicomp/groups/OID/NCEZID/DHQP/CEMB/datbases/'+db_test_species)
+		if species_path.exists():
 			print("Found species DB")
 			return db_test_species
-		elif genus_exists:
+		elif genus_path.exists():
 			print("Found genus DB")
 			return genus
 		else:
