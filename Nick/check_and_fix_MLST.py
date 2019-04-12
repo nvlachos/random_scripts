@@ -240,12 +240,12 @@ def find_DB_taxonomy(genus, species):
 		db_test_species=str(genus[0:1])+species
 		species_exists = os.path.exists('/scicomp/groups/OID/NCEZID/DHQP/CEMB/datbases/'+db_test_species)
 		genus_exists = os.path.exists('/scicomp/groups/OID/NCEZID/DHQP/CEMB/datbases/'+db_test_species)
-		if exists:
-    		return db_test_species
+		if species_exists:
+			return db_test_species
 		elif genus_exists:
 			return genus
 		else:
-    		print("No database found for", genus, species)
+			print("No database found for", genus, species)
 			exit()
 
 
