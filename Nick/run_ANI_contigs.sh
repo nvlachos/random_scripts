@@ -75,12 +75,12 @@ if [ ! -d "$OUTDATADIR/ANI" ]; then
 fi
 
 # Checks to see if the local DB ANI folder already exists and creates it if not. This is used to store a local copy of all samples in DB to be compared to (as to not disturb the source DB)
-if [ ! -d "$OUTDATADIR/Contig_check/ANI/localANIDB" ]; then  #create outdir if absent
-	echo "Creating $OUTDATADIR/Contig_check/ANI/localANIDB"
-	mkdir -p "$OUTDATADIR/Contig_check/ANI/localANIDB"
+if [ ! -d "$OUTDATADIR/Contig_check/ANI/localANIDB_aniM_contigs" ]; then  #create outdir if absent
+	echo "Creating $OUTDATADIR/Contig_check/ANI/localANIDB_aniM_contigs"
+	mkdir -p "$OUTDATADIR/Contig_check/ANI/localANIDB_aniM_contigs"
 else
-	rm -r "$OUTDATADIR/Contig_check/ANI/localANIDB"
-	mkdir -p "$OUTDATADIR/Contig_check/ANI/localANIDB"
+	rm -r "$OUTDATADIR/Contig_check/ANI/localANIDB_aniM_contigs"
+	mkdir -p "$OUTDATADIR/Contig_check/ANI/localANIDB_aniM_contigs"
 fi
 
 # Checks to see if the local DB ANI folder already exists and creates it if not. This is used to store a local copy of all samples in DB to be compared to (as to not disturb the source DB)
@@ -101,11 +101,11 @@ genus_in=${2}
 
 #Creates a local copy of the database folder
 echo "trying to copy ${local_DBs}/aniDB/${genus_in,}/"
-cp "${local_DBs}/aniDB/${genus_in,}/"*".fna" "${OUTDATADIR}/Contig_check/ANI/localANIDB/"
-gunzip ${OUTDATADIR}/Contig_check/ANI/localANIDB/*.gz
+cp "${local_DBs}/aniDB/${genus_in,}/"*".fna" "${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs/"
+gunzip ${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs/*.gz
 
 #Copies the samples assembly contigs to the local ANI db folder
-cp "${OUTDATADIR}/Contig_check/${1}_contigs_trimmed.fasta" "${OUTDATADIR}/Contig_check/ANI/localANIDB/sample_${2}_${3}.fasta"
+cp "${OUTDATADIR}/Contig_check/${1}_contigs_trimmed.fasta" "${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs/sample_${2}_${3}.fasta"
 
 
 # Add in all other assemblies to compare using list provided as argument
@@ -118,7 +118,7 @@ if [[ "${others}" = "true" ]]; then
 			if [[ "${project}" == "${4}" ]] && [[ "${sample_name}" == "${1}" ]]; then
 				echo "Already in there as ref sample"
 			else
-				cp "${processed}/${project}/${sample_name}/Assembly/${sample_name}_contigs_trimmed.fasta" "${OUTDATADIR}/Contig_check/ANI/localANIDB/temp"
+				cp "${processed}/${project}/${sample_name}/Assembly/${sample_name}_contigs_trimmed.fasta" "${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs/temp"
 			fi
 		done < ${5}
 	else
@@ -128,28 +128,28 @@ else
 	echo "Analysis will be completed using only database isolates"
 fi
 
-#Renames all files in the localANIDB folder by changing extension from fna to fasta (which pyani needs)
-for file in ${OUTDATADIR}/Contig_check/ANI/localANIDB/*.fna;
+#Renames all files in the localANIDB_aniM_contigs folder by changing extension from fna to fasta (which pyani needs)
+for file in ${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs/*.fna;
 do
 	fasta_name=$(basename "${file}" .fna)".fasta"
-	mv "${file}" "${OUTDATADIR}/Contig_check/ANI/localANIDB/${fasta_name}"
+	mv "${file}" "${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs/${fasta_name}"
 done
 
 # Mashtree trimming to reduce run time for ANI
 owd=$(pwd)
-cd ${OUTDATADIR}/Contig_check/ANI/localANIDB/
+cd ${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs/
 . "${mod_changers}/perl_5221_to_5161mt.sh"
-mashtree.pl --numcpus ${procs} *.fasta --tempdir ${OUTDATADIR}/Contig_check/ANI/temp > ${OUTDATADIR}/Contig_check/ANI/"${genus_in}_and_${1}_mashtree.dnd";
+mashtree.pl --numcpus ${procs} *.fasta --tempdir ${OUTDATADIR}/Contig_check/ANI/temp > ${OUTDATADIR}/Contig_check/ANI/"${genus_in}_and_${1}_mashtree_ANIm_contigs.dnd";
 . "${mod_changers}/perl_5161mt_to_5221.sh"
 
 # Get total number of isolates compared in tree
-sample_count=$(find ${OUTDATADIR}/Contig_check/ANI/localANIDB/ -type f | wc -l)
+sample_count=$(find ${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs/ -type f | wc -l)
 # Must remove sample of interest
 sample_count=$(( sample_count - 1 ))
 # Check if sample count is greater than the max samples for tree size, if so then reduce tree size to max closest samples balanced around submitted isolate
 if [[ ${sample_count} -gt ${max_ani_samples} ]]; then
 	sleep 2
-	tree=$(head -n 1 "${OUTDATADIR}/Contig_check/ANI/${genus_in}_and_${1}_mashtree.dnd")
+	tree=$(head -n 1 "${OUTDATADIR}/Contig_check/ANI/${genus_in}_and_${1}_mashtree_ANIm_contigs.dnd")
 	echo $tree
 	tree=$(echo "${tree}" | tr -d '()')
 	echo $tree
@@ -181,17 +181,17 @@ if [[ ${sample_count} -gt ${max_ani_samples} ]]; then
 		fi
 				#echo ${filename}
 	done
-	mkdir "${OUTDATADIR}/Contig_check/ANI/localANIDB_trimmed"
+	mkdir "${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs_trimmed"
 	for sample in ${samples_trimmed[@]};
 	do
 		filename=$(echo ${sample} | cut -d':' -f1)
 		filename="${filename}.fasta"
 		echo "Moving ${filename}"
-		cp ${OUTDATADIR}/Contig_check/ANI/localANIDB/${filename} ${OUTDATADIR}/Contig_check/ANI/localANIDB_trimmed/
+		cp ${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs/${filename} ${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs_trimmed/
 	done
-	rm -r "${OUTDATADIR}/Contig_check/ANI/localANIDB_full"
-	mv "${OUTDATADIR}/Contig_check/ANI/localANIDB" "${OUTDATADIR}/Contig_check/ANI/localANIDB_full"
-	mv "${OUTDATADIR}/Contig_check/ANI/localANIDB_trimmed" "${OUTDATADIR}/Contig_check/ANI/localANIDB"
+	rm -r "${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs_full"
+	mv "${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs" "${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs_full"
+	mv "${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs_trimmed" "${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs_contigs"
 # Continue without reducing the tree, as there are not enough samples to require reduction
 else
 	echo "Sample count below limit, not trimming ANI database"
@@ -202,14 +202,14 @@ cd ${owd}
 
 # Checks for a previous copy of the aniM folder, removes it if found
 if [ -d "${OUTDATADIR}/Contig_check/ANI/aniM" ]; then
-	echo "Removing old ANIm results in ${OUTDATADIR}/Contig_check/ANI/aniM"
-	rm -r "${OUTDATADIR}/Contig_check/ANI/aniM"
+	echo "Removing old ANIm results in ${OUTDATADIR}/Contig_check/ANI/aniM_contigs"
+	rm -r "${OUTDATADIR}/Contig_check/ANI/aniM_contigs"
 fi
 
 #Calls pyani on local db folder
 python -V
-#python "${shareScript}/pyani/average_nucleotide_identity.py" -i "${OUTDATADIR}/Contig_check/ANI/localANIDB" -o "${OUTDATADIR}/Contig_check/ANI/aniM" --write_excel
-average_nucleotide_identity.py -i "${OUTDATADIR}/Contig_check/ANI/localANIDB" -o "${OUTDATADIR}/Contig_check/ANI/aniM" --write_excel
+#python "${shareScript}/pyani/average_nucleotide_identity.py" -i "${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs" -o "${OUTDATADIR}/Contig_check/ANI/aniM" --write_excel
+average_nucleotide_identity.py -i "${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs" -o "${OUTDATADIR}/Contig_check/ANI/aniM_contigs" --write_excel
 
 #Extracts the query sample info line for percentage identity from the percent identity file
 while IFS='' read -r line;
@@ -223,10 +223,10 @@ do
 done < "${OUTDATADIR}/Contig_check/ANI/aniM/ANIm_percentage_identity.tab"
 
 #Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
-if [[ -s "${OUTDATADIR}/Contig_check/ANI/aniM/ANIm_percentage_identity.tab" ]]; then
-	firstline=$(head -n 1 "${OUTDATADIR}/Contig_check/ANI/aniM/ANIm_percentage_identity.tab")
+if [[ -s "${OUTDATADIR}/Contig_check/ANI/aniM_contigs/ANIm_percentage_identity.tab" ]]; then
+	firstline=$(head -n 1 "${OUTDATADIR}/Contig_check/ANI/aniM_contigs/ANIm_percentage_identity.tab")
 else
-	echo "No "${OUTDATADIR}/Contig_check/ANI/aniM/ANIm_percentage_identity.tab" file, exiting"
+	echo "No "${OUTDATADIR}/Contig_check/ANI/aniM_contigs/ANIm_percentage_identity.tab" file, exiting"
 	exit 1
 fi
 
@@ -246,7 +246,7 @@ do
 #		echo "Skipping ${i}"
 		continue
 	fi
-	definition=$(head -1 "${OUTDATADIR}/Contig_check/ANI/localANIDB/${samples[i]}.fasta")
+	definition=$(head -1 "${OUTDATADIR}/Contig_check/ANI/localANIDB_aniM_contigs/${samples[i]}.fasta")
 	# Prints all matching samples to file (Except the self comparison) by line as percent_match  sample_name  fasta_header
 	echo "${percents[i+1]} ${samples[i]} ${definition}" >> "${OUTDATADIR}/Contig_check/ANI/best_hits.txt"
 done
