@@ -11,8 +11,9 @@ if [[ ! -f "./config.sh" ]]; then
 	cp config_template.sh config.sh
 fi
 . ./config.sh
-module load pyani/0.2.3
+module load pyani/0.2.7
 module load mashtree/0.29
+module load ncbi-blast+/2.6.0
 # ${mod_changers}/list_modules.sh
 
 #
