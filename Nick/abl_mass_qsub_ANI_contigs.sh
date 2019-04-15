@@ -73,8 +73,8 @@ max_subs=${2}
 # Set script directory
 main_dir="${3}/ANIm_contigs_subs"
 cp ./config.sh ${main_dir}
-if [[ ! -d "${3}/ANIm_contigs_subs/complete" ]]; then
-	mkdir -p "${3}/ANIm_contigs_subs/complete"
+if [[ ! -d "${main_dir}/complete" ]]; then
+	mkdir -p "${main_dir}/ANIm_contigs_subs/complete"
 fi
 
 start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
