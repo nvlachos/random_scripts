@@ -48,7 +48,7 @@ elif [ ! -s "${local_DBs}/aniDB/${2,}" ]; then
 		mkdir -p "${processed}/${4}/${1}/ANI"
 	fi
 	# Write non-results to a file in ANI folder
-	echo "No matching ANI database found for ${2}(genus)" >> "${processed}/${4}/${1}/ANI/best_ANI_hits_ordered(${1}_vs_${2}).txt"
+	echo "No matching ANI database found for ${2}(genus)" >> "${processed}/${4}/${1}/ANI/best_ANIb_contigs_hits_ordered(${1}_vs_${2}).txt"
 	# Add genus to list to download and to database
 	global_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 	echo "ANI: ${2} - Found as ${1} on ${global_time}" >> "${shareScript}/maintenance_To_Do.txt"
