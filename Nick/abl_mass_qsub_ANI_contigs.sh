@@ -1,4 +1,4 @@
-ANI_contigs#!/bin/sh -l
+#!/bin/sh -l
 
 #$ -o ablmq-anic.out
 #$ -e ablmq-anic.err
@@ -206,6 +206,9 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		done
 	fi
 	counter=$(( counter + 1 ))
+	else
+		echo "No TAX file available to use for ANI determination"
+	fi
 done
 
 # Loop to ensure all samples are complete (or time runs) before allowing the script to exit
