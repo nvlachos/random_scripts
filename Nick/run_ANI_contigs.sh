@@ -220,7 +220,7 @@ do
 #		echo "found it-"$sampleline
 		break
 	fi
-done < "${OUTDATADIR}/Contig_check/ANI/aniM/ANIm_percentage_identity.tab"
+done < "${OUTDATADIR}/Contig_check/ANI/aniM_contigs/ANIm_percentage_identity.tab"
 
 #Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
 if [[ -s "${OUTDATADIR}/Contig_check/ANI/aniM_contigs/ANIm_percentage_identity.tab" ]]; then
