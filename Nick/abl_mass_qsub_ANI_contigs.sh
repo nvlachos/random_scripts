@@ -97,62 +97,62 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	#echo "${counter}-${processed}/${project}/${sample}/Assembly/${sample}_ANI_contigs_trimmed.fasta"
 
 	# Ensure tax file exists to get proper DB to run ANI against
-	if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
-		# Parse tax file
-		while IFS= read -r line;
-		do
-			# Grab first letter of line (indicating taxonomic level)
-			first=${line:0:1}
-			# Assign taxonomic level value from 4th value in line (1st-classification level, 2nd-% by kraken, 3rd-true % of total reads, 4th-identifier)
-			if [ "${first}" = "s" ]
-			then
-				species=$(echo "${line}" | awk -F ' ' '{print $2}')
-			elif [ "${first}" = "G" ]
-			then
-				genus=$(echo "${line}" | awk -F ' ' '{print $2}')
-				# Only until ANI gets fixed
-				if [[ ${genus} == "Clostridioides" ]]; then
-					genus="Clostridium"
-				fi
+	if [[ ! -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
+		"${shareScript}/determine_taxID.sh" "${sample}" "${project}"
+	fi
+	# Parse tax file
+	while IFS= read -r line;
+	do
+		# Grab first letter of line (indicating taxonomic level)
+		first=${line:0:1}
+		# Assign taxonomic level value from 4th value in line (1st-classification level, 2nd-% by kraken, 3rd-true % of total reads, 4th-identifier)
+		if [ "${first}" = "s" ]
+		then
+			species=$(echo "${line}" | awk -F ' ' '{print $2}')
+		elif [ "${first}" = "G" ]
+		then
+			genus=$(echo "${line}" | awk -F ' ' '{print $2}')
+			# Only until ANI gets fixed
+			if [[ ${genus} == "Clostridioides" ]]; then
+				genus="Clostridium"
 			fi
-		done < "${processed}/${project}/${sample}/${sample}.tax"
-
+		fi
+	done < "${processed}/${project}/${sample}/${sample}.tax"
 		#Temp assignment, if specific DB is necessary
-		#genus="Acinetobacter"
-		#species="baumannii"
-
+	#genus="Acinetobacter"
+	#species="baumannii"
 		# Check if counter is below max submission limit
-	 	if [[ ${counter} -lt ${max_subs} ]]; then
-			# Check if old data exists, skip if so
-			if [[ -s "${processed}/${project}/${sample}/Contig_check/${sample}_contigs_trimmed.fasta" ]]; then
-				if [[ ! -f "${processed}/${sample}/Contig_check/ANI/best_ANIm_contigs_hits_ordered(${sample}_vs_${genus,})" ]]; then
-					echo  "Index is below max submissions, submitting"
-					echo "Going to make ${main_dir}/anic_${sample}_${start_time}.sh"
-					echo -e "#!/bin/bash -l\n" > "${main_dir}/anic_${sample}_${start_time}.sh"
-					echo -e "#$ -o anic_${sample}.out" >> "${main_dir}/anic_${sample}_${start_time}.sh"
-					echo -e "#$ -e anic_${sample}.err" >> "${main_dir}/anic_${sample}_${start_time}.sh"
-					echo -e "#$ -N anic_${sample}"   >> "${main_dir}/anic_${sample}_${start_time}.sh"
-					echo -e "#$ -cwd"  >> "${main_dir}/anic_${sample}_${start_time}.sh"
-					echo -e "#$ -q short.q\n"  >> "${main_dir}/anic_${sample}_${start_time}.sh"
-					echo -e "cd ${shareScript}" >> "${main_dir}/anic_${sample}_${start_time}.sh"
-					echo -e "\"${shareScript}/run_ANI_contigs.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/anic_${sample}_${start_time}.sh"
-					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_anic_complete.txt\"" >> "${main_dir}/anic_${sample}_${start_time}.sh"
-					cd "${main_dir}"
-					#if [[ "${counter}" -lt "${last_index}" ]]; then
-						qsub "${main_dir}/anic_${sample}_${start_time}.sh"
-					#else
-					#	qsub -sync y "${main_dir}/anic_${sample}_${start_time}.sh"
-					#fi
-				# Old data exists, skipping
-				else
-					echo "${project}/${sample} already has ANI summary"
-					echo "$(date)" > "${main_dir}/complete/${sample}_anic_complete.txt"
-				fi
-			# No Assembly file to run ANI on, skipping
+ 	if [[ ${counter} -lt ${max_subs} ]]; then
+		# Check if old data exists, skip if so
+		if [[ -s "${processed}/${project}/${sample}/Contig_check/${sample}_contigs_trimmed.fasta" ]]; then
+			if [[ ! -f "${processed}/${sample}/Contig_check/ANI/best_ANIm_contigs_hits_ordered(${sample}_vs_${genus,})" ]]; then
+				echo  "Index is below max submissions, submitting"
+				echo "Going to make ${main_dir}/anic_${sample}_${start_time}.sh"
+				echo -e "#!/bin/bash -l\n" > "${main_dir}/anic_${sample}_${start_time}.sh"
+				echo -e "#$ -o anic_${sample}.out" >> "${main_dir}/anic_${sample}_${start_time}.sh"
+				echo -e "#$ -e anic_${sample}.err" >> "${main_dir}/anic_${sample}_${start_time}.sh"
+				echo -e "#$ -N anic_${sample}"   >> "${main_dir}/anic_${sample}_${start_time}.sh"
+				echo -e "#$ -cwd"  >> "${main_dir}/anic_${sample}_${start_time}.sh"
+				echo -e "#$ -q short.q\n"  >> "${main_dir}/anic_${sample}_${start_time}.sh"
+				echo -e "cd ${shareScript}" >> "${main_dir}/anic_${sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/run_ANI_contigs.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/anic_${sample}_${start_time}.sh"
+				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_anic_complete.txt\"" >> "${main_dir}/anic_${sample}_${start_time}.sh"
+				cd "${main_dir}"
+				#if [[ "${counter}" -lt "${last_index}" ]]; then
+					qsub "${main_dir}/anic_${sample}_${start_time}.sh"
+				#else
+				#	qsub -sync y "${main_dir}/anic_${sample}_${start_time}.sh"
+				#fi
+			# Old data exists, skipping
 			else
-				echo "${project}/${sample} does not have assembly"
+				echo "${project}/${sample} already has ANI summary"
 				echo "$(date)" > "${main_dir}/complete/${sample}_anic_complete.txt"
 			fi
+		# No Assembly file to run ANI on, skipping
+		else
+			echo "${project}/${sample} does not have assembly"
+			echo "$(date)" > "${main_dir}/complete/${sample}_anic_complete.txt"
+		fi
 	# Counter is above limit, wait until "slot" opens up"
 	else
 		waiting_for_index=$(( counter - max_subs ))
@@ -209,9 +209,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		done
 	fi
 	counter=$(( counter + 1 ))
-	else
-		echo "No TAX file available to use for ANI determination"
-	fi
 done
 
 # Loop to ensure all samples are complete (or time runs) before allowing the script to exit
