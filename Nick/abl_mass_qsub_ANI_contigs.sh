@@ -122,7 +122,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		# Check if counter is below max submission limit
 	 	if [[ ${counter} -lt ${max_subs} ]]; then
 			# Check if old data exists, skip if so
-			if [[ -s "${processed}/${project}/${sample}/Contig_check/${sample}_ANI_contigs_trimmed.fasta" ]]; then
+			if [[ -s "${processed}/${project}/${sample}/Contig_check/${sample}_contigs_trimmed.fasta" ]]; then
 				if [[ ! -f "${processed}/${sample}/Contig_check/ANI/best_ANIm_contigs_hits_ordered(${sample}_vs_${genus,})" ]]; then
 					echo  "Index is below max submissions, submitting"
 					echo "Going to make ${main_dir}/anic_${sample}_${start_time}.sh"
@@ -168,7 +168,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			# Check if "waiting" sample is complete
 			if [[ -f "${main_dir}/complete/${waiting_sample}_anic_complete.txt" ]]; then
 				# Check if an assembly exists to run ANI on
-				if [[ -s "${processed}/${project}/${sample}/Contig_check/${sample}_ANI_contigs_trimmed.fasta" ]]; then
+				if [[ -s "${processed}/${project}/${sample}/Contig_check/${sample}_contigs_trimmed.fasta" ]]; then
 					# Check if old data exists, skip if so
 					if [[ ! -f "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
 						echo  "${waiting_sample}(${waiting_for_index}) is not complete, submitting ${sample} ($counter)"
