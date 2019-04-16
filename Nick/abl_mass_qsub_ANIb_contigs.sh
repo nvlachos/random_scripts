@@ -89,7 +89,9 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	#sample=${sample:0:20}
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	if [[ "${clobbernes}" == "clobber" ]]; then
-		rm -r "${processed}/${project}/${sample}/Contig_check/ANI"
+		rm -r "${processed}/${project}/${sample}/Contig_check/ANI/ANIb_contigs/"
+		rm -r "${processed}/${project}/${sample}/Contig_check/ANI/localANIDB_ANIb_contigs/"
+		rm "${processed}/${project}/${sample}/Contig_check/ANI/best_ANIb_contig_hits"*
 	fi
 	#echo "${sample} and ${project}:"
 	#echo "${counter}-${processed}/${project}/${sample}/Assembly/${sample}_ANI_contigs_trimmed.fasta"
