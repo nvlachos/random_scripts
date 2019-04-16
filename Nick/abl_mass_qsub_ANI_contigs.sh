@@ -71,11 +71,15 @@ counter=0
 max_subs=${2}
 
 # Set script directory
+
 main_dir="${3}/ANIm_contigs_subs"
-cp ./config.sh ${main_dir}
-if [[ ! -d "${main_dir}/complete" ]]; then
-	mkdir -p "${main_dir}/complete"
+if [[ ! -d "${main_dir}" ]]; then
+	mkdir "${main_dir}"
+	mkdir "${main_dir}/complete"
+elif [[ ! -d "${main_dir}/complete" ]]; then
+	mkdir "${main_dir}/complete"
 fi
+cp ./config.sh ${main_dir}
 
 start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 
