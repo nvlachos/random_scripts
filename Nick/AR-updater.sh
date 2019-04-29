@@ -29,7 +29,7 @@ today=$(date "+%Y%m%d")
 
 # Exits if a sample list from TODAY was not creaetd
 if [[ ! -f ${shareScript}/sample_list_${today}.txt ]]; then
-	echo "No sample list file was created, must exit..."
+	echo "No sample list file was created (${shareScript}/sample_list_${today}.txt), must exit..."
 	exit 245
 fi
 
