@@ -144,6 +144,7 @@ while IFS= read -r var; do
 			fi
 		else
 			input_DB_csstar="NO_CSSTAR_file(HAS_ASSEMBLY)"
+		fi
 	else
 		input_DB_csstar="No_ASSEMBLY_TO_RUN_CSSTAR_ON"
 	fi
