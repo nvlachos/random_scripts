@@ -120,8 +120,8 @@ while IFS= read -r var; do
 			else
 				ohsixoheightp="Plasmid_AR_Found"
 			fi
-		elif [[ -s "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_plasmid_scaffolds_trimmed.fasta" ]]; then
-				ohsixoheightp="NO_CSSTAR_Plasmid_file(HAS_PLASMID_ASSEMBLY)"
+		# elif [[ -s "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_plasmid_scaffolds_trimmed.fasta" ]]; then
+		# 		ohsixoheightp="NO_CSSTAR_Plasmid_file(HAS_PLASMID_ASSEMBLY)"
 		else
 			ohsixoheightp="NO_PLASMID_ASSEMBLY_TO_RUN_CSSTAR_ON"
 		fi
@@ -148,8 +148,8 @@ while IFS= read -r var; do
 			else
 				input_DB_csstar_plasmid="AR_Found"
 			fi
-		elif [[ -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
-			input_DB_csstar_plasmid="NO_CSSTAR_Plasmid_file(HAS_PLASMID_ASSEMBLY)"
+		# elif [[ -s "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
+		# 	input_DB_csstar_plasmid="NO_CSSTAR_Plasmid_file(HAS_PLASMID_ASSEMBLY)"
 		else
 			input_DB_csstar_plasmid="NO_PLASMID_ASSEMBLY_TO_RUN_CSSTAR_ON"
 		fi
