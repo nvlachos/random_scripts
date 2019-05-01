@@ -110,6 +110,7 @@ while IFS= read -r var; do
 			fi
 		else
 			ohsixoheight="NO_CSSTAR_file(HAS_ASSEMBLY)"
+		fi
 	else
 		ohsixoheight="NO_ASSEMBLY_TO_RUN_CSSTAR_ON"
 	fi
@@ -125,13 +126,14 @@ while IFS= read -r var; do
 				# elif [[ -s "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_plasmid_scaffolds_trimmed.fasta" ]]; then
 				# 		ohsixoheightp="NO_CSSTAR_Plasmid_file(HAS_PLASMID_ASSEMBLY)"
 			else
-				ohsixoheightp="NO_c-sstar_plasmid_output_file"
+				ohsixoheightp="No_c-sstar_plasmid_output_file(HAS_PLASMID_ASSEMBLY)"
 			fi
 		else
 			ohsixoheightp="No_c-sstar_plasmid_folder"
 		fi
 	else
-		ohsixoheightp="No_c-sstar_plasmid_folder"
+		ohsixoheightp="NO_PLASMID_ASSEMBLY_TO_RUN_CSSTAR_PLASMID_ON"
+	fi
 	if [[ -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
 		if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_${2}.gapped_98_sstar_summary.txt" ]]; then
 			header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_${2}.gapped_98_sstar_summary.txt")
@@ -143,7 +145,7 @@ while IFS= read -r var; do
 		else
 			input_DB_csstar="NO_CSSTAR_file(HAS_ASSEMBLY)"
 	else
-		input_DB_csstar_plasmid="No_PLASMID_ASSEMBLY_TO_RUN_CSSTAR_PLASMID_ON"
+		input_DB_csstar="No_ASSEMBLY_TO_RUN_CSSTAR_ON"
 	fi
 	if [[ -f "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_plasmid_scaffolds_trimmed.fasta" ]]; then
 		if [[ -d "${processed}/${project}/${sample_name}/c-sstar_plasmid" ]]; then
@@ -157,7 +159,7 @@ while IFS= read -r var; do
 				# elif [[ -s "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
 				# 	input_DB_csstar_plasmid="NO_CSSTAR_Plasmid_file(HAS_PLASMID_ASSEMBLY)"
 			else
-				input_DB_csstar_plasmid="NO_c-sstar_plasmid_file(HAS_PLASMID_ASSEMBLY)"
+				input_DB_csstar_plasmid="No_c-sstar_plasmid_file(HAS_PLASMID_ASSEMBLY)"
 			fi
 		else
 			input_DB_csstar_plasmid="No_c-sstar_plasmid_folder"
