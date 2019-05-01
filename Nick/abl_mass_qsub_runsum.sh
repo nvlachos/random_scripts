@@ -15,6 +15,9 @@
 # Usage ./abl_mass_qsub_srst2.sh path_to_list max_concurrent_submissions output_directory_for_scripts
 #
 
+# Number regex to test max concurrent submission parameter
+number='^[0-9]+$'
+
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
 	echo "No argument supplied to abl_mass_qsub_runsum.sh, exiting"
@@ -26,6 +29,9 @@ elif [[ "$1" = "-h" ]]; then
 elif [[ ! -f "${1}" ]]; then
 	echo "${1} (list) does not exist...exiting"
 	exit 1
+elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
+	echo "${2} is not a number or is empty. Please input max number of concurrent qsub submissions...exiting"
+	exit 2
 elif [[ ! -d "${3}" ]]; then
 	echo "${3} location does not exist...exiting"
 	exit 1
