@@ -160,7 +160,7 @@ while IFS= read -r var; do
 				# elif [[ -s "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
 				# 	input_DB_csstar_plasmid="NO_CSSTAR_Plasmid_file(HAS_PLASMID_ASSEMBLY)"
 			else
-				input_DB_csstar_plasmid="No_c-sstar_plasmid_file(HAS_PLASMID_ASSEMBLY)"
+				input_DB_csstar_plasmid="No_c-sstar_plasmid_output_file(HAS_PLASMID_ASSEMBLY)"
 			fi
 		else
 			input_DB_csstar_plasmid="No_c-sstar_plasmid_folder"
