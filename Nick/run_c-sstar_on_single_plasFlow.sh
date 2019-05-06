@@ -72,7 +72,7 @@ if [[ -s "${OUTDATADIR}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_ass
 		source_assembly="${OUTDATADIR}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_assembly.fasta"
 		OUTDATADIR="${OUTDATADIR}/c-sstar_plasFlow"
 else
-	echo ""
+	echo "Not found: ${OUTDATADIR}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_assembly.fasta"
 	if [[ "${2}" = "g" ]]; then
 		suffix="gapped"
 	elif [[ "${2}" = "u" ]]; then
