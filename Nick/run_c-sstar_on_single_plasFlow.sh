@@ -71,15 +71,18 @@ fi
 if [[ -s "${OUTDATADIR}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/assembly.fasta" ]]; then
 		source_assembly="${OUTDATADIR}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_assembly.fasta"
 		OUTDATADIR="${OUTDATADIR}/c-sstar_plasFlow"
-	else
-		if [[ "${2}" = "g" ]]; then
-			suffix="gapped"
-		elif [[ "${2}" = "u" ]]; then
-			suffix="ungapped"
-		fi
+else
+	if [[ "${2}" = "g" ]]; then
+		suffix="gapped"
+	elif [[ "${2}" = "u" ]]; then
+		suffix="ungapped"
+	fi
+	if [[ ! -d "${OUTDATADIR}/${resGANNOT_srst2_filename}_${suffix}" ]]; then
+		mkdir -p "${OUTDATADIR}/${resGANNOT_srst2_filename}_${suffix}"
 		"No anti-microbial genes were found using c-SSTAR because there were No Plasmids Found" > "${OUTDATADIR}/${resGANNOT_srst2_filename}_${suffix}/${1}.${resGANNOT_srst2_filename}.${suffix}_${sim}.sstar"
 		exit
 	fi
+fi
 
 
 # Creates the output c-sstar folder if it does not exist yet
