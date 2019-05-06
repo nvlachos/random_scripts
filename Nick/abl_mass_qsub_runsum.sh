@@ -12,7 +12,7 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./abl_mass_qsub_srst2.sh path_to_list max_concurrent_submissions output_directory_for_scripts
+# Usage ./abl_mass_qsub_runsum.sh path_to_list max_concurrent_submissions output_directory_for_scripts
 #
 
 # Number regex to test max concurrent submission parameter
