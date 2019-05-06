@@ -79,9 +79,9 @@ else
 	fi
 	if [[ ! -d "${OUTDATADIR}/${resGANNOT_srst2_filename}_${suffix}" ]]; then
 		mkdir -p "${OUTDATADIR}/${resGANNOT_srst2_filename}_${suffix}"
-		"No anti-microbial genes were found using c-SSTAR because there were No Plasmids Found" > "${OUTDATADIR}/${resGANNOT_srst2_filename}_${suffix}/${1}.${resGANNOT_srst2_filename}.${suffix}_${sim}.sstar"
-		exit
 	fi
+	echo "No anti-microbial genes were found using c-SSTAR because there were No Plasmids Found" > "${OUTDATADIR}/${resGANNOT_srst2_filename}_${suffix}/${1}.${resGANNOT_srst2_filename}.${suffix}_${sim}.sstar"
+	exit
 fi
 
 
