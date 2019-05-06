@@ -68,6 +68,8 @@ echo "-${arr_size}:${arr[@]}-"
 
 max_subs=${2}
 
+start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
+
 # Loop through and act on each sample name in the passed/provided list
 counter=0
 main_dir="${3}/node_subs"
