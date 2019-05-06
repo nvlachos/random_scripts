@@ -68,10 +68,11 @@ else
 	sim=${csstar_high}
 fi
 # Check if there was a request to run it on the plasmid assembly of the sample, change fasta source as necessary
-if [[ -s "${OUTDATADIR}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/assembly.fasta" ]]; then
+if [[ -s "${OUTDATADIR}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_assembly.fasta" ]]; then
 		source_assembly="${OUTDATADIR}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_assembly.fasta"
 		OUTDATADIR="${OUTDATADIR}/c-sstar_plasFlow"
 else
+	echo ""
 	if [[ "${2}" = "g" ]]; then
 		suffix="gapped"
 	elif [[ "${2}" = "u" ]]; then
