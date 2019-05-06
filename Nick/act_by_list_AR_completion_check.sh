@@ -34,7 +34,7 @@ fi
 # Loop through and act on each sample name in the passed/provided list
 counter=0
 echo "c-sstar:c-sstar_plasmid:srst2"
-echo "Identification	20180608-c-sstar	20180608-c-sstar_plasmid	20180608-srst2	${2}-c-sstar	${2}-c-sstar_plasmid	${2}-srst2" > "${3}"
+echo "Identification	20180608-c-sstar	20180608-srst2	${2}-c-sstar	${2}-srst2" > "${3}"
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
@@ -114,26 +114,26 @@ while IFS= read -r var; do
 	else
 		ohsixoheight="NO_ASSEMBLY_TO_RUN_CSSTAR_ON"
 	fi
-	if [[ -f "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_plasmid_scaffolds_trimmed.fasta" ]]; then
-		if [[ -d "${processed}/${project}/${sample_name}/c-sstar_plasmid" ]]; then
-			if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_20180608.gapped_40_sstar_summary.txt" ]]; then
-				header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_20180608.gapped_40_sstar_summary.txt")
-				if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
-					ohsixoheightp="No_plasmid_AR"
-				else
-					ohsixoheightp="Plasmid_AR_Found"
-				fi
-				# elif [[ -s "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_plasmid_scaffolds_trimmed.fasta" ]]; then
-				# 		ohsixoheightp="NO_CSSTAR_Plasmid_file(HAS_PLASMID_ASSEMBLY)"
-			else
-				ohsixoheightp="No_c-sstar_plasmid_output_file(HAS_PLASMID_ASSEMBLY)"
-			fi
-		else
-			ohsixoheightp="No_c-sstar_plasmid_folder"
-		fi
-	else
-		ohsixoheightp="NO_PLASMID_ASSEMBLY_TO_RUN_CSSTAR_PLASMID_ON"
-	fi
+	# if [[ -f "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_plasmid_scaffolds_trimmed.fasta" ]]; then
+	# 	if [[ -d "${processed}/${project}/${sample_name}/c-sstar_plasmid" ]]; then
+	# 		if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_20180608.gapped_40_sstar_summary.txt" ]]; then
+	# 			header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_20180608.gapped_40_sstar_summary.txt")
+	# 			if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
+	# 				ohsixoheightp="No_plasmid_AR"
+	# 			else
+	# 				ohsixoheightp="Plasmid_AR_Found"
+	# 			fi
+	# 			# elif [[ -s "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_plasmid_scaffolds_trimmed.fasta" ]]; then
+	# 			# 		ohsixoheightp="NO_CSSTAR_Plasmid_file(HAS_PLASMID_ASSEMBLY)"
+	# 		else
+	# 			ohsixoheightp="No_c-sstar_plasmid_output_file(HAS_PLASMID_ASSEMBLY)"
+	# 		fi
+	# 	else
+	# 		ohsixoheightp="No_c-sstar_plasmid_folder"
+	# 	fi
+	# else
+	# 	ohsixoheightp="NO_PLASMID_ASSEMBLY_TO_RUN_CSSTAR_PLASMID_ON"
+	# fi
 	if [[ -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
 		if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_${2}.gapped_98_sstar_summary.txt" ]]; then
 			header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_${2}.gapped_98_sstar_summary.txt")
@@ -148,26 +148,26 @@ while IFS= read -r var; do
 	else
 		input_DB_csstar="No_ASSEMBLY_TO_RUN_CSSTAR_ON"
 	fi
-	if [[ -f "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_plasmid_scaffolds_trimmed.fasta" ]]; then
-		if [[ -d "${processed}/${project}/${sample_name}/c-sstar_plasmid" ]]; then
-			if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt" ]]; then
-				header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt")
-				if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
-					input_DB_csstar_plasmid="No_plasmid_AR"
-				else
-					input_DB_csstar_plasmid="Plasmid_AR_Found"
-				fi
-				# elif [[ -s "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
-				# 	input_DB_csstar_plasmid="NO_CSSTAR_Plasmid_file(HAS_PLASMID_ASSEMBLY)"
-			else
-				input_DB_csstar_plasmid="No_c-sstar_plasmid_output_file(HAS_PLASMID_ASSEMBLY)"
-			fi
-		else
-			input_DB_csstar_plasmid="No_c-sstar_plasmid_folder"
-		fi
-	else
-		input_DB_csstar_plasmid="No_PLASMID_ASSEMBLY_TO_RUN_CSSTAR_PLASMID_ON"
-	fi
+	# if [[ -f "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_plasmid_scaffolds_trimmed.fasta" ]]; then
+	# 	if [[ -d "${processed}/${project}/${sample_name}/c-sstar_plasmid" ]]; then
+	# 		if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt" ]]; then
+	# 			header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar_plasmid/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt")
+	# 			if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
+	# 				input_DB_csstar_plasmid="No_plasmid_AR"
+	# 			else
+	# 				input_DB_csstar_plasmid="Plasmid_AR_Found"
+	# 			fi
+	# 			# elif [[ -s "${processed}/${project}/${sample_name}/plasmidAssembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
+	# 			# 	input_DB_csstar_plasmid="NO_CSSTAR_Plasmid_file(HAS_PLASMID_ASSEMBLY)"
+	# 		else
+	# 			input_DB_csstar_plasmid="No_c-sstar_plasmid_output_file(HAS_PLASMID_ASSEMBLY)"
+	# 		fi
+	# 	else
+	# 		input_DB_csstar_plasmid="No_c-sstar_plasmid_folder"
+	# 	fi
+	# else
+	# 	input_DB_csstar_plasmid="No_PLASMID_ASSEMBLY_TO_RUN_CSSTAR_PLASMID_ON"
+	# fi
 
 	# Brief check if srst2 files exist, dont really have time to check for content at the moment
 	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_20180608_srst2__results.txt" ]] || [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__ResGANNOT_20180608_srst2__results.txt" ]]; then
@@ -181,7 +181,7 @@ while IFS= read -r var; do
 		input_DB_srst2="File Missing"
 	fi
 	echo "${counter}:${project}/${sample_name}:	20180608	:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:	${2}	:${input_DB_csstar}:${input_DB_csstar_plasmid}:${input_DB_srst2}:"
-	echo "${project}/${sample_name}	${ohsixoheight}	${ohsixoheightp}	${ohsixoheights}:${input_DB_csstar}	${input_DB_csstar_plasmid}	${input_DB_srst2}	" >> "${3}"
+	echo "${project}/${sample_name}	${ohsixoheight}	${ohsixoheights}:${input_DB_csstar}	${input_DB_srst2}	" >> "${3}"
 	counter=$(( counter + 1 ))
 done < "${1}"
 echo "All isolates completed"
