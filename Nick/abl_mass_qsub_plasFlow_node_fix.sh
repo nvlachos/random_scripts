@@ -100,21 +100,21 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			# Check if Node fixer has been run already, skip if so
 			if [[ "${header}" != ">${sample}" ]]; then
 				echo  "Index is below max submissions, submitting"
-				echo -e "#!/bin/bash -l\n" > "${main_dir}/node_${sample}_${start_time}.sh"
-				echo -e "#$ -o node_${sample}.out" >> "${main_dir}/node_${sample}_${start_time}.sh"
-				echo -e "#$ -e node_${sample}.err" >> "${main_dir}/node_${sample}_${start_time}.sh"
-				echo -e "#$ -N node_${sample}"   >> "${main_dir}/node_${sample}_${start_time}.sh"
-				echo -e "#$ -cwd"  >> "${main_dir}/node_${sample}_${start_time}.sh"
-				echo -e "#$ -q short.q\n"  >> "${main_dir}/node_${sample}_${start_time}.sh"
-				echo -e "cd ${shareScript}" >> "${main_dir}/node_${sample}_${start_time}.sh"
-				echo -e "mv \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly.fasta\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_original.fasta\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
-				echo -e "python3 \"${shareScript}/fasta_headers_plasFlow.py\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_original.fasta\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly.fasta\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
-				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_plnode_complete.txt\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+				echo -e "#!/bin/bash -l\n" > "${main_dir}/plnode_${sample}_${start_time}.sh"
+				echo -e "#$ -o plnode_${sample}.out" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+				echo -e "#$ -e plnode_${sample}.err" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+				echo -e "#$ -N plnode_${sample}"   >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+				echo -e "#$ -cwd"  >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+				echo -e "#$ -q short.q\n"  >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+				echo -e "cd ${shareScript}" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+				echo -e "mv \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly.fasta\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_original.fasta\"" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+				echo -e "python3 \"${shareScript}/fasta_headers_plasFlow.py\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_original.fasta\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly.fasta\"" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_plnode_complete.txt\"" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
 				cd "${main_dir}"
 				#if [[ "${counter}" -lt "${last_index}" ]]; then
-					qsub "${main_dir}/node_${sample}_${start_time}.sh"
+					qsub "${main_dir}/plnode_${sample}_${start_time}.sh"
 				#else
-				#	qsub -sync y "${main_dir}/node_${sample}_${start_time}.sh"
+				#	qsub -sync y "${main_dir}/plnode_${sample}_${start_time}.sh"
 				#fi
 			# Nodes already have been fixed
 			else
@@ -148,21 +148,21 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					header=$(head -n1 "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" | cut -d'_' -f1)
 					if [[ "${header}" = ">NODE" ]]; then
 						echo  "Index is below max submissions, submitting"
-						echo -e "#!/bin/bash -l\n" > "${main_dir}/node_${sample}_${start_time}.sh"
-						echo -e "#$ -o node_${sample}.out" >> "${main_dir}/node_${sample}_${start_time}.sh"
-						echo -e "#$ -e node_${sample}.err" >> "${main_dir}/node_${sample}_${start_time}.sh"
-						echo -e "#$ -N node_${sample}"   >> "${main_dir}/node_${sample}_${start_time}.sh"
-						echo -e "#$ -cwd"  >> "${main_dir}/node_${sample}_${start_time}.sh"
-						echo -e "#$ -q short.q\n"  >> "${main_dir}/node_${sample}_${start_time}.sh"
-						echo -e "cd ${shareScript}" >> "${main_dir}/node_${sample}_${start_time}.sh"
-						echo -e "mv \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly.fasta\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_original.fasta\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
-						echo -e "python3 \"${shareScript}/fasta_headers_plasFlow.py\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_original.fasta\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly.fasta\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
-						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_plnode_complete.txt\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+						echo -e "#!/bin/bash -l\n" > "${main_dir}/plnode_${sample}_${start_time}.sh"
+						echo -e "#$ -o plnode_${sample}.out" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+						echo -e "#$ -e plnode_${sample}.err" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+						echo -e "#$ -N plnode_${sample}"   >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+						echo -e "#$ -cwd"  >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+						echo -e "#$ -q short.q\n"  >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+						echo -e "cd ${shareScript}" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+						echo -e "mv \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly.fasta\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_original.fasta\"" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+						echo -e "python3 \"${shareScript}/fasta_headers_plasFlow.py\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_original.fasta\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly.fasta\"" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_plnode_complete.txt\"" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
 						cd "${main_dir}"
 						#if [[ "${counter}" -lt "${last_index}" ]]; then
-							qsub "${main_dir}/node_${sample}_${start_time}.sh"
+							qsub "${main_dir}/plnode_${sample}_${start_time}.sh"
 						#else
-						#	qsub -sync y "${main_dir}/node_${sample}_${start_time}.sh"
+						#	qsub -sync y "${main_dir}/plnode_${sample}_${start_time}.sh"
 						#fi
 						break
 					# Node fixer already run on sample
@@ -194,11 +194,11 @@ for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
 	if [[ -f "${main_dir}/complete/${waiting_sample}_plnode_complete.txt" ]] || [[ ! -s "${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${waitin_sample}_uni_assembly/${waiting_sample}_plasmid_assembly.fasta" ]]; then
 		echo "${item} is complete"
-		if [[ -f "${shareScript}/node_${sample}.out" ]]; then
-			mv "${shareScript}/node_${sample}.out" ${main_dir}
+		if [[ -f "${shareScript}/plnode_${sample}.out" ]]; then
+			mv "${shareScript}/plnode_${sample}.out" ${main_dir}
 		fi
-		if [[ -f "${shareScript}/node_${sample}.err" ]]; then
- 			mv "${shareScript}/node_${sample}.err" ${main_dir}
+		if [[ -f "${shareScript}/plnode_${sample}.err" ]]; then
+ 			mv "${shareScript}/plnode_${sample}.err" ${main_dir}
 		fi
 	else
 		while :
@@ -209,11 +209,11 @@ for item in "${arr[@]}"; do
 				fi
 				if [[ -f "${main_dir}/complete/${waiting_sample}_plnode_complete.txt" ]]; then
 					echo "${item} is complete"
-					if [[ -f "${shareScript}/node_${sample}.out" ]]; then
-						mv "${shareScript}/node_${sample}.out" ${main_dir}
+					if [[ -f "${shareScript}/plnode_${sample}.out" ]]; then
+						mv "${shareScript}/plnode_${sample}.out" ${main_dir}
 					fi
-					if [[ -f "${shareScript}/node_${sample}.err" ]]; then
-			 			mv "${shareScript}/node_${sample}.err" ${main_dir}
+					if [[ -f "${shareScript}/plnode_${sample}.err" ]]; then
+			 			mv "${shareScript}/plnode_${sample}.err" ${main_dir}
 					fi
 					break
 				else
