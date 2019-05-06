@@ -87,7 +87,7 @@ start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
-	if [[ "${clobberness}" = "clobber" ]]; then
+	if [[ "${clobberness}" == "clobber" ]]; then
 		rm -r ${processed}/${project}/${sample}/c-sstar_plasFlow
 	fi
 	#echo ${counter}-${project}-${sample}
