@@ -34,7 +34,7 @@ fi
 # Loop through and act on each sample name in the passed/provided list
 counter=0
 echo "c-sstar:c-sstar_plasmid:srst2"
-echo "Identification:20180608-c-sstar:20180608-c-sstar_plasmid:20180608-srst2:${2}-c-sstar:${2}-c-sstar_plasmid:${2}-srst2" > "${3}"
+echo "Identification	20180608-c-sstar	20180608-c-sstar_plasmid	20180608-srst2	${2}-c-sstar	${2}-c-sstar_plasmid	${2}-srst2" > "${3}"
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
@@ -181,7 +181,7 @@ while IFS= read -r var; do
 		input_DB_srst2="File Missing"
 	fi
 	echo "${counter}:${project}/${sample_name}:	20180608	:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:	${2}	:${input_DB_csstar}:${input_DB_csstar_plasmid}:${input_DB_srst2}:"
-	echo "${project}/${sample_name}:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:${input_DB_csstar}:${input_DB_csstar_plasmid}:${input_DB_srst2}:" >> "${3}"
+	echo "${project}/${sample_name}	${ohsixoheight}	${ohsixoheightp}	${ohsixoheights}:${input_DB_csstar}	${input_DB_csstar_plasmid}	${input_DB_srst2}	" >> "${3}"
 	counter=$(( counter + 1 ))
 done < "${1}"
 echo "All isolates completed"
