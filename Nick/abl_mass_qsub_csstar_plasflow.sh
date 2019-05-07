@@ -165,7 +165,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			done
 		fi
 	else
-		echo "${project}/${sample} has no plasflow assembly to run csstar on"
+		echo "${project}/${sample} has no plasflow assembly to run csstar on (! ${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_trimmed.fasta)"
 		echo "$(date)" > "${main_dir}/complete/${sample}_csstarp_complete.txt"
 	fi
 	counter=$(( counter + 1 ))
