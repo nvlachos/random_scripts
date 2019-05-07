@@ -92,7 +92,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	fi
 	#echo ${counter}-${project}-${sample}
 	# Check if sample has a usable assembly file
-	if [[ -s "${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly.fasta" ]]; then
+	if [[ -s "${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_trimmed.fasta" ]]; then
 		#echo "Test"
 		# Check if counter is below max number of concurrent submissions
 		if [[ ${counter} -lt ${max_subs} ]]; then
@@ -133,7 +133,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					break
 				fi
 				# Check if usable assembly exists for current sample or that one does not exist for the waiting sample (therefore there would be no need to wait on it)
-				if [[ -f "${main_dir}/complete/${waiting_sample}_csstarp_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly.fasta" ]]; then
+				if [[ -f "${main_dir}/complete/${waiting_sample}_csstarp_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_trimmed.fasta" ]]; then
 					# Check if old data exists, skip if so
 					if [[ ! -f "${processed}/${project}/${sample}/c-sstar_plasFlow/${sample}.${resGANNOT_srst2_filename}.gapped_40_sstar_summary.txt" ]]; then
 						echo  "Index is below max submissions, submitting"
@@ -176,7 +176,7 @@ timer=0
 ptimer=0
 for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
-	if [[ -f "${main_dir}/complete/${waiting_sample}_csstarp_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/plasFlow/Unicycler_assemblies/${waiting_sample}_uni_assembly/${waiting_sample}_plasmid_assembly.fasta" ]]; then
+	if [[ -f "${main_dir}/complete/${waiting_sample}_csstarp_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/plasFlow/Unicycler_assemblies/${waiting_sample}_uni_assembly/${waiting_sample}_plasmid_assembly_trimmed.fasta" ]]; then
 		echo "${item} is complete normal"
 		if [[ -f "${shareScript}/csstp_${sample}.out" ]]; then
 			mv "${shareScript}/csstp_${sample}.out" "${main_dir}"
