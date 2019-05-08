@@ -12,10 +12,11 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list.sh list_name(currently has to be placed in /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR folder) description of list function
+# Usage ./act_by_list.sh path_to_list max_concurrent_submission output_directory_for_scripts
 #
-# script changes depending on what needs to be run through the list
-#
+
+# Number regex to test max concurrent submission parametr
+number='^[0-9]+$'
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -23,9 +24,12 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_template.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_submissions"
+	echo "Usage is ./abl_mass_qsub_template.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_submissions output_directory_for_scripts"
 	echo "Output location varies depending on which tasks are performed but will be found somewhere under ${processed}"
 	exit 0
+elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
+	echo "${2} is not a number or is empty. Please input max number of concurrent qsub submissions...exiting"
+	exit 2
 fi
 
 arr=()
@@ -43,12 +47,12 @@ fi
 # Loop through and act on each sample name in the passed/provided list
 counter=0
 max_subs=${2}
-main_dir="${share}/mass_subs/srst2_subs"
-if [[ ! -d "${share}/mass_subs/srst2_subs" ]]; then
-	mkdir "${share}/mass_subs/srst2_subs"
-	mkdir "${share}/mass_subs/srst2_subs/complete"
-elif [[ ! -d  "${share}/mass_subs/srst2_subs/complete" ]]; then
-	mkdir "${share}/mass_subs/srst2_subs/complete"
+main_dir="${3}/srst2_subs"
+if [[ ! -d "${3}/srst2_subs" ]]; then
+	mkdir "${3}/srst2_subs"
+	mkdir "${3}/srst2_subs/complete"
+elif [[ ! -d  "${3}/srst2_subs/complete" ]]; then
+	mkdir "${3}/srst2_subs/complete"
 fi
 
 while [ ${counter} -lt ${arr_size} ] ; do
@@ -64,13 +68,18 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			echo -e "#$ -N srst2AR_${sample}"   >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo -e "#$ -cwd"  >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo -e "#$ -q short.q\n"  >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			echo -e "module load srst2/0.1.7" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			echo -e "module unload Python/2.7.11" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			echo -e "module load Python/2.7.15\n" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+			# Add all necessary modules
+			### echo -e "module load XXX" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+
 			# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
-			echo -e "\"${shareScript}/run_srst2_on_singleDB_alternateDB.sh\" \"${sample}\" \"${project}\" \"${share}/DBs/star/ResGANNOT_20180608_srst2.fasta\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+			echo -e "\"${shareScript}/run_srst2_on_singleDB_alternateDB.sh\" \"${sample}\" \"${project}\" \"${local_DBs}/star/ResGANNOT_20180608_srst2.fasta\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+			cd "${main_dir}"
+			if [[ "${counter}" -lt "${last_index}" ]]; then
+				qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+			else
+				qsub -sync y "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+			fi
 		else
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo "${project}/${sample} already has 20180608"
@@ -99,9 +108,14 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					echo -e "module unload Python/2.7.11" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo -e "module load Python/2.7.15\n" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
-					echo -e "${shareScript}/run_srst2_on_singleDB_alternateDB.sh ${sample} ${project} ${share}/DBs/star/ResGANNOT_20180608_srst2.fasta" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+					echo -e "${shareScript}/run_srst2_on_singleDB_alternateDB.sh ${sample} ${project} ${local_DBs}/star/ResGANNOT_20180608_srst2.fasta" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-					qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+					cd "${main_dir}"
+					if [[ "${counter}" -lt "${last_index}" ]]; then
+						qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+					else
+						qsub -sync y "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+					fi
 					else
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo "${project}/${sample} already has 20180608"
