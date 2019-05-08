@@ -64,7 +64,7 @@ while IFS= read -r var; do
 				segment_names=$(echo "${plasFlow_graph}" | cut -d'	' -f3)
 				new_segment_array=""
 				IFS=', ' read -r -a segment_array <<< "${segment_names}"
-				for segment in segment_array: do
+				for segment in segment_array; do
 					new_segment_array=new_segment_array+"${sample_name}_${segment},"
 				done
 				overlaps=$(echo "${plasFlow_graph}" | cut -d'	' -f4)
