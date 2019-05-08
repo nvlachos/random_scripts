@@ -74,7 +74,7 @@ while IFS= read -r var; do
 				continue
 			fi
 			echo "${new_line}" >> ${2}
-		done
+		done < "${processed}/${project}/${sample_name}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_assembly.gfa"
 	fi
 	#counter=$(( counter + 1 ))
 done < "${1}"
