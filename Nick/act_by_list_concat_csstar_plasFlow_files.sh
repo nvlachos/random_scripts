@@ -28,6 +28,8 @@ elif [[ "$1" = "-h" ]]; then
 elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
 	echo "${2} is not a number or is empty. Please input correct date for ResGANNOT DB...exiting"
 	exit 2
+elif [[ -z "${3}" ]]; then
+	touch ${3}
 fi
 
 # Loop through and act on each sample name in the passed/provided list
