@@ -2,7 +2,7 @@
 
 #$ -o abl-ARC.out
 #$ -e abl-ARC.err
-#$ -N abl-AR_checker
+#$ -N abl-plasCATTER
 #$ -cwd
 #$ -q all.q
 
@@ -29,12 +29,15 @@ elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
 	echo "${2} is not a number or is empty. Please input correct date for ResGANNOT DB...exiting"
 	exit 2
 elif [[ -z "${3}" ]]; then
-	touch ${3}
+	outdir=$(dirname "${3}")
+	if [[ ! -d "${outdir}" ]]; then
+		mkdir -p "${outdir}"
+	fi
+	>${3}
 fi
 
 # Loop through and act on each sample name in the passed/provided list
 counter=0
-> ${3}
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
