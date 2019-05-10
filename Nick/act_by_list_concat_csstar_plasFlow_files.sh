@@ -29,8 +29,10 @@ elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
 	echo "${2} is not a number or is empty. Please input correct date for ResGANNOT DB...exiting"
 	exit 2
 elif [[ -z "${3}" ]]; then
+	echo "${3} does not exist"
 	outdir=$(dirname "${3}")
 	if [[ ! -d "${outdir}" ]]; then
+		echo "${outdir} does not exist"
 		mkdir -p "${outdir}"
 	fi
 	>${3}
