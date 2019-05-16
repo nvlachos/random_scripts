@@ -81,7 +81,7 @@ def tagHit(l, edge):
 			l = [ l[0], l[1]+'$', l[2]+'$', l[3], l[4], l[5], l[6], l[7], l[8], l[9], l[10], l[11], l[12], l[13], l[14], l[15] ]
 	(prot, numSTOP) = internalSTOPcodon(l)
 	if int(numSTOP) > 0:  #TR indicates 'truncated protein translation'
-		l = [ l[0], l[1]+'TR', l[2]+'TR', l[3], l[4], l[5], l[6], l[7], l[8], l[9], l[10], l[11], l[12], l[13], l[14], l[15] ]
+		l = [ l[0], l[1]+'-TRUNC', l[2]+'-TRUNC', l[3], l[4], l[5], l[6], l[7], l[8], l[9], l[10], l[11], l[12], l[13], l[14], l[15] ]
 	return l
 
 def main(args=None):
@@ -143,7 +143,7 @@ def main(args=None):
 				#candidate = [clusterNr, enzymeParts[1], enzymeParts[2], blastOut[1] , pident, blastOut[3], bitscore, blastOut[12], blastOut[6], blastOut[7], blastOut[13], blastOut[14].rstrip(), enzymeParts[4] , enzymeParts[5], round(100*(int(blastOut[12])/int(blastOut[3]))), blastOut[4], ]
 				# For use with reporting SNPs
 				#print("Match: ",blastOut[3],": Total :",blastOut[12],": percent :", int(100*(int(blastOut[3])/int(blastOut[12]))))
-				candidate = [clusterNr, enzymeParts[1], enzymeParts[2], blastOut[1] , pident, blastOut[3], bitscore, blastOut[12], blastOut[6], blastOut[7], blastOut[13], blastOut[14].rstrip(), enzymeParts[4] , enzymeParts[5], int(100*(int(blastOut[3])/int(blastOut[12]))), blastOut[4]]
+				candidate = [clusterNr, enzymeParts[1], enzymeParts[2], blastOut[1] , pident, blastOut[3], bitscore, blastOut[12], blastOut[6], blastOut[7], blastOut[13], blastOut[14].rstrip(), enzymeParts[4] , enzymeParts[5], int(100*int(blastOut[3])//int(blastOut[12])), blastOut[4]]
 
 				if clusterNr == currentClusterNr:
 					if float(best[6]) < float(candidate[6]):
