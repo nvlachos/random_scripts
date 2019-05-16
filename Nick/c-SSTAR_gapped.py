@@ -130,10 +130,10 @@ def main(args=None):
 				ident, dec = blastOut[2].split('.')
 				pident = int(ident)
 				bitscore = blastOut[11]
-				#print("blastOut is", len(blastOut), "elements")
-				#print (", ".join(map(str, blastOut)))
-				#print("enzymeParts is", len(enzymeParts), "elements")
-				#print (", ".join(map(str, enzymeParts)))
+				print("blastOut is", len(blastOut), "elements")
+				print (", ".join(map(str, blastOut)))
+				print("enzymeParts is", len(enzymeParts), "elements")
+				print (", ".join(map(str, enzymeParts)))
 				#print()
 				#for i in range(0, len(blastOut)):
 				#	print("B:", i, blastOut[i])
