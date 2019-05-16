@@ -119,6 +119,7 @@ def main(args=None):
 		currentClusterNr = '-1'
 		topHits = []
 		for l in infile:
+			print("yes")
 			blastOut = [x for x in l.split('\t')]
 			# Special for cdiff project
 			thresHold = (int(blastOut[12])/5)
