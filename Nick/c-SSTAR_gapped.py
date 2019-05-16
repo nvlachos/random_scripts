@@ -130,19 +130,19 @@ def main(args=None):
 				ident, dec = blastOut[2].split('.')
 				pident = int(ident)
 				bitscore = blastOut[11]
-				print("blastOut is", len(blastOut), "elements")
-				print (", ".join(map(str, blastOut)))
-				print("enzymeParts is", len(enzymeParts), "elements")
-				print (", ".join(map(str, enzymeParts)))
-				print()
-				for i in range(0, len(blastOut)):
-					print("B:", i, blastOut[i])
-				for i in range(0, len(enzymeParts)):
-					print("E:", i, enzymeParts[i])
-				print("\n\n\n\n\n")
+				#print("blastOut is", len(blastOut), "elements")
+				#print (", ".join(map(str, blastOut)))
+				#print("enzymeParts is", len(enzymeParts), "elements")
+				#print (", ".join(map(str, enzymeParts)))
+				#print()
+				#for i in range(0, len(blastOut)):
+				#	print("B:", i, blastOut[i])
+				#for i in range(0, len(enzymeParts)):
+				#	print("E:", i, enzymeParts[i])
+				#print("\n\n\n\n\n")
 				#candidate = [clusterNr, enzymeParts[1], enzymeParts[2], blastOut[1] , pident, blastOut[3], bitscore, blastOut[12], blastOut[6], blastOut[7], blastOut[13], blastOut[14].rstrip(), enzymeParts[4] , enzymeParts[5], round(100*(int(blastOut[12])/int(blastOut[3]))), blastOut[4], ]
 				# For use with reporting SNPs
-				print("Match: ",blastOut[3],": Total :",blastOut[12],": percent :", int(100*(int(blastOut[3])/int(blastOut[12]))))
+				#print("Match: ",blastOut[3],": Total :",blastOut[12],": percent :", int(100*(int(blastOut[3])/int(blastOut[12]))))
 				candidate = [clusterNr, enzymeParts[1], enzymeParts[2], blastOut[1] , pident, blastOut[3], bitscore, blastOut[12], blastOut[6], blastOut[7], blastOut[13], blastOut[14].rstrip(), enzymeParts[4] , enzymeParts[5], int(100*int(blastOut[3])//int(blastOut[12])), blastOut[4]]
 
 				if clusterNr == currentClusterNr:
