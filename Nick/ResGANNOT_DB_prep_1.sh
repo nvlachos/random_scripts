@@ -76,13 +76,16 @@ if [[ "${non_duplicated}" != "true" ]]; then
 
 	cp "${ARGANNOT_source}" "${DATADIR}/argannot_${today}.fasta"
 	ARGANNOT_source="${DATADIR}/argannot_${today}.fasta"
+	if [[ ! -f "${ARGANNOT_source}" ]]; then
+		echo "No argannot fasta found, exiting"
+	fi
 	sed -i 's/\//_/g' "${ARGANNOT_source}"
 
 	if [[ "${resFinder_source}" == "" ]]; then
 	#echo "Looking rf:${DATADIR}"
 		resFinder_zip=$(find ${DATADIR} -name 'genomicepidemiology-resfinder_db-*')
 	fi
-	#echo ":${ARGANNOT_source}:${resFinder_zip}:"
+	echo ":${ARGANNOT_source}:${resFinder_zip}:"
 
 	temp_dir=$(basename "${resFinder_zip}" ".zip")
 	#echo "${resFinder_zip}, ${temp_dir}"

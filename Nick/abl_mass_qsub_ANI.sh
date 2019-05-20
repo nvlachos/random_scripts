@@ -153,66 +153,66 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo "${project}/${sample} does not have assembly"
 				echo "$(date)" > "${main_dir}/complete/${sample}_ani_complete.txt"
 			fi
-	# Counter is above limit, wait until "slot" opens up"
-	else
-		waiting_for_index=$(( counter - max_subs ))
-		waiting_sample=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
-		timer=0
-		echo "Index is above max submissions, waiting for index ${waiting_for_index}:${waiting_sample} to complete"
-		# Loop to wait until "waiting" sample is complete
-		while :
-		do
-			# If timer exceeeds limit then exit
-			if [[ ${timer} -gt 1800 ]]; then
-				echo "Timer exceeded limit of 1800 seconds 30 minutes"
-				break
-			fi
-			# Check if "waiting" sample is complete
-			if [[ -f "${main_dir}/complete/${waiting_sample}_ani_complete.txt" ]]; then
-				# Check if an assembly exists to run ANI on
-				if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
-					# Check if old data exists, skip if so
-					if [[ ! -f "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
-						echo  "${waiting_sample}(${waiting_for_index}) is not complete, submitting ${sample} ($counter)"
-						echo -e "#!/bin/bash -l\n" > "${main_dir}/ani_${sample}_${start_time}.sh"
-						echo -e "#$ -o ani_${sample}.out" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-						echo -e "#$ -e ani_${sample}.err" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-						echo -e "#$ -N ani_${sample}"   >> "${main_dir}/ani_${sample}_${start_time}.sh"
-						echo -e "#$ -cwd"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
-						echo -e "#$ -q short.q\n"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
-						echo -e "cd ${shareScript}" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-						echo -e "\"${shareScript}/run_ANI.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-						echo -e "\"${shareScript}/determine_taxID.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_ani_complete.txt\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-						cd "${main_dir}"
-						#if [[ "${counter}" -lt "${last_index}" ]]; then
-							qsub "${main_dir}/ani_${sample}_${start_time}.sh"
-						#else
-						#	qsub -sync y "${main_dir}/ani_${sample}_${start_time}.sh"
-						#fi
-					# Old data exists, skipping
+		# Counter is above limit, wait until "slot" opens up"
+		else
+			waiting_for_index=$(( counter - max_subs ))
+			waiting_sample=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
+			timer=0
+			echo "Index is above max submissions, waiting for index ${waiting_for_index}:${waiting_sample} to complete"
+			# Loop to wait until "waiting" sample is complete
+			while :
+			do
+				# If timer exceeeds limit then exit
+				if [[ ${timer} -gt 1800 ]]; then
+					echo "Timer exceeded limit of 1800 seconds 30 minutes"
+					break
+				fi
+				# Check if "waiting" sample is complete
+				if [[ -f "${main_dir}/complete/${waiting_sample}_ani_complete.txt" ]]; then
+					# Check if an assembly exists to run ANI on
+					if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
+						# Check if old data exists, skip if so
+						if [[ ! -f "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
+							echo  "${waiting_sample}(${waiting_for_index}) is not complete, submitting ${sample} ($counter)"
+							echo -e "#!/bin/bash -l\n" > "${main_dir}/ani_${sample}_${start_time}.sh"
+							echo -e "#$ -o ani_${sample}.out" >> "${main_dir}/ani_${sample}_${start_time}.sh"
+							echo -e "#$ -e ani_${sample}.err" >> "${main_dir}/ani_${sample}_${start_time}.sh"
+							echo -e "#$ -N ani_${sample}"   >> "${main_dir}/ani_${sample}_${start_time}.sh"
+							echo -e "#$ -cwd"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
+							echo -e "#$ -q short.q\n"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
+							echo -e "cd ${shareScript}" >> "${main_dir}/ani_${sample}_${start_time}.sh"
+							echo -e "\"${shareScript}/run_ANI.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
+							echo -e "\"${shareScript}/determine_taxID.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
+							echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_ani_complete.txt\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
+							cd "${main_dir}"
+							#if [[ "${counter}" -lt "${last_index}" ]]; then
+								qsub "${main_dir}/ani_${sample}_${start_time}.sh"
+							#else
+							#	qsub -sync y "${main_dir}/ani_${sample}_${start_time}.sh"
+							#fi
+						# Old data exists, skipping
+						else
+							echo "${project}/${sample} already has ANI summary"
+							echo "$(date)" > "${main_dir}/complete/${sample}_ani_complete.txt"
+						fi
+						# No Assembly file to run ANI on, skipping
 					else
-						echo "${project}/${sample} already has ANI summary"
+						echo "${project}/${sample} does not have assembly"
 						echo "$(date)" > "${main_dir}/complete/${sample}_ani_complete.txt"
 					fi
-					# No Assembly file to run ANI on, skipping
+					break
+				# Wait 5 seconds before checking if "waiting" sample is complete
 				else
-					echo "${project}/${sample} does not have assembly"
-					echo "$(date)" > "${main_dir}/complete/${sample}_ani_complete.txt"
+					timer=$(( timer + 5 ))
+					echo "sleeping for 5 seconds, so far slept for ${timer}"
+					sleep 5
 				fi
-				break
-			# Wait 5 seconds before checking if "waiting" sample is complete
-			else
-				timer=$(( timer + 5 ))
-				echo "sleeping for 5 seconds, so far slept for ${timer}"
-				sleep 5
-			fi
-		done
-	fi
-	counter=$(( counter + 1 ))
+			done
+		fi
 	else
 		echo "No TAX file available to use for ANI determination"
 	fi
+	counter=$(( counter + 1 ))
 done
 
 # Loop to ensure all samples are complete (or time runs) before allowing the script to exit

@@ -12,10 +12,11 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list.sh path_to_list max_concurrent_submission
+# Usage ./act_by_list.sh path_to_list max_concurrent_submission output_directory_for_scripts
 #
-#
-#
+
+# Number regex to test max concurrent submission parametr
+number='^[0-9]+$'
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -23,9 +24,12 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_taxonomy.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_submissions"
+	echo "Usage is ./abl_mass_qsub_taxonomy.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_submissions output_directory_for_scripts"
 	echo "Output location varies depending on which tasks are performed but will be found somewhere under ${processed}"
 	exit 0
+elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
+	echo "${2} is not a number or is empty. Please input max number of concurrent qsub submissions...exiting"
+	exit 2
 fi
 
 arr=()
@@ -45,19 +49,18 @@ fi
 
 # Loop through and act on each sample name in the passed/provided list
 counter=0
-max_subs=${2}
-main_dir="${share}/mass_subs/taxonomy_subs"
-if [[ ! -d "${share}/mass_subs/taxonomy_subs" ]]; then
-	mkdir "${share}/mass_subs/taxonomy_subs"
-	mkdir "${share}/mass_subs/taxonomy_subs/complete"
-elif [[ ! -d  "${share}/mass_subs/taxonomy_subs/complete" ]]; then
-	mkdir "${share}/mass_subs/taxonomy_subs/complete"
+main_dir="${3}/taxonomy_subs"
+if [[ ! -d "${3}/taxonomy_subs" ]]; then
+	mkdir "${3}/taxonomy_subs"
+	mkdir "${3}/taxonomy_subs/complete"
+elif [[ ! -d  "${3}/taxonomy_subs/complete" ]]; then
+	mkdir "${3}/taxonomy_subs/complete"
 fi
 
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
-	echo ${counter}
+	echo "${counter} of ${arr_size}"
 	if [[ -f "${processed}/${project}/${sample}/${sample}_no_calc.tax" ]]; then
 		rm "${processed}/${project}/${sample}/${sample}_no_calc.tax"
 	fi
@@ -77,6 +80,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		echo -e "#$ -q short.q\n"  >> "${main_dir}/tax_${sample}_${start_time}.sh"
 		echo -e "\"${shareScript}/determine_taxID.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/tax_${sample}_${start_time}.sh"
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_taxonomy_complete.txt\"" >> "${main_dir}/tax_${sample}_${start_time}.sh"
+		cd "${main_dir}"
 		if [[ "${counter}" -lt "${last_index}" ]]; then
 			qsub "${main_dir}/tax_${sample}_${start_time}.sh"
 		else
@@ -103,6 +107,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/tax_${sample}_${start_time}.sh"
 				echo -e "\"${shareScript}/determine_taxID.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/tax_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_taxonomy_complete.txt\"" >> "${main_dir}/tax_${sample}_${start_time}.sh"
+				cd "${main_dir}"
 				if [[ "${counter}" -lt "${last_index}" ]]; then
 					qsub "${main_dir}/tax_${sample}_${start_time}.sh"
 				else

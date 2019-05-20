@@ -7,20 +7,24 @@
 #$ -q all.q
 
 pwd
+
 #Import the config file with shortcuts and settings
 if [[ ! -d ./config.sh ]]; then
 	cp config_template.sh config.sh
 fi
 . ./config.sh
+
+# List all currently loaded modules
 #   ${shareScript}/module_changers/list_modules.sh
 
 #
 # Script to calculate the average nucleotide identity of a sample to numerous other samples from the same genus (genus dependent)
 # The most similar match is identified and provided for confirmation
 #
-# Usage ./run_ANI.sh sample_name	run_id
+# Usage ./ANI_test.sh sample_name	run_id
 #
-# Python/3.5.2 (pyani is located in Nick_DIR/script folder, not run from scicomp module)
+# Required modules: Python/3.5.2
+# sub-required modules (loaded by required module): MUMmer 3.9.4, gcc 4.8.5, perl 5.22.1
 #
 
 local_DBs="/scicomp/groups/OID/NCEZID/DHQP/CEMB/databases"
@@ -29,17 +33,10 @@ local_DBs="/scicomp/groups/OID/NCEZID/DHQP/CEMB/databases"
 if [[ $# -eq 0 ]]; then
 	echo "No argument supplied to run_ANI.sh, exiting"
 	exit 1
-elif [[ -z "${1}" ]]; then
-	echo "Empty sample name supplied to run_ANI.sh, exiting"
-	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./run_ANI.sh sample_name run_id"
-	echo "Output is saved to in ${processed}/sample_name/ANI"
+	echo "Usage is ./ANI_test.sh"
 	exit 0
-#elif [ -z "$2" ]; then
-#	echo "Empty database name supplied to run_ANI.sh. Second argument should be a genus found in ${share}/DBs/ANI/  ...Exiting"
-#	exit 1
 fi
 
 start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
@@ -49,7 +46,6 @@ working_dir="all_test"
 
 # Sets the output folder to the sample_name folder in processed samples
 OUTDATADIR="${local_DBs}/aniDB"
-
 # counter=0
 # for ref in ${local_DBs}/aniDB/all/*.fna; do
 # 	echo ${ref}
