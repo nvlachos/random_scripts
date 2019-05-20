@@ -65,4 +65,4 @@ while IFS= read -r line_in; do
 	else
 		echo "Unknown 2nd parameter: ${2}, should be 1 (for original MLST) or 2 (for alternate MLST)"
 	fi
-done < ${share}/${1}
+done < ${1}

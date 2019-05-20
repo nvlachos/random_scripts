@@ -51,9 +51,9 @@ today=$(date '+%Y%m%d')
 
  module load CD-HIT/4.6
 # #switch to python 2.7 temporarily for cdhit to csv scripts/config
- cp "${share}/DBs/star/cdhit_to_csv.py" "${DATADIR}"
- cp "${share}/DBs/star/csv_to_gene_db.py" "${DATADIR}"
- 
+ cp "${local_DBs}/star/cdhit_to_csv.py" "${DATADIR}"
+ cp "${local_DBs}/star/csv_to_gene_db.py" "${DATADIR}"
+
  cd "${DATADIR}"
 
  #module unload Python/3.5.2
