@@ -45,14 +45,14 @@ while IFS= read -r var; do
 	makeblastdb -in "${processed}/${var}/Assembly/${sample_name}_scaffolds_trimmed.fasta" -out ${2}/${sample_name} -dbtype nucl
 	cp "${processed}/${var}/Assembly/${sample_name}_scaffolds_trimmed.fasta" "${2}/Assemblies/${sample_name}_scaffolds_trimmed.fasta"
 	samtools faidx "${2}/Assemblies/${sample_name}_scaffolds_trimmed.fasta"
-	
+
 	blastOut=${2}/${sample_name}.blast
 	blastn -query ${3} -db ${2}/${sample_name} -out $blastOut -word_size 10 -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen"
 	sort -k1,1 -k12,12gr -k11,11g -k3,3gr $blastOut | sort -u -k1,1 --merge | sort -k12,12gr -k11,11g -k3,3gr > $blastOut.best
-	
-	
+
+
 	echo "completed ${var} in loop at ${current_time}"
-done < "${share}/${1}"
+done < "${1}"
 echo "All runs completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)

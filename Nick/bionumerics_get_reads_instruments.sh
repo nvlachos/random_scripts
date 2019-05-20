@@ -10,23 +10,23 @@
 . ./config.sh
 
 #
-# Will find all fastq.gz files matching samples in provided list file
+# Will find all fastq.gz files matching samples in provided list file straight from the accessible instruments. If the isolate data has been moved to another instrument, suffix the line with /new_instrument_ID
 #
-# Usage ./bionumerics_get_reads.sh  destination_database_folder(Genus_species) list_file (Maybe add sample name or list functionality later)
+# Usage ./bionumerics_get_reads_instruments.sh  destination_database_folder(Genus_species) list_file (Maybe add sample name or list functionality later)
 #
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to bionumerics_get_reads.sh, exiting"
+	echo "No argument supplied to bionumerics_get_reads_instruments.sh, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
-	echo "Empty project name supplied to bionumerics_get_reads.sh, exiting"
+	echo "Empty project name supplied to bionumerics_get_reads_instruments.sh, exiting"
 	exit 1
 elif [[ "${1}" = "-h" ]]; then
 	echo "Usage is ./bionumerics_get_reads.sh  Genus_species file_list (use extra / and machine id if data has been moved instruments"
 	exit 0
 elif [[ -z "${2}" ]]; then
-	echo "Empty file list supplied to bionumerics_get_reads.sh, exiting"
+	echo "Empty file list supplied to bionumerics_get_reads_instruments.sh, exiting"
 	exit 1
 fi
 
@@ -44,7 +44,7 @@ while IFS= read -r var; do
 		instrument="${alt_machine}"
 	else
 		instrument=$(echo "${project}" |  cut -d'_' -f2)
-	fi	
+	fi
 	full_instrument=$(find /scicomp/instruments/ -maxdepth 1 -name *${instrument})
 	full_instrument=${full_instrument##*/}
 	#echo "${full_instrument}"
@@ -72,8 +72,8 @@ while IFS= read -r var; do
 #			gunzip -c "${full_name2}" > "${OUTDATADIR}/${sample_name}_R2_001.fastq"
 			gunzip -c "/scicomp/instruments/${full_instrument}/${project}/Data/Intensities/BaseCalls/${full_name}_L001_R2_001.fastq.gz" > "${OUTDATADIR}/${full_name}_R2_001.fastq"
 		fi
-	fi	
-done < /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/${2}
+	fi
+done < ${2}
 
 #Script exited gracefully (unless something else inside failed)
 exit 0

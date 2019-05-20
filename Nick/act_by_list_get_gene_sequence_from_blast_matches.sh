@@ -12,9 +12,9 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list.sh list_name(currently has to be placed in /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR folder) Description of list function
+# Takes a list of isolates and pulls out the sequences of the requested gene from the csstar blast output
 #
-# script changes depending on what needs to be run through the list
+# Usage ./act_by_list_get_gene_sequence_from_blast_matches.sh path_to_list gene_to_find Output_directory
 #
 
 # Checks for proper argumentation
@@ -23,7 +23,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./act_by_list.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) gene_to_find output_folder"
+	echo "Usage is ./act_by_list_get_gene_sequence_from_blast_matches.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) gene_to_find output_folder"
 	echo "Output location varies depending on which tasks are performed but will be found somewhere under ${processed}"
 	exit 0
 elif [[ -z ${1} ]]; then
@@ -39,23 +39,14 @@ fi
 
 # Loop through and act on each sample name in the passed/provided list
 counter=1
-mkdir "${share}/${3}"
+mkdir "${3}"
 
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.cdiff_gyrs_srst2.gapped_98_sstar_summary.txt" ]]; then
-		ar_file="${processed}/${project}/${sample_name}/c-sstar/${sample_name}.cdiff_gyrs_srst2.gapped_98_sstar_summary.txt"
-		blast_file="${processed}/${project}/${sample_name}/c-sstar/cdiff_gyrs_srst2_gapped/${sample_name}_scaffolds_trimmed.blastn.tsv"
-	elif [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${resGANNOT_srst2_filename}.gapped_98_sstar_summary.txt" ]]; then
+	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${resGANNOT_srst2_filename}.gapped_98_sstar_summary.txt" ]]; then
 		ar_file="${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${resGANNOT_srst2_filename}.gapped_98_sstar_summary.txt"
 		blast_file="${processed}/${project}/${sample_name}/c-sstar/${resGANNOT_srst2_filename}_gapped/${sample_name}_scaffolds_trimmed.blastn.tsv"
-	elif [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180724.gapped_98_sstar_summary.txt" ]]; then
-		ar_file="${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180724.gapped_98_sstar_summary.txt"
-		blast_file="${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180724_gapped/${sample_name}_scaffolds_trimmed.blastn.tsv"
-	elif [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608.gapped_98_sstar_summary.txt" ]]; then
-		ar_file="${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180608.gapped_98_sstar_summary.txt"
-		blast_file="${processed}/${project}/${sample_name}/c-sstar/ResGANNOT_20180608_gapped/${sample_name}_scaffolds_trimmed.blastn.tsv"
 	else
 		ls "${processed}/${project}/${sample_name}/c-sstar/"
 		break
@@ -80,14 +71,13 @@ while IFS= read -r var; do
 					break
 				fi
 			done < ${blast_file}
-			echo -e ">${counter}_${project}_${sample_name}_${contig}_${gene}_${allele}\n${seqmatch}" >> ${share}/${2}.fasta
-			#python "${shareScript}/Contig_Writer_Exe.py" "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" "${contig}" "${share}/oxa_23_fastas/${sample_name}_oxa_${oxa}.fasta"
+			echo -e ">${counter}_${project}_${sample_name}_${contig}_${gene}_${allele}\n${seqmatch}" >> ${3}/${2}.fasta
 			#counter=$(( counter + 1 ))
 		fi
 		#counter=$(( counter + 1 ))
 	done < "${ar_file}"
 	counter=$(( counter + 1 ))
-done < "${share}/${1}"
+done < "${1}"
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)

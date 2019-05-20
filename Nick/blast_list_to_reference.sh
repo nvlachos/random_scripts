@@ -40,12 +40,12 @@ while IFS= read -r var; do
 	sample_name=$(echo "${var}" | awk -F/ '{ print $2}' | tr -d '[:space:]')
 	project=$(echo "${var}" | awk -F/ '{ print $1}' | tr -d '[:space:]')
 	SOURCEDATADIR="${processed}/${project}/${sample_name}"
-	
+
 	blastOut=${2}/${sample_name}.blast
-	blastn -query ${SOURCEDATADIR}/Assembly/${sample_name}_scaffolds_trimmed.fasta -db ${3} -out $blastOut -word_size 10 -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen" 
-	
+	blastn -query ${SOURCEDATADIR}/Assembly/${sample_name}_scaffolds_trimmed.fasta -db ${3} -out $blastOut -word_size 10 -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen"
+
 	echo "completed ${var} in loop at ${current_time}"
-done < "${share}/${1}"
+done < "${1}"
 echo "All runs completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)
