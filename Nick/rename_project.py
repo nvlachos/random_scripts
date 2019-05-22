@@ -102,7 +102,7 @@ def main():
 		matchingFileList = list()
 
 		# List of all patterns that can be skipped when found in path name while trudging through ALL files in a project folder
-		skip_folders=['c-sstar/','16s/', 'FASTQs/', 'kraken/', 'plasmid_on_plasmidAssembly/', 'removedAdapters/', 'srst2/', '/trimmed/', '.fastq']
+		skip_folders=['c-sstar/','16s/', 'FASTQs/', 'kraken/', 'plasmid_on_plasFlow/', 'removedAdapters/', 'srst2/', '/trimmed/', '.fastq']
 
 		for (dirpath, dirnames, filenames) in os.walk(path):
 			matchingFileList += [os.path.join(dirpath, file) for file in filenames]

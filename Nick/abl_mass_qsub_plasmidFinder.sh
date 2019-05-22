@@ -89,8 +89,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		if [[ -d "${processed}/${project}/${sample}/plasmid" ]]; then
 			rm -r "${processed}/${project}/${sample}/plasmid"
 		fi
-		# if [[ -d "${processed}/${project}/${sample}/plasmid_on_plasmidAssembly" ]]; then
-		# 	rm -r "${processed}/${project}/${sample}/plasmid_on_plasmidAssembly"
+		# if [[ -d "${processed}/${project}/${sample}/plasmid_on_plasFlow" ]]; then
+		# 	rm -r "${processed}/${project}/${sample}/plasmid_on_plasFlow"
 		# fi
 	fi
 	#echo ${counter}
@@ -111,45 +111,33 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "\"${shareScript}/run_plasmidFinder.sh\" \"${sample}\" \"${project}\" \"plasmid\"" >> "${main_dir}/pFn_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFn_complete.txt\"" >> "${main_dir}/pFn_${sample}_${start_time}.sh"
 				cd "${main_dir}"
-				#if [[ "${counter}" -lt "${last_index}" ]]; then
-					qsub "${main_dir}/pFn_${sample}_${start_time}.sh"
-				#else
-				#	if [[ -d "${processed}/${project}/${sample}/c-sstar_plasmid" ]]; then
-				#		qsub "${main_dir}/pFn_${sample}_${start_time}.sh"
-				#	else
-				#		qsub -sync y "${main_dir}/pFn_${sample}_${start_time}.sh"
-				#	fi
-				#fi
+				qsub "${main_dir}/pFn_${sample}_${start_time}.sh"
 			# Old data exists, skipping plasmidFinder on normal Assembly
 			else
 				echo "${project}/${sample} already has plasmid"
 				echo "$(date)" > "${main_dir}/complete/${sample}_pFn_complete.txt"
 			fi
 			# Check if plasmid Assembly exists
-			# if [[ -s "${processed}/${project}/${sample}/plasmidAssembly/${sample}_plasmid_scaffolds_trimmed.fasta" ]]; then
-			# 	# Check if old data exists, skip if so
-			# 	if [[ ! -f "${processed}/${project}/${sample}/plasmid_on_plasmidAssembly/${sample}_results_table_summary.txt" ]]; then
-			# 		echo -e "#!/bin/bash -l\n" > "${main_dir}/pFp_${sample}_${start_time}.sh"
-			# 		echo -e "#$ -o pFp_${sample}.out" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-			# 		echo -e "#$ -e pFp_${sample}.err" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-			# 		echo -e "#$ -N pFp_${sample}"   >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-			# 		echo -e "#$ -cwd"  >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-			# 		echo -e "#$ -q short.q\n"  >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-			# 		echo -e "cd ${shareScript}" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-			# 		echo -e "\"${shareScript}/run_plasmidFinder.sh\" \"${sample}\" \"${project}\" \"plasmid_on_plasmidAssembly\"" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-			# 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFp_complete.txt\"" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-			# 		cd "${main_dir}"
-			# 		#if [[ "${counter}" -lt "${last_index}" ]]; then
-			# 			qsub "${main_dir}/pFp_${sample}_${start_time}.sh"
-			# 		#else
-			# 		#	qsub -sync y "${main_dir}/pFp_${sample}_${start_time}.sh"
-			# 		#fi
-			# 	# Old data exists, skipping plasmidFinder on plasmid Assembly
-			# 	else
-			# 		echo "${project}/${sample} already has plasmidFinder on plasmid"
-			# 		echo "$(date)" > "${main_dir}/complete/${sample}_pFp_complete.txt"
-			# 	fi
-			# fi
+			if [[ -s "${processed}/${project}/${sample}/plasFlow/Assembly/${sample}_plasmid_scaffolds_trimmed.fasta" ]]; then
+				# Check if old data exists, skip if so
+				if [[ ! -f "${processed}/${project}/${sample}/plasmid_on_plasFlow/${sample}_results_table_summary.txt" ]]; then
+					echo -e "#!/bin/bash -l\n" > "${main_dir}/pFp_${sample}_${start_time}.sh"
+					echo -e "#$ -o pFp_${sample}.out" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
+					echo -e "#$ -e pFp_${sample}.err" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
+					echo -e "#$ -N pFp_${sample}"   >> "${main_dir}/pFp_${sample}_${start_time}.sh"
+					echo -e "#$ -cwd"  >> "${main_dir}/pFp_${sample}_${start_time}.sh"
+					echo -e "#$ -q short.q\n"  >> "${main_dir}/pFp_${sample}_${start_time}.sh"
+					echo -e "cd ${shareScript}" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
+					echo -e "\"${shareScript}/run_plasmidFinder.sh\" \"${sample}\" \"${project}\" \"plasmid_on_plasFlow\"" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
+					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFp_complete.txt\"" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
+					cd "${main_dir}"
+					qsub "${main_dir}/pFp_${sample}_${start_time}.sh"
+				# Old data exists, skipping plasmidFinder on plasmid Assembly
+				else
+					echo "${project}/${sample} already has plasmidFinder on plasmid"
+					echo "$(date)" > "${main_dir}/complete/${sample}_pFp_complete.txt"
+				fi
+			fi
 		# Counter is above max sub limit, must wait until slot becomes available
 		else
 			waiting_for_index=$(( counter - max_subs ))
@@ -178,44 +166,33 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "cd ${shareScript}" >> "${main_dir}/pFn_${sample}_${start_time}.sh"
 						echo -e "\"${shareScript}/run_plasmidFinder.sh\" \"${sample}\" \"${project}\" \"plasmid\"" >> "${main_dir}/pFn_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFn_complete.txt\"" >> "${main_dir}/pFn_${sample}_${start_time}.sh"
-						#if [[ "${counter}" -lt "${last_index}" ]]; then
-							qsub "${main_dir}/pFn_${sample}_${start_time}.sh"
-						#else
-						#	if [[ -d "${processed}/${project}/${sample}/c-sstar_plasmid" ]]; then
-						#		qsub "${main_dir}/pFn_${sample}_${start_time}.sh"
-						#	else
-						#		qsub -sync y "${main_dir}/pFn_${sample}_${start_time}.sh"
-						#	fi
-						#fi
+						qsub "${main_dir}/pFn_${sample}_${start_time}.sh"
 					# Old data exists, skipping plasmid Finder on normal Assembly
 					else
-						echo "${project}/${sample} already has plasmid"
-						echo "$(date)" > "${main_dir}/complete/${sample}_pFn_complete.txt"
+						echo "${project}/${sample} already has plasmidFinder on plasmid"
+						echo "$(date)" > "${main_dir}/complete/${sample}_pFp_complete.txt"
 					fi
 					# Check if plasmid Assembly exists
-					# if [[ -s "${processed}/${project}/${sample}/plasmidAssembly/${sample}_plasmid_scaffolds_trimmed.fasta" ]]; then
-					# 	# Check if old data exists, skip if so
-					# 	if [[ ! -f "${processed}/${project}/${sample}/plasmid_on_plasmidAssembly/${sample}_results_table_summary.txt" ]]; then
-					# 		echo -e "#!/bin/bash -l\n" > "${main_dir}/pFp_${sample}_${start_time}.sh"
-					# 		echo -e "#$ -o pFp_${sample}.out" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-					# 		echo -e "#$ -e pFp_${sample}.err" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-					# 		echo -e "#$ -N pFp_${sample}"   >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-					# 		echo -e "#$ -cwd"  >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-					# 		echo -e "#$ -q short.q\n"  >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-					# 		echo -e "cd ${shareScript}" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-					# 		echo -e "\"${shareScript}/run_plasmidFinder.sh\" \"${sample}\" \"${project}\" \"plasmid_on_plasmidAssembly\"" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-					# 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFp_complete.txt\"" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
-					# 		#if [[ "${counter}" -lt "${last_index}" ]]; then
-					# 			qsub "${main_dir}/pFp_${sample}_${start_time}.sh"
-					# 		#else
-					# 		#	qsub -sync y "${main_dir}/pFp_${sample}_${start_time}.sh"
-					# 		#fi
-					# 	# Old data exists, skipping plasmidFinder on plasmid Assembly
-					# 	else
-					# 		echo "${project}/${sample} already has plasmidFinder on plasmid"
-					# 		echo "$(date)" > "${main_dir}/complete/${sample}_pFp_complete.txt"
-					# 	fi
-					# fi
+					if [[ -s "${processed}/${project}/${sample}/plasFlow/Assembly/${sample}_plasmid_scaffolds_trimmed.fasta" ]]; then
+						# Check if old data exists, skip if so
+						if [[ ! -f "${processed}/${project}/${sample}/plasmid_on_plasFlow/${sample}_results_table_summary.txt" ]]; then
+							echo -e "#!/bin/bash -l\n" > "${main_dir}/pFp_${sample}_${start_time}.sh"
+							echo -e "#$ -o pFp_${sample}.out" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
+							echo -e "#$ -e pFp_${sample}.err" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
+							echo -e "#$ -N pFp_${sample}"   >> "${main_dir}/pFp_${sample}_${start_time}.sh"
+							echo -e "#$ -cwd"  >> "${main_dir}/pFp_${sample}_${start_time}.sh"
+							echo -e "#$ -q short.q\n"  >> "${main_dir}/pFp_${sample}_${start_time}.sh"
+							echo -e "cd ${shareScript}" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
+							echo -e "\"${shareScript}/run_plasmidFinder.sh\" \"${sample}\" \"${project}\" \"plasmid_on_plasFlow\"" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
+							echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFp_complete.txt\"" >> "${main_dir}/pFp_${sample}_${start_time}.sh"
+							cd "${main_dir}"
+							qsub "${main_dir}/pFp_${sample}_${start_time}.sh"
+						# Old data exists, skipping plasmidFinder on plasmid Assembly
+						else
+							echo "${project}/${sample} already has plasmidFinder on plasmid"
+							echo "$(date)" > "${main_dir}/complete/${sample}_pFp_complete.txt"
+						fi
+					fi
 					break
 				# Wait 5 seconds before seeing if the "waiting" sample is done yet
 				else
