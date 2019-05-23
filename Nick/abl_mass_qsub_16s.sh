@@ -98,7 +98,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -cwd"  >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
 				echo -e "cd ${shareScript}" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
-				echo -e "\"${shareScript}/16s_blast.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/16s_blast.sh\" \"-n\" \"${sample}\" \"-p\" \"${project}\"" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_blast16s_complete.txt\"" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
 				# Moves to working dir of mass qsub scripts
 				cd "${main_dir}"
@@ -139,7 +139,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -cwd"  >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
 						echo -e "#$ -q short.q\n" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
 						echo -e "cd ${shareScript}" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
-						echo -e "\"${shareScript}/16s_blast.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
+						echo -e "\"${shareScript}/16s_blast.sh\" \"-n\" \"${sample}\" \"-p\" \"${project}\"" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_blast16s_complete.txt\"" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
 						# Moves to working dir of mass qsub scripts
 						cd "${main_dir}"
