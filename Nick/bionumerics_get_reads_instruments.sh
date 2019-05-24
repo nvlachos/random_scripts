@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o bionumerics_get_reads.out
-#$ -e bionumerics_get_reads.err
-#$ -N bionumerics_get_reads
+#$ -o bionumerics_get_reads_ints.out
+#$ -e bionumerics_get_reads-ints.err
+#$ -N bionumerics_get_reads_ints
 #$ -cwd
 #$ -q all.q
 
@@ -17,16 +17,16 @@
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to bionumerics_get_reads_instruments.sh, exiting"
+	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
-	echo "Empty project name supplied to bionumerics_get_reads_instruments.sh, exiting"
+	echo "Empty project name supplied to $0, exiting"
 	exit 1
 elif [[ "${1}" = "-h" ]]; then
 	echo "Usage is ./bionumerics_get_reads.sh  Genus_species file_list (use extra / and machine id if data has been moved instruments"
 	exit 0
 elif [[ -z "${2}" ]]; then
-	echo "Empty file list supplied to bionumerics_get_reads_instruments.sh, exiting"
+	echo "Empty file list supplied to $0, exiting"
 	exit 1
 fi
 

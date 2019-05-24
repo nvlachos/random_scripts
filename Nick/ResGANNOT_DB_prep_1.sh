@@ -22,7 +22,7 @@ $(python2 -V)
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to prep_ResGANNOT_DB_1.sh, using DEFAULT /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep"
+	echo "No argument supplied to $0, using DEFAULT DATADIR=/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep"
 	DATADIR="${local_DBs}/star/db_prep"
 	if [ -d "${DATADIR}" ]; then
 		#echo "Directory already exists, try another or delete ${DATADIR}, exiting"
@@ -34,7 +34,7 @@ if [[ $# -eq 0 ]]; then
 else
 	if [[ "${1}" == "-f" ]]; then
 		if [[ -z "${2}" ]]; then
-			echo "Empty filename supplied to ResGANNOT_DB_prep_1.sh, exiting"
+			echo "Empty filename supplied to $0, exiting"
 			exit 1
 		else
 			non_duplicated="true"

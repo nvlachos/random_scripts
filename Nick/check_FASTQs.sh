@@ -1,7 +1,7 @@
 #!/bin/sh -l
 
-#$ -o check_FASTQs_barebones_2.out
-#$ -e check_FASTQs_barebones_2.err
+#$ -o check_FASTQs.out
+#$ -e check_FASTQs.err
 #$ -N ablb2
 #$ -cwd
 #$ -q all.q
@@ -19,7 +19,7 @@
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to check_FASTQs.sh, exiting"
+	echo "No argument supplied to $0, exiting"
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then

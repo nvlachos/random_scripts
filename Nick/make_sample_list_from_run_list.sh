@@ -1,8 +1,8 @@
 #!/bin/bash -l
 
-#$ -o do_all.out
-#$ -e do_all.err
-#$ -N rekrak
+#$ -o samp_list.out
+#$ -e sampl_list.err
+#$ -N sample_list
 #$ -cwd
 #$ -q all.q
 
@@ -18,10 +18,10 @@
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to make_sample_list_from_run_list.sh, exiting"
+	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
-	echo "Empty Genus_species supplied to make_sample_list_from_run_list.sh, exiting"
+	echo "Empty Genus_species supplied to $0, exiting"
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then

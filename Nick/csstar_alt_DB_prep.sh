@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o prepCSSTARDB.out
-#$ -e prepCSSTARDB.err
-#$ -N prepCSSTARDB
+#$ -o prepCSSTARDB_alt.out
+#$ -e prepCSSTARDB_alt.err
+#$ -N prepCSSTARDB_alt
 #$ -cwd
 #$ -q short.q
 
@@ -15,7 +15,7 @@ module load Python/2.7.15
 #
 # Consolidates resFinders multi fasta to one
 #
-# Usage ./run_resPrep.sh path_to_dir
+# Usage ./csstar_alt_db_prep.sh input_fasta output_directory
 #
 
 $(python2 -V)
@@ -25,11 +25,11 @@ DB_source=${1}
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to csstar_DB_prep.sh"
+	echo "No argument supplied to $0, exiting"
 	exit
 else
 	if [[ -z "${2}" ]]; then
-		echo "Empty path supplied to csstar_DB_prep.sh, exiting"
+		echo "Empty path supplied to $0, exiting"
 		exit 1
 	# Gives the user a brief usage and help section if requested with the -h option argument
 	elif [[ "${1}" = "-h" ]]; then

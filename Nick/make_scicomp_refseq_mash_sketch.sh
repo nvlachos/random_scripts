@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o mmshfolder.out
-#$ -e mmshfolder.err
-#$ -N mmshfolder
+#$ -o mmshref.out
+#$ -e mmshref.err
+#$ -N mmshref
 #$ -cwd
 #$ -q all.q
 
@@ -17,10 +17,10 @@ module load Mash/2.0
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to make_scicomp_refseq_mash_sketch.sh, exiting"
+	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
-	echo "Empty Genus_species supplied to make_scicomp_refseq_mash_sketch.sh, exiting"
+	echo "Empty Genus_species supplied to $0, exiting"
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then

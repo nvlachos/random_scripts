@@ -28,7 +28,7 @@ number='^[0-9]+$'
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to ./abl_mass_qsub_16s.sh, exiting"
+	echo "No argument supplied to $0, exiting"
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then

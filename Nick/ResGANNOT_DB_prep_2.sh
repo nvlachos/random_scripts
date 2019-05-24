@@ -15,7 +15,7 @@ module load Python/2.7.13
 #
 # Consolidates resFinders multi fasta to one
 #
-# Usage ./run_resPrep.sh path_to_dir
+# Usage ./ResGANNOT_DB_prep_2.sh path_to_dir
 #
 
 $(python2 -V)
@@ -28,14 +28,14 @@ ResGANNOT_source="${DATADIR}/ResGANNOT_${today}.fasta"
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to prep_RESGANNOT_DB.sh, using default DATADIR=/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep"
+	echo "No argument supplied to $0, using default DATADIR=/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep"
 	#if [ -d "${DATADIR}" ]; then
 	#	rm -r "${DATADIR}"
 	#fi
 	#mkdir "${DATADIR}"
 else
 	if [[ -z "${1}" ]]; then
-		echo "Empty path supplied to ResGANNOT_DB_prep.sh, exiting"
+		echo "Empty path supplied to $0, exiting"
 		exit 1
 	# Gives the user a brief usage and help section if requested with the -h option argument
 	elif [[ "${1}" = "-h" ]]; then
@@ -45,7 +45,7 @@ else
 		exit 0
 	elif [[ "${1}" = "-f" ]]; then
 		if [[ -z "${2}" ]]; then
-			echo "Empty filename supplied to ResGANNOT_DB_prep.sh, exiting"
+			echo "Empty filename supplied to $0, exiting"
 			exit 1
 		else
 			sourced="true"

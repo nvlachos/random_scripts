@@ -22,10 +22,10 @@ fi
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to get_SRA_reads.sh, exiting"
+	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
-	echo "Empty SRA Number supplied to get_SRA_reads.sh, exiting"
+	echo "Empty SRA Number supplied to $0, exiting"
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
@@ -40,7 +40,7 @@ else
 fi
 
 if [ ! -d "${OUTDATADIR}" ]; then
-	echo "Empty output directory supplied to get_SRA_reads.sh...creating"
+	echo "Empty output directory supplied to $0...creating"
 	mkdir -p "${OUTDATADIR}/FASTQs"
 fi
 

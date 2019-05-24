@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o getTaxQ.out
-#$ -e getTaxQ.err
-#$ -N getTaxQ
+#$ -o getTax.out
+#$ -e getTax.err
+#$ -N getTax
 #$ -cwd
 #$ -q short.q
 
@@ -24,17 +24,17 @@ pwd
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to determine_taxID.sh, exiting"
+	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
-	echo "Empty sample_id supplied to determine_taxID.sh, exiting"
+	echo "Empty sample_id supplied to $0, exiting"
 	exit 1
 elif [[ "${1}" = "-h" ]]; then
 	echo "Usage is ./determine_taxID.sh sample_ID run_ID"
 	echo "Output is saved to ${processed}/run_ID/sample_ID/taxonomy.csv"
 	exit 0
 elif [[ -z "${2}" ]]; then
-	echo "Empty run_id supplied to determine_taxID.sh, exiting"
+	echo "Empty run_id supplied to $0, exiting"
 	exit 1
 fi
 

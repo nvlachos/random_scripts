@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o run_c-sstar.out
-#$ -e run_c-sstar.err
-#$ -N run_c-sstar
+#$ -o c-sstar_cont.out
+#$ -e c-sstar_cont.err
+#$ -N c-sstar_cont
 #$ -cwd
 #$ -q all.q
 
@@ -25,10 +25,10 @@ module load ncbi-blast+/2.6.0
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to run_c-sstar_on_contigs.sh, exiting"
+	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
-	echo "Empty sample name supplied to run_c-sstar_on_contigs.sh, exiting"
+	echo "Empty sample name supplied to $0, exiting"
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
@@ -36,13 +36,13 @@ elif [[ "${1}" = "-h" ]]; then
 	echo "Output is saved to ${processed}/sample_name/c-sstar"
 	exit
 elif [ -z "$2" ]; then
-	echo "Empty run type supplied to run_c-sstar_on_contigs.sh, exiting"
+	echo "Empty run type supplied to $0, exiting"
 	exit 1
 elif [ -z "$3" ]; then
-	echo "Empty similarity supplied to run_c-sstar_on_contigs.sh, exiting"
+	echo "Empty similarity supplied to $0, exiting"
 	exit 1
 elif [ -z "$4" ]; then
-	echo "Empty project id supplied to run_c-sstar_on_contigs.sh, exiting"
+	echo "Empty project id supplied to $0, exiting"
 	exit 1
 fi
 

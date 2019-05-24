@@ -20,17 +20,17 @@ module load ncbi-blast+/2.6.0
 # Script to calculate the average nucleotide identity of a sample to numerous other samples from the same genus (genus dependent)
 # The most similar match is identified and provided for confirmation
 #
-# Usage ./run_ANI.sh sample_name   DB(for looking up reference, just relative path, also is genus)   Species   run_id  list_samples_to_include(optional)
+# Usage ./run_ANIb_contigs.sh sample_name   DB(for looking up reference, just relative path, also is genus)   Species   run_id  list_samples_to_include(optional)
 #
-# Python/3.5.2 (pyani is located in Nick_DIR/script folder, not run from scicomp module)
+# Python/3.5.2
 #
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to run_ANI.sh, exiting"
+	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
-	echo "Empty sample name supplied to run_ANI.sh, exiting"
+	echo "Empty sample name supplied to $0, exiting"
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
@@ -38,7 +38,7 @@ elif [[ "${1}" = "-h" ]]; then
 	echo "Output is saved to in ${processed}/sample_name/ANI"
 	exit 0
 elif [ -z "$2" ]; then
-	echo "Empty database name supplied to run_ANI.sh. Second argument should be a genus found in ${local_DBs}/ANI/  ...Exiting"
+	echo "Empty database name supplied to $0. Second argument should be a genus found in ${local_DBs}/ANI/  ...Exiting"
 	exit 1
 elif [ ! -s "${local_DBs}/aniDB/${2,}" ]; then
 	echo "The genus does not exist in the ANI database. This will be noted and the curator of the database will be notified. However, since nothing can be done at the moment....exiting"
@@ -54,10 +54,10 @@ elif [ ! -s "${local_DBs}/aniDB/${2,}" ]; then
 	echo "ANI: ${2} - Found as ${1} on ${global_time}" >> "${shareScript}/maintenance_To_Do.txt"
 	exit 1
 elif [ -z "$3" ]; then
-	echo "Empty species name supplied to run_ANI.sh. Third argument should be the suspected species of the sample. Exiting"
+	echo "Empty species name supplied to $0. Third argument should be the suspected species of the sample. Exiting"
 	exit 1
 elif [ -z "$4" ]; then
-	echo "Empty miseq_run_id name supplied to run_ANI.sh. Fourth argument should be the run id. Exiting"
+	echo "Empty miseq_run_id name supplied to $0. Fourth argument should be the run id. Exiting"
 	exit 1
 elif [ ! -z "$5" ]; then
 	others="true"

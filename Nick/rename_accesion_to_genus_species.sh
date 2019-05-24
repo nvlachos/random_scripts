@@ -1,10 +1,10 @@
 #!/bin/sh -l
 
-#$ -o mmshfolder.out
-#$ -e mmshfolder.err
-#$ -N mmshfolder
+#$ -o rename_acc.out
+#$ -e rename_acc.err
+#$ -N rename_acc
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 
 #
@@ -15,14 +15,14 @@
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to rename_accession_to_genus_species.sh, exiting"
+	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
-	echo "Empty Genus_species supplied to rename_accession_to_genus_species.sh, exiting"
+	echo "Empty Genus_species supplied to $0, exiting"
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./make_scicomp_refseq_mash_sketch.sh	output_directory"
+	echo "Usage is ./rename_accession_to_genus_species.sh	output_directory"
 	echo "Output is saved to ${1} & ${2}"
 	exit 0
 fi

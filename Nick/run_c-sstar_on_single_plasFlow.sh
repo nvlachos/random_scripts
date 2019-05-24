@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o run_c-sstar.out
-#$ -e run_c-sstar.err
-#$ -N run_c-sstar
+#$ -o c-sstar_plas.out
+#$ -e c-sstar_plas.err
+#$ -N c-sstar_plas
 #$ -cwd
 #$ -q all.q
 
@@ -18,31 +18,31 @@ module load ncbi-blast+/2.6.0
 #
 # Finds anti-microbial resistance genes in the resFinder and ARG-ANNOT databases and exports a file containing list of all genes found
 #
-# Usage ./run_c-sstar.sh sample_name run_type(g/u for gapped/ungapped) similarity(l/m/h/u/p/o for low(80),medium(95),high(98),ultra-high(99),perfect(100),other(set in config.sh)) run_id
+# Usage ./run_c-sstar_on_single_plasFlow.sh sample_name run_type(g/u for gapped/ungapped) similarity(l/m/h/u/p/o for low(80),medium(95),high(98),ultra-high(99),perfect(100),other(set in config.sh)) run_id
 #
 # Python/3.5.2
 #
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to run_c-sstar.sh, exiting"
+	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
-	echo "Empty sample name supplied to run_c-sstar.sh, exiting"
+	echo "Empty sample name supplied to $0, exiting"
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./run_c-sstar.sh   sample_name   run-type[g/u](for gapped/ungapped)   similarity[l/m/h/u/p/o](for low/medium/high/ultra-high/perfect as 80/95/98/99/100, other(st in config.sh) run_id"
+	echo "Usage is ./run_c-sstar_on_plasFlow.sh   sample_name   run-type[g/u](for gapped/ungapped)   similarity[l/m/h/u/p/o](for low/medium/high/ultra-high/perfect as 80/95/98/99/100, other(st in config.sh) run_id"
 	echo "Output is saved to ${processed}/sample_name/c-sstar_plasFlow"
 	exit
 elif [ -z "$2" ]; then
-	echo "Empty run type supplied to run_c-sstar.sh, exiting"
+	echo "Empty run type supplied to $0, exiting"
 	exit 1
 elif [ -z "$3" ]; then
-	echo "Empty similarity supplied to run_c-sstar.sh, exiting"
+	echo "Empty similarity supplied to $0, exiting"
 	exit 1
 elif [ -z "$4" ]; then
-	echo "Empty project id supplied to run_c-sstar.sh, exiting"
+	echo "Empty project id supplied to $0, exiting"
 	exit 1
 fi
 

@@ -17,10 +17,10 @@ module load Mash/2.0
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to make_folder_compound_sketch.sh.sh, exiting"
+	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
-	echo "Empty output directory supplied to make_folder_compound_sketch.sh.sh, exiting"
+	echo "Empty output directory supplied to $0, exiting"
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
@@ -28,7 +28,7 @@ elif [[ "${1}" = "-h" ]]; then
 	echo "Output is saved to in ${processed}/sample_name/ANI"
 	exit 0
 elif [ -z "$2" ]; then
-	echo "Empty fasta folder location supplied to make_folder_compound_sketch.sh "
+	echo "Empty fasta folder location supplied to $0"
 	exit 1
 fi
 

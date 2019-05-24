@@ -16,7 +16,7 @@ fi
 . "${mod_changers}/prep_srst2.sh"
 
 #
-# Usage ./run_srst2.sh   sample_name   run_ID
+# Usage ./run_srst2_on_singleDB.sh   sample_name   run_ID
 #
 # script uses srst2 to find AR genes from ResGANNOT DBs.
 #
@@ -25,11 +25,11 @@ fi
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to run_srtst2.sh, exiting"
+	echo "No argument supplied to $0, exiting"
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./run_srst2.sh  sample_name run_ID"
+	echo "Usage is ./run_srst2_on_singleDB.sh  sample_name run_ID"
 	echo "Output location is ${processed}/run_ID/sample_name/srst2"
 	exit 0
 fi
