@@ -1,10 +1,10 @@
 #!/bin/sh -l
 
-#$ -o act_by_list_barebones_4.out
-#$ -e act_by_list_barebones_4.err
-#$ -N ablb4
+#$ -o abl-ggbm.out
+#$ -e abl-ggbm.err
+#$ -N abl-ggbm
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 . ./config.sh
@@ -19,7 +19,7 @@
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to act_by_list.sh, exiting"
+	echo "No argument supplied to act_by_list_get_gene_sequence_from_blast_matches, exiting"
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
@@ -27,13 +27,13 @@ elif [[ "$1" = "-h" ]]; then
 	echo "Output location varies depending on which tasks are performed but will be found somewhere under ${processed}"
 	exit 0
 elif [[ -z ${1} ]]; then
-	echo "Empty list given to get_contig_with_geneX.sh...exiting"
+	echo "Empty list given to act_by_list_get_gene_sequence_from_blast_matches...exiting"
 	exit
 elif [[ -z ${2} ]]; then
-	echo "Empty gene given to get_contig_with_geneX.sh...exiting"
+	echo "Empty gene given to act_by_list_get_gene_sequence_from_blast_matches...exiting"
 	exit
 elif [[ -z ${3} ]]; then
-	echo "Empty output folder given to get_contig_with_geneX.sh...exiting"
+	echo "Empty output folder given to act_by_list_get_gene_sequence_from_blast_matches...exiting"
 	exit
 fi
 
@@ -81,5 +81,5 @@ done < "${1}"
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)
-printf "%s %s" "Act_by_list.sh has completed ${2} " "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
+printf "%s %s" "act_by_list_get_gene_sequence_from_blast_matches.sh has completed ${2} " "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
 exit 0

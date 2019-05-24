@@ -1,7 +1,7 @@
 #!/bin/sh -l
 
-#$ -o act_by_list_barebones1.out
-#$ -e act_by_list_barebones1.err
+#$ -o ablmq_tax.out
+#$ -e ablmq_tax..err
 #$ -N ablb1
 #$ -cwd
 #$ -q short.q
@@ -12,7 +12,7 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list.sh path_to_list max_concurrent_submission output_directory_for_scripts
+# Usage ./abl_mass_qsub_taxonomy.sh path_to_list max_concurrent_submission output_directory_for_scripts
 #
 
 # Number regex to test max concurrent submission parametr
@@ -123,5 +123,5 @@ done
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)
-printf "%s %s" "Act_by_list.sh has completed ${2}" "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
+printf "%s %s" "abl_mass_qsub_taxonomy.sh has completed ${2}" "${global_end_time}" | mail -s "abl_mass_qsub complete" nvx4@cdc.gov
 exit 0

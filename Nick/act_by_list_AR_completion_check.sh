@@ -17,7 +17,7 @@
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to act_by_list.sh, exiting"
+	echo "No argument supplied to act_by_list_AR_completion_check.sh, exiting"
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
@@ -187,5 +187,5 @@ done < "${1}"
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)
-printf "%s %s" "Act_by_list.sh has completed check for AR completion " "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
+printf "%s %s" "act_by_list_AR_completion_check.sh has completed check for AR completion " "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
 exit 0

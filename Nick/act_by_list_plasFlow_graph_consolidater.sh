@@ -1,10 +1,10 @@
 #!/bin/sh -l
 
-#$ -o abl-ARC.out
-#$ -e abl-ARC.err
-#$ -N abl-AR_checker
+#$ -o abl-gracon.out
+#$ -e abl-gracon.err
+#$ -N abl-gracon
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 . ./config.sh
@@ -12,12 +12,12 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list_AR_completion_check.sh path_to_list path_for_output_file
+# Usage ./act_by_list_graph_consolidater.sh path_to_list path_for_output_file
 #
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to act_by_list.sh, exiting"
+	echo "No argument supplied to act_by_list_graph_consolidater.sh, exiting"
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
@@ -82,5 +82,5 @@ done < "${1}"
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)
-printf "%s %s" "Act_by_list.sh has completed check of snd MLSTs" "${global_end_time}" | mail -s "act_by_list 2MLST complete" nvx4@cdc.gov
+printf "%s %s" "act_by_list_graph_consolidater.sh has completed check of snd MLSTs" "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
 exit 0

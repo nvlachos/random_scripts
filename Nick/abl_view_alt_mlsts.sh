@@ -1,10 +1,10 @@
 #!/bin/sh -l
 
-#$ -o abl-ARC.out
-#$ -e abl-ARC.err
-#$ -N abl-AR_checker
+#$ -o abl-vaMLST.out
+#$ -e abl-vaMLST.err
+#$ -N abl-vaMLST
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 . ./config.sh
@@ -12,16 +12,16 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list_AR_completion_check.sh path_to_list path_for_output_file
+# Usage ./abl_view_alt_mlsts.sh path_to_list path_for_output_file
 #
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to act_by_list.sh, exiting"
+	echo "No argument supplied to abl_view_alt_mlsts.sh, exiting"
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./act_by_list_AR_completion_check.sh path_to_list_file path_for_output_file"
+	echo "Usage is ./abl_view_alt_mlsts.sh path_to_list_file path_for_output_file"
 	exit 0
 elif [[ -z "${2}" ]]; then
 	echo  "No output file input, exiting..."
@@ -49,7 +49,7 @@ while IFS= read -r var; do
 	if [[ "${info_out}" == *","* ]] || [[ "${info_out}" == *"/"* ]]; then
 		echo "DUAL - ${info}" >> "${2}"
 		echo "${project}/${sample_name}	${info1}"
-	elif [[ "${type}" == "-" ]]; then 
+	elif [[ "${type}" == "-" ]]; then
 		echo "UNKN - ${info}" >> "${2}"
 		echo "${project}/${sample_name}	${info}"
 	else
@@ -78,5 +78,5 @@ done < "${1}"
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)
-printf "%s %s" "Act_by_list.sh has completed check of snd MLSTs" "${global_end_time}" | mail -s "act_by_list 2MLST complete" nvx4@cdc.gov
+printf "%s %s" "abl_view_alt_mlsts.sh has completed check of snd MLSTs" "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
 exit 0

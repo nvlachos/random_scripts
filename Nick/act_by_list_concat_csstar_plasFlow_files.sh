@@ -12,18 +12,18 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list_AR_completion_check.sh path_to_list path_for_output_file
+# Usage ./act_by_list_concat_csstar_plasFlow_files.sh path_to_list path_for_output_file
 #
 
 number='^[0-9]+$'
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to act_by_list.sh, exiting"
+	echo "No argument supplied to act_by_list_concat_csstar_plasFlow_files.sh, exiting"
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./act_by_list_template.sh path_to_list_file ResGANNOT_Identifier(YYYYMMDD) path_for_output_file"
+	echo "Usage is ./act_by_list_concat_csstar_plasFlow_files.sh path_to_list_file ResGANNOT_Identifier(YYYYMMDD) path_for_output_file"
 	exit 0
 elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
 	echo "${2} is not a number or is empty. Please input correct date for ResGANNOT DB...exiting"
@@ -54,5 +54,5 @@ done < "${1}"
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)
-printf "%s %s" "Act_by_list.sh has completed check of snd MLSTs" "${global_end_time}" | mail -s "act_by_list 2MLST complete" nvx4@cdc.gov
+printf "%s %s" "act_by_list_concat_csstar_plasFlow_files.sh has completed check of snd MLSTs" "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
 exit 0

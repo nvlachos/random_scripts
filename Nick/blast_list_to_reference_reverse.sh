@@ -1,10 +1,10 @@
 #!/bin/sh -l
 
-#$ -o act_by_list_barebones.out
-#$ -e act_by_list_barebones.err
-#$ -N ablb
+#$ -o abl_blrr.out
+#$ -e abl-blrr.err
+#$ -N abl-blrr
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 . ./config.sh
@@ -15,7 +15,7 @@
 #export LANG=en_US.UTF-8
 
 #
-# Usage ./act_by_list.sh list_name(currently has to be placed in /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR folder)
+# Usage ./blast_list_to_reference_reverse.sh list_name(currently has to be placed in /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR folder)
 #
 # script changes depending on what needs to be run through the list
 #
@@ -26,7 +26,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./blast_list_to_reference.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) absolute_output_folder absolute_path_to_reference"
+	echo "Usage is ./blast_list_to_reference_reverse.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) absolute_output_folder absolute_path_to_reference"
 	echo "Output location varies depending on which tasks are performed but will be found somewhere under ${processed}"
 	exit 0
 fi
@@ -56,5 +56,5 @@ done < "${1}"
 echo "All runs completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)
-printf "%s %s" "Act_by_list.sh has completed whatever it was doing at" "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
+printf "%s %s" "blast_list_to_reference_reverse.sh".sh has completed whatever it was doing at" "${global_end_time}" | mail -s "blast_list complete" nvx4@cdc.gov
 exit 0

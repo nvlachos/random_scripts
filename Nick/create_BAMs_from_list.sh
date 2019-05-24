@@ -1,10 +1,10 @@
 #!/bin/sh -l
 
-#$ -o act_by_list_barebones.out
-#$ -e act_by_list_barebones.err
-#$ -N ablb
+#$ -o create_BAMS.out
+#$ -e create_BAMS.err
+#$ -N create_BAMS
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 . ./config.sh
@@ -12,18 +12,18 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list.sh list_name(currently has to be placed in /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR folder)
+# Usage ./create_BAMS_from_list.sh list_name(currently has to be placed in /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR folder)
 #
 # script changes depending on what needs to be run through the list
 #
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to act_by_list.sh, exiting"
+	echo "No argument supplied to $0, exiting"
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./act_by_list.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) output_directory path_to_reference_sequence"
+	echo "Usage is ./create_BAMS_from_list.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) output_directory path_to_reference_sequence"
 	echo "Output location varies depending on which tasks are performed but will be found somewhere under ${processed}"
 	exit 0
 fi
@@ -57,5 +57,5 @@ done < "${1}"
 echo "All runs completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)
-printf "%s %s" "Act_by_list.sh has completed whatever it was doing at" "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
+printf "%s %s" "/create_BAMS_from_list.sh has completed making BAMs?" "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
 exit 0

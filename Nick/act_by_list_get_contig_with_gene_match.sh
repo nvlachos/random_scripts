@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o act_by_list_barebones_4.out
-#$ -e act_by_list_barebones_4.err
-#$ -N ablb4
+#$ -o abl_scon.out
+#$ -e abl_scon.err
+#$ -N scon
 #$ -cwd
 #$ -q all.q
 
@@ -87,5 +87,5 @@ fi
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)
-printf "%s %s" "Act_by_list.sh has completed ${2} " "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
+printf "%s %s" "_get_contig_with_gene_match.sh has completed ${2} " "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
 exit 0

@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o act_by_list_barebones.out
-#$ -e act_by_list_barebones.err
-#$ -N ablb
+#$ -o abl-blr.out
+#$ -e abl-blr.err
+#$ -N abl-blr
 #$ -cwd
 #$ -q all.q
 
@@ -12,7 +12,7 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list.sh list_name(currently has to be placed in /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR folder)
+# Usage ./blast_list_to_reference.sh list_name(currently has to be placed in /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR folder)
 #
 # script changes depending on what needs to be run through the list
 #
@@ -49,5 +49,5 @@ done < "${1}"
 echo "All runs completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)
-printf "%s %s" "Act_by_list.sh has completed whatever it was doing at" "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
+printf "%s %s" "blast_list_to_reference.sh has completed whatever it was doing at" "${global_end_time}" | mail -s "blast_list complete" nvx4@cdc.gov
 exit 0

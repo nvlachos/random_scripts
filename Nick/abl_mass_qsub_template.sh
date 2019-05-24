@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o act_by_list_barebones1.out
-#$ -e act_by_list_barebones1.err
-#$ -N ablb1
+#$ -o ablmq_template.out
+#$ -e ablmq_template.err
+#$ -N ablmq_template
 #$ -cwd
 #$ -q short.q
 
@@ -12,7 +12,7 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list.sh path_to_list max_concurrent_submission output_directory_for_scripts
+# Usage ./abl_mass_qsub_template.sh path_to_list max_concurrent_submission output_directory_for_scripts
 #
 
 # Number regex to test max concurrent submission parametr
@@ -20,7 +20,7 @@ number='^[0-9]+$'
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to act_by_list.sh, exiting"
+	echo "No argument supplied to abl_mass_qsub_template.sh, exiting"
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
@@ -134,5 +134,5 @@ done
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)
-printf "%s %s" "Act_by_list.sh has completed ${2}" "${global_end_time}" | mail -s "act_by_list complete" nvx4@cdc.gov
+printf "%s %s" "abl_mass_qsub_template.sh has completed ${2}" "${global_end_time}" | mail -s "abl_mass_qsub complete" nvx4@cdc.gov
 exit 0
