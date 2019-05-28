@@ -4,7 +4,7 @@
 #$ -e bionumerics_get_reads-ints.err
 #$ -N bionumerics_get_reads_ints
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 # Import the config file with shortcuts and settings
 . ./config.sh

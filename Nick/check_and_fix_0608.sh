@@ -4,7 +4,7 @@
 #$ -e sp0608.err
 #$ -N sp0608
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 . ./config.sh

@@ -4,7 +4,7 @@
 #$ -e rename_by_list.err
 #$ -N rbl
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 . ./config.sh

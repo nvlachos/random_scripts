@@ -4,7 +4,7 @@
 #$ -e check_FASTQs.err
 #$ -N ablb2
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 . ./config.sh

@@ -104,7 +104,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/plnode_${sample}_${start_time}.sh"
 				echo -e "cd ${shareScript}" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
 				echo -e "mv \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly.fasta\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_original.fasta\"" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
-				echo -e "python3 \"${shareScript}/fasta_headers_plasFlow.py\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_original.fasta\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly.fasta\"" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+				echo -e "python3 \"${shareScript}/fasta_headers_plasFlow.py\" -i \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_original.fasta\" -o \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly.fasta\"" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_plnode_complete.txt\"" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
 				cd "${main_dir}"
 				#if [[ "${counter}" -lt "${last_index}" ]]; then
@@ -152,7 +152,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/plnode_${sample}_${start_time}.sh"
 						echo -e "cd ${shareScript}" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
 						echo -e "mv \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly.fasta\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_original.fasta\"" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
-						echo -e "python3 \"${shareScript}/fasta_headers_plasFlow.py\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_original.fasta\" \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly.fasta\"" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
+						echo -e "python3 \"${shareScript}/fasta_headers_plasFlow.py\" -i \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_original.fasta\" -o \"${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly.fasta\"" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_plnode_complete.txt\"" >> "${main_dir}/plnode_${sample}_${start_time}.sh"
 						cd "${main_dir}"
 						#if [[ "${counter}" -lt "${last_index}" ]]; then

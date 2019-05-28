@@ -4,7 +4,7 @@
 #$ -e rename_sample.err
 #$ -N rename_sample
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 . ./config.sh

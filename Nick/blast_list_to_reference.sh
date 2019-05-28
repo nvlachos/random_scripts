@@ -4,7 +4,7 @@
 #$ -e abl-blr.err
 #$ -N abl-blr
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 . ./config.sh

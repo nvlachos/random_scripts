@@ -4,7 +4,7 @@
 #$ -e run_sum.err
 #$ -N run_sum
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 echo $(pwd)

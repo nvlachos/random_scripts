@@ -4,7 +4,7 @@
 #$ -e mashdist.err
 #$ -N mashdist
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 for i in ${1}/*.fasta; do
 	query=$(basename $i | cut -d'.' -f1)

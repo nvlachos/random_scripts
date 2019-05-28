@@ -4,7 +4,7 @@
 #$ -e sampl_list.err
 #$ -N sample_list
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 . ./config.sh

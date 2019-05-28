@@ -4,7 +4,7 @@
 #$ -e srst2.err
 #$ -N srst2
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 

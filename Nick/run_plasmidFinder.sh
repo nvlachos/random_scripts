@@ -4,7 +4,7 @@
 #$ -e get_run_plasmidFinder.err
 #$ -N get_run_plasmidFinder
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 # Import the config file with shortcuts and settings
 if [[ ! -f "./config.sh" ]]; then

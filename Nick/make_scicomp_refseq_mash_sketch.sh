@@ -4,7 +4,7 @@
 #$ -e mmshref.err
 #$ -N mmshref
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 
 module load Mash/2.0

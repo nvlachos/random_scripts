@@ -110,7 +110,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/node_${sample}_${start_time}.sh"
 				echo -e "cd ${shareScript}" >> "${main_dir}/node_${sample}_${start_time}.sh"
 				echo -e "mv \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta\" \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed_original.fasta\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
-				echo -e "python3 \"${shareScript}/fasta_headers.py\" \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed_original.fasta\" \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+				echo -e "python3 \"${shareScript}/fasta_headers.py\" -i \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed_original.fasta\" -o \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_node_complete.txt\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
 				cd "${main_dir}"
 				#if [[ "${counter}" -lt "${last_index}" ]]; then
@@ -158,7 +158,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/node_${sample}_${start_time}.sh"
 						echo -e "cd ${shareScript}" >> "${main_dir}/node_${sample}_${start_time}.sh"
 						echo -e "mv \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta\" \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed_original.fasta\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
-						echo -e "python3 \"${shareScript}/fasta_headers.py\" \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed_original.fasta\" \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
+						echo -e "python3 \"${shareScript}/fasta_headers.py\" -i \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed_original.fasta\" -o \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_node_complete.txt\"" >> "${main_dir}/node_${sample}_${start_time}.sh"
 						cd "${main_dir}"
 						#if [[ "${counter}" -lt "${last_index}" ]]; then

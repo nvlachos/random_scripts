@@ -4,7 +4,7 @@
 #$ -e run_ANIc.err
 #$ -N run_ANIc
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 if [[ ! -f "./config.sh" ]]; then
@@ -290,7 +290,7 @@ else
 	if [[ "${accession}" == "No_Accession_Number" ]]; then
 		best_organism_guess="${def_array[3]} ${def_array[4]}"
 	else
-		best_organism_guess=$(python "${shareScript}/entrez_get_taxon_from_accession.py" "${accession}" "${me}")
+		best_organism_guess=$(python "${shareScript}/entrez_get_taxon_from_accession.py" -a "${accession}" -e "${me}")
 	fi
 fi
 # Uncomment this if you want to restrict ID to only genus species, without more resolute definition

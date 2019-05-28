@@ -4,7 +4,7 @@
 #$ -e mmshfolder.err
 #$ -N mmshfolder
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 
 module load Mash/2.0

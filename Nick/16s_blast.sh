@@ -4,7 +4,7 @@
 #$ -e 16s_blast.err
 #$ -N 16s_blast
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 if [[ ! -f "./config.sh" ]]; then
@@ -155,7 +155,7 @@ if [[ -s "${OUTDATADIR}/16s/${sample_name}.nt.RemoteBLASTN" ]]; then
 	attempts=0
 	# Will try getting info from entrez up to 5 times, as it has a higher chance of not finishing correctly on the first try
 	while [[ ${attempts} -lt 5 ]]; do
-		blast_id=$(python ${shareScript}/entrez_get_taxon_from_accession.py "${gb_acc}" "${me}@cdc.gov")
+		blast_id=$(python ${shareScript}/entrez_get_taxon_from_accession.py -a "${gb_acc}" -e "${me}@cdc.gov")
 		if [[ ! -z ${blast_id} ]]; then
 			break
 		else
@@ -180,7 +180,7 @@ if [[ -s "${OUTDATADIR}/16s/${sample_name}.nt.RemoteBLASTN.sorted" ]]; then
 	attempts=0
 	# Will try getting info from entrez up to 5 times, as it has a higher chance of not finishing correctly on the first try
 	while [[ ${attempts} -lt 5 ]]; do
-		blast_id=$(python ${shareScript}/entrez_get_taxon_from_accession.py "${gb_acc}" "${me}@cdc.gov")
+		blast_id=$(python ${shareScript}/entrez_get_taxon_from_accession.py -a "${gb_acc}" -e "${me}@cdc.gov")
 		if [[ ! -z ${blast_id} ]]; then
 			break
 		else

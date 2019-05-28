@@ -4,7 +4,7 @@
 #$ -e rename_project.err
 #$ -N rename_project
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 . ./config.sh

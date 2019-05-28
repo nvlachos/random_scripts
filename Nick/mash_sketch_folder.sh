@@ -4,7 +4,7 @@
 #$ -e mashdist.err
 #$ -N mashdist
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 echo ":${1}:"
 if [[ ! -d ${1} ]]; then

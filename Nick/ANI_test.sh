@@ -4,7 +4,7 @@
 #$ -e test_ANI.err
 #$ -N test_ANI
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 pwd
 

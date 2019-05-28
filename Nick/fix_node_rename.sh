@@ -48,9 +48,9 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		rm -r ${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed_original.fasta
 	fi
 	if [[ -f ${processed}/${project}/${sample}/Assembly/scaffolds.fasta ]]; then
-		python ${shareScript}/removeShortContigs.py ${processed}/${project}/${sample}/Assembly/scaffolds.fasta 500 "normal_SPAdes"
+		python ${shareScript}/removeShortContigs.py -i ${processed}/${project}/${sample}/Assembly/scaffolds.fasta -t 500 -s "normal_SPAdes"
 		mv ${processed}/${project}/${sample}/Assembly/scaffolds.fasta.TRIMMED.fasta ${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed_original.fasta
-		python ${shareScript}/fasta_headers.py ${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed_original.fasta ${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta
+		python ${shareScript}/fasta_headers.py -i ${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed_original.fasta -o ${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta
 	else
 		echo "No scaffolds file found for ${sample}"
 	fi
@@ -68,9 +68,9 @@ done
 # 		rm -r ${processed}/${project}/${sample}/plasmidAssembly/${sample}_plasmid_scaffolds_trimmed_original.fasta
 # 	fi
 # 	if [[ -f ${processed}/${project}/${sample}/plasmidAssembly/scaffolds.fasta ]]; then
-# 		python ${shareScript}/removeShortContigs.py ${processed}/${project}/${sample}/plasmidAssembly/scaffolds.fasta 500 "normal_SPAdes"
+# 		python ${shareScript}/removeShortContigs.py -i ${processed}/${project}/${sample}/plasmidAssembly/scaffolds.fasta -t 500 -s "normal_SPAdes"
 # 		mv ${processed}/${project}/${sample}/plasmidAssembly/scaffolds.fasta.TRIMMED.fasta ${processed}/${project}/${sample}/plasmidAssembly/${sample}_plasmid_scaffolds_trimmed_original.fasta
-# 		python "${shareScript}/fasta_headers.py" ${processed}/${project}/${sample}/plasmidAssembly/${sample}_plasmid_scaffolds_trimmed_original.fasta ${processed}/${project}/${sample}/plasmidAssembly/${sample}_plasmid_scaffolds_trimmed.fasta
+# 		python "${shareScript}/fasta_headers.py" -i ${processed}/${project}/${sample}/plasmidAssembly/${sample}_plasmid_scaffolds_trimmed_original.fasta -o ${processed}/${project}/${sample}/plasmidAssembly/${sample}_plasmid_scaffolds_trimmed.fasta
 # 	else
 # 		echo "No plasmid scaffolds found for ${sample}"
 # 	counter=$(( counter + 1))

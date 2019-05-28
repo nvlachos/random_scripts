@@ -4,7 +4,7 @@
 #$ -e fix_species.err
 #$ -N fix_species
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 
 #

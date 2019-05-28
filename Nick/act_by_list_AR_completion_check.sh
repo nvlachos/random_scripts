@@ -4,7 +4,7 @@
 #$ -e abl-ARC.err
 #$ -N abl-AR_checker
 #$ -cwd
-#$ -q all.q
+#$ -q short.q
 
 #Import the config file with shortcuts and settings
 . ./config.sh
