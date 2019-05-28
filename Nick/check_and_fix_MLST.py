@@ -68,14 +68,17 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		print("Unknown MLST filetype, can not continue")
 		exit()
 	MLST_temp_type=MLST_temp_type.replace("/", ",")
-	if "," not in MLST_temp_type:
+	if "," not in MLST_temp_type and "|" not in MLST_temp_type:
 		mlstype=[MLST_temp_type]
 		for i in range(0, len(mlstype)):
 			if mlstype[i] != '-':
 				mlstype[i] = int(mlstype[i])
 		mlstype.sort()
 	else:
-		mlstype=MLST_temp_type.split(",")
+		if "," in MLST_temp_type:
+			mlstype=MLST_temp_type.split(",")
+		else:
+			mlstype=MLST_temp_type.split("|")
 	print("Current MLST type:", mlstype, "\n")
 	list_size=len(allele_list)
 	print("Allele_names:", allele_names)
