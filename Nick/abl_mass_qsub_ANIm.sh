@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o ablmq-ani.out
-#$ -e ablmq-ani.err
-#$ -N ablmq-ani
+#$ -o ablmq-anim.out
+#$ -e ablmq-anim.err
+#$ -N ablmq-anim
 #$ -cwd
 #$ -q short.q
 
@@ -19,7 +19,7 @@ fi
 #. ./module_changers/list_modules.sh
 
 #
-# Usage ./abl_mass_qsub_ANI.sh path_to_list max_concurrent_submissions output_directory_for_scripts clobberness[keep|clobber]
+# Usage ./abl_mass_qsub_ANIm.sh path_to_list max_concurrent_submissions output_directory_for_scripts clobberness[keep|clobber]
 #
 
 # Number regex to test max concurrent submission parametr
@@ -31,7 +31,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_ANI.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions output_directory_for_scripts clobberness[keep|clobber]"
+	echo "Usage is ./abl_mass_qsub_ANIm.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions output_directory_for_scripts clobberness[keep|clobber]"
 	exit 1
 elif [[ ! -f "${1}" ]]; then
 	echo "${1} (list) does not exist...exiting"
@@ -71,13 +71,13 @@ counter=0
 max_subs=${2}
 
 # Set script directory
-main_dir="${3}/ANI_subs"
+main_dir="${3}/anim_subs"
 cp ./config.sh ${main_dir}
-if [[ ! -d "${3}/ANI_subs" ]]; then
-	mkdir "${3}/ANI_subs"
-	mkdir "${3}/ANI_subs/complete"
-elif [[ ! -d "${3}/ANI_subs/complete" ]]; then
-	mkdir "${3}/ANI_subs/complete"
+if [[ ! -d "${3}/anim_subs" ]]; then
+	mkdir "${3}/anim_subs"
+	mkdir "${3}/anim_subs/complete"
+elif [[ ! -d "${3}/anim_subs/complete" ]]; then
+	mkdir "${3}/anim_subs/complete"
 fi
 
 start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
@@ -124,34 +124,34 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	 	if [[ ${counter} -lt ${max_subs} ]]; then
 			# Check if old data exists, skip if so
 			if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
-				if [[ ! -f "${processed}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
+				if [[ ! -f "${processed}/${sample}/ANI/best_anim_hits_ordered(${sample}_vs_${genus,})" ]]; then
 					echo  "Index is below max submissions, submitting"
-					echo "Going to make ${main_dir}/ani_${sample}_${start_time}.sh"
-					echo -e "#!/bin/bash -l\n" > "${main_dir}/ani_${sample}_${start_time}.sh"
-					echo -e "#$ -o ani_${sample}.out" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-					echo -e "#$ -e ani_${sample}.err" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-					echo -e "#$ -N ani_${sample}"   >> "${main_dir}/ani_${sample}_${start_time}.sh"
-					echo -e "#$ -cwd"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
-					echo -e "#$ -q short.q\n"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
-					echo -e "cd ${shareScript}" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-					echo -e "\"${shareScript}/run_ANI.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-					echo -e "\"${shareScript}/determine_taxID.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_ani_complete.txt\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
+					echo "Going to make ${main_dir}/anim_${sample}_${start_time}.sh"
+					echo -e "#!/bin/bash -l\n" > "${main_dir}/anim_${sample}_${start_time}.sh"
+					echo -e "#$ -o anim_${sample}.out" >> "${main_dir}/anim_${sample}_${start_time}.sh"
+					echo -e "#$ -e anim_${sample}.err" >> "${main_dir}/anim_${sample}_${start_time}.sh"
+					echo -e "#$ -N anim_${sample}"   >> "${main_dir}/anim_${sample}_${start_time}.sh"
+					echo -e "#$ -cwd"  >> "${main_dir}/anim_${sample}_${start_time}.sh"
+					echo -e "#$ -q short.q\n"  >> "${main_dir}/anim_${sample}_${start_time}.sh"
+					echo -e "cd ${shareScript}" >> "${main_dir}/anim_${sample}_${start_time}.sh"
+					echo -e "\"${shareScript}/run_ANIm.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/anim_${sample}_${start_time}.sh"
+					echo -e "\"${shareScript}/determine_taxID.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/anim_${sample}_${start_time}.sh"
+					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_anim_complete.txt\"" >> "${main_dir}/anim_${sample}_${start_time}.sh"
 					cd "${main_dir}"
 					#if [[ "${counter}" -lt "${last_index}" ]]; then
-						qsub "${main_dir}/ani_${sample}_${start_time}.sh"
+						qsub "${main_dir}/anim_${sample}_${start_time}.sh"
 					#else
-					#	qsub -sync y "${main_dir}/ani_${sample}_${start_time}.sh"
+					#	qsub -sync y "${main_dir}/anim_${sample}_${start_time}.sh"
 					#fi
 				# Old data exists, skipping
 				else
 					echo "${project}/${sample} already has ANI summary"
-					echo "$(date)" > "${main_dir}/complete/${sample}_ani_complete.txt"
+					echo "$(date)" > "${main_dir}/complete/${sample}_anim_complete.txt"
 				fi
 			# No Assembly file to run ANI on, skipping
 			else
 				echo "${project}/${sample} does not have assembly"
-				echo "$(date)" > "${main_dir}/complete/${sample}_ani_complete.txt"
+				echo "$(date)" > "${main_dir}/complete/${sample}_anim_complete.txt"
 			fi
 		# Counter is above limit, wait until "slot" opens up"
 		else
@@ -168,37 +168,37 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					break
 				fi
 				# Check if "waiting" sample is complete
-				if [[ -f "${main_dir}/complete/${waiting_sample}_ani_complete.txt" ]]; then
+				if [[ -f "${main_dir}/complete/${waiting_sample}_anim_complete.txt" ]]; then
 					# Check if an assembly exists to run ANI on
 					if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
 						# Check if old data exists, skip if so
-						if [[ ! -f "${processed}/${project}/${sample}/ANI/best_ANI_hits_ordered(${sample}_vs_${genus,})" ]]; then
+						if [[ ! -f "${processed}/${project}/${sample}/ANI/best_anim_hits_ordered(${sample}_vs_${genus,})" ]]; then
 							echo  "${waiting_sample}(${waiting_for_index}) is not complete, submitting ${sample} ($counter)"
-							echo -e "#!/bin/bash -l\n" > "${main_dir}/ani_${sample}_${start_time}.sh"
-							echo -e "#$ -o ani_${sample}.out" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-							echo -e "#$ -e ani_${sample}.err" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-							echo -e "#$ -N ani_${sample}"   >> "${main_dir}/ani_${sample}_${start_time}.sh"
-							echo -e "#$ -cwd"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
-							echo -e "#$ -q short.q\n"  >> "${main_dir}/ani_${sample}_${start_time}.sh"
-							echo -e "cd ${shareScript}" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-							echo -e "\"${shareScript}/run_ANI.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-							echo -e "\"${shareScript}/determine_taxID.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
-							echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_ani_complete.txt\"" >> "${main_dir}/ani_${sample}_${start_time}.sh"
+							echo -e "#!/bin/bash -l\n" > "${main_dir}/anim_${sample}_${start_time}.sh"
+							echo -e "#$ -o anim_${sample}.out" >> "${main_dir}/anim_${sample}_${start_time}.sh"
+							echo -e "#$ -e anim_${sample}.err" >> "${main_dir}/anim_${sample}_${start_time}.sh"
+							echo -e "#$ -N anim_${sample}"   >> "${main_dir}/anim_${sample}_${start_time}.sh"
+							echo -e "#$ -cwd"  >> "${main_dir}/anim_${sample}_${start_time}.sh"
+							echo -e "#$ -q short.q\n"  >> "${main_dir}/anim_${sample}_${start_time}.sh"
+							echo -e "cd ${shareScript}" >> "${main_dir}/anim_${sample}_${start_time}.sh"
+							echo -e "\"${shareScript}/run_ANIm.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/anim_${sample}_${start_time}.sh"
+							echo -e "\"${shareScript}/determine_taxID.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/anim_${sample}_${start_time}.sh"
+							echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_anim_complete.txt\"" >> "${main_dir}/anim_${sample}_${start_time}.sh"
 							cd "${main_dir}"
 							#if [[ "${counter}" -lt "${last_index}" ]]; then
-								qsub "${main_dir}/ani_${sample}_${start_time}.sh"
+								qsub "${main_dir}/anim_${sample}_${start_time}.sh"
 							#else
-							#	qsub -sync y "${main_dir}/ani_${sample}_${start_time}.sh"
+							#	qsub -sync y "${main_dir}/anim_${sample}_${start_time}.sh"
 							#fi
 						# Old data exists, skipping
 						else
 							echo "${project}/${sample} already has ANI summary"
-							echo "$(date)" > "${main_dir}/complete/${sample}_ani_complete.txt"
+							echo "$(date)" > "${main_dir}/complete/${sample}_anim_complete.txt"
 						fi
 						# No Assembly file to run ANI on, skipping
 					else
 						echo "${project}/${sample} does not have assembly"
-						echo "$(date)" > "${main_dir}/complete/${sample}_ani_complete.txt"
+						echo "$(date)" > "${main_dir}/complete/${sample}_anim_complete.txt"
 					fi
 					break
 				# Wait 5 seconds before checking if "waiting" sample is complete
@@ -219,13 +219,13 @@ done
 timer=0
 for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
-	if [[ -f "${main_dir}/complete/${waiting_sample}_ani_complete.txt" ]]; then
+	if [[ -f "${main_dir}/complete/${waiting_sample}_anim_complete.txt" ]]; then
 		echo "${item} is complete"
-		if [[ -f "${shareScript}/ani_${sample}.out" ]]; then
-			mv "${shareScript}/ani_${sample}.out" ${main_dir}
+		if [[ -f "${shareScript}/anim_${sample}.out" ]]; then
+			mv "${shareScript}/anim_${sample}.out" ${main_dir}
 		fi
-		if [[ -f "${shareScript}/ani_${sample}.err" ]]; then
-			mv "${shareScript}/ani_${sample}.err" ${main_dir}
+		if [[ -f "${shareScript}/anim_${sample}.err" ]]; then
+			mv "${shareScript}/anim_${sample}.err" ${main_dir}
 		fi
 	else
 		# Check every 5 seconds to see if the sample has completed normal csstar analysis
@@ -235,13 +235,13 @@ for item in "${arr[@]}"; do
 					echo "Timer exceeded limit of 3600 seconds = 60 minutes"
 					exit 1
 				fi
-				if [[ -f "${main_dir}/complete/${waiting_sample}_ani_complete.txt" ]]; then
+				if [[ -f "${main_dir}/complete/${waiting_sample}_anim_complete.txt" ]]; then
 					echo "${item} is complete"
-					if [[ -f "${shareScript}/ani_${sample}.out" ]]; then
-						mv "${shareScript}/ani_${sample}.out" ${main_dir}
+					if [[ -f "${shareScript}/anim_${sample}.out" ]]; then
+						mv "${shareScript}/anim_${sample}.out" ${main_dir}
 					fi
-					if [[ -f "${shareScript}/ani_${sample}.err" ]]; then
-						mv "${shareScript}/ani_${sample}.err" ${main_dir}
+					if [[ -f "${shareScript}/anim_${sample}.err" ]]; then
+						mv "${shareScript}/anim_${sample}.err" ${main_dir}
 					fi
 					break
 				else
@@ -255,7 +255,7 @@ done
 
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
-printf "%s %s" "abl_mass_qsub_ANI.sh has completed" "${global_end_time}" | mail -s "abl_mass_qsub_ANI.sh complete" nvx4@cdc.gov
+printf "%s %s" "abl_mass_qsub_ANIm.sh has completed" "${global_end_time}" | mail -s "abl_mass_qsub_ANIm.sh complete" nvx4@cdc.gov
 
 #Script exited gracefully (unless something else inside failed)
 exit 0

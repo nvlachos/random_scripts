@@ -19,7 +19,7 @@ fi
 #. ./module_changers/list_modules.sh
 
 #
-# Usage ./abl_mass_qsub_ANI.sh path_to_list max_concurrent_submissions output_directory_for_scripts clobberness[keep|clobber]
+# Usage ./abl_mass_qsub_ANIb.sh path_to_list max_concurrent_submissions output_directory_for_scripts clobberness[keep|clobber]
 #
 
 # Number regex to test max concurrent submission parametr
@@ -31,7 +31,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_ANI_contigs.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions output_directory_for_scripts clobberness[keep|clobber]"
+	echo "Usage is ./abl_mass_qsub_ANIb_contigs.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions output_directory_for_scripts clobberness[keep|clobber]"
 	exit 1
 elif [[ ! -f "${1}" ]]; then
 	echo "${1} (list) does not exist...exiting"
@@ -83,7 +83,7 @@ cp ./config.sh ${main_dir}
 
 start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 
-# Create and submit qsub scripts to get ANI_contigs for all isolates
+# Create and submit qsub scripts to get ANIb for all isolates
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	#sample=${sample:0:20}
@@ -254,7 +254,7 @@ done
 
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
-printf "%s %s" "abl_mass_qsub_ANI.sh has completed" "${global_end_time}" | mail -s "abl_mass_qsub_ANI.sh complete" nvx4@cdc.gov
+printf "%s %s" "abl_mass_qsub_ANIb.sh has completed" "${global_end_time}" | mail -s "abl_mass_qsub_ANIb.sh complete" nvx4@cdc.gov
 
 #Script exited gracefully (unless something else inside failed)
 exit 0
