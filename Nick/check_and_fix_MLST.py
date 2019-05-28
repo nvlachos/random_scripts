@@ -69,6 +69,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		exit()
 	MLST_temp_type=MLST_temp_type.replace("/", ",")
 	if "," not in MLST_temp_type and "|" not in MLST_temp_type:
+		mlstype_str = [MLST_temp_type]
 		mlstype=[MLST_temp_type]
 		for i in range(0, len(mlstype)):
 			if mlstype[i] != '-':
@@ -148,7 +149,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				new_types[i] = str(new_types[i])
 			#new_types.sort()
 			new_types='|'.join(new_types)
-			print("Updating MLST types in", input_MLST_file, "from", ",".join(mlstype), "to", new_types)
+			print("Updating MLST types in", input_MLST_file, "from", ",".join(mlstype_str), "to", new_types)
 			MLST_temp_types=new_types
 			# Log any incomplete/strange types found
 			if '-' in MLST_temp_types or 'ND' in MLST_temp_types or 'NF' in MLST_temp_types:
