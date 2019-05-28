@@ -2,6 +2,7 @@ import sys
 import os
 import glob
 import math
+import argparse
 import itertools as it
 from pathlib import Path
 
@@ -512,5 +513,4 @@ def find_DB_taxonomy(genus, species):
 
 
 print("Parsing MLST file ...\n")
-args =parseArgs()
 do_MLST_check(args.input, args.filetype) #, "/scicomp/groups/OID/NCEZID/DHQP/CEMB/databases/mlst/abaumannii_Pasteur.txt") #sys.argv[3])
