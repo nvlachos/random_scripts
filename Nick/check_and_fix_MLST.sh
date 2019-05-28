@@ -12,7 +12,7 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./check_and_fix_MLST.sh list_name(currently has to be placed in /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR folder) -type (1 for automatically detected MLST, 2 for forced MLST against a certain database)
+# Usage ./check_and_fix_MLST.sh list_name -type (1 for automatically detected MLST, 2 for forced MLST against a certain database)
 #
 # script changes depending on what needs to be run through the list
 #
@@ -52,7 +52,7 @@ while IFS= read -r line_in; do
 					DB=$(tail -n1 ${mlst_file} | cut -d'	' -f2)
 					"${shareScript}/run_MLST.sh" "${sample}" "${project}" "-f" "${DB}"
 				fi
-				python3 "${shareScript}/check_and_fix_mlsts.py" "${mlst_file}" "standard"
+				python3 "${shareScript}/check_and_fix_mlsts.py" -i "${mlst_file}" -t "standard"
 			fi
 		fi # Done with main mlst file
 	done
