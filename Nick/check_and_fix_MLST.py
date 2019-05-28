@@ -144,7 +144,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				#	new_types[i] = "-"
 				new_types[i] = str(new_types[i])
 			#new_types.sort()
-			new_types='|'.join(new_types)
+			new_types=','.join(new_types)
 			print("Updating MLST types in", input_MLST_file, "from", ",".join(mlstype), "to", new_types)
 			MLST_temp_types=new_types
 			# Log any incomplete/strange types found
