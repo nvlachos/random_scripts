@@ -12,7 +12,7 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./check_and_fix_MLST.sh list_name -type (1 for automatically detected MLST, 2 for forced MLST against a certain database)
+# Usage ./check_and_fix_MLST.sh list_name
 #
 # script changes depending on what needs to be run through the list
 #
@@ -23,7 +23,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./check_and_fix_MLST.sh path_to_corrected_MLST_file(DB	MiSeq_ID	sample_ID	MLST	locus_1(type)	locus2(type) ... locus7(type)) -mlst_type (1 for normal, 2 for alternate(forced))"
+	echo "Usage is ./check_and_fix_MLST.sh path_to_list"
 	#echo "Output location varies depending on which tasks are performed but will be found somewhere under ${processed}"
 	exit 0
 elif [[ ! -f ${1} ]]; then
@@ -52,7 +52,7 @@ while IFS= read -r line_in; do
 					DB=$(tail -n1 ${mlst_file} | cut -d'	' -f2)
 					"${shareScript}/run_MLST.sh" "${sample}" "${project}" "-f" "${DB}"
 				fi
-				python3 "${shareScript}/check_and_fix_mlsts.py" -i "${mlst_file}" -t "standard"
+				python3 "${shareScript}/check_and_fix_MLST.py" -i "${mlst_file}" -t "standard"
 			fi
 		fi # Done with main mlst file
 	done
