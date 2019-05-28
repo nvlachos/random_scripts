@@ -190,7 +190,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				MLST_file.close()
 			MLST_changed_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/updated_MLSTs.txt"
 			MLST_changed_file_handler=open(MLST_changed_file,'a+')
-			MLST_changed_file_handler.write(filepath+"	"+db_name+"	"+",".join(mlstype)+" to "+new_types+"\n")
+			MLST_changed_file_handler.write(filepath+"	"+db_name+"	"+",".join(mlstype_str)+" to "+new_types+"\n")
 			MLST_changed_file_handler.close()
 		else:
 			print(input_MLST_file, "is as good as it gets with type", mlstype)
