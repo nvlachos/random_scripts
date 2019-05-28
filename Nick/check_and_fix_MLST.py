@@ -127,7 +127,6 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			new_types=get_type(schemes, allele_names, db_name)
 			checking=True
 	print("Old types:", mlstype, "\n")
-	exit()
 	filepath=input_MLST_file[::-1].split("/")[2:4]
 	#print(filepath)
 	for i in range(0, len(filepath)):
