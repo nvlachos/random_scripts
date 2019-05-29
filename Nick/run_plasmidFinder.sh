@@ -97,7 +97,7 @@ if [[ "${force}" == "true" ]]; then
 # Else, if the force flag is not set, then TRY to limit search to family (it will still check against all if it does not match the family)
 else
 	# Checks to see if a post assembly kraken file is available to extract the family of the sample
-	if [[ -f ${processed}/${2}/${1}/kraken/postAssembly/${1}_kraken_summary_assembled_BP_data.txt ]]; then
+	if [[ -f ${processed}/${2}/${1}/${1}.tax ]]; then
 		#Extracts the 6th line from the kraken file containing all family information
 		family=$(sed -n '6p' < ${processed}/${2}/${1}/${1}.tax)
 		genus=$(sed -n '7p' < ${processed}/${2}/${1}/${1}.tax)
