@@ -51,7 +51,7 @@ if [[ "${4}" != "keep" ]] && [[ "${4}" != "clobber" ]]; then
 	echo "Clobberness was not input, be sure to add keep or clobber as 5th parameter...exiting"
 	exit 1
 else
-	clobberness="${5}"
+	clobberness="${4}"
 fi
 
 # create an array of all samples in the list
