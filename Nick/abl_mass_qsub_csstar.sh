@@ -88,6 +88,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	if [[ "${clobberness}" = "clobber" ]]; then
+		echo "Removing old c-sstar for ${project}/${sample} and ${resGANNOT_srst2_filename}"
 		rm ${processed}/${project}/${sample}/c-sstar/${sample}.${resGANNOT_srst2_filename}.gapped_98_sstar_summary
 		rm -r ${processed}/${project}/${sample}/c-sstar/${resGANNOT_srst2_filename}_gapped/
 	fi
