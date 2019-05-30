@@ -38,40 +38,58 @@ while IFS= read -r var; do
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 	#sed -i 's/281,1839/281\/1839/g' "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst"
 	if [[ -f ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst ]]; then
+		change=0
 		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst)
 		IFS='	' read -r -a mlst_file_array <<< "$mlst_line"
-		#echo "Test original: ${mlst_file_array[2]}"
+		orig=${mlst_file_array[2]}
 		if [[ "${mlst_file_array[2]}" == *","* ]]; then
 			mlst_file_array[2]=${mlst_file_array[2]/,/\/}
+			change=1
 		fi
 		if [[ "${mlst_file_array[2]}" == *"|"* ]]; then
 			mlst_file_array[2]=${mlst_file_array[2]/\|/\/}
+			change=1
 		fi
-		echo -e "${mlst_file_array[@]}\n" > ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst
+		if [[ "${change}" -gt 0 ]]; then
+			echo "Changing ${orig} to ${mlst_file_array[2]} in ${project}/${sample_name} for standard"
+			echo -e "${mlst_file_array[@]}\n" > ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst
+		fi
 	fi
 	if [[ -f ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst ]]; then
+		change=0
 		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst)
 		IFS='	' read -r -a mlst_file_array <<< "$mlst_line"
-		echo "Test abaumannii: ${mlst_file_array[2]}"
+		orig=${mlst_file_array[2]}
 		if [[ "${mlst_file_array[2]}" == *","* ]]; then
 			mlst_file_array[2]=${mlst_file_array[2]/,/\/}
+			change=1
 		fi
 		if [[ "${mlst_file_array[2]}" == *"|"* ]]; then
 			mlst_file_array[2]=${mlst_file_array[2]/\|/\/}
+			change=1
 		fi
-		echo -e "${mlst_file_array[@]}\n" > ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst
+		if [[ "${change}" -gt 0 ]]; then
+			echo "Changing ${orig} to ${mlst_file_array[2]} in ${project}/${sample_name} for abaummannii"
+			echo -e "${mlst_file_array[@]}\n" > ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst
+		fi
 	fi
 	if [[ -f ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst ]]; then
+		change=0
 		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst)
 		IFS='	' read -r -a mlst_file_array <<< "$mlst_line"
-		echo "Test ecoli: ${mlst_file_array[2]}"
+		orig=${mlst_file_array[2]}
 		if [[ "${mlst_file_array[2]}" == *","* ]]; then
 			mlst_file_array[2]=${mlst_file_array[2]/,\/}
+			change=1
 		fi
 		if [[ "${mlst_file_array[2]}" == *"|"* ]]; then
 			mlst_file_array[2]=${mlst_file_array[2]/\|/\/}
+			change=1
 		fi
-		echo -e "${mlst_file_array[@]}\n" > ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst
+		if [[ "${change}" -gt 0 ]]; then
+			echo "Changing ${orig} to ${mlst_file_array[2]} in ${project}/${sample_name} for ecoli_2"
+			echo -e "${mlst_file_array[@]}\n" > ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst
+		fi
 	fi
 
 	#echo "${counter}"
