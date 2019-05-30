@@ -36,19 +36,19 @@ while IFS= read -r var; do
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 	#sed -i 's/281,1839/281\/1839/g' "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst"
 	if [[ -f ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst ]]; then
-		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample}.mlst)
+		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst)
 		IFS='	' read -r -a mlst_file_array <<< "$mlst_line"
 		echo "Test original: ${mlst_file_array[2]}"
 
 	fi
 	if [[ -f ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst ]]; then
-		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample}_abaumannii.mlst)
+		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst)
 		IFS='	' read -r -a mlst_file_array <<< "$mlst_line"
 		echo "Test abaumannii: ${mlst_file_array[2]}"
 
 	fi
 	if [[ -f ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst ]]; then
-		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample}_ecoli_2.mlst)
+		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst)
 		IFS='	' read -r -a mlst_file_array <<< "$mlst_line"
 		echo "Test ecoli: ${mlst_file_array[2]}"
 	fi
