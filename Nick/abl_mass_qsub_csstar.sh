@@ -18,7 +18,7 @@ fi
 #. ./module_changers/list_modules.sh
 
 #
-# Usage ./abl_mass_qsub_csstar.sh path_to_list max_concurrent_submissions output_folder_for_scripts clobberness[keep|clobber]
+# Usage ./abl_mass_qsub_csstar.sh path_to_list max_concurrent_submissions output_folder_for_scripts clobberness[keep|clobber] %ID(optional)[80|95|98|99|100]
 #
 
 # Number regex to test max concurrent submission parametr
@@ -30,7 +30,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_csstar.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions output_directory_for_scripts clobberness[keep|clobber]"
+	echo "Usage is ./abl_mass_qsub_csstar.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions output_directory_for_scripts clobberness[keep|clobber] %ID(optional)[80|95|98|99|100]"
 	exit 1
 elif [[ ! -f "${1}" ]]; then
 	echo "${1} (list) does not exist...exiting"
@@ -52,6 +52,25 @@ if [[ "${4}" != "keep" ]] && [[ "${4}" != "clobber" ]]; then
 	exit 1
 else
 	clobberness="${4}"
+fi
+
+# Checks that value given for % Identity is one of the presets for csstar
+if [[ "${5}" != 80 ]] && [[ "${5}" != 95 ]] && [[ "${5}" != 98 ]] && [[ "${5}" != 99 ]] && [[ "${5}" != 100 ]]; then
+	echo "Identity is not one of the presets for csstar and therefore will fail, defaulting to 98..."
+	sim="h"
+else
+	if [ "${3}" == 98 ]; then
+		sim="h"
+	elif [ "${3}" == 80 ]; then
+		sim="l"
+	elif [ "${3}" == 99 ]; then
+		sim="u"
+	elif [ "${3}" == 95 ]; then
+		sim="m"
+	elif [ "${3}" == 100 ]; then
+		sim="p"
+	elif [ "${3}" == 40 ]; then
+		sim="o"
 fi
 
 # create an array of all samples in the list
@@ -110,7 +129,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "module load Python/3.6.1\n" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 				# Defaulting to gapped/98, change if you want to include user preferences
 				echo -e "cd ${shareScript}" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
-				echo -e "\"${shareScript}/run_c-sstar_on_single.sh\" \"${sample}\" g h \"${project}\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/run_c-sstar_on_single.sh\" \"${sample}\" g "${sim}" \"${project}\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarn_complete.txt\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 				cd "${main_dir}"
 				echo "submitting ${main_dir}/csstn_${sample}_${start_time}.sh"
@@ -186,7 +205,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "module load Python/3.6.1\n" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 						# Defaulting to gapped/98, change if you want to include user preferences
 						echo -e "cd ${shareScript}" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
-						echo -e "\"${shareScript}/run_c-sstar_on_single.sh\" \"${sample}\" g h \"${project}\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
+						echo -e "\"${shareScript}/run_c-sstar_on_single.sh\" \"${sample}\" g "${sim}" \"${project}\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarn_complete.txt\"" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
 						cd ${main_dir}
 						#if [[ "${counter}" -lt "${last_index}" ]]; then
