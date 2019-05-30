@@ -38,8 +38,9 @@ while IFS= read -r var; do
 	if [[ -f ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst ]]; then
 		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst)
 		IFS='	' read -r -a mlst_file_array <<< "$mlst_line"
+		#sed 's/,/\//g' "${mlst_file_array[2]"
 		echo "Test original: ${mlst_file_array[2]}"
-
+		echo "Test new:" ${mlst_file_array[2]/\//,}
 	fi
 	if [[ -f ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst ]]; then
 		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst)
