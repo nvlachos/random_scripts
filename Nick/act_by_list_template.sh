@@ -82,6 +82,7 @@ while IFS= read -r var; do
 	if [[ -f ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst ]]; then
 		change=0
 		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst)
+		mlst_line=${mlst_line/ /	/}
 		IFS='	' read -r -a mlst_file_array <<< "$mlst_line"
 		orig="${mlst_file_array[2]}"
 		echo "ec-${orig}:${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst"
