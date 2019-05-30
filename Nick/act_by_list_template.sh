@@ -42,7 +42,7 @@ while IFS= read -r var; do
 		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst)
 		IFS='	' read -r -a mlst_file_array <<< "$mlst_line"
 		orig="${mlst_file_array[2]}"
-		echo "standard-${orig}"
+		echo "standard-${orig}:${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst"
 		if [[ "${mlst_file_array[2]}" == *","* ]]; then
 			mlst_file_array[2]=${mlst_file_array[2]/,/\/}
 			change=1
@@ -63,7 +63,7 @@ while IFS= read -r var; do
 		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst)
 		IFS='	' read -r -a mlst_file_array <<< "$mlst_line"
 		orig="${mlst_file_array[2]}"
-		echo "ab-${orig}"
+		echo "ab-${orig}:${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst"
 		if [[ "${mlst_file_array[2]}" == *","* ]]; then
 			mlst_file_array[2]=${mlst_file_array[2]/,/\/}
 			change=1
@@ -84,7 +84,7 @@ while IFS= read -r var; do
 		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst)
 		IFS='	' read -r -a mlst_file_array <<< "$mlst_line"
 		orig="${mlst_file_array[2]}"
-		echo "ec-${orig}"
+		echo "ec-${orig}:${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst"
 		if [[ "${mlst_file_array[2]}" == *","* ]]; then
 			mlst_file_array[2]=${mlst_file_array[2]/,\/}
 			change=1
