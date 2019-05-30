@@ -48,7 +48,7 @@ while IFS= read -r var; do
 		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst)
 		IFS='	' read -r -a mlst_file_array <<< "$mlst_line"
 		echo "Test abaumannii: ${mlst_file_array[2]}"
-		if [[ "${mlst_file_array[2]}" == *","* ]]; then
+		if [[ "${mlst_file_array[2]}" == *"/"* ]]; then
 			echo "Test new:" ${mlst_file_array[2]/\//,}
 		fi
 	fi
