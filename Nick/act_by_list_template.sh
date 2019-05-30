@@ -47,7 +47,7 @@ while IFS= read -r var; do
 		if [[ "${mlst_file_array[2]}" == *"|"* ]]; then
 			mlst_file_array[2]=${mlst_file_array[2]/\|/\/}
 		fi
-		echo -e "${mlst_file_array[@]}\n}" > ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst
+		echo -e "${mlst_file_array[@]}\n" > ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst
 	fi
 	if [[ -f ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst ]]; then
 		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst)
@@ -59,7 +59,7 @@ while IFS= read -r var; do
 		if [[ "${mlst_file_array[2]}" == *"|"* ]]; then
 			mlst_file_array[2]=${mlst_file_array[2]/\|/\/}
 		fi
-		echo -e "${mlst_file_array[@]}\n}" > ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst
+		echo -e "${mlst_file_array[@]}\n" > ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst
 	fi
 	if [[ -f ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst ]]; then
 		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst)
@@ -71,7 +71,7 @@ while IFS= read -r var; do
 		if [[ "${mlst_file_array[2]}" == *"|"* ]]; then
 			mlst_file_array[2]=${mlst_file_array[2]/\|/\/}
 		fi
-		echo -e "${mlst_file_array[@]}\n}" > ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst
+		echo -e "${mlst_file_array[@]}\n" > ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst
 	fi
 
 	#echo "${counter}"
