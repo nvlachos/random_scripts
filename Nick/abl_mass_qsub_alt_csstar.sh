@@ -62,6 +62,7 @@ fi
 if [[ "${6}" != 80 ]] && [[ "${6}" != 95 ]] && [[ "${6}" != 98 ]] && [[ "${6}" != 99 ]] && [[ "${6}" != 100 ]]; then
 	echo "Identity is not one of the presets for csstar and therefore will fail, defaulting to 98..."
 	sim="h"
+	simnum=98
 else
 	if [ "${6}" == 98 ]; then
 		sim="h"
@@ -75,6 +76,7 @@ else
 		sim="p"
 	elif [ "${6}" == 40 ]; then
 		sim="o"
+	simnum=${6}
 fi
 
 # create an array of all samples in the list
@@ -119,7 +121,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	# Delete old results if clobbering
 	if [[ "${5}" == "clobber" ]]; then
-		rm ${processed}/${project}/${sample}/c-sstar/${sample}.${alt_database}.gapped_98_sstar_summary
+		rm ${processed}/${project}/${sample}/c-sstar/${sample}.${alt_database}.gapped_${simnum}_sstar_summary
 		rm -r ${processed}/${project}/${sample}/c-sstar/${alt_database}_gapped/
 	fi
 
@@ -129,7 +131,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		if [[ ${counter} -lt ${max_subs} ]]; then
 			echo  "Index is below max submissions, submitting"
 			# Check if old results exist, and skip if so
-			if [[ ! -f "${processed}/${project}/${sample}/c-sstar/${sample}.${alt_database}.gapped_98_sstar_summary.txt" ]]; then
+			if [[ ! -f "${processed}/${project}/${sample}/c-sstar/${sample}.${alt_database}.gapped_${simnum}_sstar_summary.txt" ]]; then
 				echo  "Index is below max submissions, submitting"
 				echo -e "#!/bin/bash -l\n" > "${main_dir}/csstn_${sample}_${start_time}.sh"
 				echo -e "#$ -o csstn_${sample}.out" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
@@ -183,8 +185,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			# 		#	qsub -sync y "${main_dir}/csstp_${sample}_${start_time}.sh"
 			# 		#fi
 			# 		# Delete any version  of plasmid csstar run at high identity values
-			# 		if [[ -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_98_sstar_summary.txt" ]]; then
-			# 			rm "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_98_sstar_summary.txt"
+			# 		if [[ -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_${simnum}_sstar_summary.txt" ]]; then
+			# 			rm "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_${simnum}_sstar_summary.txt"
 			# 		fi
 			# 	# Old data exists, skipping
 			# 	else
@@ -212,7 +214,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				# Check if the sample it is waiting on has been completed or if it has a usable assembly
 				if [[ -f "${main_dir}/complete/${waiting_sample}_csstarn_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_scaffolds_trimmed.fasta" ]]; then
 					# Check if ol results exist and skip if so
-					if [[ ! -f "${processed}/${project}/${sample}/c-sstar/${sample}.${alt_database}.gapped_98_sstar_summary.txt" ]]; then
+					if [[ ! -f "${processed}/${project}/${sample}/c-sstar/${sample}.${alt_database}.gapped_${simnum}_sstar_summary.txt" ]]; then
 						echo  "Index is below max submissions, submitting"
 						echo -e "#!/bin/bash -l\n" > "${main_dir}/csstn_${sample}_${start_time}.sh"
 						echo -e "#$ -o csstn_${sample}.out" >> "${main_dir}/csstn_${sample}_${start_time}.sh"
@@ -260,8 +262,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					# 		#	qsub -sync y "${main_dir}/csstp_${sample}_${start_time}.sh"
 					# 		#fi
 					# 		# Remove any plasmid cstarr output that was run at high identity values
-					# 		if [[ -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_98_sstar_summary.txt" ]]; then
-					# 			rm "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_98_sstar_summary.txt"
+					# 		if [[ -f "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_${simnum}_sstar_summary.txt" ]]; then
+					# 			rm "${processed}/${project}/${sample}/c-sstar_plasmid/${sample}.${alt_database}.gapped_${simnum}_sstar_summary.txt"
 					# 		fi
 					# 		# Old data exists, skipping
 					# 	else
