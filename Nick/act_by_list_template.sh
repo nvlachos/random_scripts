@@ -50,7 +50,7 @@ while IFS= read -r var; do
 			mlst_file_array[2]=${mlst_file_array[2]/\|/\/}
 			change=1
 		fi
-		if [[ "${change}" -gt 0 ]]; then
+		if [[ ${change} -gt 0 ]]; then
 			echo "Changing ${orig} to ${mlst_file_array[2]} in ${project}/${sample_name} for standard"
 			echo -e "${mlst_file_array[@]}\n" > ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst
 		fi
@@ -68,7 +68,7 @@ while IFS= read -r var; do
 			mlst_file_array[2]=${mlst_file_array[2]/\|/\/}
 			change=1
 		fi
-		if [[ "${change}" -gt 0 ]]; then
+		if [[ ${change} -gt 0 ]]; then
 			echo "Changing ${orig} to ${mlst_file_array[2]} in ${project}/${sample_name} for abaummannii"
 			echo -e "${mlst_file_array[@]}\n" > ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst
 		fi
@@ -86,7 +86,7 @@ while IFS= read -r var; do
 			mlst_file_array[2]=${mlst_file_array[2]/\|/\/}
 			change=1
 		fi
-		if [[ "${change}" -gt 0 ]]; then
+		if [[ ${change} -gt 0 ]]; then
 			echo "Changing ${orig} to ${mlst_file_array[2]} in ${project}/${sample_name} for ecoli_2"
 			echo -e "${mlst_file_array[@]}\n" > ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst
 		fi
