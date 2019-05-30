@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o ablmq-cs.out
-#$ -e ablmq-cs.err
-#$ -N ablmq-cs
+#$ -o ablmq-pf.out
+#$ -e ablmq-pf.err
+#$ -N ablmq-pf
 #$ -cwd
 #$ -q short.q
 
