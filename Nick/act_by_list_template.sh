@@ -28,6 +28,8 @@ elif [[ -z "${2}" ]]; then
 	exit 1
 fi
 
+#sed 's/,/\//g' "${mlst_file_array[2]"
+
 # Loop through and act on each sample name in the passed/provided list
 counter=0
 > ${2}
@@ -38,27 +40,38 @@ while IFS= read -r var; do
 	if [[ -f ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst ]]; then
 		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst)
 		IFS='	' read -r -a mlst_file_array <<< "$mlst_line"
-		#sed 's/,/\//g' "${mlst_file_array[2]"
-		echo "Test original: ${mlst_file_array[2]}"
+		#echo "Test original: ${mlst_file_array[2]}"
 		if [[ "${mlst_file_array[2]}" == *","* ]]; then
-			echo "Test new:" ${mlst_file_array[2]/\//,}
+			mlst_file_array[2]=${mlst_file_array[2]/,/\/}
 		fi
+		if [[ "${mlst_file_array[2]}" == *"|"* ]]; then
+			mlst_file_array[2]=${mlst_file_array[2]/\|/\/}
+		fi
+		echo -e "${mlst_file_array[@]}\n}" > ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst
 	fi
 	if [[ -f ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst ]]; then
 		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst)
 		IFS='	' read -r -a mlst_file_array <<< "$mlst_line"
 		echo "Test abaumannii: ${mlst_file_array[2]}"
-		if [[ "${mlst_file_array[2]}" == *"/"* ]]; then
-			echo "Test new:" ${mlst_file_array[2]/\//,}
+		if [[ "${mlst_file_array[2]}" == *","* ]]; then
+			mlst_file_array[2]=${mlst_file_array[2]/,/\/}
 		fi
+		if [[ "${mlst_file_array[2]}" == *"|"* ]]; then
+			mlst_file_array[2]=${mlst_file_array[2]/\|/\/}
+		fi
+		echo -e "${mlst_file_array[@]}\n}" > ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst
 	fi
 	if [[ -f ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst ]]; then
 		mlst_line=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst)
 		IFS='	' read -r -a mlst_file_array <<< "$mlst_line"
 		echo "Test ecoli: ${mlst_file_array[2]}"
 		if [[ "${mlst_file_array[2]}" == *","* ]]; then
-			echo "Test new:" ${mlst_file_array[2]/\//,}
+			mlst_file_array[2]=${mlst_file_array[2]/,\/}
 		fi
+		if [[ "${mlst_file_array[2]}" == *"|"* ]]; then
+			mlst_file_array[2]=${mlst_file_array[2]/\|/\/}
+		fi
+		echo -e "${mlst_file_array[@]}\n}" > ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst
 	fi
 
 	#echo "${counter}"
