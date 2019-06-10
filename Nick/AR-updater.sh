@@ -49,7 +49,7 @@ resGANNOT_date=$(echo ${resGANNOT_srst2_filename} | cut -d'_' -f2)
 qsub "${shareScript}/abl_mass_qsub_csstar.sh" "${shareScript}/sample_list_${today}.txt" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs" "keep"
 qsub -sync y "${shareScript}/abl_mass_qsub_srst2.sh" "${shareScript}/sample_list_${today}.txt" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs" "keep"
 qsub "${shareScript}/abl_mass_qsub_runsum.sh" "${shareScript}/directory_list_${today}.txt" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs"
-qsub -sync y "${shareScript}/act_by_list_AR_completion_check.sh" "${shareScript}/sample_list_${today}.txt" "${resGANNOT_date}" "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/AR_check_${today}.txt"
+qsub -sync y "${shareScript}/abl_AR_completion_check.sh" "${shareScript}/sample_list_${today}.txt" "${resGANNOT_date}" "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/AR_check_${today}.txt"
 
 
 

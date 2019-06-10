@@ -82,7 +82,7 @@ done < "${1}"
 if [[ "${need_qsub}" = "true" ]]; then
 	echo "Some samples needed to be run with the newest ResGANNOT DB, submitting to qsub and then rerunning"
 	${shareScript}/abl_mass_qsub_csstar.sh "${3}/csstar_to_do.txt" 25
-	${shareScript}/"act_by_list_get_contig_with_gene_match.sh" ${1} ${2} ${3}
+	${shareScript}/"abl_get_contig_with_gene_match.sh" ${1} ${2} ${3}
 fi
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
