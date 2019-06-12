@@ -43,18 +43,18 @@ while IFS= read -r var; do
 		info2=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst")
 	fi
 	#echo "${info}"
-	info_out=$(echo "${info}" | cut -d'	' -f3-)
-	type=$(echo ${info} | cut -d'	' -f3)
+	info_out=$(echo "${info1}" | cut -d'	' -f3-)
+	type=$(echo ${info1} | cut -d'	' -f3)
 	#echo "${info_out}"
 	if [[ "${info_out}" == *","* ]] || [[ "${info_out}" == *"/"* ]] || [[ "${info_out}" == *"|"* ]]; then
-		echo "DUAL - ${info}" >> "${2}"
-		echo "${project}/${sample_name}	${info1}"
+		echo "1-DUAL - ${info1}" >> "${2}"
+		echo "1-${project}/${sample_name}	${info1}"
 	elif [[ "${type}" == "-" ]]; then
-		echo "UNKN - ${info}" >> "${2}"
-		echo "${project}/${sample_name}	${info}"
+		echo "1-UNKN - ${info1}" >> "${2}"
+		echo "1-${project}/${sample_name}	${info1}"
 	else
-		echo "Normal? - ${info}" >> "${2}"
-		echo "${project}/${sample} ${info}"
+		echo "1-Normal? - ${info1}" >> "${2}"
+		echo "1-${project}/${sample} ${info1}"
 		:
 	fi
 	if [[ ! -z "${info2}" ]]; then
@@ -62,14 +62,14 @@ while IFS= read -r var; do
 		info_out2=$(echo "${info2}" | cut -d'	' -f3-)
 		#echo "${info_out}"
 		if [[ "${info_out2}" == *","* ]] || [[ "${info_out2}" == *"/"* ]] || [[ "${info_out}" == *"|"* ]]; then
-			echo "DUAL - ${info2}" >> "${2}"
-			echo "${project}/${sample_name}	${info2}"
+			echo 2-"DUAL - ${info2}" >> "${2}"
+			echo "2-${project}/${sample_name}	${info2}"
 		elif [[ "${type}" == "-" ]]; then
-			echo "UNKN - ${info2}" >> "${2}"
-			echo "${project}/${sample_name}	${info2}"
+			echo "2-UNKN - ${info2}" >> "${2}"
+			echo "2-${project}/${sample_name}	${info2}"
 		else
-			echo "Normal? - ${info}" >> "${2}"
-			echo "${project}/${sample} ${info}"
+			echo "2-Normal? - ${info2}" >> "${2}"
+			echo "2-${project}/${sample} ${info2}"
 			:
 		fi
 	fi
