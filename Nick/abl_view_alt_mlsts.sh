@@ -53,8 +53,8 @@ while IFS= read -r var; do
 		echo "UNKN - ${info}" >> "${2}"
 		echo "${project}/${sample_name}	${info}"
 	else
-		#echo "${project}/${sample}	unknown?!" >> "${2}"
-		#echo "${project}/${sample}	unknown ?!"
+		echo "Normal? - ${info}" >> "${2}"
+		echo "${project}/${sample} ${info}"
 		:
 	fi
 	if [[ ! -z "${info2}" ]]; then
@@ -68,8 +68,8 @@ while IFS= read -r var; do
 			echo "UNKN - ${info2}" >> "${2}"
 			echo "${project}/${sample_name}	${info2}"
 		else
-			#echo "${project}/${sample}	unknown?!" >> "${2}"
-			#echo "${project}/${sample}	unknown ?!"
+			echo "Normal? - ${info}" >> "${2}"
+			echo "${project}/${sample} ${info}"
 			:
 		fi
 	fi
