@@ -50,7 +50,7 @@ while IFS= read -r var; do
 	fi
 	echo "${info1}"
 	info_out=$(echo "${info1}" | cut -d'	' -f3-)
-	type=$(echo ${info1} | cut -d'	' -f3)
+	type=$(echo ${info1} | cut -d' ' -f3)
 	#echo "${info_out}"
 	if [[ "${info_out}" == *","* ]] || [[ "${info_out}" == *"/"* ]] || [[ "${info_out}" == *"|"* ]]; then
 		echo "1-DUAL - ${type} - ${info1}" >> "${2}"
@@ -65,7 +65,7 @@ while IFS= read -r var; do
 	fi
 	if [[ ! -z "${info2}" ]]; then
 		type2=$(echo ${info2} | cut -d'	' -f3)
-		info_out2=$(echo "${info2}" | cut -d'	' -f3-)
+		info_out2=$(echo "${info2}" | cut -d' ' -f3-)
 		#echo "${info_out}"
 		if [[ "${info_out2}" == *","* ]] || [[ "${info_out2}" == *"/"* ]] || [[ "${info_out2}" == *"|"* ]]; then
 			echo 2-"DUAL - ${type2} - ${info2}" >> "${2}"
