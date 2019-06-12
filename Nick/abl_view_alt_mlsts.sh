@@ -49,8 +49,8 @@ while IFS= read -r var; do
 		info2=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst")
 	fi
 	echo "${info1}"
-	info_out=$(echo "${info1}" | cut -d' ' -f3-)
-	type=$(echo ${info1} | cut -d' ' -f3)
+	info_out=$(echo "${info1}" | cut -d'	' -f3-)
+	type=$(echo ${info1} | cut -d'	' -f3)
 	echo "${info_out}"
 	if [[ "${info_out}" == *","* ]] || [[ "${info_out}" == *"/"* ]] || [[ "${info_out}" == *"|"* ]]; then
 		echo "1-DUAL - ${type} - ${info1}" >> "${2}"
