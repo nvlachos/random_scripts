@@ -38,7 +38,9 @@ while IFS= read -r var; do
 	info1=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst")
 	if [[ "${info1}" == *"}" ]]; then
 		echo "Cutting trailing }"
+		echo "Before - ${info1}"
 		info1=$(echo "${info1}" | rev | cut -d'}' -f2 | rev)
+		echo "After - ${info1}"
 	fi
 	info2=""
 	if [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
