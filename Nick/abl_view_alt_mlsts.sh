@@ -35,7 +35,7 @@ while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 	#echo "${counter} - ${processed}/${project}/${sample_name}/MLST/"
-	info1=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst")
+	info1=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst")
 	if [[ "${info1}" == *"}" ]]; then
 		echo "Cutting trailing }"
 		echo "Before - ${info1}"
@@ -44,9 +44,9 @@ while IFS= read -r var; do
 	fi
 	info2=""
 	if [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
-		info2=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst")
+		info2=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst")
 	elif [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst" ]]; then
-		info2=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst")
+		info2=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst")
 	fi
 	echo "${info1}"
 	info_out=$(echo "${info1}" | cut -d'	' -f3-)
