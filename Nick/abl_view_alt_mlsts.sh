@@ -46,7 +46,7 @@ while IFS= read -r var; do
 	info_out=$(echo "${info}" | cut -d'	' -f3-)
 	type=$(echo ${info} | cut -d'	' -f3)
 	#echo "${info_out}"
-	if [[ "${info_out}" == *","* ]] || [[ "${info_out}" == *"/"* ]]; then
+	if [[ "${info_out}" == *","* ]] || [[ "${info_out}" == *"/"* ]] || [[ "${info_out}" == *"|"* ]]; then
 		echo "DUAL - ${info}" >> "${2}"
 		echo "${project}/${sample_name}	${info1}"
 	elif [[ "${type}" == "-" ]]; then
@@ -61,7 +61,7 @@ while IFS= read -r var; do
 		type2=$(echo ${info2} | cut -d'	' -f3)
 		info_out2=$(echo "${info2}" | cut -d'	' -f3-)
 		#echo "${info_out}"
-		if [[ "${info_out2}" == *","* ]] || [[ "${info_out2}" == *"/"* ]]; then
+		if [[ "${info_out2}" == *","* ]] || [[ "${info_out2}" == *"/"* ]] || [[ "${info_out}" == *"|"* ]]; then
 			echo "DUAL - ${info2}" >> "${2}"
 			echo "${project}/${sample_name}	${info2}"
 		elif [[ "${type}" == "-" ]]; then
