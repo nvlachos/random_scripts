@@ -53,14 +53,14 @@ while IFS= read -r var; do
 	type=$(echo ${info1} | cut -d'	' -f3)
 	#echo "${info_out}"
 	if [[ "${info_out}" == *","* ]] || [[ "${info_out}" == *"/"* ]] || [[ "${info_out}" == *"|"* ]]; then
-		echo "1-DUAL - ${info1}" >> "${2}"
-		echo "1-${project}/${sample_name}	${info1}"
+		echo "1-DUAL - ${type} - ${info1}" >> "${2}"
+		echo "1-${project}/${sample_name} ${type}	${info1}"
 	elif [[ "${type}" == "-" ]]; then
-		echo "1-UNKN - ${info1}" >> "${2}"
-		echo "1-${project}/${sample_name}	${info1}"
+		echo "1-UNKN - ${type} - ${info1}" >> "${2}"
+		echo "1-${project}/${sample_name}	${type} ${info1}"
 	else
 		echo "1-Normal? - ${info1}" >> "${2}"
-		echo "1-${project}/${sample} ${info1}"
+		echo "1-${project}/${sample} ${tpe} ${info1}"
 		:
 	fi
 	if [[ ! -z "${info2}" ]]; then
@@ -68,14 +68,14 @@ while IFS= read -r var; do
 		info_out2=$(echo "${info2}" | cut -d'	' -f3-)
 		#echo "${info_out}"
 		if [[ "${info_out2}" == *","* ]] || [[ "${info_out2}" == *"/"* ]] || [[ "${info_out2}" == *"|"* ]]; then
-			echo 2-"DUAL - ${info2}" >> "${2}"
-			echo "2-${project}/${sample_name}	${info2}"
+			echo 2-"DUAL - ${type2} - ${info2}" >> "${2}"
+			echo "2-${project}/${sample_name}	${type2} ${info2}"
 		elif [[ "${type2}" == "-" ]]; then
-			echo "2-UNKN - ${info2}" >> "${2}"
-			echo "2-${project}/${sample_name}	${info2}"
+			echo "2-UNKN - ${type2} - ${info2}" >> "${2}"
+			echo "2-${project}/${sample_name}	${type2} ${info2}"
 		else
-			echo "2-Normal? - ${info2}" >> "${2}"
-			echo "2-${project}/${sample} ${info2}"
+			echo "2-Normal? - ${type2} - ${info2}" >> "${2}"
+			echo "2-${project}/${sample} ${type2} ${info2}"
 			:
 		fi
 	fi
