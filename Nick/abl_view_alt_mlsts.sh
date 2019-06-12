@@ -36,7 +36,10 @@ while IFS= read -r var; do
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 	#echo "${counter} - ${processed}/${project}/${sample_name}/MLST/"
 	info1=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst")
-	info1="${info1/\}/}"
+	if [[ "${info1}" == *"}" ]]; then
+		echo "Cutting trailing }"
+		info1=$(echo "${info1}" | rev | cut -d'}' -f2 | rev)
+	fi
 	info2=""
 	if [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
 		info2=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst")
