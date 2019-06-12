@@ -51,7 +51,7 @@ while IFS= read -r var; do
 	echo "${info1}"
 	info_out=$(echo "${info1}" | cut -d' ' -f3-)
 	type=$(echo ${info1} | cut -d' ' -f3)
-	#echo "${info_out}"
+	echo "${info_out}"
 	if [[ "${info_out}" == *","* ]] || [[ "${info_out}" == *"/"* ]] || [[ "${info_out}" == *"|"* ]]; then
 		echo "1-DUAL - ${type} - ${info1}" >> "${2}"
 		echo "1-${project}/${sample_name} ${type}	${info1}"
