@@ -37,14 +37,14 @@ fi
 
 if [[ -d /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1} ]]; then
 	if  [[ -d /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2} ]]; then
-		echo "Redacting Phylogeny folder: /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}"
-		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/output/snvMatrix.tsv snvMatrix_redacted.tsv
-		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/output/phylogeneticTree.newick phylogeneticTree_redacted.newick
+		echo "Redacting Phylogeny folder: /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}"
+		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/snvMatrix.tsv /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/snvMatrix_redacted.tsv
+		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree.newick /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree_redacted.newick
 		while IFS= read -r var; do
 			original_name=$(echo "${var}" | cut -d':' -f1 | tr -d '[:space:]')
 			redacted_name=$(echo "${var}" | cut -d':' -f2 | tr -d '[:space:]')
-			sed -i "s/${original_name}/${redacted_name}/g" /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/output/phylogeneticTree_redacted.newick
-			sed -i "s/${original_name}/${redacted_name}/g" /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/output/snvMatrix_redacted.tsv
+			sed -i "s/${original_name}/${redacted_name}/g" /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree_redacted.newick
+			sed -i "s/${original_name}/${redacted_name}/g" /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/snvMatrix_redacted.tsv
 		done < ${3}
 	else
 		echo "Phylo: ${1} exists, but ${2} is missing"
@@ -52,24 +52,23 @@ if [[ -d /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1} ]
 else
 	echo "Phylo: /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1} does not exist"
 fi
-	if [[ -d /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1} ]]; then
-		if [[ -d /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2} ]]; then
-			echo "Redacting Project folder: /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny/${1}"
-			cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}.nwk ${2}_redacted.nwk
-			cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/${2}_AR_plasmid_report.csv ${2}_AR_plasmid_report_redacted.csv
-			while IFS= read -r var; do
-				original_name=$(echo "${var}" | cut -d':' -f1 | tr -d '[:space:]')
-				redacted_name=$(echo "${var}" | cut -d':' -f2 | tr -d '[:space:]')
-				sed -i "s/${original_name}/${redacted_name}/g" /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_redacted.nwk
-				sed -i "s/${original_name}/${redacted_name}/g" cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/${2}_AR_plasmid_report_redacted.csv
-			done < ${3}
-		else
-			echo "Projects: ${1} exists, but ${2} is missing"
-		fi
+if [[ -d /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1} ]]; then
+	if [[ -d /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2} ]]; then
+		echo "Redacting Project folder: /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny/${1}/${2}"
+		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}.nwk /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_redacted.nwk
+		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/${2}_AR_plasmid_report.csv /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_AR_plasmid_report_redacted.csv
+		while IFS= read -r var; do
+			original_name=$(echo "${var}" | cut -d':' -f1 | tr -d '[:space:]')
+			redacted_name=$(echo "${var}" | cut -d':' -f2 | tr -d '[:space:]')
+			sed -i "s/${original_name}/${redacted_name}/g" /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_redacted.nwk
+			sed -i "s/${original_name}/${redacted_name}/g" cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/${2}_AR_plasmid_report_redacted.csv
+		done < ${3}
 	else
-		echo "Projects: /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1} does not exist"
+		echo "Projects: ${1} exists, but ${2} is missing"
 	fi
-done < "${1}"
+else
+	echo "Projects: /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1} does not exist"
+fi
 
 echo "Redaction complete"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
