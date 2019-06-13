@@ -104,8 +104,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 	#Consolidate all resFinder excel files into a single large fasta file
 	for file in ${DATADIR}/*.fsa
 	do
-		while IFS= read -r line
-		do
+		while IFS= read -r line || [ -n "$line" ]; do
 			echo ${line} >> ${resFinder_source}
 		done < ${file}
 	done
@@ -119,8 +118,7 @@ fi
 declare -A groups
 echo "Creating reference array"
 counter=0
-while IFS= read -r line;
-do
+while IFS= read -r line || [ -n "$line" ]; do
 	line=${line,,}
 	gene=$(echo "${line}" | cut -d ':' -f1)
 	first=${gene:0:1}
@@ -147,8 +145,7 @@ done
 
 echo "checking for new groups in the source DB fasta file"
 new_groups=()
-while IFS= read -r line
-do
+while IFS= read -r line || [ -n "$line" ]; do
 	#echo "=${line}="
 	if [[ "${line:0:1}" == ">" ]]; then
 		source=$(echo "${line:2}" | cut -d']' -f1)

@@ -69,7 +69,7 @@ OUTDATADIR="${local_DBs}/aniDB"
 # 	if [[ ! -d ${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB ]]; then
 # 		mkdir "${local_DBs}/aniDB/${working_dir}/${taxa}/localANIDB"
 # 	fi
-# 	while IFS= read -r line;  do
+# 	while IFS= read -r line  || [ -n "$line" ];  do
 # 			echo "${counter}:-:-:${line}"
 # 			if [[ ${counter} -eq 0 ]]; then
 # 				ref_path=$(echo "${line}" | cut -d'	' -f2)
@@ -104,7 +104,7 @@ samples=()
 main_dir="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs/ani_TEST"
 mkdir ${main_dir}
 
-	#while IFS= read -r var; do
+	#while IFS=read -r var  || [ -n "$var" ]; do
 	#sample=$(basename ${ref_tax} | rev | cut -d'/' -f1 | rev)
 	#sample=${var}
 	#echo "Sample:${sample}"
@@ -244,11 +244,11 @@ for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
 
 #Extracts the query sample info line for percentage identity from the percent identity file
 #for ref_tax in ${local_DBs}/aniDB/${working_dir}/*; do
-while IFS= read -r var; do
+while IFS=read -r var  || [ -n "$var" ]; do
 	#sample=$(basename ${ref_tax} | rev | cut -d'/' -f1 | rev)
 	sample=${var}
 	echo "Sample:${sample}"
-	while IFS='' read -r line;
+	while IFS='' read -r line || [ -n "$line" ];
 	do
 	#	echo "!-${line}"
 		if [[ ${line} == ${sample}* ]]; then
@@ -267,7 +267,7 @@ while IFS= read -r var; do
 	fi
 
 	#Extracts the query sample info line for percentage identity from the percent identity file
-	while IFS='' read -r line;
+	while IFS='' read -r line || [ -n "$line" ];
 	do
 	#	echo "!-${line}"
 		if [[ ${line} == ${sample}* ]]; then
@@ -332,7 +332,7 @@ while IFS= read -r var; do
 	echo "Making fastANI_identity_array"
 	#Extracts the query sample info line for ANI
 	declare -A fastANI_identity_array
-	while IFS='' read -r line;
+	while IFS='' read -r line || [ -n "$line" ];
 	do
 		temp_isolate=$(echo ${line} | cut -d' ' -f2 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
 		temp_percent=$(echo ${line} | cut -d' ' -f3)
@@ -354,7 +354,7 @@ while IFS= read -r var; do
 		cp "${local_DBs}/aniDB/all_test/dists/${sample}.dists" "${local_DBs}/aniDB/${working_dir}/${sample}"
 		head -n 31 ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}.dists > ${local_DBs}/aniDB/${working_dir}/${sample}/${sample}_top30.dists
 	fi
-	while IFS='' read -r line;
+	while IFS='' read -r line || [ -n "$line" ];
 	do
 		isolate=$(echo ${line} | cut -d' ' -f1 | rev | cut -d'/' -f1 | cut -d'.' -f2- | rev)
 		temp_isolate=${isolate//./_dot_}

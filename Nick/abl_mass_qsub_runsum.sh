@@ -39,7 +39,7 @@ fi
 
 # create an array of all samples in the list
 arr=()
-while IFS= read -r line;  do
+while IFS= read -r line || [ -n "$line" ];  do
 	#echo "L:${line}"
 	if [[ ! -z "${line}" ]]; then
 		line=$(echo ${line} | tr -d '\n' | tr -d '\r')

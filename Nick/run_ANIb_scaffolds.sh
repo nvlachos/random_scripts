@@ -112,7 +112,7 @@ cp "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta" "${OUTDATADIR}/Contig_c
 # Add in all other assemblies to compare using list provided as argument
 if [[ "${others}" = "true" ]]; then
 	if [[ -f "${5}" ]]; then
-		while IFS= read -r var; do
+		while IFS=read -r var  || [ -n "$var" ]; do
 			sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 			project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 			echo "${sample_name}, ${project}"
@@ -213,7 +213,7 @@ python -V
 average_nucleotide_identity.py -i "${OUTDATADIR}/Contig_check/ANI/localANIDB_aniB_scaffolds" -o "${OUTDATADIR}/Contig_check/ANI/aniB_scaffolds" -m ANIb --write_excel
 
 #Extracts the query sample info line for percentage identity from the percent identity file
-while IFS='' read -r line;
+while IFS='' read -r line || [ -n "$line" ];
 do
 #	echo "!-${line}"
 	if [[ ${line:0:7} = "sample_" ]]; then
@@ -267,13 +267,11 @@ best_percent=$(awk -v per="${def_array[0]}" 'BEGIN{printf "%.2f", per * 100}')
 # If the best match comes from the additional file, extract the taxonomy from that file
 if [[ "${best_file}" = *"_scaffolds_trimmed" ]]; then
 	best_outbreak_match=$(echo "${best_file}" | rev | cut -d'_' -f3- | rev)
-	while IFS= read -r var
-	do
+	while IFS= read -r var || [ -n "$var" ]; do
 		sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 		if [[ "${sample_name}" = "${best_outbreak_match}" ]]; then
 			project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-			while IFS= read -r pstats_line
-				do
+			while IFS= read -r pstats_line || [ -n "$pstats_line" ]; do
 					tool=$(echo "${pstats_line}" | cut -d':' -f1 | tr -s " ")
 					#echo ":${tool}:"
 					if [[ "${tool}" = "weighted Classify " ]]; then

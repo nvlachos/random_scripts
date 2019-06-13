@@ -31,7 +31,7 @@ fi
 
 # Loop through and act on each sample name in the passed/provided list
 counter=0
-while IFS= read -r var; do
+while IFS=read -r var  || [ -n "$var" ]; do
 	FR1="-"
 	FR2="-"
 	FQ1="-"

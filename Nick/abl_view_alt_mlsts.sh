@@ -31,7 +31,7 @@ fi
 # Loop through and act on each sample name in the passed/provided list
 counter=0
 > ${2}
-while IFS= read -r var; do
+while IFS=read -r var  || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 	#echo "${counter} - ${processed}/${project}/${sample_name}/MLST/"

@@ -33,7 +33,7 @@ elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
 fi
 
 arr=()
-while IFS= read -r line || [[ "$line" ]];  do
+while IFS= read -r line || [ "$line" ];  do
   arr+=("$line")
 done < ${1}
 

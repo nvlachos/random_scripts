@@ -65,7 +65,7 @@ done
 if [[ "${3}" = "-r" ]]; then
 	mv "${sample_list}" "${sample_list}_temp"
 	> "${sample_list}"
-	while IFS= read -r var; do
+	while IFS=read -r var  || [ -n "$var" ]; do
 		if [[ "${var}" = *"_FAILED" ]]; then
 			echo "Removing ${var} from the list"
 		else

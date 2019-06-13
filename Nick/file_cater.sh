@@ -1,7 +1,7 @@
 for filename in ${1}/*.blast.best; do
 	sample=$(basename $filename .blast.best)
 	#echo $sample
-	while IFS= read -r var; do
+	while IFS=read -r var  || [ -n "$var" ]; do
 		node=$(echo "${var}" | cut -d'	' -f2)
 		ref_start=$(echo "${var}" | cut -d'	' -f7)
 		ref_stop=$(echo "${var}" | cut -d'	' -f8)

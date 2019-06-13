@@ -158,8 +158,7 @@ do_GOTTCHA() {
 	source="GOTTCHA"
 	source_file="${processed}/${project}/${sample}/gottcha/${sample}_gottcha_species_summary.txt"
 	#echo "${source}"
-	while IFS= read -r line;
-	do
+	while IFS= read -r line  || [ -n "$line" ]; do
 		# Grab first letter of line (indicating taxonomic level)
 		first=${line::1}
 		# Assign taxonomic level value from 4th value in line (1st-classification level,2nd-% by kraken, 3rd-true % of total reads, 4th-identifier)
@@ -179,8 +178,7 @@ do_Kraken() {
 	source="Kraken"
 	source_file="${processed}/${project}/${sample}/kraken/postAssembly/${sample}_kraken_summary_assembled_BP_data.txt"
 	#echo "${source}"
-	while IFS= read -r line;
-	do
+	while IFS= read -r line  || [ -n "$line" ]; do
 		# Grab first letter of line (indicating taxonomic level)
 		first=${line::1}
 		# Assign taxonomic level value from 4th value in line (1st-classification level,2nd-% by kraken, 3rd-true % of total reads, 4th-identifier)
@@ -209,8 +207,7 @@ if [[ ${Genus} == "Peptoclostridium" ]]; then
 	Genus="Clostridium"
 fi
 
-while IFS= read -r line;
-do
+while IFS= read -r line  || [ -n "$line" ]; do
 	DB_genus=$(echo ${line} | cut -d"," -f1)
 	#echo ":${Genus}:${DB_genus}:"
 	if [[ "${Genus,}" = "${DB_genus}" ]]; then

@@ -58,7 +58,7 @@ fi
 
 # Create an array of all samples in the list
 arr=()
-while IFS= read -r line || [[ "$line" ]];  do
+while IFS= read -r line || [ "$line" ];  do
   arr+=("$line")
 done < ${1}
 
@@ -98,8 +98,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	# Ensure tax file exists to get proper DB to run ANI against
 	if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
 		# Parse tax file
-		while IFS= read -r line;
-		do
+		while IFS= read -r line  || [ -n "$line" ]; do
 			# Grab first letter of line (indicating taxonomic level)
 			first=${line:0:1}
 			# Assign taxonomic level value from 4th value in line (1st-classification level, 2nd-% by kraken, 3rd-true % of total reads, 4th-identifier)

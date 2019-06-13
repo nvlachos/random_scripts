@@ -63,8 +63,7 @@ fi
 
 echo "${list}"
 
-while IFS= read -r samples;
-do
+while IFS= read -r samples || [ -n "$samples" ]; do
 	echo ${file}
 	file=$(echo "${samples}" | awk -F/ '{ print $2}' | tr -d '[:space:]')
 	proj=$(echo "${samples}" | awk -F/ '{ print $1}' | tr -d '[:space:]')

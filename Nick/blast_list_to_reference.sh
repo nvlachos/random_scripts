@@ -36,7 +36,7 @@ if [[ ! -d ${2} ]]; then
 	mkdir ${2}
 fi
 
-while IFS= read -r var; do
+while IFS=read -r var  || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | awk -F/ '{ print $2}' | tr -d '[:space:]')
 	project=$(echo "${var}" | awk -F/ '{ print $1}' | tr -d '[:space:]')
 	SOURCEDATADIR="${processed}/${project}/${sample_name}"

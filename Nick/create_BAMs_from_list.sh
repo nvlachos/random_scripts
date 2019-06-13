@@ -40,7 +40,7 @@ if [[ ! -d ${processed}/ ]]; then
 	mkdir -p ${3}/BAMs
 fi
 
-while IFS= read -r var; do
+while IFS=read -r var  || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | awk -F/ '{ print $2}' | tr -d '[:space:]')
 	project=$(echo "${var}" | awk -F/ '{ print $1}' | tr -d '[:space:]')
 	OUTDATADIR="${processed}/${project}/${sample_name}"

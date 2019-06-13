@@ -47,7 +47,7 @@ fi
 
 # Make array to hold all sample names to be processed
 arr=()
-while IFS= read -r line || [[ "$line" ]];  do
+while IFS= read -r line || [ "$line" ];  do
   arr+=("$line")
 done < ${1}
 

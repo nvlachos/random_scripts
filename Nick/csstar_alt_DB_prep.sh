@@ -75,7 +75,7 @@ counter=0
 count=0
 seq=""
 echo "Creating seq reference array"
-while IFS= read -r line;
+while IFS= read -r line  || [ -n "$line" ];
 do
 	line=$(echo ${line} | tr -d '\040\011\012\015')
 	if [[ "${line:0:1}" == ">" ]]; then
@@ -102,8 +102,7 @@ echo "There are ${#seqarr[@]} different entries, and counter equals ${count}"
 
 counter=0
 echo "Before"
-while IFS= read -r gene_line
-do
+while IFS= read -r gene_line || [ -n "$gene_line" ]; do
 	echo "It: ${counter}"
 	if [[ ${counter} -eq 0 ]]; then
 		seqID="seqID"

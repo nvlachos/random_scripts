@@ -35,7 +35,7 @@ fi
 OUTDATADIR="/scicomp/groups/OID/NCEZID/DHQP/CEMB/analysis/calcengine/${1}"
 
 # Loop through and act on each sample name in the passed/provided list
-while IFS= read -r var; do
+while IFS=read -r var  || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | awk -F/ '{ print $2}' | tr -d '[:space:]')
 	project=$(echo "${var}" | awk -F/ '{ print $1}' | tr -d '[:space:]')
 	alt_machine=$(echo "${var}" | awk -F/ '{ print $3}' | tr -d '[:space:]')

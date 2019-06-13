@@ -30,7 +30,7 @@ fi
 
 
 # Loop through and act on each sample name in the passed/provided list
-while IFS= read -r line_in; do
+while IFS= read -r line_in || [ -n "$line_in" ]; do
 	line_in=$(echo "${line_in}" | tr -d '\n')
 	if [[ "${2}" = "1" ]]; then
 		IFS='	' read -r -a array_1st <<< "$line_in"

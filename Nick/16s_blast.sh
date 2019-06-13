@@ -82,8 +82,7 @@ make_fasta() {
 	clength=$(( cstop - cstart + 1))
 	match=0
 	# Finds the matching contig and extracts sequence ##### REPLACE WITH SUBSEQUENCE ONCE IT CAN HANDLE MULTI_FASTAS !!!
-	while IFS='' read -r line;
-	do
+	while IFS='' read -r line || [ -n "$line" ]; do
 		if [ "$line" == "${header}" ]; then
 			match=1
 			continue
@@ -115,8 +114,7 @@ fi
 # Checks barrnap output and finds all 16s hits and creates a fasta sequence to add to list of possible matches
 lines=0
 found_16s="false"
-while IFS='' read -r line;
-do
+while IFS='' read -r line || [ -n "$line" ]; do
 	if [ ${lines} -gt 0 ]; then
 		contig=$(echo ${line} | cut -d' ' -f1)
 		cstart=$(echo ${line} | cut -d' ' -f4)

@@ -61,8 +61,7 @@ date
 #Creates an associative array for looking up the genes to what they confer
 declare -A groups
 echo "Creating reference array"
-while IFS= read -r line;
-do
+while IFS= read -r line  || [ -n "$line" ]; do
 	line=${line,,}
 	gene=$(echo "${line}" | cut -d ':' -f1)
 	first=${gene:0:1}
@@ -107,8 +106,7 @@ counter=0
 count=0
 seq=""
 echo "Creating ResGANNOT seq reference array"
-while IFS= read -r line;
-do
+while IFS= read -r line  || [ -n "$line" ]; do
 	line=$(echo ${line} | tr -d '\040\011\012\015')
 	if [[ "${line:0:1}" == ">" ]]; then
 		if [[ "${counter}" -gt 0 ]]; then
@@ -140,8 +138,7 @@ fi
 
 counter=0
 echo "Before"
-while IFS= read -r gene_line
-do
+while IFS= read -r gene_line || [ -n "$gene_line" ]; do
 	echo "It: ${counter}"
 	if [[ ${counter} -eq 0 ]]; then
 		seqID="seqID"
@@ -221,8 +218,7 @@ python "${DATADIR}/csv_to_gene_db.py" "-t" "${DATADIR}/ResGANNOT_${today}_cluste
 
 #Additional Enumerator, specfically to address fos gene ambiguity
 # declare -A allele_tally
-# while IFS= read -r line;
-# do
+# while IFS= read -r line  || [ -n "$line" ]; do
 	# srst2=${echo ${line} | cut -d' ' -f1)
 	# info1=$(echo ${srst2} | awk -v delimeter="__" '{split($0,a,delimeter)} END{print a[1]}')
 	# supp_info=$(echo ${line} | cut -d' ' -2)

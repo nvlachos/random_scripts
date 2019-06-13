@@ -30,7 +30,7 @@ elif [[ "$1" = "-h" ]]; then
 fi
 
 # Loop through and act on each sample name in the passed/provided list
-while IFS= read -r var; do
+while IFS=read -r var  || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | cut -d':' -f1 | tr -d '[:space:]')
 	project=$(echo "${var}" | awk -F/ '{ print $1}' | tr -d '[:space:]')
 	new_sample_name=$(echo ${var} | cut -d':' -f2 | tr -d [:space:])
