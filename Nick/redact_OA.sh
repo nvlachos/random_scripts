@@ -61,7 +61,7 @@ if [[ -d /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1} ]]; then
 			original_name=$(echo "${var}" | cut -d':' -f1 | tr -d '[:space:]')
 			redacted_name=$(echo "${var}" | cut -d':' -f2 | tr -d '[:space:]')
 			sed -i "s/${original_name}/${redacted_name}/g" /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_redacted.nwk
-			sed -i "s/${original_name}/${redacted_name}/g" cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/${2}_AR_plasmid_report_redacted.csv
+			sed -i "s/${original_name}/${redacted_name}/g" /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_AR_plasmid_report_redacted.csv
 		done < ${3}
 	else
 		echo "Projects: ${1} exists, but ${2} is missing"
