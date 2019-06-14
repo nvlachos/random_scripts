@@ -40,7 +40,7 @@ if [[ -d /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1} ]
 		echo "Redacting Phylogeny folder: /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}"
 		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/snvMatrix.tsv /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/snvMatrix_redacted.tsv
 		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree.newick /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree_redacted.newick
-		while IFS=read -r var  || [ -n "$var" ]; do
+		while IFS= read -r var  || [ -n "$var" ]; do
 			original_name=$(echo "${var}" | cut -d':' -f1 | cut -d'/' -f2 | tr -d '[:space:]')
 			redacted_name=$(echo "${var}" | cut -d':' -f2 | tr -d '[:space:]')
 			sed -i "s/${original_name}/${redacted_name}/g" /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree_redacted.newick
@@ -57,7 +57,7 @@ if [[ -d /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1} ]]; then
 		echo "Redacting Project folder: /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny/${1}/${2}"
 		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}.nwk /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_redacted.nwk
 		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_AR_plasmid_report.csv /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_AR_plasmid_report_redacted.csv
-		while IFS=read -r var  || [ -n "$var" ]; do
+		while IFS= read -r var  || [ -n "$var" ]; do
 			original_name=$(echo "${var}" | cut -d':' -f1 | cut -d'/' -f2 | | tr -d '[:space:]')
 			redacted_name=$(echo "${var}" | cut -d':' -f2 | tr -d '[:space:]')
 			sed -i "s/${original_name}/${redacted_name}/g" /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_redacted.nwk
