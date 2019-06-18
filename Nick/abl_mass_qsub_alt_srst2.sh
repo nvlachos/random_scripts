@@ -160,7 +160,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				break
 			fi
 			# Check if "waiting" sample has completed analysis
-			if [ -f "${main_dir}/complete/${waiting_sample}_srst2_complete.txt" ]; then
+			if [ -f "${main_dir}/complete/${waiting_sample}_srst2AR_complete.txt" ]; then
 				# Check for old data, skip if present
 				if [[ ! -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__${alt_DB}_srst2__results.txt" ]] || [[ ! -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__${alt_DB}_srst2__results.txt" ]]; then
 					echo "${waiting_sample} has completed, starting ${sample}"
@@ -211,11 +211,11 @@ for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
 	if [[ -f "${main_dir}/complete/${waiting_sample}_srst2AR_complete.txt" ]]; then
 		echo "${item} is complete"
-		if [[ -f "${shareScript}/srst2AR_${sample}.out" ]]; then
-			mv "${shareScript}/srst2AR_${sample}.out" "${main_dir}"
+		if [[ -f "${shareScript}/srst2AR_${waiting_sample}.out" ]]; then
+			mv "${shareScript}/srst2AR_${waiting_sample}.out" "${main_dir}"
 		fi
-		if [[ -f "${shareScript}/srst2AR_${sample}.err" ]]; then
-			mv "${shareScript}/srst2AR_${sample}.err" "${main_dir}"
+		if [[ -f "${shareScript}/srst2AR_${waiting_sample}.err" ]]; then
+			mv "${shareScript}/srst2AR_${waiting_sample}.err" "${main_dir}"
 		fi
 	else
 		# Check every 5 seconds to see if the sample has completed normal csstar analysis
@@ -227,11 +227,11 @@ for item in "${arr[@]}"; do
 				fi
 				if [[ -f "${main_dir}/complete/${waiting_sample}_srst2AR_complete.txt" ]]; then
 					echo "${item} is complete"
-					if [[ -f "${shareScript}/srst2AR_${sample}.out" ]]; then
-						mv "${shareScript}/srst2AR_${sample}.out" "${main_dir}"
+					if [[ -f "${shareScript}/srst2AR_${waiting_sample}.out" ]]; then
+						mv "${shareScript}/srst2AR_${waiting_sample}.out" "${main_dir}"
 					fi
-					if [[ -f "${shareScript}/srst2AR__${sample}.err" ]]; then
-						mv "${shareScript}/srst2AR_${sample}.err" "${main_dir}"
+					if [[ -f "${shareScript}/srst2AR__${waiting_sample}.err" ]]; then
+						mv "${shareScript}/srst2AR_${waiting_sample}.err" "${main_dir}"
 					fi
 					break
 				else
