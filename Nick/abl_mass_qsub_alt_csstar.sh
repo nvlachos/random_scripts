@@ -76,6 +76,7 @@ else
 		sim="p"
 	elif [ "${6}" == 40 ]; then
 		sim="o"
+	fi
 	simnum=${6}
 fi
 
