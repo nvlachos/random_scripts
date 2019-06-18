@@ -178,11 +178,11 @@ for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
 	if [[ -f "${main_dir}/complete/${waiting_sample}_csstarp_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/plasFlow/Unicycler_assemblies/${waiting_sample}_uni_assembly/${waiting_sample}_plasmid_assembly_trimmed.fasta" ]]; then
 		echo "${item} is complete normal"
-		if [[ -f "${shareScript}/csstp_${sample}.out" ]]; then
-			mv "${shareScript}/csstp_${sample}.out" "${main_dir}"
+		if [[ -f "${shareScript}/csstp_${waiting_sample}.out" ]]; then
+			mv "${shareScript}/csstp_${waiting_sample}.out" "${main_dir}"
 		fi
-		if [[ -f "${shareScript}/csstp_${sample}.err" ]]; then
-			mv "${shareScript}/csstp_${sample}.err" "${main_dir}"
+		if [[ -f "${shareScript}/csstp_${waiting_sample}.err" ]]; then
+			mv "${shareScript}/csstp_${waiting_sample}.err" "${main_dir}"
 		fi
 	else
 		# Check every 5 seconds to see if the sample has completed normal csstar analysis
@@ -194,6 +194,12 @@ for item in "${arr[@]}"; do
 				fi
 				if [[ -f "${main_dir}/complete/${waiting_sample}_csstarp_complete.txt" ]]; then
 					echo "${item} is complete"
+					if [[ -f "${shareScript}/csstp_${waiting_sample}.out" ]]; then
+						mv "${shareScript}/csstp_${waiting_sample}.out" "${main_dir}"
+					fi
+					if [[ -f "${shareScript}/csstp_${waiting_sample}.err" ]]; then
+						mv "${shareScript}/csstp_${waiting_sample}.err" "${main_dir}"
+					fi
 					break
 				else
 					timer=$(( timer + 5 ))

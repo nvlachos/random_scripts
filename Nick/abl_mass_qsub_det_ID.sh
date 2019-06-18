@@ -161,11 +161,11 @@ for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
 	if [[ -f "${main_dir}/complete/${waiting_sample}_detID_complete.txt" ]]; then
 		echo "${item} is complete"
-		if [[ -f "${shareScript}/detID_${sample}.out" ]]; then
-			mv "${shareScript}/detID_${sample}.out" "${main_dir}"
+		if [[ -f "${shareScript}/detID_${waiting_sample}.out" ]]; then
+			mv "${shareScript}/detID_${waiting_sample}.out" "${main_dir}"
 		fi
-		if [[ -f "${shareScript}/detID_${sample}.err" ]]; then
-			mv "${shareScript}/detID_${sample}.err" "${main_dir}"
+		if [[ -f "${shareScript}/detID_${waiting_sample}.err" ]]; then
+			mv "${shareScript}/detID_${waiting_sample}.err" "${main_dir}"
 		fi
 	else
 		while :
@@ -176,11 +176,11 @@ for item in "${arr[@]}"; do
 				fi
 				if [[ -f "${main_dir}/complete/${waiting_sample}_detID_complete.txt" ]]; then
 					echo "${item} is complete"
-					if [[ -f "${shareScript}/detID_${sample}.out" ]]; then
-						mv "${shareScript}/detID_${sample}.out" "${main_dir}"
+					if [[ -f "${shareScript}/detID_${waiting_sample}.out" ]]; then
+						mv "${shareScript}/detID_${waiting_sample}.out" "${main_dir}"
 					fi
-					if [[ -f "${shareScript}/detID_${sample}.err" ]]; then
-						mv "${shareScript}/detID_${sample}.err" "${main_dir}"
+					if [[ -f "${shareScript}/detID_${waiting_sample}.err" ]]; then
+						mv "${shareScript}/detID_${waiting_sample}.err" "${main_dir}"
 					fi
 					break
 				else

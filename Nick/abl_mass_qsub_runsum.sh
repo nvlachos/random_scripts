@@ -137,6 +137,43 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	counter=$(( counter + 1 ))
 done
 
+# Check for completion is done right now, but the qsub fiules still need to be moved
+timer=0
+for item in "${arr[@]}"; do
+	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
+	if [[ -f "${main_dir}/complete/${waiting_sample}_runsum_complete.txt" ]]; then
+		echo "${item} is complete"
+		if [[ -f "${shareScript}/runsum_${waiting_sample}.out" ]]; then
+			mv "${shareScript}/runsum_${waiting_sample}.out" "${main_dir}"
+		fi
+		if [[ -f "${shareScript}/runsum_${waiting_sample}.err" ]]; then
+			mv "${shareScript}/runsum_${waiting_sample}.err" "${main_dir}"
+		fi
+	else
+		while :
+		do
+				if [[ ${timer} -gt 3600 ]]; then
+					echo "Timer exceeded limit of 3600 seconds = 60 minutes"
+					exit 1
+				fi
+				if [[ -f "${main_dir}/complete/${waiting_sample}_runsum_complete.txt" ]]; then
+					echo "${item} is complete"
+					if [[ -f "${shareScript}/runsum_${waiting_sample}.out" ]]; then
+						mv "${shareScript}/runsum_${waiting_sample}.out" "${main_dir}"
+					fi
+					if [[ -f "${shareScript}/runsum_${waiting_sample}.err" ]]; then
+						mv "${shareScript}/runsum_${waiting_sample}.err" "${main_dir}"
+					fi
+					break
+				else
+					timer=$(( timer + 5 ))
+					echo "sleeping for 5 seconds, so far slept for ${timer}"
+					sleep 5
+				fi
+		done
+	fi
+done
+
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
 #Script exited gracefully (unless something else inside failed)

@@ -216,11 +216,11 @@ for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
 	if [[ -f "${main_dir}/complete/${waiting_sample}_animc_complete.txt" ]]; then
 		echo "${item} is complete"
-		if [[ -f "${shareScript}/animc_${sample}.out" ]]; then
-			mv "${shareScript}/animc_${sample}.out" ${main_dir}
+		if [[ -f "${shareScript}/animc_${waiting_sample}.out" ]]; then
+			mv "${shareScript}/animc_${waiting_sample}.out" ${main_dir}
 		fi
-		if [[ -f "${shareScript}/animc_${sample}.err" ]]; then
-			mv "${shareScript}/animc_${sample}.err" ${main_dir}
+		if [[ -f "${shareScript}/animc_${waiting_sample}.err" ]]; then
+			mv "${shareScript}/animc_${waiting_sample}.err" ${main_dir}
 		fi
 	else
 		# Check every 5 seconds to see if the sample has completed normal csstar analysis
@@ -232,11 +232,11 @@ for item in "${arr[@]}"; do
 				fi
 				if [[ -f "${main_dir}/complete/${waiting_sample}_animc_complete.txt" ]]; then
 					echo "${item} is complete"
-					if [[ -f "${shareScript}/animc_${sample}.out" ]]; then
-						mv "${shareScript}/animc_${sample}.out" ${main_dir}
+					if [[ -f "${shareScript}/animc_${waiting_sample}.out" ]]; then
+						mv "${shareScript}/animc_${waiting_sample}.out" ${main_dir}
 					fi
-					if [[ -f "${shareScript}/animc_${sample}.err" ]]; then
-						mv "${shareScript}/animc_${sample}.err" ${main_dir}
+					if [[ -f "${shareScript}/animc_${waiting_sample}.err" ]]; then
+						mv "${shareScript}/animc_${waiting_sample}.err" ${main_dir}
 					fi
 					break
 				else

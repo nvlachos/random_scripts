@@ -180,13 +180,13 @@ done
 timer=0
 for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
-	if [[ -f "${main_dir}/complete/${waiting_sample}_ACS_complete.txt" ]] || [[ ! -f "${processed}/${project}/${waiting_sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
+	if [[ -f "${main_dir}/complete/${waiting_sample}_ACS_complete.txt" ]] || [[ ! -f "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_scaffolds_trimmed.fasta" ]]; then
 		echo "${item} is complete"
-		if [[ -f "${shareScript}/ACS_${sample}.out" ]]; then
-			mv "${shareScript}/ACS_${sample}.out" ${main_dir}
+		if [[ -f "${shareScript}/ACS_${waiting_sample}.out" ]]; then
+			mv "${shareScript}/ACS_${waiting_sample}.out" ${main_dir}
 		fi
-		if [[ -f "${shareScript}/ACS_${sample}.err" ]]; then
-			mv "${shareScript}/ACS_${sample}.err" ${main_dir}
+		if [[ -f "${shareScript}/ACS_${waiting_sample}.err" ]]; then
+			mv "${shareScript}/ACS_${waiting_sample}.err" ${main_dir}
 		fi
 	else
 		# Check every 5 seconds to see if the sample has completed normal csstar analysis
@@ -198,11 +198,11 @@ for item in "${arr[@]}"; do
 				fi
 				if [[ -f "${main_dir}/complete/${waiting_sample}_ACS_complete.txt" ]]; then
 					echo "${item} is complete"
-					if [[ -f "${shareScript}/ACS_${sample}.out" ]]; then
-						mv "${shareScript}/ACS_${sample}.out" ${main_dir}
+					if [[ -f "${shareScript}/ACS_${waiting_sample}.out" ]]; then
+						mv "${shareScript}/ACS_${waiting_sample}.out" ${main_dir}
 					fi
-					if [[ -f "${shareScript}/ACS_${sample}.err" ]]; then
-						mv "${shareScript}/ACS_${sample}.err" ${main_dir}
+					if [[ -f "${shareScript}/ACS_${waiting_sample}.err" ]]; then
+						mv "${shareScript}/ACS_${waiting_sample}.err" ${main_dir}
 					fi
 					break
 				else
