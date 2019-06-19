@@ -23,7 +23,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./act_by_list_concat_csstar_plasFlow_files.sh path_to_list_file ResGANNOT_Identifier(YYYYMMDD) path_for_output_file"
+	echo "Usage is ./act_by_list_concat_csstar_plasFlow_files.sh path_to_list_file DB_Identifier(resGANNOT_date, for example) path_for_output_file"
 	exit 0
 elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
 	echo "${2} is not a number or is empty. Please input correct date for ResGANNOT DB...exiting"
@@ -35,7 +35,9 @@ elif [[ ! -f "${3}" ]]; then
 		echo "${outdir} does not exist"
 		mkdir -p "${outdir}"
 	fi
-	>${3}
+	>${3}_plasFLOW
+	>${3}_csstar
+	>${3}_srst2
 fi
 
 # Loop through and act on each sample name in the passed/provided list
@@ -44,10 +46,21 @@ while IFS= read -r var || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 	#echo "${counter} - ${processed}/${project}/${sample_name}/MLST/"
-	if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt" ]]; then
-		cat "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt" >> ${3}
+	if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.${2}.gapped_40_sstar_summary.txt" ]]; then
+		:
+		#cat "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.${2}.gapped_40_sstar_summary.txt" >> ${3}_plasFlow
 	else
 		echo "${project}/${sample_name} does not have c-sstar_plasFlow 40 file"
+	fi
+	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_98_sstar_summary.txt" ]]; then
+		cat $(tail -n +2 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_98_sstar_summary.txt") >> ${3}_csstar
+	else
+		echo "${project}/${sample_name} does not have c-sstar 98 file"
+	fi
+	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__${2}_srst2__results.txt" ]]; then
+		cat $(tail -n +2 "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__${2}_srst2__results.txt") >> ${3}_csstar
+	else
+		echo "${project}/${sample_name} does not have srst2 file"
 	fi
 done < "${1}"
 
