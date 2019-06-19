@@ -35,9 +35,9 @@ elif [[ ! -f "${3}" ]]; then
 		echo "${outdir} does not exist"
 		mkdir -p "${outdir}"
 	fi
-	>${3}_plasFLOW
-	>${3}_csstar
-	>${3}_srst2
+	#>${3}_plasFLOW
+	#>${3}_csstar
+	#>${3}_srst2
 fi
 
 # Checks that value given for % Identity is one of the presets for csstar
