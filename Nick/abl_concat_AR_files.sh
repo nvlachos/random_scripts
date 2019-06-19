@@ -46,6 +46,9 @@ while IFS= read -r var || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 	#echo "${counter} - ${processed}/${project}/${sample_name}/MLST/"
+	if [[ "${counter}" -gt 5 ]]; then
+		break
+	fi
 	if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.${2}.gapped_40_sstar_summary.txt" ]]; then
 		:
 		#cat "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.${2}.gapped_40_sstar_summary.txt" >> ${3}_plasFlow
@@ -62,6 +65,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 	#else
 	#	echo "${project}/${sample_name} does not have srst2 file"
 	#fi
+	counter=$(( counter + 1 ))
 done < "${1}"
 
 echo "All isolates completed"
