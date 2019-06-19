@@ -79,10 +79,9 @@ while IFS= read -r var || [ -n "$var" ]; do
 	fi
 	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_${simnum}_sstar_summary.txt" ]]; then
 		if [[ "${counter}" -eq 0 ]]; then
-			tail -n +1 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_${simnum}_sstar_summary.txt" >> ${3}_csstar.tsv
-		else
-			tail -n +2 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_${simnum}_sstar_summary.txt" >> ${3}_csstar.tsv
+			echo "Source_DB	AR_Family	sstar_on_single_alternate_DB	Gene_Status	Gene_Allele	Contig#	%ID	Source_Length	Target_length	%_Length" >> ${3}_csstar.tsv
 		fi
+		tail -n +1 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_${simnum}_sstar_summary.txt" >> ${3}_csstar.tsv
 	else
 		echo "${project}/${sample_name} does not have c-sstar ${simnum} file"
 	fi
