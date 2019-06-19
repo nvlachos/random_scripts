@@ -12,7 +12,7 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list_concat_csstar_plasFlow_files.sh path_to_list path_for_output_file
+# Usage ./act_by_list_concat_csstar_plasFlow_files.sh path_to_list path_for_output_file %ID_to_find_correct_csstar_file[80|95|98|99|100]
 #
 
 number='^[0-9]+$'
@@ -23,7 +23,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./act_by_list_concat_csstar_plasFlow_files.sh path_to_list_file DB_Identifier(resGANNOT_date, for example) path_for_output_file"
+	echo "Usage is ./act_by_list_concat_csstar_plasFlow_files.sh path_to_list_file DB_Identifier(resGANNOT_date, for example) path_for_output_file %ID_to_find_correct_csstar_file[80|95|98|99|100]"
 	exit 0
 elif [[ -z "${2}" ]]; then     #! [[ ${2} =~ $number ]] ||
 	echo "${2} is not a number or is empty. Please input correct date for ResGANNOT DB...exiting"
@@ -38,6 +38,28 @@ elif [[ ! -f "${3}" ]]; then
 	>${3}_plasFLOW
 	>${3}_csstar
 	>${3}_srst2
+fi
+
+# Checks that value given for % Identity is one of the presets for csstar
+if [[ "${4}" != 80 ]] && [[ "${4}" != 95 ]] && [[ "${4}" != 98 ]] && [[ "${4}" != 99 ]] && [[ "${4}" != 100 ]]; then
+	echo "Identity is not one of the presets for csstar and therefore will fail, defaulting to 98..."
+	sim="h"
+	simnum=98
+else
+	if [ "${4}" == 98 ]; then
+		sim="h"
+	elif [ "${4}" == 80 ]; then
+		sim="l"
+	elif [ "${4}" == 99 ]; then
+		sim="u"
+	elif [ "${4}" == 95 ]; then
+		sim="m"
+	elif [ "${4}" == 100 ]; then
+		sim="p"
+	elif [ "${4}" == 40 ]; then
+		sim="o"
+	fi
+	simnum=${4}
 fi
 
 # Loop through and act on each sample name in the passed/provided list
@@ -55,8 +77,8 @@ while IFS= read -r var || [ -n "$var" ]; do
 	else
 		echo "${project}/${sample_name} does not have c-sstar_plasFlow 40 file"
 	fi
-	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_98_sstar_summary.txt" ]]; then
-		tail -n +2 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_98_sstar_summary.txt" >> ${3}_csstar.txt
+	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_${simnum}_sstar_summary.txt" ]]; then
+		tail -n +2 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_${simnum}_sstar_summary.txt" >> ${3}_csstar.txt
 	else
 		echo "${project}/${sample_name} does not have c-sstar 98 file"
 	fi
