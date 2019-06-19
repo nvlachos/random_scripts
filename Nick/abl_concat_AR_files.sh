@@ -51,17 +51,17 @@ while IFS= read -r var || [ -n "$var" ]; do
 	fi
 	if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.${2}.gapped_40_sstar_summary.txt" ]]; then
 		:
-		#cat "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.${2}.gapped_40_sstar_summary.txt" >> ${3}_plasFlow
+		#cat "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.${2}.gapped_40_sstar_summary.txt" >> ${3}_plasFlow.txt
 	else
 		echo "${project}/${sample_name} does not have c-sstar_plasFlow 40 file"
 	fi
 	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_98_sstar_summary.txt" ]]; then
-		echo $(tail -n +2 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_98_sstar_summary.txt") #>> ${3}_csstar
+		$(tail -n +2 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_98_sstar_summary.txt") >> ${3}_csstar.txt
 	else
 		echo "${project}/${sample_name} does not have c-sstar 98 file"
 	fi
 	#if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__${2}_srst2__results.txt" ]]; then
-	#	cat $(tail -n +2 "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__${2}_srst2__results.txt") #>> ${3}_csstar
+	#	cat $(tail -n +2 "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__${2}_srst2__results.txt") #>> ${3}_srst2.txt
 	#else
 	#	echo "${project}/${sample_name} does not have srst2 file"
 	#fi
