@@ -78,12 +78,20 @@ while IFS= read -r var || [ -n "$var" ]; do
 		echo "${project}/${sample_name} does not have c-sstar_plasFlow 40 file"
 	fi
 	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_${simnum}_sstar_summary.txt" ]]; then
-		tail -n +2 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_${simnum}_sstar_summary.txt" >> ${3}_csstar.tsv
+		if [[ "${counter}" -eq 0 ]]; then
+			tail -n +1 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_${simnum}_sstar_summary.txt" >> ${3}_csstar.tsv
+		else
+			tail -n +2 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_${simnum}_sstar_summary.txt" >> ${3}_csstar.tsv
+		fi
 	else
 		echo "${project}/${sample_name} does not have c-sstar ${simnum} file"
 	fi
 	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__${2}_srst2__results.txt" ]]; then
-		tail -n +2 "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__${2}_srst2__results.txt" >> ${3}_srst2.tsv
+		if [[ "${counter}" -eq 0 ]]; then
+			tail -n +1 "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__${2}_srst2__results.txt" >> ${3}_srst2.tsv
+		else
+			tail -n +2 "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__${2}_srst2__results.txt" >> ${3}_srst2.tsv
+		fi
 	else
 		echo "${project}/${sample_name} does not have srst2 file"
 	fi
