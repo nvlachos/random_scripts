@@ -80,7 +80,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_${simnum}_sstar_summary.txt" ]]; then
 		tail -n +2 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_${simnum}_sstar_summary.txt" >> ${3}_csstar.txt
 	else
-		echo "${project}/${sample_name} does not have c-sstar 98 file"
+		echo "${project}/${sample_name} does not have c-sstar ${simnum} file"
 	fi
 	#if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__${2}_srst2__results.txt" ]]; then
 	#	cat $(tail -n +2 "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__${2}_srst2__results.txt") #>> ${3}_srst2.txt
