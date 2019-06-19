@@ -56,7 +56,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 		echo "${project}/${sample_name} does not have c-sstar_plasFlow 40 file"
 	fi
 	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_98_sstar_summary.txt" ]]; then
-		$(tail -n +2 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_98_sstar_summary.txt") >> ${3}_csstar.txt
+		tail -n +2 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${2}.gapped_98_sstar_summary.txt" >> ${3}_csstar.txt
 	else
 		echo "${project}/${sample_name} does not have c-sstar 98 file"
 	fi
