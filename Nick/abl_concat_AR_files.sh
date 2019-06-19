@@ -25,7 +25,7 @@ if [[ $# -eq 0 ]]; then
 elif [[ "$1" = "-h" ]]; then
 	echo "Usage is ./act_by_list_concat_csstar_plasFlow_files.sh path_to_list_file DB_Identifier(resGANNOT_date, for example) path_for_output_file"
 	exit 0
-elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
+elif [[ -z "${2}" ]]; then     #! [[ ${2} =~ $number ]] ||
 	echo "${2} is not a number or is empty. Please input correct date for ResGANNOT DB...exiting"
 	exit 2
 elif [[ ! -f "${3}" ]]; then
