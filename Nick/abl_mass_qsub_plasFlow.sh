@@ -7,6 +7,8 @@
 #$ -q short.q
 
 $(pwd)
+$(ls -l ./)
+
 
 #Import the config file with shortcuts and settings
 if [[ ! -f ./config.sh ]]; then
@@ -15,6 +17,16 @@ fi
 . ./config.sh
 #Import the module file that loads all necessary mods
 . "${mod_changers}/pipeline_mods"
+
+#Import the config file with shortcuts and settings
+if [[ ! -f "./config.sh" ]]; then
+	cp ./config_template.sh ./config.sh
+fi
+. ./config.sh
+#Import the module file that loads all necessary mods
+. "${mod_changers}/pipeline_mods"
+
+
 
 #
 # Usage ./abl_mass_qsub_template.sh path_to_list max_concurrent_submission output_directory_for_scripts clobberness[keep|clobber]
