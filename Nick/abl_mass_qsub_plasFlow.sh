@@ -119,8 +119,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 				# Add all necessary modules
 				### echo -e "module load XXX" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-
-				# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
+				echo -e "cd ${shareScript}" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 				echo -e "\"${shareScript}/run_plasFlow.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 				cd "${main_dir}"
@@ -155,8 +154,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 						# Add all necessary modules
 						### echo -e "module load XXX" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-
-						# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
+						echo -e "cd ${shareScript}" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 						echo -e "\"${shareScript}/run_plasFlow.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 						cd "${main_dir}"
