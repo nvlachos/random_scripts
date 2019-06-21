@@ -90,7 +90,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 
 	if [[ "${family}" == "Enterobacteriaceae" ]]; then
 		if [ ${counter} -lt ${max_subs} ]; then
-			if [[ -f "${processed}/${project}/${sample_name}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_plasmid_assembly_trimmed.fasta" ]]; then
+			if [[ ! -f "${processed}/${project}/${sample_name}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_plasmid_assembly_trimmed.fasta" ]]; then
 				echo  "Index is below max submissions, submitting"
 				echo -e "#!/bin/bash -l\n" > "${main_dir}/pFlow_${sample}_${start_time}.sh"
 				echo -e "#$ -o pFlow_${sample}.out" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
@@ -111,7 +111,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					qsub -sync y "${main_dir}/pFlow_${sample}_${start_time}.sh"
 				fi
 			else
-				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+				echo -e "$(date)" > "${main_dir}/complete/${sample}_pFlow_complete.txt"
 				echo "${project}/${sample} already has plasFlow completed"
 			fi
 		else
@@ -126,7 +126,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					break
 				fi
 				if [ -f "${main_dir}/complete/${waiting_sample}_pFlow_complete.txt" ]; then
-					if [[ -f "${processed}/${project}/${sample_name}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_plasmid_assembly_trimmed.fasta" ]]; then
+					if [[ ! -f "${processed}/${project}/${sample_name}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_plasmid_assembly_trimmed.fasta" ]]; then
 						echo  "Index is below max submissions, submitting"
 						echo -e "#!/bin/bash -l\n" > "${main_dir}/pFlow_${sample}_${start_time}.sh"
 						echo -e "#$ -o pFlow_${sample}.out" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
