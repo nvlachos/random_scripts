@@ -6,6 +6,8 @@
 #$ -cwd
 #$ -q short.q
 
+$(pwd)
+
 #Import the config file with shortcuts and settings
 if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
