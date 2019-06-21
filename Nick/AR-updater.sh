@@ -37,7 +37,7 @@ fi
 last_run=$(tail -n1 ${local_DBs}/ar_updater.txt)
 echo "Last time run=${last_run}
 ResGANNOT created=${resGANNOT_srst2_filename}"
-if [[ "${last_run}" = "${resGANNOT_srst2_filename}" ]]; then
+if [[ "${last_run}" == "${resGANNOT_srst2_filename}" ]]; then
 	echo "The last run was with the newest database... ${resGANNOT_srst2_filename}, exiting"
 	exit 0
 fi

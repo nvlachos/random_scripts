@@ -71,78 +71,96 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	echo ${counter}
 	if [[ "${clobberness}" == "clobber" ]]; then
-		if [[ -d "${processed}/${project}/${sample}/plasmid" ]]; then
-			rm -r "${processed}/${project}/${sample}/plasmid"
+		if [[ -d "${processed}/${project}/${sample}/plasFlow" ]]; then
+			rm -r "${processed}/${project}/${sample}/plasFlow"
 		fi
 	fi
-	if [ ${counter} -lt ${max_subs} ]; then
-		if [[ -f "${processed}/${project}/${sample_name}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_plasmid_assembly_trimmed.fasta" ]]; then
-			echo  "Index is below max submissions, submitting"
-			echo -e "#!/bin/bash -l\n" > "${main_dir}/pFlow_${sample}_${start_time}.sh"
-			echo -e "#$ -o pFlow_${sample}.out" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-			echo -e "#$ -e pFlow_${sample}.err" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-			echo -e "#$ -N pFlow_${sample}"   >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-			echo -e "#$ -cwd"  >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-			echo -e "#$ -q short.q\n"  >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-			# Add all necessary modules
-			### echo -e "module load XXX" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+	if [[ ! -f "${processed}/${project}/${sample}/${sample}.tax" ]]; then
+		${shareScript}/determine_taxID.sh "${sample}" "${project}"
+	fi
+	family=""
+	while IFS= read -r line  || [ -n "$line" ]; do
+		# Grab first letter of line (indicating taxonomic level)
+		first=${line:0:1}
+		# Assign taxonomic level value from 4th value in line (1st-classification level, 2nd-% by kraken, 3rd-true % of total reads, 4th-identifier)
+		if [ "${first}" = "f" ]; then
+			family=$(echo "${line}" | awk -F ' ' '{print $2}')
+		fi
+	done < "${processed}/${project}/${sample}/${sample}.tax"
 
-			# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
-			echo -e "\"${shareScript}/run_plasFlow.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-			cd "${main_dir}"
-			if [[ "${counter}" -lt "${last_index}" ]]; then
-				qsub "${main_dir}/pFlow_${sample}_${start_time}.sh"
+	if [[ "${family}" == "Enterobacteriaceae" ]]; then
+		if [ ${counter} -lt ${max_subs} ]; then
+			if [[ -f "${processed}/${project}/${sample_name}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_plasmid_assembly_trimmed.fasta" ]]; then
+				echo  "Index is below max submissions, submitting"
+				echo -e "#!/bin/bash -l\n" > "${main_dir}/pFlow_${sample}_${start_time}.sh"
+				echo -e "#$ -o pFlow_${sample}.out" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+				echo -e "#$ -e pFlow_${sample}.err" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+				echo -e "#$ -N pFlow_${sample}"   >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+				echo -e "#$ -cwd"  >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+				echo -e "#$ -q short.q\n"  >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+				# Add all necessary modules
+				### echo -e "module load XXX" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+
+				# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
+				echo -e "\"${shareScript}/run_plasFlow.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+				cd "${main_dir}"
+				if [[ "${counter}" -lt "${last_index}" ]]; then
+					qsub "${main_dir}/pFlow_${sample}_${start_time}.sh"
+				else
+					qsub -sync y "${main_dir}/pFlow_${sample}_${start_time}.sh"
+				fi
 			else
-				qsub -sync y "${main_dir}/pFlow_${sample}_${start_time}.sh"
+				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+				echo "${project}/${sample} already has plasFlow completed"
 			fi
 		else
-			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-			echo "${project}/${sample} already has plasFlow completed"
+			waiting_for_index=$(( counter - max_subs ))
+			waiting_sample=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
+			timer=0
+			echo "Index is above max submissions, waiting for index ${waiting_for_index}:${waiting_sample} to complete"
+			while :
+			do
+				if [[ ${timer} -gt 1800 ]]; then
+					echo "Timer exceeded limit of 1800 seconds 30 minutes"
+					break
+				fi
+				if [ -f "${main_dir}/complete/${waiting_sample}_pFlow_complete.txt" ]; then
+					if [[ -f "${processed}/${project}/${sample_name}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_plasmid_assembly_trimmed.fasta" ]]; then
+						echo  "Index is below max submissions, submitting"
+						echo -e "#!/bin/bash -l\n" > "${main_dir}/pFlow_${sample}_${start_time}.sh"
+						echo -e "#$ -o pFlow_${sample}.out" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+						echo -e "#$ -e pFlow_${sample}.err" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+						echo -e "#$ -N pFlow_${sample}"   >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+						echo -e "#$ -cwd"  >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+						echo -e "#$ -q short.q\n"  >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+						# Add all necessary modules
+						### echo -e "module load XXX" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+
+						# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
+						echo -e "\"${shareScript}/run_plasFlow.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+						cd "${main_dir}"
+						if [[ "${counter}" -lt "${last_index}" ]]; then
+							qsub "${main_dir}/pFlow_${sample}_${start_time}.sh"
+						else
+							qsub -sync y "${main_dir}/pFlow_${sample}_${start_time}.sh"
+						fi
+					else
+						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+						echo "${project}/${sample} already has plasFlow completed"
+					fi
+					break
+				else
+					timer=$(( timer + 5 ))
+					echo "sleeping for 5 seconds, so far slept for ${timer}"
+					sleep 5
+				fi
+			done
 		fi
 	else
-		waiting_for_index=$(( counter - max_subs ))
-		waiting_sample=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
-		timer=0
-		echo "Index is above max submissions, waiting for index ${waiting_for_index}:${waiting_sample} to complete"
-		while :
-		do
-			if [[ ${timer} -gt 1800 ]]; then
-				echo "Timer exceeded limit of 1800 seconds 30 minutes"
-				break
-			fi
-			if [ -f "${main_dir}/complete/${waiting_sample}_pFlow_complete.txt" ]; then
-				if [[ -f "${processed}/${project}/${sample_name}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_plasmid_assembly_trimmed.fasta" ]]; then
-					echo  "Index is below max submissions, submitting"
-					echo -e "#!/bin/bash -l\n" > "${main_dir}/pFlow_${sample}_${start_time}.sh"
-					echo -e "#$ -o pFlow_${sample}.out" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-					echo -e "#$ -e pFlow_${sample}.err" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-					echo -e "#$ -N pFlow_${sample}"   >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-					echo -e "#$ -cwd"  >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-					echo -e "#$ -q short.q\n"  >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-					# Add all necessary modules
-					### echo -e "module load XXX" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-
-					# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
-					echo -e "\"${shareScript}/run_plasFlow.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-					cd "${main_dir}"
-					if [[ "${counter}" -lt "${last_index}" ]]; then
-						qsub "${main_dir}/pFlow_${sample}_${start_time}.sh"
-					else
-						qsub -sync y "${main_dir}/pFlow_${sample}_${start_time}.sh"
-					fi
-				else
-					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-					echo "${project}/${sample} already has plasFlow completed"
-				fi
-				break
-			else
-				timer=$(( timer + 5 ))
-				echo "sleeping for 5 seconds, so far slept for ${timer}"
-				sleep 5
-			fi
-		done
+		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+		echo "${project}/${sample} no plasFlow - not in Enterobacteriaceae family"
 	fi
 	counter=$(( counter + 1 ))
 done
