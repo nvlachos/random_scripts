@@ -7,9 +7,9 @@
 #$ -q short.q
 
 echo "1"
-$(pwd)
+echo $(pwd)
 echo "2"
-$(ls -l)
+echo $(ls -l)
 echo "3"
 
 #Import the config file with shortcuts and settings
