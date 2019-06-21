@@ -147,7 +147,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 							qsub -sync y "${main_dir}/pFlow_${sample}_${start_time}.sh"
 						fi
 					else
-						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+						echo -e "$(date)" > "${main_dir}/complete/${sample}_pFlow_complete.txt"
 						echo "${project}/${sample} already has plasFlow completed"
 					fi
 					break
@@ -159,7 +159,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			done
 		fi
 	else
-		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+		echo -e "$(date)" > "${main_dir}/complete/${sample}_pFlow_complete.txt"
 		echo "${project}/${sample} no plasFlow - not in Enterobacteriaceae family"
 	fi
 	counter=$(( counter + 1 ))
