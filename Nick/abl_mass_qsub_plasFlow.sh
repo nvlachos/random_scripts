@@ -31,7 +31,7 @@ fi
 
 
 #
-# Usage ./abl_mass_qsub_template.sh path_to_list max_concurrent_submission output_directory_for_scripts clobberness[keep|clobber]
+# Usage ./abl_mass_qsub_plasFlow.sh path_to_list max_concurrent_submission output_directory_for_scripts clobberness[keep|clobber]
 #
 
 # Number regex to test max concurrent submission parametr
@@ -124,11 +124,11 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "\"${shareScript}/run_plasFlow.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 				cd "${main_dir}"
-				if [[ "${counter}" -lt "${last_index}" ]]; then
+				#if [[ "${counter}" -lt "${last_index}" ]]; then
 					qsub "${main_dir}/pFlow_${sample}_${start_time}.sh"
-				else
-					qsub -sync y "${main_dir}/pFlow_${sample}_${start_time}.sh"
-				fi
+				#else
+				#	qsub -sync y "${main_dir}/pFlow_${sample}_${start_time}.sh"
+				#fi
 			else
 				echo -e "$(date)" > "${main_dir}/complete/${sample}_pFlow_complete.txt"
 				echo "${project}/${sample} already has plasFlow completed"
@@ -160,11 +160,11 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "\"${shareScript}/run_plasFlow.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 						cd "${main_dir}"
-						if [[ "${counter}" -lt "${last_index}" ]]; then
+						#if [[ "${counter}" -lt "${last_index}" ]]; then
 							qsub "${main_dir}/pFlow_${sample}_${start_time}.sh"
-						else
-							qsub -sync y "${main_dir}/pFlow_${sample}_${start_time}.sh"
-						fi
+						#else
+						#	qsub -sync y "${main_dir}/pFlow_${sample}_${start_time}.sh"
+						#fi
 					else
 						echo -e "$(date)" > "${main_dir}/complete/${sample}_pFlow_complete.txt"
 						echo "${project}/${sample} already has plasFlow completed"
