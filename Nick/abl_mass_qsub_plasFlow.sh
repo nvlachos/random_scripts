@@ -1,14 +1,16 @@
 #!/bin/sh -l
 
-#$ -o ablmq_template.out
-#$ -e ablmq_template.err
-#$ -N ablmq_template
+#$ -o ablmq_pFlow.out
+#$ -e ablmq_pFlow.err
+#$ -N ablmq_pFlow
 #$ -cwd
 #$ -q short.q
 
+echo "1"
 $(pwd)
-$(ls -l ./)
-
+echo "2"
+$(ls -l)
+echo "3"
 
 #Import the config file with shortcuts and settings
 if [[ ! -f ./config.sh ]]; then
