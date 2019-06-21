@@ -16,7 +16,7 @@
 #
 
 # Clears out script folder of all .sh, .err, and .out files and the complete folders within each qsub type folder
-if [[ ${1} -eq 1 ]] || [[ ${1} -eq 3 ]]; then
+if [[ ${1} -eq 1 ]] || [[ ${1} -eq 3 ]] && [[ ! -z "${2}" ]]; then
 	for folder in ${2}/*
 	do
 		if [[ -d ${folder} ]]; then
