@@ -85,6 +85,8 @@ elif [[ ! -d  "${3}/plasFlow_subs/complete" ]]; then
 	mkdir "${3}/plasFlow_subs/complete"
 fi
 
+start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
+
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
