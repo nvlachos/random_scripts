@@ -181,7 +181,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 		input_DB_srst2="File Missing"
 	fi
 	echo "${counter}:${project}/${sample_name}:	20180608	:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:	${2}	:${input_DB_csstar}:${input_DB_csstar_plasmid}:${input_DB_srst2}:"
-	echo "${project}/${sample_name}	${ohsixoheight}	${ohsixoheights}:${input_DB_csstar}	${input_DB_srst2}	" >> "${3}"
+	echo "${project}/${sample_name}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_srst2}	" >> "${3}"
 	counter=$(( counter + 1 ))
 done < "${1}"
 echo "All isolates completed"
