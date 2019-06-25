@@ -143,12 +143,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_blast16s_complete.txt\"" >> "${main_dir}/blast16s_${sample}_${start_time}.sh"
 						# Moves to working dir of mass qsub scripts
 						cd "${main_dir}"
-						# Checks o see if it is last entry to sync it, not allowing script to end
-						#if [[ "${counter}" -lt "${last_index}" ]]; then
-							qsub "${main_dir}/blast16s_${sample}_${start_time}.sh"
-						#else
-						#	qsub -sync y "${main_dir}/blast16s_${sample}_${start_time}.sh"
-						#fi
+						qsub "${main_dir}/blast16s_${sample}_${start_time}.sh"
 					# Case that data already exists for this sample, creates a completed txt notifier for if there are more samples than max submissions allowed
 					else
 						echo "${project}/${sample} already has 16s summary"
