@@ -21,7 +21,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./redact_OA.sh path_for_output_file"
+	echo "Usage is ./redact_OA.sh project_ID analysis_ID path_to_crosswalk_file"
 	exit 0
 elif [[ -z "${2}" ]]; then
 	echo  "No analysis ID input, exiting..."
@@ -38,11 +38,16 @@ fi
 if [[ -d /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1} ]]; then
 	if  [[ -d /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2} ]]; then
 		echo "Redacting Phylogeny folder: /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}"
+		if [[ -f /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/snvMatrix_redacted.tsv ]]; then
+			rm /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/snvMatrix_redacted.tsv
+		fi
 		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/snvMatrix.tsv /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/snvMatrix_redacted.tsv
-		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree.newick /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree_redacted.newick
+		if [[ -f /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree_redacted.newick ]]; then
+			rm /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree.newick /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree_redacted.newick
+		fi
 		while IFS= read -r var  || [ -n "$var" ]; do
-			original_name=$(echo "${var}" | cut -d':' -f1 | cut -d'/' -f2 | tr -d '[:space:]')
-			redacted_name=$(echo "${var}" | cut -d':' -f2 | tr -d '[:space:]')
+			original_name=$(echo "${var}" | cut -d',' -f1 | cut -d'/' -f2 | tr -d '[:space:]')
+			redacted_name=$(echo "${var}" | cut -d',' -f2 | tr -d '[:space:]')
 			sed -i "s/${original_name}/${redacted_name}/g" /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree_redacted.newick
 			sed -i "s/${original_name}/${redacted_name}/g" /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/snvMatrix_redacted.tsv
 		done < ${3}
@@ -55,12 +60,18 @@ fi
 if [[ -d /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1} ]]; then
 	if [[ -d /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2} ]]; then
 		echo "Redacting Project folder: /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny/${1}/${2}"
+		if [[ -f /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_redacted.nwk ]]; then
+			rm /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_redacted.nwk
+		fi
 		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}.nwk /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_redacted.nwk
+		if [[ -f /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_AR_plasmid_report_redacted.csv ]]; then
+			rm /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_AR_plasmid_report_redacted.csv
+		fi
 		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_AR_plasmid_report.csv /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_AR_plasmid_report_redacted.csv
 		while IFS= read -r var  || [ -n "$var" ]; do
-			original_name=$(echo "${var}" | cut -d':' -f1 | cut -d'/' -f2 | tr -d '[:space:]')
+			original_name=$(echo "${var}" | cut -d',' -f1 | cut -d'/' -f2 | tr -d '[:space:]')
 			original_project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-			redacted_name=$(echo "${var}" | cut -d':' -f2 | tr -d '[:space:]')
+			redacted_name=$(echo "${var}" | cut -d',' -f2 | tr -d '[:space:]')
 			sed -i "s/${original_name}/${redacted_name}/g" /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_redacted.nwk
 			sed -i "s/${original_name}/${redacted_name}/g" /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_AR_plasmid_report_redacted.csv
 			sed -i "s/${original_project}/NA/g" /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_AR_plasmid_report_redacted.csv

@@ -125,11 +125,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "\"${shareScript}/run_plasFlow.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 				cd "${main_dir}"
-				#if [[ "${counter}" -lt "${last_index}" ]]; then
-					qsub "${main_dir}/pFlow_${sample}_${start_time}.sh"
-				#else
-				#	qsub -sync y "${main_dir}/pFlow_${sample}_${start_time}.sh"
-				#fi
+
+				qsub "${main_dir}/pFlow_${sample}_${start_time}.sh"
 			else
 				echo -e "$(date)" > "${main_dir}/complete/${sample}_pFlow_complete.txt"
 				echo "${project}/${sample} already has plasFlow completed"
@@ -160,11 +157,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "\"${shareScript}/run_plasFlow.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_pFlow_complete.txt\"" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 						cd "${main_dir}"
-						#if [[ "${counter}" -lt "${last_index}" ]]; then
-							qsub "${main_dir}/pFlow_${sample}_${start_time}.sh"
-						#else
-						#	qsub -sync y "${main_dir}/pFlow_${sample}_${start_time}.sh"
-						#fi
+
+						qsub "${main_dir}/pFlow_${sample}_${start_time}.sh"
 					else
 						echo -e "$(date)" > "${main_dir}/complete/${sample}_pFlow_complete.txt"
 						echo "${project}/${sample} already has plasFlow completed"
