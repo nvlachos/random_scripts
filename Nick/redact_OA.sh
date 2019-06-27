@@ -45,6 +45,7 @@ if [[ -d /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1} ]
 		if [[ -f /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree_redacted.newick ]]; then
 			rm /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree.newick /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree_redacted.newick
 		fi
+		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree.newick /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Phylogeny_analyses/${1}/${2}/output/phylogeneticTree_redacted.newick
 		while IFS= read -r var  || [ -n "$var" ]; do
 			original_name=$(echo "${var}" | cut -d',' -f1 | cut -d'/' -f2 | tr -d '[:space:]')
 			redacted_name=$(echo "${var}" | cut -d',' -f2 | tr -d '[:space:]')
