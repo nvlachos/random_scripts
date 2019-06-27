@@ -15,6 +15,8 @@ module load pyani/0.2.7
 module load mashtree/0.29
 # ${mod_changers}/list_modules.sh
 
+ml Python3/3.5.2 pyani/0.2.7 mashtree/0.29
+
 #
 # Script to calculate the average nucleotide identity of a sample to numerous other samples from the same genus (genus dependent)
 # The most similar match is identified and provided for confirmation

@@ -13,7 +13,8 @@ if [[ ! -f "./config.sh" ]]; then
 fi
 . ./config.sh
 #Import the module file that loads all necessary mods
-. "${mod_changers}/prep_srst2.sh"
+# . "${mod_changers}/prep_srst2.sh"
+ml Python2/2.7.12 samtools/0.1.18 perl/5.16.1-MT srst2 bowtie2/2.2.4
 
 #
 # Usage ./run_srst2_on_singleDB.sh   sample_name   run_ID
@@ -98,4 +99,4 @@ find ${processed}/${2}/${1}/srst2 -type f -name "*ResGANNOT__*" | while read FIL
 done
 
 # Close out modules that were loaded specifically for srst2
-. "${mod_changers}/close_srst2.sh"
+#. "${mod_changers}/close_srst2.sh"
