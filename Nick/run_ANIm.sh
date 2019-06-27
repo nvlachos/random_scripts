@@ -11,7 +11,7 @@ if [[ ! -f "./config.sh" ]]; then
 	cp config_template.sh config.sh
 fi
 . ./config.sh
-# ${mod_changers}/list_modules.sh
+#${mod_changers}/list_modules.sh
 
 #
 # Script to calculate the average nucleotide identity of a sample to numerous other samples from the same genus (genus dependent)
@@ -22,12 +22,14 @@ fi
 # Python/3.5.2 (pyani is located in Nick_DIR/script folder, not run from scicomp module)
 #
 
+
+
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
 	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
-	echo "Empty sample name supplied to $0, exiting"
+	echo "Empty sample name supplied to run_ANI.sh, exiting"
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
@@ -35,7 +37,7 @@ elif [[ "${1}" = "-h" ]]; then
 	echo "Output is saved to in ${processed}/sample_name/ANI"
 	exit 0
 elif [ -z "$2" ]; then
-	echo "Empty database name supplied to $0. Second argument should be a genus found in ${local_DBs}/ANI/  ...Exiting"
+	echo "Empty database name supplied to run_ANI.sh. Second argument should be a genus found in ${local_DBs}/ANI/  ...Exiting"
 	exit 1
 elif [ ! -s "${local_DBs}/aniDB/${2,}" ]; then
 	echo "The genus does not exist in the ANI database. This will be noted and the curator of the database will be notified. However, since nothing can be done at the moment....exiting"
@@ -51,14 +53,16 @@ elif [ ! -s "${local_DBs}/aniDB/${2,}" ]; then
 	echo "ANI: ${2} - Found as ${1} on ${global_time}" >> "${shareScript}/maintenance_To_Do.txt"
 	exit 1
 elif [ -z "$3" ]; then
-	echo "Empty species name supplied to $0. Third argument should be the suspected species of the sample. Exiting"
+	echo "Empty species name supplied to run_ANI.sh. Third argument should be the suspected species of the sample. Exiting"
 	exit 1
 elif [ -z "$4" ]; then
-	echo "Empty miseq_run_id name supplied to $0. Fourth argument should be the run id. Exiting"
+	echo "Empty miseq_run_id name supplied to run_ANI.sh. Fourth argument should be the run id. Exiting"
 	exit 1
 elif [ ! -z "$5" ]; then
 	others="true"
 fi
+
+ml Python3/3.5.2 pyani/0.2.7 mashtree/0.29
 
 start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 echo "Started ANI at ${start_time}"
@@ -99,7 +103,7 @@ genus_in=${2}
 
 #Creates a local copy of the database folder
 echo "trying to copy ${local_DBs}/aniDB/${genus_in,}/"
-cp "${local_DBs}/aniDB/${genus_in,}/"*".fna" "${OUTDATADIR}/ANI/localANIDB/"
+cp "${local_DBs}/aniDB/${genus_in,}/"*".fna.gz" "${OUTDATADIR}/ANI/localANIDB/"
 gunzip ${OUTDATADIR}/ANI/localANIDB/*.gz
 
 #Copies the samples assembly contigs to the local ANI db folder
@@ -187,7 +191,9 @@ if [[ ${sample_count} -gt ${max_ani_samples} ]]; then
 		echo "Moving ${filename}"
 		cp ${OUTDATADIR}/ANI/localANIDB/${filename} ${OUTDATADIR}/ANI/localANIDB_trimmed/
 	done
-	rm -r "${OUTDATADIR}/ANI/localANIDB_full"
+	if [[ -d "${OUTDATADIR}/ANI/localANIDB_full" ]]; then
+		rm -r "${OUTDATADIR}/ANI/localANIDB_full"
+	fi
 	mv "${OUTDATADIR}/ANI/localANIDB" "${OUTDATADIR}/ANI/localANIDB_full"
 	mv "${OUTDATADIR}/ANI/localANIDB_trimmed" "${OUTDATADIR}/ANI/localANIDB"
 # Continue without reducing the tree, as there are not enough samples to require reduction
@@ -210,8 +216,7 @@ python -V
 average_nucleotide_identity.py -i "${OUTDATADIR}/ANI/localANIDB" -o "${OUTDATADIR}/ANI/aniM" --write_excel
 
 #Extracts the query sample info line for percentage identity from the percent identity file
-while IFS='' read -r line || [ -n "$line" ];
-do
+while IFS='' read -r line || [ -n "$line" ]; do
 #	echo "!-${line}"
 	if [[ ${line:0:7} = "sample_" ]]; then
 		sampleline=${line}
@@ -286,7 +291,15 @@ else
 	if [[ "${accession}" == "No_Accession_Number" ]]; then
 		best_organism_guess="${def_array[3]} ${def_array[4]}"
 	else
-		best_organism_guess=$(python "${shareScript}/entrez_get_taxon_from_accession.py" -a "${accession}" -e "${me}")
+		attempts=0
+		while [[ ${attempts} -lt 25 ]]; do
+			best_organism_guess=$(python "${shareScript}/entrez_get_taxon_from_accession.py" -a "${accession}" -e "${me}")
+			if [[ ! -z ${best_organism_guess} ]]; then
+				break
+			else
+				attempts=$(( attempts + 1 ))
+			fi
+		done
 	fi
 fi
 # Uncomment this if you want to restrict ID to only genus species, without more resolute definition
