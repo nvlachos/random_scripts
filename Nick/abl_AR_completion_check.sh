@@ -34,7 +34,7 @@ fi
 # Loop through and act on each sample name in the passed/provided list
 counter=0
 echo "c-sstar:c-sstar_plasmid:srst2"
-echo "Identification	20180608-c-sstar	20180608-srst2	${2}-c-sstar	${2}-srst2" > "${3}"
+echo "Identification	20180608-c-sstar	20180608-srst2	${2}-c-sstar	${2}-srst2 plaFlow ${2}-c-sstar-plasFlow	plasmidFinder	plasmidFinder_on_plasFlow" > "${3}"
 while IFS= read -r var || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
@@ -180,7 +180,63 @@ while IFS= read -r var || [ -n "$var" ]; do
 	else
 		input_DB_srst2="File Missing"
 	fi
-	echo "${counter}:${project}/${sample_name}:	20180608	:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:	${2}	:${input_DB_csstar}:${input_DB_csstar_plasmid}:${input_DB_srst2}:"
+
+	if [[ -f "${processed}/${project}/${sample_name}/${sample_name}.tax" ]]; then
+		# Parse tax file
+		family=""
+		while IFS= read -r line  || [ -n "$line" ]; do
+			# Grab first letter of line (indicating taxonomic level)
+			first=${line:0:1}
+			# Assign taxonomic level value from 4th value in line (1st-classification level, 2nd-% by kraken, 3rd-true % of total reads, 4th-identifier)
+			if [ "${first}" = "f" ];
+			then
+				family=$(echo "${line}" | awk -F ' ' '{print $2}')
+			fi
+		done < "${processed}/${project}/${sample}/${sample}.tax"
+		if [[ "${family}" == "Enterobacteriaceae" ]]; then
+			if [[ -s "${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_plasmid_assembly_trimmed.fasta" ]]; then
+				plasFlow="Completed"
+				if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt" ]]; then
+					header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt")
+					if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
+						cplas="No_chromo_AR"
+					else
+						csplas="AR_Found"
+					fi
+					## Check run_plasmidFinder
+				if [[ -f "${processed}/${project}/${sample_name}/plasmid/${sample_name}_results_table_summary.txt" ]]; then
+					pfin_plas="Found"
+				else
+					pfin_plas="NOT_found"
+				fi
+				else
+					cplas="NO_plasFlow_CSSTAR_file(HAS_plasFlow_ASSEMBLY)"
+				fi
+			fi
+		elif [[ "${family}" == "" ]]; then
+			plasFlow="No_family_in_TAX_file"
+			csplas="No_plasFlow"
+			pfin_plas="No_plasFlow"
+		else
+			plasFlow="Not_ENTEROBACTERIACEAE_family"
+			cplas="No_plasFlow"
+			pfin_plas="No_plasFlow"
+		fi
+	else
+		plasFlow="No_TAX_file"
+		csplas="No_plaslow"
+		pfin_plas="No_plasFlow"
+	fi
+
+	## Check run_plasmidFinder
+if [[ -f "${processed}/${project}/${sample_name}/plasmid/${sample_name}_results_table_summary.txt" ]]; then
+	pfin="Found"
+else
+	pfin="NOT_found"
+fi
+
+
+	echo "${counter}:${project}/${sample_name}:	20180608	:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:	${2}	:${input_DB_csstar}:${input_DB_csstar_plasmid}:${input_DB_srst2}:${plasFlow}:${cplas}:${pfin}:${pfin_plas}"
 	echo "${project}/${sample_name}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_srst2}	" >> "${3}"
 	counter=$(( counter + 1 ))
 done < "${1}"
