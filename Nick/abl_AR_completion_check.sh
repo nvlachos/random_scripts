@@ -188,7 +188,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 			# Grab first letter of line (indicating taxonomic level)
 			first=${line:0:1}
 			# Assign taxonomic level value from 4th value in line (1st-classification level, 2nd-% by kraken, 3rd-true % of total reads, 4th-identifier)
-			if [ "${first}" = "f" ];
+			if [ "${first}" = "F" ];
 			then
 				family=$(echo "${line}" | awk -F ' ' '{print $2}')
 			fi
