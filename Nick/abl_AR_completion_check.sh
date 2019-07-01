@@ -236,7 +236,7 @@ else
 fi
 
 
-	echo "${counter}:${project}/${sample_name}:	20180608	:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:	${2}	:${input_DB_csstar}:${input_DB_csstar_plasmid}:${input_DB_srst2}:${plasFlow}:${cplas}:${pfin}:${pfin_plas}"
+	echo "${counter}:${project}/${sample_name}:	20180608	:${ohsixoheight}:${ohsixoheightp}:${ohsixoheights}:	${2}	:${input_DB_csstar}:${input_DB_srst2}:${plasFlow}:${cplas}:${pfin}:${pfin_plas}"
 	echo "${project}/${sample_name}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_srst2}	${plasFlow}	${cplas}	${pfin}	${pfin_plas}" >> "${3}"
 	counter=$(( counter + 1 ))
 done < "${1}"
