@@ -32,7 +32,7 @@ fi
 "${shareScript}/clean_list.sh"  "${1}"
 
 # Loop through and act on each sample name in the passed/provided list
-while IFS=read -r var; do
+while IFS=read var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | cut -d':' -f1 | tr -d '[:space:]')
 	project=$(echo "${var}" | awk -F/ '{ print $1}' | tr -d '[:space:]')
 	new_sample_name=$(echo ${var} | cut -d':' -f2 | tr -d [:space:])
