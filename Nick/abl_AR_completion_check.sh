@@ -192,9 +192,9 @@ while IFS= read -r var || [ -n "$var" ]; do
 			then
 				family=$(echo "${line}" | awk -F ' ' '{print $2}')
 			fi
-		done < "${processed}/${project}/${sample}/${sample}.tax"
+		done < "${processed}/${project}/${sample_name}/${sample_name}.tax"
 		if [[ "${family}" == "Enterobacteriaceae" ]]; then
-			if [[ -s "${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_plasmid_assembly_trimmed.fasta" ]]; then
+			if [[ -s "${processed}/${project}/${sample_name}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_plasmid_assembly_trimmed.fasta" ]]; then
 				plasFlow="Completed"
 				if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt" ]]; then
 					header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt")
