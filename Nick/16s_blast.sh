@@ -13,13 +13,15 @@ fi
 . ./config.sh
 
 # Load modules necessary for barrnap (that arent automatically loaded)
-module load barrnap/0.8
-module unload perl/5.22.1
-module load perl/5.12.3
+#module load barrnap/0.8
+#module unload perl/5.22.1
+#module load perl/5.12.3
+
+ml perl/5.12.3 barrnap/0.8 ncbi-blast+/LATEST
 
 #
 # Creates a species prediction based on blasting the largest and also best hit of the suggested 16s sequences found using barrnap
-# Usage ./16s_blast.sh   sample_name   run_id
+# Usage ./16s_blast.sh -n sample_name -p run_id
 #
 # Required modules: barrnap/0.8
 # Sub-required modules (loaded by required modules): hmmer/3.1b2
@@ -72,32 +74,32 @@ if [ ! -d "${OUTDATADIR}/16s" ]; then
 fi
 
 
-# Function to create and add a "fasta" entry to the list of 16s hits
-make_fasta() {
-	header=">$3"
-	rna_seq=""
-	cstart=$4
-	cstart=$(( cstart - 1 ))
-	cstop=$5
-	clength=$(( cstop - cstart + 1))
-	match=0
-	# Finds the matching contig and extracts sequence ##### REPLACE WITH SUBSEQUENCE ONCE IT CAN HANDLE MULTI_FASTAS !!!
-	while IFS='' read -r line || [ -n "$line" ]; do
-		if [ "$line" == "${header}" ]; then
-			match=1
-			continue
-		elif [[ "$line" = ">"* ]]; then
-			match=0
-		fi
-		if [ $match -eq 1 ]; then
-			rna_seq="$rna_seq$line"
-		fi
-	done < "${OUTDATADIR}/Assembly/${sample_name}_scaffolds_trimmed.fasta"
-	# Extracts appropriate sequence from contig using start and stop positions
-	rna="${rna_seq:$cstart:$clength}"
-	# Adds new fasta entry to the file
-	echo -e "${header}\n${rna_seq:$cstart:$clength}" >> ${processed}/${project}/${sample_name}/16s/${sample_name}_16s_rna_seqs.txt
-}
+# # Function to create and add a "fasta" entry to the list of 16s hits
+# make_fasta() {
+# 	header=">$3"
+# 	rna_seq=""
+# 	cstart=$4
+# 	cstart=$(( cstart - 1 ))
+# 	cstop=$5
+# 	clength=$(( cstop - cstart + 1))
+# 	match=0
+# 	# Finds the matching contig and extracts sequence ##### REPLACE WITH SUBSEQUENCE ONCE IT CAN HANDLE MULTI_FASTAS !!!
+# 	while IFS='' read -r line || [ -n "$line" ]; do
+#  		if [ "$line" == "${header}" ]; then
+# 			match=1
+# 			continue
+# 		elif [[ "$line" = ">"* ]]; then
+# 			match=0
+# 		fi
+# 		if [ $match -eq 1 ]; then
+# 			rna_seq="$rna_seq$line"
+# 		fi
+# 	done < "${OUTDATADIR}/Assembly/${sample_name}_scaffolds_trimmed.fasta"
+# 	# Extracts appropriate sequence from contig using start and stop positions
+# 	rna="${rna_seq:$cstart:$clength}"
+# 	# Adds new fasta entry to the file
+# 	echo -e "${header}\n${rna_seq:$cstart:$clength}" >> ${processed}/${project}/${sample_name}/16s/${sample_name}_16s_rna_seqs.txt
+# }
 
 owd=$(pwd)
 cd ${OUTDATADIR}/16s
@@ -111,7 +113,7 @@ if [[ ! -s ${OUTDATADIR}/16s/${sample_name}_scaffolds_trimmed.fasta_rRNA_seqs.fa
 	exit 1
 fi
 
-# Checks barrnap output and finds all 16s hits and creates a fasta sequence to add to list of possible matches
+# Checks barrnap output and finds all 16s hits and creates a multi-fasta file to list all possible matches
 lines=0
 found_16s="false"
 while IFS='' read -r line || [ -n "$line" ]; do
@@ -199,9 +201,7 @@ fi
 cd ${owd}
 
 # Return modules to original versions
-module unload perl/5.12.3
-module load perl/5.22.1
-module unload barrnap/0.8
+ml -perl/5.12.3 -barrnap/0.8 -ncbi-blast+/LATEST
 
 #Script exited gracefully (unless something else inside failed)
 exit 0

@@ -22,7 +22,7 @@ elif [[ -z "${1}" ]]; then
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./make_scicomp_refseq_mash_sketch.sh	output_directory"
+	echo "Usage is ./fix_species.sh	output_directory"
 	echo "Output is saved to ${1} & ${2}"
 	exit 0
 fi

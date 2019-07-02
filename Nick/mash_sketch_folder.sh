@@ -6,6 +6,8 @@
 #$ -cwd
 #$ -q short.q
 
+ml Mash/2.0
+
 echo ":${1}:"
 if [[ ! -d ${1} ]]; then
 	echo "${1} does not exist"
@@ -15,5 +17,3 @@ for j in ${1}/*.fasta; do
 	mash sketch ${j}
 done
 mv ${1}/*.msh ${1}/sketches
-
-

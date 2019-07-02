@@ -13,8 +13,10 @@ fi
 . ./config.sh
 
 # Load necessary modules to run mashtree
-module unload perl/5.22.1
-module load perl/5.16.1-MT
+#module unload perl/5.22.1
+#module load perl/5.16.1-MT
+#Switiching to ml syntax
+ml -perl/5.22.1 perl/5.16.1-MT mashtree/0.29
 
 #
 # Script to create mashtree of specified isolates that were processed by Quaisar pipeline
@@ -29,7 +31,7 @@ show_help () {
 }
 
 options_found=0
-while getopts ":h?n:p:" option; do
+while getopts ":h?i:d:o:" option; do
 	options_found=$(( options_found + 1 ))
 	case "${option}" in
 		\?)

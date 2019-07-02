@@ -6,6 +6,8 @@
 #$ -cwd
 #$ -q short.q
 
+ml Mash/2.0
+
 query=$(basename $1 | cut -d'.' -f1)
 for j in ${2}/*.fasta; do
 	ref=$(basename $j | cut -d'.' -f1)
@@ -13,4 +15,3 @@ for j in ${2}/*.fasta; do
 done
 cat ${2}/*.dist > ${2}/${query}.dists
 sort -k3 -n -o "${2}/${query}.dists" "${2}/${query}.dists"
-

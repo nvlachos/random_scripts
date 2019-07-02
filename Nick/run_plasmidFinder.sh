@@ -11,13 +11,15 @@ if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
 . ./config.sh
-. ${mod_changers}/pipeline_mods
-. ${mod_changers}/list_modules.sh
+#. ${mod_changers}/pipeline_mods
+#. ${mod_changers}/list_modules.sh
+
+ml PlasmidFinder/1.3
 
 #
 # Will attempt to find any plasmids in sample
 #
-# Usage ./get_run_plasmidFinder.sh sample_name run_id force
+# Usage ./run_plasmidFinder.sh sample_name run_id force
 #
 
 # Checks for proper argumentation
@@ -48,24 +50,28 @@ fi
 OUTDATADIR=${processed}/${2}/${1}/${3}
 # Get proper input file based on output directory (whether it is full assembly or plasmid)
 # if [[ "${3}" == "plasmid_on_plasFlow" ]]; then
-# 	outpath="plasmidAssembly/${1}_plasmid_scaffolds_trimmed.fasta"
+# 	inpath="plasmidAssembly/${1}_plasmid_scaffolds_trimmed.fasta"
 # el
 if [[ "${3}" == "plasmid" ]]; then
-	outpath="Assembly/${1}_scaffolds_trimmed.fasta"
+	inpath="Assembly/${1}_scaffolds_trimmed.fasta"
 elif [[ "${3}" == "plasmid_on_plasFlow" ]]; then
 	if [[ -f "${processed}/${2}/${1}//plasFlow/Unicycler_assemblies/${1}_uni_assembly/assembly.fasta" ]]; then
 		mv "${processed}/${2}/${1}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/assembly.fasta" "${processed}/${2}/${1}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_assembly.fasta"
 		mv "${processed}/${2}/${1}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/assembly.gfa" "${processed}/${2}/${1}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_assembly.gfa"
 	fi
-	if 	[[ -f "${processed}/${2}/${1}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_assembly.fasta" ]]; then
-		outpath="plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_assembly.fasta"
+	if 	[[ -f "${processed}/${2}/${1}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_plasmid_assembly_trimmed.fasta" ]]; then
+		inpath="plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_plasmid_assembly_trimmed.fasta"
 	else
-		echo "No ${processed}/${2}/${1}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_assembly.fasta"
+		if [[ ! -d "${processed}/${2}/${1}/plasFlow" ]]; then
+			echo "plasFlow folder does not exist for ${2}/${1}, it likely is not in the Enterobacteriaceae family"
+		else
+			echo "No ${processed}/${2}/${1}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_plasmid_assembly_trimmed.fasta"
+		fi
 		exit
 	fi
 else
 	echo "Non standard output location, using full assembly to find plasmids"
-	outpath="Assembly/${1}_scaffolds_trimmed.fasta"
+	inpath="Assembly/${1}_scaffolds_trimmed.fasta"
 fi
 
 # If flag was set to change % ID threshold then use it, otherwise use default from config.sh
@@ -79,14 +85,14 @@ fi
 #If force flag is set, then run it against all databases
 if [[ "${force}" == "true" ]]; then
 	echo "Checking against ALL plasmids, but unlikely to find anything"
-	plasmidfinder -i ${processed}/${2}/${1}/${outpath} -o ${OUTDATADIR} -k ${plasmidFinder_identity} -p enterobacteriaceae
+	plasmidfinder -i ${processed}/${2}/${1}/${inpath} -o ${OUTDATADIR} -k ${plasmidFinder_identity} -p enterobacteriaceae
 	# Rename all files to include ID
 	mv ${OUTDATADIR}/Hit_in_genome_seq.fsa ${OUTDATADIR}/${1}_Hit_in_genome_seq_entero.fsa
 	mv ${OUTDATADIR}/Plasmid_seq.fsa ${OUTDATADIR}/${1}_Plasmid_seq_enetero.fsa
 	mv ${OUTDATADIR}/results.txt ${OUTDATADIR}/${1}_results_entero.txt
 	mv ${OUTDATADIR}/results_tab.txt ${OUTDATADIR}/${1}_results_tab_entero.txt
 	mv ${OUTDATADIR}/results_table.txt ${OUTDATADIR}/${1}_results_table_entero.txt
-	plasmidfinder -i ${processed}/${2}/${1}/${outpath} -o ${OUTDATADIR} -k ${plasmidFinder_identity} -p gram_positive
+	plasmidfinder -i ${processed}/${2}/${1}/${inpath} -o ${OUTDATADIR} -k ${plasmidFinder_identity} -p gram_positive
 	# Rename all files to include ID
 	mv ${OUTDATADIR}/Hit_in_genome_seq.fsa ${OUTDATADIR}/${1}_Hit_in_genome_seq_gramp.fsa
 	mv ${OUTDATADIR}/Plasmid_seq.fsa ${OUTDATADIR}/${1}_Plasmid_seq_gramp.fsa
@@ -108,7 +114,7 @@ else
 		# If family is enterobacteriaceae, then run against that DB
 		if [[ "${family,}" == "enterobacteriaceae" ]]; then
 			echo "Checking against Enterobacteriaceae plasmids"
-			plasmidfinder -i ${processed}/${2}/${1}/${outpath} -o ${OUTDATADIR} -k ${plasmidFinder_identity} -p enterobacteriaceae
+			plasmidfinder -i ${processed}/${2}/${1}/${inpath} -o ${OUTDATADIR} -k ${plasmidFinder_identity} -p enterobacteriaceae
 			# Rename all files to include ID
 			mv ${OUTDATADIR}/Hit_in_genome_seq.fsa ${OUTDATADIR}/${1}_Hit_in_genome_seq_entero.fsa
 			mv ${OUTDATADIR}/Plasmid_seq.fsa ${OUTDATADIR}/${1}_Plasmid_seq_enetero.fsa
@@ -118,7 +124,7 @@ else
 		# If family is staph, strp, or enterococcus, then run against the gram positive database
 		elif [[ "${genus,}" == "staphylococcus" ]] || [[ "${3,}" == "streptococcus" ]] || [[ "${3,}" == "enterococcus" ]]; then
 			echo "Checking against Staph, Strep, and Enterococcus plasmids"
-			plasmidfinder -i ${processed}/${2}/${1}/${outpath} -o ${OUTDATADIR} -k ${plasmidFinder_identity} -p gram_positive
+			plasmidfinder -i ${processed}/${2}/${1}/${inpath} -o ${OUTDATADIR} -k ${plasmidFinder_identity} -p gram_positive
 			# Rename all files to include ID
 			mv ${OUTDATADIR}/Hit_in_genome_seq.fsa ${OUTDATADIR}/${1}_Hit_in_genome_seq_gramp.fsa
 			mv ${OUTDATADIR}/Plasmid_seq.fsa ${OUTDATADIR}/${1}_Plasmid_seq_gramp.fsa
@@ -128,14 +134,14 @@ else
 		# Family is not one that has been designated by the creators of plasmidFinder to work well, but still attempting to run against both databases
 		else
 			echo "Checking against ALL plasmids, but unlikely to find anything"
-			plasmidfinder -i ${processed}/${2}/${1}/${outpath} -o ${OUTDATADIR} -k ${plasmidFinder_identity} -p enterobacteriaceae
+			plasmidfinder -i ${processed}/${2}/${1}/${inpath} -o ${OUTDATADIR} -k ${plasmidFinder_identity} -p enterobacteriaceae
 			# Rename all files to include ID
 			mv ${OUTDATADIR}/Hit_in_genome_seq.fsa ${OUTDATADIR}/${1}_Hit_in_genome_seq_entero.fsa
 			mv ${OUTDATADIR}/Plasmid_seq.fsa ${OUTDATADIR}/${1}_Plasmid_seq_enetero.fsa
 			mv ${OUTDATADIR}/results.txt ${OUTDATADIR}/${1}_results_entero.txt
 			mv ${OUTDATADIR}/results_tab.txt ${OUTDATADIR}/${1}_results_tab_entero.txt
 			mv ${OUTDATADIR}/results_table.txt ${OUTDATADIR}/${1}_results_table_entero.txt
-			plasmidfinder -i ${processed}/${2}/${1}/${outpath} -o ${OUTDATADIR} -k ${plasmidFinder_identity} -p gram_positive
+			plasmidfinder -i ${processed}/${2}/${1}/${inpath} -o ${OUTDATADIR} -k ${plasmidFinder_identity} -p gram_positive
 			# Rename all files to include ID
 			mv ${OUTDATADIR}/Hit_in_genome_seq.fsa ${OUTDATADIR}/${1}_Hit_in_genome_seq_gramp.fsa
 			mv ${OUTDATADIR}/Plasmid_seq.fsa ${OUTDATADIR}/${1}_Plasmid_seq_gramp.fsa
@@ -149,4 +155,6 @@ else
 	else
 		echo "Cant guess the genus of the sample, please try again with the force option or check the contents of the .tax file for complete taxonomic classification (${processed}/${2}/${1}/${1}.tax)"
 	fi
+
+	ml -PlasmidFinder/1.3
 fi

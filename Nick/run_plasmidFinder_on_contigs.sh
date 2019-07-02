@@ -14,6 +14,8 @@ fi
 . ${mod_changers}/pipeline_mods
 . ${mod_changers}/list_modules.sh
 
+ml plasmidFinder/1.3
+
 #
 # Will attempt to find any plasmids in sample
 #

@@ -11,10 +11,11 @@ if [[ ! -f "./config.sh" ]]; then
 	cp config_template.sh config.sh
 fi
 . ./config.sh
-module load pyani/0.2.7
-module load mashtree/0.29
 # ${mod_changers}/list_modules.sh
 
+# Switching to ml syntax
+#module load pyani/0.2.7
+#module load mashtree/0.29
 ml Python3/3.5.2 pyani/0.2.7 mashtree/0.29
 
 #

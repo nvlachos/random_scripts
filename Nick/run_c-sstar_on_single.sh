@@ -10,15 +10,15 @@
 if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
+
 . ./config.sh
 
-module load Python/3.5.2
-module load ncbi-blast+/2.6.0
+ml ncbi-blast+/LATEST
 
 #
 # Finds anti-microbial resistance genes in the resFinder and ARG-ANNOT databases and exports a file containing list of all genes found
 #
-# Usage ./run_c-sstar_on_single.sh sample_name run_type(g/u for gapped/ungapped) similarity(l/m/h/u/p/o for low(80),medium(95),high(98),ultra-high(99),perfect(100),other(set in config.sh)) run_id plasmid(optional)
+# Usage ./run_c-sstar_on_single.sh sample_name run_type(g/u for gapped/ungapped) similarity(l/m/h/u/p/o for low(80),medium(95),high(98),ultra-high(99),perfect(100),other(set in config.sh)) run_id (DONT USE-plasmid(optional))
 #
 # Python/3.5.2
 #
@@ -28,21 +28,21 @@ if [[ $# -eq 0 ]]; then
 	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
-	echo "Empty sample name supplied to $0, exiting"
+	echo "Empty sample name supplied to run_c-sstar_on_single.sh, exiting"
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./run_c-sstar_on_single.sh   sample_name   run-type[g/u](for gapped/ungapped)   similarity[l/m/h/u/p/o](for low/medium/high/ultra-high/perfect as 80/95/98/99/100, other(st in config.sh) run_id plasmid(optional)"
+	echo "Usage is ./run_c-sstar.sh   sample_name   run-type[g/u](for gapped/ungapped)   similarity[l/m/h/u/p/o](for low/medium/high/ultra-high/perfect as 80/95/98/99/100, other(st in config.sh) run_id (DONT USE-plasmid(optional))"
 	echo "Output is saved to ${processed}/sample_name/c-sstar"
 	exit
 elif [ -z "$2" ]; then
-	echo "Empty run type supplied to $0, exiting"
+	echo "Empty run type supplied to run_c-sstar.sh, exiting"
 	exit 1
 elif [ -z "$3" ]; then
-	echo "Empty similarity supplied to $0, exiting"
+	echo "Empty similarity supplied to run_c-sstar.sh, exiting"
 	exit 1
 elif [ -z "$4" ]; then
-	echo "Empty project id supplied to $0, exiting"
+	echo "Empty project id supplied to run_c-sstar.sh, exiting"
 	exit 1
 fi
 
@@ -70,19 +70,33 @@ fi
 # Check if there was a request to run it on the plasmid assembly of the sample, change fasta source as necessary
 if [[ "${5}" == "--plasmid" ]] || [[ "${5}" == "-p" ]]; then
 	if [[ -s "${OUTDATADIR}/plasmidAssembly/${1}_plasmid_scaffolds_trimmed.fasta" ]]; then
+	#if [[ -s "${OUTDATADIR}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/assembly.fasta" ]]; then
 		source_assembly="${OUTDATADIR}/plasmidAssembly/${1}_plasmid_scaffolds_trimmed.fasta"
 		OUTDATADIR="${OUTDATADIR}/c-sstar_plasmid"
+		#source_assembly="${OUTDATADIR}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/assembly.fasta"
+		#OUTDATADIR="${OUTDATADIR}/plasFlow_plasmid"
 	else
-		"No anti-microbial genes were found using c-SSTAR because there were No Plasmids Found" > "${OUTDATADIR}/c-sstar_plasmid/${1}_plasmid_scaffolds_trimmed.fasta"
+		if [[ "${2}" = "g" ]]; then
+			suffix="gapped"
+		elif [[ "${2}" = "u" ]]; then
+			suffix="ungapped"
+		fi
+		"No anti-microbial genes were found using c-SSTAR because there were No Plasmids Found" > "${OUTDATADIR}/${resGANNOT_srst2_filename}_${suffix}/${1}.${resGANNOT_srst2_filename}.${suffix}_${sim}.sstar"
 		exit
 	fi
 else
+	if [[ ! -s "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta" ]]; then
+		echo "No Assembly found to run c-sstar with (${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta does not exist)"
+		exit
+	fi
 	source_assembly="${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta"
 	OUTDATADIR="${OUTDATADIR}/c-sstar"
 fi
 
+
+
 # Creates the output c-sstar folder if it does not exist yet
-#echo "${OUTDATADIR}"
+echo "${OUTDATADIR}"
 if [ ! -d "$OUTDATADIR" ]; then  #create outdir if absent
 	echo "Creating $OUTDATADIR"
 	mkdir -p "$OUTDATADIR"
@@ -100,9 +114,9 @@ if [ "${2}" == "u" ]; then
 	cd "${OUTDATADIR}/${resGANNOT_srst2_filename}_${suffix}"
 	echo "Running c-SSTAR on ResGANNOT DB using"
 	echo "python \"${shareScript}/c-SSTAR_ungapped.py\" -g \"${source_assembly}\" -s \"${sim}\" -d \"${resGANNOT_srst2}\" > \"${OUTDATADIR}/${resGANNOT_srst2_filename}_${suffix}/${1}.${resGANNOT_srst2_filename}.${suffix}_${sim}.sstar\""
-	python "${shareScript}/c-SSTAR_ungapped.py" -g "${source_assembly}" -s "${sim}" -d "${resGANNOT_srst2}" > "${OUTDATADIR}/${resGANNOT_srst2_filename}_${suffix}/${1}.${resGANNOT_srst2_filename}.${suffix}_${sim}.sstar"
+	python3 "${shareScript}/c-SSTAR_ungapped.py" -g "${source_assembly}" -s "${sim}" -d "${resGANNOT_srst2}" > "${OUTDATADIR}/${resGANNOT_srst2_filename}_${suffix}/${1}.${resGANNOT_srst2_filename}.${suffix}_${sim}.sstar"
 # Calls the gapped version of csstar
-	elif [ "${2}" == "g" ]; then
+elif [ "${2}" == "g" ]; then
 	suffix="gapped"
 	if [ ! -d "$OUTDATADIR/${resGANNOT_srst2_filename}_${suffix}" ]; then  #create outdir if absent
 		echo "Creating $OUTDATADIR/${resGANNOT_srst2_filename}_${suffix}"
@@ -112,9 +126,9 @@ if [ "${2}" == "u" ]; then
 	cd "${OUTDATADIR}/${resGANNOT_srst2_filename}_${suffix}"
 	echo "Running c-SSTAR on ResGANNOT DB"
 	echo "python \"${shareScript}/c-SSTAR_gapped.py\" -g \"${source_assembly}\" -s \"${sim}\" -d \"${resGANNOT_srst2}\" > \"${OUTDATADIR}/${resGANNOT_srst2_filename}_${suffix}/${1}.${resGANNOT_srst2_filename}.${suffix}_${sim}.sstar\""
-	python "${shareScript}/c-SSTAR_gapped.py" -g "${source_assembly}" -s "${sim}" -d "${resGANNOT_srst2}" > "${OUTDATADIR}/${resGANNOT_srst2_filename}_${suffix}/${1}.${resGANNOT_srst2_filename}.${suffix}_${sim}.sstar"
+	python3 "${shareScript}/c-SSTAR_gapped.py" -g "${source_assembly}" -s "${sim}" -d "${resGANNOT_srst2}" > "${OUTDATADIR}/${resGANNOT_srst2_filename}_${suffix}/${1}.${resGANNOT_srst2_filename}.${suffix}_${sim}.sstar"
 # Unknown gapping parameter when called (not 'g' or 'u')
-	else
+else
 	echo "Unknown run type set (only use 'g' or 'u' for gapped/ungapped analysis"
 	exit 1
 fi
@@ -134,7 +148,7 @@ while IFS= read -r line || [ -n "$line" ]; do
 	# Determine what flags were thrown for this gene by csstar
 	info1=""
 	# Truncated allele
-	if [[ "${label1}" = *"tr" ]] && [[ "${label1}" != "str" ]]; then
+	if [[ "${label1}" = *"TRUNC" ]] && [[ "${label1}" != "str" ]]; then
 		#echo "Label 1 was truncated"
 		label1="${label1:0:${#label1} - 2}"
 		info1="${info1}trunc-"
@@ -198,6 +212,8 @@ fi
 
 #Returns to original directory
 cd "${owd}"
+
+ml -ncbi-blast+/LATEST
 
 #Script exited gracefully (unless something else inside failed)
 exit 0

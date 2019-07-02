@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o c-sstar_alt.out
-#$ -e c-sstar_alt.err
-#$ -N c-sstar_alt
+#$ -o run_c-sstar.out
+#$ -e run_c-sstar.err
+#$ -N run_c-sstar
 #$ -cwd
 #$ -q short.q
 
@@ -12,6 +12,8 @@ if [[ ! -f "./config.sh" ]]; then
 fi
 . ./config.sh
 # No modules needed
+
+ml ncbi-blast+/LATEST
 
 #
 # Finds anti-microbial resistance genes in the resFinder and ARG-ANNOT databases and exports a file containing list of all genes found
@@ -26,24 +28,24 @@ if [[ $# -eq 0 ]]; then
 	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
-	echo "Empty sample name supplied to $0, exiting"
+	echo "Empty sample name supplied to run_c-sstar_on_single_alternate_DB.sh, exiting"
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./run_c-sstar_on_single_alternate_DB.sh   sample_name   run-type[g/u](for gapped/ungapped)   similarity[l/m/h/u/p/o](for low/medium/high/ultra-high/perfect as 80/95/98/99/100, other(st in config.sh) miseq_run_id path/to/DB (DONT USE-plasmid(optional))"
+	echo "Usage is ./run_c-sstar.sh   sample_name   run-type[g/u](for gapped/ungapped)   similarity[l/m/h/u/p/o](for low/medium/high/ultra-high/perfect as 80/95/98/99/100, other(st in config.sh) miseq_run_id path/to/DB (DONT USE-plasmid(optional))"
 	echo "Output is saved to ${processed}/sample_name/c-sstar"
 	exit
 elif [ -z "$2" ]; then
-	echo "Empty run type supplied to $0, exiting"
+	echo "Empty run type supplied to run_c-sstar.sh, exiting"
 	exit 1
 elif [ -z "$3" ]; then
-	echo "Empty similarity supplied to $0, exiting"
+	echo "Empty similarity supplied to run_c-sstar.sh, exiting"
 	exit 1
 elif [ -z "$4" ]; then
-	echo "Empty project id supplied to $0, exiting"
+	echo "Empty project id supplied to run_c-sstar.sh, exiting"
 	exit 1
 elif [ -z "$5" ] || [ ! -f "${5}" ]; then
-	echo "Empty alternate ID ${5} supplied to $0, exiting"
+	echo "Empty alternate ID supplied to run_c-sstar.sh, exiting"
 	exit 1
 fi
 
@@ -85,7 +87,7 @@ fi
 alt_database_path=$(basename -- "${5}")
 alt_database=$(echo ${alt_database_path##*/} | cut -d'.' -f1)
 alt_database=${alt_database//_srst2/}
-echo ${alt_database}
+#echo ${alt_database}
 
 # Creates the output c-sstar folder if it does not exist yet
 #echo "${OUTDATADIR}"
@@ -134,7 +136,7 @@ while IFS= read -r line || [ -n "$line" ]; do
 	info1=""
 	#info2=""
 	#echo "R1;${label1}-${label2}"
-	if [[ "${label1}" = *"tr" ]] && [[ "${label1}" != "str" ]]; then
+	if [[ "${label1}" = *"TRUNC" ]] && [[ "${label1}" != "str" ]]; then
 		#echo "Label 1 was truncated"
 		label1="${label1:0:${#label1} - 2}"
 		info1="${info1}trunc-"
@@ -164,11 +166,6 @@ while IFS= read -r line || [ -n "$line" ]; do
 	len2=$(echo "${line}" | cut -d '	' -f8 | tr -d '[:space:]')
 	SNPs=$(echo "${line}" | cut -d '	' -f10 | tr -d '[:space:]')
 	plen=$(echo "${line}" | cut -d '	' -f9 | tr -d '[:space:]')
-	#if [[ ${len1} -ge ${len2} ]]; then
-	#	plen=100
-	#else
-	#	plen=$( echo "${len1} ${len2}" | awk '{ printf "%2.f", ($1*100)/$2 }' )
-	#fi
 	if [[ -z "${info1}" ]]; then
 		info1="normal"
 	else
@@ -177,10 +174,7 @@ while IFS= read -r line || [ -n "$line" ]; do
 	#printf "%-10s %-50s %-15s %-25s %-25s %-40s %-4s %-5d %-5d %-5d\\n" "${source}" "${resistance}" "${label1}" "${info1}" "${label2}" "${contig}" "${percent}" "${len1}" "${len2}" "${plen}" "${SNPs}"
 	echo "${source}	${resistance}	${label1}	${info1}	${label2}	${contig}	${percent}	${len1}	${len2}	${plen}" "${SNPs}"
 done < "${OUTDATADIR}/${alt_database}_${suffix}/${1}.${alt_database}.${suffix}_${sim}.sstar" > "${OUTDATADIR}/${alt_database}_${suffix}/${1}.${alt_database}.${suffix}_${sim}.sstar_grouped"
-#echo "${OUTDATADIR}/${alt_database}_${suffix}/${1}.${alt_database}.${suffix}_${sim}.sstar_grouped"
-#echo "${OUTDATADIR}/${1}.${alt_database}.${suffix}_${sim}_sstar_summary.txt"
 sort -k7,7nr -k10,10nr -k8,8n "${OUTDATADIR}/${alt_database}_${suffix}/${1}.${alt_database}.${suffix}_${sim}.sstar_grouped" > "${OUTDATADIR}/${1}.${alt_database}.${suffix}_${sim}_sstar_summary.txt"
-#sort -k7,7nr -k10,10nr -k8,8n "/scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/151217_M02103_0050_000000000-AKVY1/2013732586/c-sstar/ResGANNOT_20180608_gapped/2013732586.ResGANNOT_20180608.gapped_98.sstar_grouped" > "/scicomp/groups/OID/NCEZID/DHQP/CEMB/MiSeqAnalysisFiles/151217_M02103_0050_000000000-AKVY1/2013732586/c-sstar/2013732586.ResGANNOT_20180608.gapped_98_sstar_summary.txt"
 
 # Catches an empty or missing file
 if [ ! -s "${OUTDATADIR}/${1}.${alt_database}.${suffix}_${sim}_sstar_summary.txt" ]; then
@@ -189,6 +183,8 @@ fi
 
 #Returns to original directory
 cd "${owd}"
+
+ml -ncbi-blast+/LATEST
 
 #Script exited gracefully (unless something else inside failed)
 exit 0

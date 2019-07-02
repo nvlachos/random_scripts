@@ -6,6 +6,8 @@
 #$ -cwd
 #$ -q short.q
 
+ml Mash/2.0
+
 for i in ${1}/*.fasta; do
 	query=$(basename $i | cut -d'.' -f1)
 	for j in ${2}/*.fasta; do

@@ -7,7 +7,7 @@
 #$ -q short.q
 
 
-module load Mash/2.0
+ml Mash/2.0
 
 #
 # This will create  a sketch of everything available in the refseq database found on scicomp

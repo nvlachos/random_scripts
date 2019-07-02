@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o c-sstar_plas.out
-#$ -e c-sstar_plas.err
-#$ -N c-sstar_plas
+#$ -o run_c-sstar.out
+#$ -e run_c-sstar.err
+#$ -N run_c-sstar
 #$ -cwd
 #$ -q short.q
 
@@ -13,7 +13,7 @@ fi
 
 . ./config.sh
 
-module load ncbi-blast+/2.6.0
+ml ncbi-blast+/LATEST
 
 #
 # Finds anti-microbial resistance genes in the resFinder and ARG-ANNOT databases and exports a file containing list of all genes found
@@ -28,21 +28,21 @@ if [[ $# -eq 0 ]]; then
 	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
-	echo "Empty sample name supplied to $0, exiting"
+	echo "Empty sample name supplied to run_c-sstar_on_single_plasFlow.sh, exiting"
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./run_c-sstar_on_plasFlow.sh   sample_name   run-type[g/u](for gapped/ungapped)   similarity[l/m/h/u/p/o](for low/medium/high/ultra-high/perfect as 80/95/98/99/100, other(st in config.sh) run_id"
+	echo "Usage is ./run_c-sstar.sh   sample_name   run-type[g/u](for gapped/ungapped)   similarity[l/m/h/u/p/o](for low/medium/high/ultra-high/perfect as 80/95/98/99/100, other(st in config.sh) run_id"
 	echo "Output is saved to ${processed}/sample_name/c-sstar_plasFlow"
 	exit
 elif [ -z "$2" ]; then
-	echo "Empty run type supplied to $0, exiting"
+	echo "Empty run type supplied to run_c-sstar.sh, exiting"
 	exit 1
 elif [ -z "$3" ]; then
-	echo "Empty similarity supplied to $0, exiting"
+	echo "Empty similarity supplied to run_c-sstar.sh, exiting"
 	exit 1
 elif [ -z "$4" ]; then
-	echo "Empty project id supplied to $0, exiting"
+	echo "Empty project id supplied to run_c-sstar.sh, exiting"
 	exit 1
 fi
 
@@ -177,14 +177,6 @@ while IFS= read -r line || [ -n "$line" ]; do
 	len1=$(echo "${line}" | cut -d '	' -f7 | tr -d '[:space:]')
 	len2=$(echo "${line}" | cut -d '	' -f8 | tr -d '[:space:]')
 	plen=$(echo "${line}" | cut -d '	' -f9 | tr -d '[:space:]')
-	# Catch instances where match length is longer than gene (gaps cause extension)
-	#if [[ ${len1} -ge ${len2} ]]; then
-	#	plen=100
-	# Determine % length match
-	#else
-	#	plen=$( echo "${len1} ${len2}" | awk '{ printf "%d", ($1*100)/$2 }' )
-	#fi
-	# Check and display any flags found, otherwise mark it as normal
 	if [[ -z "${info1}" ]]; then
 		info1="normal"
 	else
@@ -203,6 +195,8 @@ fi
 
 #Returns to original directory
 cd "${owd}"
+
+ml -ncbi-blast+/LATEST
 
 #Script exited gracefully (unless something else inside failed)
 exit 0

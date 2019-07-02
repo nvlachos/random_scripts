@@ -7,7 +7,7 @@
 #$ -q short.q
 
 
-module load Mash/2.0
+ml Mash/2.0
 
 #
 # Script to make a list of all matching isolates in our database with match genus species
