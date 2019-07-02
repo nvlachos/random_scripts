@@ -12,10 +12,6 @@
 from Bio import Entrez
 import sys
 import argparse
-import subprocess
-
-# Ensure that Entrez is loaded 
-subprocess.call(["ml", "Entrez/E-utilities"])
 
 #Create an arg parser...someday
 def parseArgs(args=None):
