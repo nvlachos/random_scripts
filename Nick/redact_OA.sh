@@ -9,7 +9,7 @@
 #Import the config file with shortcuts and settings
 . ./config.sh
 #Import the module file that loads all necessary mods
-. "${mod_changers}/pipeline_mods"
+# . "${mod_changers}/pipeline_mods"
 
 #
 # Usage ./redact_OA.sh project_ID analysis_ID path_to_crosswalk_file(separated by colons)
