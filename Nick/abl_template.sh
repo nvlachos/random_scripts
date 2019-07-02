@@ -26,7 +26,7 @@ elif [[ "$1" = "-h" ]]; then
 fi
 
 # Loop through and act on each sample name in the passed/provided list
-while IFS=read -r var  || [ -n "$var" ]; do
+while IFS= read -r var  || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 	"${shareScript}/best_hit_from_gottcha1.sh" "${sample_name}" "${project}"
