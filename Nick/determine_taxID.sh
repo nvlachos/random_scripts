@@ -14,7 +14,7 @@ pwd
 . ./config.sh
 
 #
-# Creates a single file that attempts to pull the best taxonomic information from the isolate. Currently, it operates in a linera fashion, e.g. 1.ANI, 2.kraken, 3.Gottcha, 4.16s
+# Creates a single file that attempts to pull the best taxonomic information from the isolate. Currently, it operates in a linear fashion, e.g. 1.ANI, 2.kraken, 3.Gottcha, 4.16s
 # The taxon is chosen based on the highest ranked classifier first
 #
 # Usage ./determine_texID.sh sample_name project_ID
