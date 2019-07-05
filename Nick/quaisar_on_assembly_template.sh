@@ -49,6 +49,9 @@ if [[ ! -z "${4}" ]]; then
 	OUTDATADIR="${4}/${project}"
 fi
 
+time_summary="${OUTDATADIR}/${1}_time_summary_post_assembly_redo.txt"
+>${time_summary}
+
 ### Removing Short Contigs  ###
 echo "----- Removing Short Contigs -----"
 python3 "${shareScript}/removeShortContigs.py" -i "${OUTDATADIR}/${filename}/Assembly/scaffolds.fasta" -t 500 -s "normal_SPAdes"
