@@ -2,7 +2,7 @@
 
 #$ -o ablmq_quass.out
 #$ -e ablmq_quass..err
-#$ -N ablb1
+#$ -N ablquass
 #$ -cwd
 #$ -q short.q
 
@@ -69,7 +69,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		echo -e "#$ -N quass_${sample}"   >> "${main_dir}/quass_${sample}_${start_time}.sh"
 		echo -e "#$ -cwd"  >> "${main_dir}/quass_${sample}_${start_time}.sh"
 		echo -e "#$ -q short.q\n"  >> "${main_dir}/quass_${sample}_${start_time}.sh"
-		echo -e "\"${shareScript}/quaisar_on_assembly_template.sh\" \"${sample}\" \"${project}\" \"./config\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
+		echo -e "\"${shareScript}/quaisar_on_assembly_template.sh\" \"${sample}\" \"${project}\" \"${shareScript}/config.sh\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_quassonomy_complete.txt\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
 		cd "${main_dir}"
 		if [[ "${counter}" -lt "${last_index}" ]]; then
@@ -96,7 +96,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -N quass_${sample}"   >> "${main_dir}/quass_${sample}_${start_time}.sh"
 				echo -e "#$ -cwd"  >> "${main_dir}/quass_${sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/quass_${sample}_${start_time}.sh"
-				echo -e "\"${shareScript}/quaisar_on_assembly_template.sh\" \"${sample}\" \"${project}\" \"./config\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/quaisar_on_assembly_template.sh\" \"${sample}\" \"${project}\" \"${shareScript}/config.sh\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_quass_complete.txt\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
 				cd "${main_dir}"
 				if [[ "${counter}" -lt "${last_index}" ]]; then
