@@ -21,7 +21,7 @@ fi
 #
 # requires modules busco/3.0.1, Python/3.6.1
 #
-
+ml purge
 ml  Python3/3.5.2
 ml Python3/3.6.1 busco/3.0.1
 
