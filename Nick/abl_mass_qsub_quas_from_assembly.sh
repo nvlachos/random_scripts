@@ -49,7 +49,8 @@ fi
 
 # Loop through and act on each sample name in the passed/provided list
 counter=0
-main_dir="${3}/quass_subs"
+script_dir="${3}/quass_subs"
+main_dir="${shareScript}"
 if [[ ! -d "${3}/quass_subs" ]]; then
 	mkdir "${3}/quass_subs"
 	mkdir "${3}/quass_subs/complete"
@@ -66,13 +67,13 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		echo -e "#!/bin/bash -l\n" > "${main_dir}/quass_${sample}_${start_time}.sh"
 		echo -e "#$ -o quass_${sample}.out" >> "${main_dir}/quass_${sample}_${start_time}.sh"
 		echo -e "#$ -e quass_${sample}.err" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-		echo -e "#$ -N quass_${sample}"   >> "${main_dir}/quass_${sample}_${start_time}.sh"
-		echo -e "#$ -cwd"  >> "${main_dir}/quass_${sample}_${start_time}.sh"
-		echo -e "#$ -q short.q\n"  >> "${main_dir}/quass_${sample}_${start_time}.sh"
-		echo -e "cd ${shareScript}" >> "${main_dir}/quass_${sample}_${start_time}.sh"
+		echo -e "#$ -N quass_${sample}" >> "${main_dir}/quass_${sample}_${start_time}.sh"
+		echo -e "#$ -cwd" >> "${main_dir}/quass_${sample}_${start_time}.sh"
+		echo -e "#$ -q short.q\n" >> "${main_dir}/quass_${sample}_${start_time}.sh"
+		#echo -e "cd ${shareScript}" >> "${main_dir}/quass_${sample}_${start_time}.sh"
 		echo -e "\"${shareScript}/quaisar_on_assembly_template.sh\" \"${sample}\" \"${project}\" \"${shareScript}/config.sh\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_quassonomy_complete.txt\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-		cd "${main_dir}"
+		#cd "${main_dir}"
 		if [[ "${counter}" -lt "${last_index}" ]]; then
 			qsub "${main_dir}/quass_${sample}_${start_time}.sh"
 		else
@@ -94,13 +95,13 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#!/bin/bash -l\n" > "${main_dir}/quass_${sample}_${start_time}.sh"
 				echo -e "#$ -o quass_${sample}.out" >> "${main_dir}/quass_${sample}_${start_time}.sh"
 				echo -e "#$ -e quass_${sample}.err" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-				echo -e "#$ -N quass_${sample}"   >> "${main_dir}/quass_${sample}_${start_time}.sh"
-				echo -e "#$ -cwd"  >> "${main_dir}/quass_${sample}_${start_time}.sh"
-				echo -e "#$ -q short.q\n"  >> "${main_dir}/quass_${sample}_${start_time}.sh"
-				echo -e "cd ${shareScript}" >> "${main_dir}/quass_${sample}_${start_time}.sh"
+				echo -e "#$ -N quass_${sample}" >> "${main_dir}/quass_${sample}_${start_time}.sh"
+				echo -e "#$ -cwd" >> "${main_dir}/quass_${sample}_${start_time}.sh"
+				echo -e "#$ -q short.q\n" >> "${main_dir}/quass_${sample}_${start_time}.sh"
+				#echo -e "cd ${shareScript}" >> "${main_dir}/quass_${sample}_${start_time}.sh"
 				echo -e "\"${shareScript}/quaisar_on_assembly_template.sh\" \"${sample}\" \"${project}\" \"${shareScript}/config.sh\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_quass_complete.txt\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-				cd "${main_dir}"
+				#cd "${main_dir}"
 				if [[ "${counter}" -lt "${last_index}" ]]; then
 					qsub "${main_dir}/quass_${sample}_${start_time}.sh"
 				else
