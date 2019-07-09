@@ -147,7 +147,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					echo -e "#$ -N busco_${sample}"   >> "${main_dir}/busco_${sample}_${start_time}.sh"
 					echo -e "#$ -cwd"  >> "${main_dir}/busco_${sample}_${start_time}.sh"
 					echo -e "#$ -q short.q\n"  >> "${main_dir}/busco_${sample}_${start_time}.sh"
-					echo -e "module load busco/3.0.1" >> "${main_dir}/busco_${sample}_${start_time}.sh"
 					echo -e "cd ${shareScript}" >> "${main_dir}/busco_${sample}_${start_time}.sh"
 					echo -e "\"${shareScript}/do_busco.sh\" \"${sample}\" \"${buscoDB}\" \"${project}\"" >> "${main_dir}/busco_${sample}_${start_time}.sh"
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_busco_complete.txt\"" >> "${main_dir}/busco_${sample}_${start_time}.sh"
@@ -187,7 +186,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 							echo -e "#$ -N busco_${sample}"   >> "${main_dir}/busco_${sample}_${start_time}.sh"
 							echo -e "#$ -cwd"  >> "${main_dir}/busco_${sample}_${start_time}.sh"
 							echo -e "#$ -q short.q\n"  >> "${main_dir}/busco_${sample}_${start_time}.sh"
-							echo -e "module load busco/3.0.1" >> "${main_dir}/busco_${sample}_${start_time}.sh"
 							echo -e "cd ${shareScript}" >> "${main_dir}/busco_${sample}_${start_time}.sh"
 							echo -e "\"${shareScript}/do_busco.sh\" \"${sample}\" \"${buscoDB}\" \"${project}\"" >> "${main_dir}/busco_${sample}_${start_time}.sh"
 							echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_busco_complete.txt\"" >> "${main_dir}/busco_${sample}_${start_time}.sh"
@@ -213,10 +211,14 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			fi
 		# No prokka output to run BUSCO on
 		else
-			echo "${project}/${sample} does not have prokka output to ru nbusco on"
+			echo "${project}/${sample} does not have prokka output to run busco on"
 			echo "$(date)" > "${main_dir}/complete/${sample}_busco_complete.txt"
 		fi
 	counter=$(( counter + 1 ))
+	else
+		echo "${project}/${sample} does not have taxonomic output to run busco on"
+		echo "$(date)" > "${main_dir}/complete/${sample}_busco_complete.txt"
+	fi
 done
 
 # Loop to ensure all samples are complete (or time runs) before allowing the script to exit
