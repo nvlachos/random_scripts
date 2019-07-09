@@ -109,7 +109,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/prok_${sample}_${start_time}.sh"
 				echo -e "cd ${shareScript}" >> "${main_dir}/prok_${sample}_${start_time}.sh"
 				echo -e "mv ${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta ${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta_backup" >> "${main_dir}/prok_${sample}_${start_time}.sh"
-				echo -e "\"${shareScript}/fasta_headers\" -i \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta_backup\" -o \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta\" --reverse" >> "${main_dir}/prok_${sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/fasta_headers.sh\" -i \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta_backup\" -o \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta\" --reverse" >> "${main_dir}/prok_${sample}_${start_time}.sh"
 				echo -e "\"${shareScript}/run_prokka.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/prok_${sample}_${start_time}.sh"
 				echo -e "rm ${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" >> "${main_dir}/prok_${sample}_${start_time}.sh"
 				echo -e "mv ${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta_backup ${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta_backup" >> "${main_dir}/prok_${sample}_${start_time}.sh"
@@ -148,7 +148,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/prok_${sample}_${start_time}.sh"
 						echo -e "cd ${shareScript}" >> "${main_dir}/prok_${sample}_${start_time}.sh"
 						echo -e "mv ${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta ${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta_backup" >> "${main_dir}/prok_${sample}_${start_time}.sh"
-						echo -e "\"${shareScript}/fasta_headers\" -i \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta_backup\" -o \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta\" --reverse" >> "${main_dir}/prok_${sample}_${start_time}.sh"
+						echo -e "\"${shareScript}/fasta_headers.sh\" -i \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta_backup\" -o \"${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta\" --reverse" >> "${main_dir}/prok_${sample}_${start_time}.sh"
 						echo -e "\"${shareScript}/run_prokka.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/prok_${sample}_${start_time}.sh"
 						echo -e "rm ${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" >> "${main_dir}/prok_${sample}_${start_time}.sh"
 						echo -e "mv ${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta_backup ${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta_backup" >> "${main_dir}/prok_${sample}_${start_time}.sh"
@@ -171,7 +171,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		fi
 	# No assembly exists to run prokka on
 	else
-		echo "${project}/${sample} already no assembly to run prokka on"
+		echo "${project}/${sample} has no assembly to run prokka on"
 		echo "$(date)" > "${main_dir}/complete/${sample}_prok_complete.txt"
 	fi
 	counter=$(( counter + 1 ))
