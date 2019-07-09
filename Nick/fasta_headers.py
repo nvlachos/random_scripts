@@ -41,8 +41,8 @@ if not args.reverse:
 	    record.id = record.id.split("_cov")[0].replace("NODE",name)
 	    print(record.id)
 	    record.description = ""
-	#    print(record.description)
-	#    print(record)
+		#print(record.description)
+		#print(record)
 	    sequences.append(record)
 
 	SeqIO.write(sequences, args.output, "fasta")
@@ -60,8 +60,8 @@ else:
 	    record.id = record.id.replace(name,"NODE")+"_cov_X"
 	    print(record.id)
 	    record.description = ""
-		print(record.description)
-		print(record)
+		#print(record.description)
+		#print(record)
 	    sequences.append(record)
 
 	SeqIO.write(sequences, args.output, "fasta")
