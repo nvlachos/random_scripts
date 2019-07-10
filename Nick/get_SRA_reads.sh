@@ -50,6 +50,8 @@ fi
 
 ml sratoolkit/2.9.1 BBMap/38.26 trimmomatic/0.35
 
+ecoh "Saving to ${OUTDATADIR}"
+
 fasterq-dump --split-files ${1} -O ${OUTDATADIR}/FASTQs
 
 complete="true"
