@@ -42,7 +42,7 @@ elif [ -z "$2" ]; then
 	echo "Empty database name supplied to run_ANI.sh. Second argument should be a genus found in ${local_DBs}/ANI/  ...Exiting"
 	exit 1
 elif [ ! -s "${local_DBs}/aniDB/${2,}" ]; then
-	echo "The genus does not exist in the ANI database. This will be noted and the curator of the database will be notified. However, since nothing can be done at the moment....exiting"
+	echo "The genus (${2}) does not exist in the ANI database. This will be noted and the curator of the database will be notified. However, since nothing can be done at the moment....exiting"
 	# Create a dummy folder to put non-results into (if it doesnt exist
 	if [ ! -d "${processed}/${4}/${1}/ANI" ]; then  #create outdir if absent
 		echo "${processed}/${4}/${1}/ANI"
