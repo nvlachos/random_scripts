@@ -87,7 +87,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	#sample=${sample:0:20}
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
-	if [[ "${clobbernes}" == "clobber" ]]; then
+	if [[ "${clobberness}" == "clobber" ]]; then
 		echo "Trying to remove ${processed}/${project}/${sample}/ANI"
 		rm -r "${processed}/${project}/${sample}/ANI"
 		rm -r "${processed}/${project}/${sample}/${sample}.tax"
