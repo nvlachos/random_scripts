@@ -35,8 +35,10 @@ elif [[ "${1}" = "-h" ]]; then
 elif [[ -z "${2}" ]]; then
 	echo "No output directory given, using default ${processed}..."
 	OUTDATADIR="${processed}/References/${1}"
-else
+elif [[ "${2}" == *"/"* ]]; then
 	OUTDATADIR="${2}/${1}"
+else
+	OUTDATADIR="${processed}/${2}/${1}"
 fi
 
 if [ ! -d "${OUTDATADIR}" ]; then
@@ -49,10 +51,6 @@ fi
 ml sratoolkit/2.9.1 BBMap/38.26 trimmomatic/0.35
 
 fasterq-dump --split-files ${1} -O ${OUTDATADIR}/FASTQs
-
-if [[ ! -d ${OUTDATADIR} ]]; then
-	mkdir -p ${OUTDATADIR}
-fi
 
 complete="true"
 if [[ -s "${OUTDATADIR}/FASTQs/${1}_1.fastq" ]]; then
