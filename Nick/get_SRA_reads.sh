@@ -46,11 +46,13 @@ fi
 
 
 
-module load sratoolkit/2.9.1
-module load BBMap/38.26
-module load trimmomatic/0.35
+ml sratoolkit/2.9.1 BBMap/38.26 trimmomatic/0.35
 
 fasterq-dump --split-files ${1} -O ${OUTDATADIR}/FASTQs
+
+if [[ ! -d ${OUTDATADIR} ]]; then
+	mkdir -p ${OUTDATADIR}
+fi
 
 complete="true"
 if [[ -s "${OUTDATADIR}/FASTQs/${1}_1.fastq" ]]; then
@@ -74,8 +76,6 @@ if [[ "${complete}" == "true" ]]; then
 	cat "${OUTDATADIR}/trimmed/${1}_R1_001.unpaired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.unpaired.fq" > "${OUTDATADIR}/trimmed/${1}.single.fq"
 fi
 
-module unload sratoolkit/2.9.1
-module unload BBMap/38.26
-module unload trimmomatic/0.35
+ml -sratoolkit/2.9.1 -BBMap/38.26 -trimmomatic/0.35
 
 exit 0
