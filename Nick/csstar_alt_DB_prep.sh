@@ -34,7 +34,7 @@ else
 	fi
 	if [[ -z "${2}" ]]; then
 			echo "Empty path supplied to $0, using default output location /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/alt_db_prep"
-			DATADIR="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/alt_db_prep"
+			DATADIR="/scicomp/groups/OID/NCEZID/DHQP/CEMB/databases/star/alt_db_prep"
 	else
 		DATADIR=${2}
 		if [[ ! -d "${DATADIR}" ]]; then
