@@ -31,6 +31,7 @@ else
 		echo "Usage is ./DB_prep.sh input_fasta output_directory"
 		echo "Output is ResGANNOT_date_srst2.fasta"
 		exit 0
+	fi
 	if [[ -z "${2}" ]]; then
 			echo "Empty path supplied to $0, using default output location /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/alt_db_prep"
 			DATADIR="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/alt_db_prep"
