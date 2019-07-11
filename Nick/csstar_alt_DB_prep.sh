@@ -9,8 +9,8 @@
 #Import the config file with shortcuts and settings
 . ./config.sh
 #Import list of modds used during pipeline analysis (or downstream)
-module load Python/2.7.15
-. "${mod_changers}/list_modules.sh"
+ml Python/2.7.15
+#. "${mod_changers}/list_modules.sh"
 
 #
 # Consolidates resFinders multi fasta to one
@@ -20,8 +20,12 @@ module load Python/2.7.15
 
 $(python2 -V)
 
-DATADIR="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep"
+DATADIR="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/alt_db_prep"
 DB_source=${1}
+
+if [[ ! -d ${DATADIR} ]]; then
+	mkdir -p ${DATADIR}
+fi
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -49,16 +53,12 @@ date
 
 today=$(date '+%Y%m%d')
 
- module load CD-HIT/4.6
+ ml CD-HIT/4.6
 # #switch to python 2.7 temporarily for cdhit to csv scripts/config
  cp "${local_DBs}/star/cdhit_to_csv.py" "${DATADIR}"
  cp "${local_DBs}/star/csv_to_gene_db.py" "${DATADIR}"
 
  cd "${DATADIR}"
-
- #module unload Python/3.5.2
- module load Python/2.7.13
- python2 "-V"
 
 echo "--- About to CD-HIT-EST on ResGANNOT DB ---"
 cd-hit-est "-i" "${DB_source}" "-o" "${DATADIR}/${DB_short_name}_${today}_cdhit90" "-d" "0" > "${DATADIR}/${DB_short_name}_${today}_cdhit90.stdout"
@@ -66,7 +66,6 @@ cd-hit-est "-i" "${DB_source}" "-o" "${DATADIR}/${DB_short_name}_${today}_cdhit9
 echo "--- About to CD-HIT-to-CSV on ResGANNOT DB ---"
 python "${DATADIR}/cdhit_to_csv.py" "--cluster_file" "${DATADIR}/${DB_short_name}_${today}_cdhit90.clstr" "--infasta" "${DB_source}" "--outfile" "${DATADIR}/${DB_short_name}_${today}_clustered.csv"
 # python /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/cdhit_to_csv.py --cluster_file /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/ResGANNOT_040518_cdhit90.clstr --infasta /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/Combined.fasta --outfile /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/ResGANNOT_040518_clustered.csv
-
 
 
 #Creates an associative array for matching accession to dna sequence
