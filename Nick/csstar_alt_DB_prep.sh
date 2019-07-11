@@ -13,42 +13,38 @@ ml Python/2.7.15
 #. "${mod_changers}/list_modules.sh"
 
 #
-# Consolidates resFinders multi fasta to one
+# Consolidates multi-fasta databas to srst2 formatted version
 #
 # Usage ./csstar_alt_db_prep.sh input_fasta output_directory
 #
 
 $(python2 -V)
 
-DATADIR="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/alt_db_prep"
-DB_source=${1}
-
-if [[ ! -d ${DATADIR} ]]; then
-	mkdir -p ${DATADIR}
-fi
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
 	echo "No argument supplied to $0, exiting"
 	exit
 else
-	if [[ -z "${2}" ]]; then
-		echo "Empty path supplied to $0, exiting"
-		exit 1
 	# Gives the user a brief usage and help section if requested with the -h option argument
-	elif [[ "${1}" = "-h" ]]; then
+	if [[ "${1}" = "-h" ]]; then
 		echo "Usage is ./DB_prep.sh input_fasta output_directory"
 		echo "Output is ResGANNOT_date_srst2.fasta"
 		exit 0
+	if [[ -z "${2}" ]]; then
+			echo "Empty path supplied to $0, using default output location /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/alt_db_prep"
+			DATADIR="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/alt_db_prep"
 	else
 		DATADIR=${2}
 		if [[ ! -d "${DATADIR}" ]]; then
 			mkdir -p "${DATADIR}"
 		fi
-		DB_source="${1}"
-		DB_short_name=$(basename ${1})
 	fi
 fi
+
+DB_source="${1}"
+DB_short_name=$(basename ${1})
+
 date
 
 today=$(date '+%Y%m%d')
