@@ -42,8 +42,9 @@ else
 	fi
 fi
 
-DB_source="${1}"
+cp ${1} ${DATADIR}
 DB_short_name=$(basename ${1})
+DB_source="${DATADIR}/${DB_short_name}"
 
 date
 
