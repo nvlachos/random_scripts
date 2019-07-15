@@ -6,14 +6,11 @@ import argparse
 import itertools as it
 from pathlib import Path
 
-#Create an arg parser...someday
 def parseArgs(args=None):
 	parser = argparse.ArgumentParser(description='Script to check MLST types for duplicate alleles and implications on final typing')
 	parser.add_argument('-i', '--input', required=True, help='input mlst filename')
 	parser.add_argument('-t', '--filetype', required=True, help='filetype of mlst file (standard or srst2)')
 	return parser.parse_args()
-
-args = parseArgs()
 
 # main function that looks if all MLST types are defined for an outptu mlst file
 def do_MLST_check(input_MLST_file, MLST_filetype):
@@ -72,7 +69,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		mlstype_str = [MLST_temp_type]
 		mlstype=[MLST_temp_type]
 		for i in range(0, len(mlstype)):
-			if mlstype[i] != '-':
+			if mlstype[i] != '-' and mlstype[i] != 'PAM' and mlstype[i] != 'NAM':
 				mlstype[i] = int(mlstype[i])
 		mlstype.sort()
 	else:
@@ -152,8 +149,8 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			print("Updating MLST types in", input_MLST_file, "from", ",".join(mlstype_str), "to", new_types)
 			MLST_temp_types=new_types
 			# Log any incomplete/strange types found
-			if '-' in MLST_temp_types or 'NID' in MLST_temp_types:
-				if (MLST_temp_types.count("-", 0, len(MLST_temp_types)) + MLST_temp_types.count("ND", 0, len(MLST_temp_types))) == 1:
+			if '-' in MLST_temp_types or 'ND' in MLST_temp_types or 'NF' in MLST_temp_types:
+				if MLST_temp_types.count("-", 0, len(MLST_temp_types)) + MLST_temp_types.count("ND", 0, len(MLST_temp_types)) + MLST_temp_types.count("NF", 0, len(MLST_temp_types)) == 1:
 					problem=["Profile_undefined"]
 				else:
 					problem=["Profiles_undefined"]
@@ -233,8 +230,34 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 						break
 	types.sort()
 	for i in range(0, len(types)):
+		#print("type_check#", len(types), ":", types[i])
 		if types[i] == -1:
-			types[i] = "-"
+			passed="true"
+			# NAM - Novel Allele Match, perfect match to new closest alleles
+			# PAM - Partial Allele match to closest allele (>= mincov, >= minID )
+			for locus in list_of_profiles[i]:
+				#print(locus)
+				if '?' in locus:
+					passed="false"
+					if types[i] == "NAM":
+						types[i]="PAM&NAM"
+					else:
+						types[i]="PAM"
+				elif '~' in locus:
+					passed="false"
+					if types[i] == "PAM":
+						types[i]="PAM&NAM"
+					else:
+						types[i]="NAM"
+				#print(types[i])
+				#elif '*' in locus:
+				#	passed="false"
+				#	if types[i] == "NAM" or types[i] == "PAM" or types[i] == "NAM&PAM":
+				#		types[i]=types[i]+"&UAP"
+				#	else:
+				#		types[i]="UAP"
+			if passed == "true":
+				types[i] = "NID"
 		else:
 			types[i] = str(types[i])
 	return types
@@ -275,4 +298,5 @@ def find_DB_taxonomy(genus, species):
 
 
 print("Parsing MLST file ...\n")
+args = parseArgs()
 do_MLST_check(args.input, args.filetype) #, "/scicomp/groups/OID/NCEZID/DHQP/CEMB/databases/mlst/abaumannii_Pasteur.txt") #sys.argv[3])
