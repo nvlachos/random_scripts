@@ -152,8 +152,8 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			print("Updating MLST types in", input_MLST_file, "from", ",".join(mlstype_str), "to", new_types)
 			MLST_temp_types=new_types
 			# Log any incomplete/strange types found
-			if '-' in MLST_temp_types or 'ND' in MLST_temp_types or 'NF' in MLST_temp_types:
-				if MLST_temp_types.count("-", 0, len(MLST_temp_types)) + MLST_temp_types.count("ND", 0, len(MLST_temp_types)) + MLST_temp_types.count("NF", 0, len(MLST_temp_types)) == 1:
+			if '-' in MLST_temp_types or 'NID' in MLST_temp_types:
+				if (MLST_temp_types.count("-", 0, len(MLST_temp_types)) + MLST_temp_types.count("ND", 0, len(MLST_temp_types))) == 1:
 					problem=["Profile_undefined"]
 				else:
 					problem=["Profiles_undefined"]
