@@ -240,7 +240,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 			# PAM - Partial Allele match to closest allele (>= mincov, >= minID )
 			# AMI - Allele MIssing, not close enough to any allele to report
 			# NAF - No Alleles Found, probably checked against the wrong DB???
-			if len(sets.Set(input_list)) == 1:
+			if len(set(list_of_profiles[i])) == 1:
 				types[i]="NAF"
 				continue
 			for locus in list_of_profiles[i]:
