@@ -238,27 +238,36 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 			passed="true"
 			# NAM - Novel Allele Match, perfect match to new closest alleles
 			# PAM - Partial Allele match to closest allele (>= mincov, >= minID )
+			# AMI - Allele MIssing, not close enough to any allele to report
+			# NAF - No Alleles Found, probably checked against the wrong DB???
+			if len(sets.Set(input_list)) == 1:
+				types[i]="NAF"
+				continue
 			for locus in list_of_profiles[i]:
 				#print(locus)
 				if '?' in locus:
 					passed="false"
 					if types[i] == "NAM":
-						types[i]="PAM&NAM"
+						types[i]="NAM&PAM"
+					elif types[i] == "NAM&AMI"
+						types[i] = "NAM&PAM&AMI"
 					else:
 						types[i]="PAM"
 				elif '~' in locus:
 					passed="false"
 					if types[i] == "PAM":
-						types[i]="PAM&NAM"
+						types[i]="NAM&PAM"
+					elif types[i] == "PAM&AMI"
+						types[i] = "NAM&PAM&AMI"
 					else:
 						types[i]="NAM"
 				#print(types[i])
-				#elif '*' in locus:
-				#	passed="false"
-				#	if types[i] == "NAM" or types[i] == "PAM" or types[i] == "NAM&PAM":
-				#		types[i]=types[i]+"&UAP"
-				#	else:
-				#		types[i]="UAP"
+				elif '-' in locus:
+					passed="false"
+					if types[i] == "NAM" or types[i] == "PAM" or types[i] == "NAM&PAM":
+						types[i]=types[i]+"&AMI"
+					else:
+						types[i]="AMI"
 			if passed == "true":
 				types[i] = "NID"
 		else:
