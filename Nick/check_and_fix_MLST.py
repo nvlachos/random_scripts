@@ -15,6 +15,7 @@ def parseArgs(args=None):
 # main function that looks if all MLST types are defined for an outptu mlst file
 def do_MLST_check(input_MLST_file, MLST_filetype):
 	# Must check if input_MLST_file has more than 1 line, different versions of MLST make different outputs
+	bad_types=['-', 'NAM', 'PAM', 'NAM&PAM']
 	types=""
 	schemes=[]
 	MLST_file=open(input_MLST_file,'r')
@@ -105,22 +106,22 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	if len(schemes) == 0:
 		print("No schemes found???")
 	elif len(schemes) == 1:
-		if mlstype[0] != "-":
+		if mlstype[0] not in bad_types:
 	 		print("This sample is singular and defined\n")
 		else:
 			print("This sample is singular and UNdefined\n")
 			new_types=get_type(schemes, allele_names, db_name)
 			checking=True
 	elif len(schemes) > 1:
-		if "-" not in mlstype:
+		if "-" not in mlstype and "NAM" not in mlstype and "PAM" not in mlstype and "NAM&PAM" not in mlstype:
 			if len(schemes) == len(mlstype):
 				print("This sample is a multiple and defined\n")
 			elif len(schemes) > len(mlstype):
-				print("Not enough types to match schemes")
+				print("Not enough types to match schemes, checking")
 				new_types=get_type(schemes, allele_names, db_name)
 				checking=True
 			elif len(schemes) < len(mlstype):
-				print("Not enough schemes to match types")
+				print("Not enough schemes to match types, checking")
 				new_types=get_type(schemes, allele_names, db_name)
 				checking=True
 		else:
