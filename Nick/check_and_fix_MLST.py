@@ -192,6 +192,8 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			MLST_changed_file_handler.close()
 		else:
 			print(input_MLST_file, "is as good as it gets with type", mlstype)
+	else:
+		print("Sticking with already found mlstype", mlstype)
 
 # Uses the local copy of DB file to look up actual ST type
 def get_type(list_of_profiles, list_of_allele_names, DB_file):
