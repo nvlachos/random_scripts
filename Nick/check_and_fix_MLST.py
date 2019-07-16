@@ -17,7 +17,14 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	# Must check if input_MLST_file has more than 1 line, different versions of MLST make different outputs
 	MLST_changed_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/updated_MLSTs.txt"
 	blanks_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/blank_MLSTs.txt"
-
+	filepath=input_MLST_file[::-1].split("/")[2:4]
+	#print(filepath)
+	for i in range(0, len(filepath)):
+		#print(filepath[i])
+		filepath[i]=filepath[i][::-1]
+	filepath=filepath[::-1]
+	filepath="/".join(filepath)
+	
 	bad_types=['-', 'AU', 'SUB']
 	# Outdated now because all old versions should be fixed, but keeping for a little while longer
 	change_to_SUB=["NAM","PAM","NID","NAM&PAM", "PAM&NAM"]
@@ -145,13 +152,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			new_types=get_type(schemes, allele_names, db_name)
 			checking=True
 	print("Old types:", mlstype)
-	filepath=input_MLST_file[::-1].split("/")[2:4]
-	#print(filepath)
-	for i in range(0, len(filepath)):
-		#print(filepath[i])
-		filepath[i]=filepath[i][::-1]
-	filepath=filepath[::-1]
-	filepath="/".join(filepath)
+
 	if checking:
 		print("New types:", new_types)
 		if mlstype != new_types:
