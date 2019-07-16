@@ -86,10 +86,10 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			mlstype=MLST_temp_type.split(",")
 		else:
 			mlstype=MLST_temp_type.split("|")
-	print("Current MLST type:", mlstype, "\n")
+	print("Current MLST type:", mlstype)
 	list_size=len(allele_list)
 	print("Allele_names:", allele_names)
-	print("Alleles_found:", allele_list, "\n")
+	print("Alleles_found:", allele_list)
 	#for allele_index in range(0,len(allele_list)):
 	#	allele_list[allele_index]=allele_list[allele_index].sort()
 	if list_size == 7:
@@ -136,7 +136,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			print("This sample is a multiple and something is UNdefined")
 			new_types=get_type(schemes, allele_names, db_name)
 			checking=True
-	print("Old types:", mlstype, "\n")
+	print("Old types:", mlstype)
 	filepath=input_MLST_file[::-1].split("/")[2:4]
 	#print(filepath)
 	for i in range(0, len(filepath)):
@@ -145,7 +145,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	filepath=filepath[::-1]
 	filepath="/".join(filepath)
 	if checking:
-		print("New types:", new_types, "\n")
+		print("New types:", new_types)
 		if mlstype != new_types:
 			for i in range(0, len(new_types)):
 				#print(new_types[i])
@@ -201,7 +201,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		else:
 			print(input_MLST_file, "is as good as it gets with type", mlstype)
 	else:
-		print("Sticking with already found mlstype", mlstype)
+		print("Sticking with already found mlstype", mlstype,"\n")
 
 # Uses the local copy of DB file to look up actual ST type
 def get_type(list_of_profiles, list_of_allele_names, DB_file):
@@ -220,12 +220,13 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 						profile_size+=1
 					else:
 						break
-				print(db_items[1:profile_size])
-				print(list_of_allele_names)
+				#print(db_items[1:profile_size])
+				#print(list_of_allele_names)
 				if db_items[1:profile_size] == list_of_allele_names:
-					print("Allele names match, yay!")
+					#print("Allele names match, yay!")
+					:
 				else:
-					print("We'll have to fix this if it ever comes up")
+					print("Allele names DO NOT match...We'll have to fix this if it ever comes up")
 					print("db: "+db_items)
 					print("list:"+allele_names)
 			else:
@@ -250,7 +251,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 				types[i]="AU"
 				continue
 			for locus in list_of_profiles[i]:
-				print("Test:",locus)
+				#print("Test:",locus)
 				if '?' in locus or '~' in locus:
 					passed="false"
 					if types[i] != "AU":
@@ -300,10 +301,10 @@ def find_DB_taxonomy(genus, species):
 			exit()
 
 
-print("Parsing MLST file ...\n")
+print("Parsing MLST file ...")
 args = parseArgs()
 if os.stat(args.input).st_size > 0:
 	do_MLST_check(args.input, args.filetype) #, "/scicomp/groups/OID/NCEZID/DHQP/CEMB/databases/mlst/abaumannii_Pasteur.txt") #sys.argv[3])
 else:
 	print(args.input,"has an empty mlst file, so it will be deleted")
-	#os.remove(args.input)
+	os.remove(args.input)
