@@ -15,7 +15,11 @@ def parseArgs(args=None):
 # main function that looks if all MLST types are defined for an outptu mlst file
 def do_MLST_check(input_MLST_file, MLST_filetype):
 	# Must check if input_MLST_file has more than 1 line, different versions of MLST make different outputs
+	MLST_changed_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/updated_MLSTs.txt"
+	blanks_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/blank_MLSTs.txt"
+
 	bad_types=['-', 'AU', 'SUB']
+	# Outdated now because all old versions should be fixed, but keeping for a little while longer
 	change_to_SUB=["NAM","PAM","NID","NAM&PAM", "PAM&NAM"]
 	change_to_AU=["AMI", "NAM&AMI", "PAM&AMI", "NAM&PAM&AMI", "PAM&NAM&AMI"]
 	types=""
@@ -112,7 +116,11 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		schemes[profile_index]=temp_scheme
 		#print(profile_index, schemes[profile_index])
 	if len(schemes) == 0:
-		print("No schemes found???")
+		print("No schemes found???, probably needs to be deleted, just adding to blanks list currently")
+		#os.remove(args.input)
+		blanks=open(blanks_file,'a+')
+		blanks.write(filepath+"	has no scheme database determined...checked against wrong or unknown DB\n")
+		blanks.close()
 	elif len(schemes) == 1:
 		if mlstype[0] not in bad_types:
 	 		print("This sample is singular and defined\n")
@@ -178,7 +186,6 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 						print("Investigate/Submit allele or maybe try srst2 to fix allele issue on:", filepath)
 					else:
 						print("Investigate/Submit allele to fix allele issue on:", filepath)
-				blanks_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/blank_MLSTs.txt"
 				blanks=open(blanks_file,'a+')
 				blanks.write(filepath+"	"+",".join(problem)+"	"+"	".join(MLST_items[1:])+"\n")
 				blanks.close()
@@ -194,7 +201,6 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				MLST_file.write('	'.join(MLST_items))
 				MLST_file.write('	'.join(MLST_items_second))
 				MLST_file.close()
-			MLST_changed_file="/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/updated_MLSTs.txt"
 			MLST_changed_file_handler=open(MLST_changed_file,'a+')
 			MLST_changed_file_handler.write(filepath+"	"+db_name+"	"+",".join(mlstype_str)+" to "+new_types+"\n")
 			MLST_changed_file_handler.close()
