@@ -67,7 +67,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		MLST_items_second=MLST_line_two.split("	")
 		MLST_temp_type=MLST_items_second[1]
 		sample=MLST_items_second[0]
-		for i in range(0, len(allele_names)):
+		for i in range(2, 2+len(allele_names)):
 			if '*' in MLST_items_second[i] or '?' in MLST_items_second[i] or '-' in MLST_items_second[i]:
 				allele_list.append(MLST_items_second[i].split(","))
 				print ("Appending non-int:", MLST_items_second[i].split(","))
@@ -82,7 +82,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	if "," not in MLST_temp_type:
 		mlstype=[MLST_temp_type]
 	else:
-		mlstype=[MLST_temp_type.split(",")
+		mlstype=MLST_temp_type.split(",")
 	mlstype_str = str(MLST_temp_type)
 	for i in range(0, len(mlstype)):
 		if mlstype[i] in change_to_AU:
@@ -91,7 +91,8 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 			mlstype[i]="SUB"
 		if mlstype[i] not in bad_types:
 			mlstype[i] = int(mlstype[i])
-	mlstype.sort()
+	#mlstype.sort()
+	mlstype=sorted(mlstype, key=lambda x: str(x))
 
 	print("Current MLST type:", mlstype)
 	list_size=len(allele_list)
@@ -109,7 +110,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	print("All possible schemes:")
 	print(schemes)
 	#print(*schemes, sep = "\n")
-	print()
+	#print()
 	checking=False
 	for profile_index in range(0, len(schemes)):
 		#print(profile_index, schemes[profile_index])
@@ -150,6 +151,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	print("Old types:", mlstype)
 
 	if checking:
+		new_types=sorted(new_types, key=lambda x: str(x))
 		print("New types:", new_types)
 		if mlstype != new_types:
 			for i in range(0, len(new_types)):
@@ -193,9 +195,9 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				MLST_file.write('	'.join(MLST_items))
 				MLST_file.close()
 			elif MLST_filetype == "srst2":
-				MLST_items[1]=MLST_temp_types
+				MLST_items_second[1]=MLST_temp_types
 				MLST_file=open(input_MLST_file,'w')
-				MLST_file.write('	'.join(MLST_items))
+				MLST_file.write('	'.join(MLST_items)+"\n")
 				MLST_file.write('	'.join(MLST_items_second))
 				MLST_file.close()
 			MLST_changed_file_handler=open(MLST_changed_file,'a+')
@@ -264,27 +266,27 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 					types[i]="AU"
 			if passed == "true":
 				types[i] = "SUB"
-		else:
-			types[i] = str(types[i])
+		#else:
+		#	types[i] = (types[i])
 	return types
 
 def find_DB_taxonomy(genus, species):
 	if genus == "Acinetobacter":
-		if species == "baumannii#1":
+		if species == "baumannii#1-Oxford":
 			#print("Waiting for confirmation of success for abaumannii#1")
-			species="abaumannii"
-		elif species == "baumannii#2":
+			species="baumannii"
+		elif species == "baumannii#2-Pasteur":
 			#print("Waiting for confirmation of success for abaumannii#2")
-			species="abaumannii_2"
+			species="baumannii_2"
 		else:
 			print("Extra baumannii. Not a known DB variant #1/#2")
 	elif genus == "Escherichia":
-		if species == "coli#1":
+		if species == "coli#1-Achtman":
 			#print("Waiting for confirmation of success for abaumannii#1")
-			species="ecoli"
-		elif species == "coli#2":
+			species="coli"
+		elif species == "coli#2-Pasteur":
 			#print("Waiting for confirmation of success for abaumannii#2")
-			species=ecoli_2
+			species="coli_2"
 		else:
 			print("Extra coli. Not a known DB variant #1/#2")
 	elif genus == "Burkholderia" and species == "cepacia":
