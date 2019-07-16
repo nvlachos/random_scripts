@@ -222,13 +222,12 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 						break
 				#print(db_items[1:profile_size])
 				#print(list_of_allele_names)
-				if db_items[1:profile_size] == list_of_allele_names:
-					#print("Allele names match, yay!")
-					:
-				else:
+				if db_items[1:profile_size] != list_of_allele_names:
 					print("Allele names DO NOT match...We'll have to fix this if it ever comes up")
 					print("db: "+db_items)
 					print("list:"+allele_names)
+				#else:
+				#	print("Allele names match, yay!")
 			else:
 				for index in range(0,len(types)):
 					current_profile=db_items[1:profile_size]
