@@ -238,7 +238,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 			passed="true"
 			# AU - Allele(s) missing and not close to anything in current database, therefore can not do anything further
 			# SUB - One or more alleles and/or profiles ned to be submitted for classification to proper DB scheme
-			if len(set(list_of_profiles[i])) == 1:
+			if len(set(list_of_profiles[i])) == 1 and list_of_profiles[i] == '-':
 				types[i]="AU"
 				continue
 			for locus in list_of_profiles[i]:
