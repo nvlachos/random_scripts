@@ -242,7 +242,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 				types[i]="AU"
 				continue
 			for locus in list_of_profiles[i]:
-				#print(locus)
+				print(locus)
 				if '?' in locus or '~' in locus:
 					passed="false"
 					if types[i] != "AU":
