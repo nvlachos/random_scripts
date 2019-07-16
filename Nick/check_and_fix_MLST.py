@@ -302,4 +302,8 @@ def find_DB_taxonomy(genus, species):
 
 print("Parsing MLST file ...\n")
 args = parseArgs()
-do_MLST_check(args.input, args.filetype) #, "/scicomp/groups/OID/NCEZID/DHQP/CEMB/databases/mlst/abaumannii_Pasteur.txt") #sys.argv[3])
+if os.stat(args.input).st_size > 0:
+	do_MLST_check(args.input, args.filetype) #, "/scicomp/groups/OID/NCEZID/DHQP/CEMB/databases/mlst/abaumannii_Pasteur.txt") #sys.argv[3])
+else
+	print(args.input,"has an empty mlst file, so it will be deleted")
+	#os.remove(args.input)
