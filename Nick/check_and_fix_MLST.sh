@@ -50,7 +50,7 @@ while IFS= read -r line_in || [ -n "$line_in" ]; do
 				if [[ "${lines}" -eq 2 ]]; then
 					echo "Need to redo mlst file"
 					DB=$(tail -n1 ${mlst_file} | cut -d'	' -f2)
-					"${shareScript}/run_MLST.sh" "${sample}" "${project}" #"-f" "${DB}"
+					"${shareScript}/run_MLST.sh" "${sample}" "${project}" "-f" "${DB}"
 				fi
 				python3 "${shareScript}/check_and_fix_MLST.py" -i "${mlst_file}" -t "standard"
 			fi
