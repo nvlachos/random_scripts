@@ -26,8 +26,11 @@ elif [[ "$1" = "-h" ]]; then
 elif [[ -z "${2}" ]]; then
 	echo  "No analysis ID input, exiting..."
 	exit 1
-elif [[ -z "${3}" ]] || [[ ! -f ${3} ]]; then
+elif [[ -z "${3}" ]]; then
 	echo  "No crosswalk file input, exiting..."
+	exit 1
+elif [[ ! -f ${3} ]]; then
+	echo "${3} does not exist"
 	exit 1
 fi
 
