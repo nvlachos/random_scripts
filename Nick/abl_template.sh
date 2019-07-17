@@ -33,7 +33,7 @@ while IFS= read -r var  || [ -n "$var" ]; do
 	sed -i -e 's/ /\t/g' "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst"
 	if [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
 		sed -i -e 's/ /\t/g' "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst"
-	elif [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst"]]; then
+	elif [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst" ]]; then
 		sed -i -e 's/ /\t/g' "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst"
 	fi
 done < "${1}"
