@@ -29,12 +29,12 @@ fi
 while IFS= read -r var  || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	sed -i -e 's/}//g' "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst"
+	"sed -i -e 's/\n\n/\n/g' "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst"
 	if [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
-		sed -i -e 's/}//g' "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst"
+		sed -i -e 's/\n\n/\n/g' "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst"
 	elif [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst" ]]; then
-		sed -i -e 's/}//g' "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst"
-	fi
+		sed -i -e 's/\n\n/\n/g' "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst"
+	fi"
 done < "${1}"
 
 echo "All isolates completed"
