@@ -25,9 +25,9 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	filepath=filepath[::-1]
 	filepath="/".join(filepath)
 
-	bad_types=['-', 'AU', 'SUB']
+	bad_types=['-', 'AU', 'SUB', 'NAF']
 	# Outdated now because all old versions should be fixed, but keeping for a little while longer
-	change_to_SUB=["NAM","PAM","NID","NAM&PAM", "PAM&NAM"]
+	change_to_SUB=["NAM","PAM","NID","NAM&PAM", "PAM&NAM", "NF"]
 	change_to_AU=["AMI", "NAM&AMI", "PAM&AMI", "NAM&PAM&AMI", "PAM&NAM&AMI"]
 	types=""
 	schemes=[]
@@ -78,16 +78,18 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	else:
 		print("Unknown MLST filetype, can not continue")
 		exit()
+	print("RAW OLD types:", MLST_temp_type)
 	MLST_temp_type=MLST_temp_type.replace("/", ",").replace("|",",")
 	if "," not in MLST_temp_type:
 		mlstype=[MLST_temp_type]
+		mlstype_str = str(MLST_temp_type)
 	else:
 		mlstype=MLST_temp_type.split(",")
-	mlstype_str = str(MLST_temp_type)
+		mlstype_str = "/".join(mlstype)
 	for i in range(0, len(mlstype)):
 		if mlstype[i] in change_to_AU:
 			mlstype[i]="AU"
-		if mlstype[i] in change_to_SUB:
+		if mlstype[i] in change_to_SUB or "*" in mlstype[i] or "?" in mlstype[i]:
 			mlstype[i]="SUB"
 		if mlstype[i] not in bad_types:
 			mlstype[i] = int(mlstype[i])
@@ -130,30 +132,34 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 	 		print("This sample is singular and defined\n")
 		else:
 			print("This sample is singular and UNdefined\n")
-			new_types=get_type(schemes, allele_names, db_name)
+			new_types=get_type(schemes, allele_names, db_name, MLST_filetype)
 			checking=True
 	elif len(schemes) > 1:
-		if "-" not in mlstype and "AU" not in mlstype and "SUB" not in mlstype:
+		if "NAF" in mlstype:
+			print("This sample had no alleles found last time, must be very poor quality or compared to the wrong database\n")
+			new_types=get_type(schemes, allele_names, db_name, MLST_filetype)
+			checking=True
+		elif "-" not in mlstype and "AU" not in mlstype and "SUB" not in mlstype:
 			if len(schemes) == len(mlstype):
 				print("This sample is a multiple and defined\n")
 			elif len(schemes) > len(mlstype):
 				print("Not enough types to match schemes, checking")
-				new_types=get_type(schemes, allele_names, db_name)
+				new_types=get_type(schemes, allele_names, db_name, MLST_filetype)
 				checking=True
 			elif len(schemes) < len(mlstype):
 				print("Not enough schemes to match types, checking")
-				new_types=get_type(schemes, allele_names, db_name)
+				new_types=get_type(schemes, allele_names, db_name, MLST_filetype)
 				checking=True
 		else:
 			print("This sample is a multiple and something is UNdefined")
-			new_types=get_type(schemes, allele_names, db_name)
+			new_types=get_type(schemes, allele_names, db_name, MLST_filetype)
 			checking=True
 	print("Old types:", mlstype)
 
 	if checking:
 		new_types=sorted(new_types, key=lambda x: str(x))
 		print("New types:", new_types)
-		if mlstype != new_types:
+		if mlstype != new_types or "-" in mlstype or "AU" in mlstype or "SUB" in mlstype or "NAF" in mlstype:
 			for i in range(0, len(new_types)):
 				#print(new_types[i])
 				#if new_types[i] == -1:
@@ -162,12 +168,14 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				new_types[i] = str(new_types[i])
 			#new_types.sort()
 			new_types='/'.join(new_types)
-			print("Updating MLST types in", input_MLST_file, "from", "/".join(mlstype_str), "to", new_types)
+			print("Updating MLST types in", input_MLST_file, "from", mlstype_str, "to", new_types)
 			MLST_temp_types=new_types
 			# Log any incomplete/strange types found
 			if '-' in MLST_temp_types or 'SUB' in MLST_temp_types:
 				if MLST_temp_types.count("-", 0, len(MLST_temp_types)) + MLST_temp_types.count("SUB", 0, len(MLST_temp_types)) + MLST_temp_types.count("AU", 0, len(MLST_temp_types)) == 1:
 					problem=["Profile_undefined"]
+				elif "NAF" in MLST_temp_type:
+					problem="NO_Alleles_for_profile"
 				else:
 					problem=["Profiles_undefined"]
 				for i in range(0, len(schemes)):
@@ -180,6 +188,8 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 									problem.append(allele_names[j])
 				if problem[0] == "Profile_undefined" or problem[0] == "Profiles_undefined":
 					print("Must submit profile(s) for :", filepath)
+				elif problem[0] == "NO_Alleles_for_profile":
+					print("No alleles found for sample, maybe try checking that samples was run against proper DB?")
 				else:
 					if MLST_filetype == "standard":
 						print("Investigate/Submit allele or maybe try srst2 to fix allele issue on:", filepath)
@@ -201,7 +211,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				MLST_file.write('	'.join(MLST_items_second))
 				MLST_file.close()
 			MLST_changed_file_handler=open(MLST_changed_file,'a+')
-			MLST_changed_file_handler.write(filepath+"	"+db_name+"	"+"/".join(mlstype_str)+" to "+new_types+"\n")
+			MLST_changed_file_handler.write(filepath+"	"+db_name+"	"+mlstype_str+" to "+new_types+"\n")
 			MLST_changed_file_handler.close()
 		else:
 			print(input_MLST_file, "is as good as it gets with type", mlstype)
@@ -209,8 +219,18 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 		print("Sticking with already found mlstype", mlstype,"\n")
 
 # Uses the local copy of DB file to look up actual ST type
-def get_type(list_of_profiles, list_of_allele_names, DB_file):
+def get_type(list_of_profiles, list_of_allele_names, DB_file, source_filetype):
 	types=["Not_initialized"]
+	#print(list_of_profiles,":", list_of_allele_names)
+	if source_filetype == "srst2":
+		if DB_file == "abaumannii":
+			for i in range(0,len(list_of_allele_names)):
+				list_of_allele_names[i] = "Oxf_"+list_of_allele_names[i]
+		elif DB_file == "abaumannii_2":
+			for i in range(0,len(list_of_allele_names)):
+				list_of_allele_names[i] = "Pas_"+list_of_allele_names[i]
+		else:
+			print("No adjustments needed to names in list_of_allele_names")
 	full_db_path="/scicomp/groups/OID/NCEZID/DHQP/CEMB/databases/pubmlsts/"+DB_file+"/"+DB_file+".txt"
 	with open(full_db_path,'r') as scheme:
 		profile_size=0
@@ -229,8 +249,8 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 				#print(list_of_allele_names)
 				if db_items[1:profile_size] != list_of_allele_names:
 					print("Allele names DO NOT match...We'll have to fix this if it ever comes up")
-					print("db: "+db_items)
-					print("list:"+allele_names)
+					print("db:"+"	".join(db_items))
+					print("list:"+"	".join(list_of_allele_names))
 				#else:
 				#	print("Allele names match, yay!")
 			else:
@@ -252,7 +272,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file):
 			# AU - Allele(s) missing and not close to anything in current database, therefore can not do anything further
 			# SUB - One or more alleles and/or profiles ned to be submitted for classification to proper DB scheme
 			if len(set(list_of_profiles[i])) == 1 and list_of_profiles[i] == '-':
-				types[i]="AU"
+				types[i]="NAF"
 				continue
 			for locus in list_of_profiles[i]:
 				#print("Test:",locus)
