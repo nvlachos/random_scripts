@@ -68,7 +68,7 @@ echo "-${arr_size}:${arr[@]}-"
 counter=0
 max_subs=${2}
 
-"${shareScript}/clean_list.sh "${1}"
+"${shareScript}/clean_list.sh" "${1}"
 
 # Set script directory
 main_dir="${3}/srst2_subs"
@@ -110,7 +110,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			#echo -e "module load samtools/0.1.18" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			#echo -e "module load perl/5.16.1-MT" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			#echo -e "module load srst2" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			echo -e "ml Python2/2.7.12 samtools/0.1.18 perl/5.16.1-MT srst2 bowtie2/2.2.4" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+			#echo -e "ml Python2/2.7.12 samtools/0.1.18 perl/5.16.1-MT srst2 bowtie2/2.2.4" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
 			echo -e "cd ${shareScript}" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo -e "\"${shareScript}/run_srst2_on_singleDB.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
@@ -161,7 +161,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					#echo -e "module load samtools/0.1.18" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					#echo -e "module load perl/5.16.1-MT" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					#echo -e "module load srst2" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-					echo -e "ml Python2/2.7.12 samtools/0.1.18 perl/5.16.1-MT srst2 bowtie2/2.2.4" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+					#echo -e "ml Python2/2.7.12 samtools/0.1.18 perl/5.16.1-MT srst2 bowtie2/2.2.4" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
 					echo -e "cd ${shareScript}" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo -e "\"${shareScript}/run_srst2_on_singleDB.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
