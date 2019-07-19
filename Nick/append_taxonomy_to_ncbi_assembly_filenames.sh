@@ -30,7 +30,7 @@ fi
 # Loop through and act on each sample name in the passed/provided list
 
 for i in ${1}/*.gz; do
-	old_name=$(basename ${i} | cut -d'.' -f1)
+	old_name=$(basename ${i} | rev | cut -d'.' -f2- | rev)
 	dir_name=$(dirname ${i})
 	gunzip ${i}
 	tax_genus=$(head -n1 "${dir_name}/${old_name}.fna" | cut -d' ' -f2)
