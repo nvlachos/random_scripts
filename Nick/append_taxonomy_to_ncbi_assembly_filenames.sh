@@ -31,11 +31,12 @@ fi
 
 for i in ${1}/*.gz; do
 	old_name=$(basename ${i} | rev | cut -d'.' -f2- | rev)
+	new_name=$(echo ${old_name} | tr -d '[]')
 	dir_name=$(dirname ${i})
 	gunzip ${i}
 	tax_genus=$(head -n1 "${dir_name}/${old_name}" | cut -d' ' -f2)
 	tax_species=$(head -n1 "${dir_name}/${old_name}" | cut -d' ' -f3)
 	echo "Taxes: ${tax_genus}:${tax_species}"
-	mv ${dir_name}/${old_name} ${dir_name}/${tax_genus}_${tax_species}_${old_name}
-	gzip ${dir_name}/${tax_genus}_${tax_species}_${old_name}
+	mv ${dir_name}/${old_name} ${dir_name}/${tax_genus}_${tax_species}_${new_name}
+	gzip ${dir_name}/${tax_genus}_${tax_species}_${new_name}
 done < "${1}"
