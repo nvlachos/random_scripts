@@ -37,5 +37,5 @@ for i in ${1}/*.gz; do
 	tax_species=$(head -n1 "${dir_name}/${old_name}" | cut -d' ' -f3)
 	echo "Taxes: ${tax_genus}:${tax_species}"
 	mv ${dir_name}/${old_name} ${dir_name}/${tax_genus}_${tax_species}_${old_name}
-	gzip ${dir_name}/${tax_genus}_${tax_species}_${old_name}.fna
+	gzip ${dir_name}/${tax_genus}_${tax_species}_${old_name}
 done < "${1}"
