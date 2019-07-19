@@ -31,7 +31,7 @@ fi
 
 for i in ${1}/*.gz; do
 	old_name=$(basename ${i})
-	dir_name=$(dirname ${1})
+	dir_name=$(dirname ${i})
 	tax_genus=$(head -n1 "${i}" | cut -d' ' -f2)
 	tax_species=$(head -n1 "${i}" | cut -d' ' -f3)
 	echo "rename ${i} ${dir_name}/${tax_genus}_${tax_species}_${old_name}"
