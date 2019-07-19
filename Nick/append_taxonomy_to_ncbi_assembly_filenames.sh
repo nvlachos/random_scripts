@@ -33,8 +33,9 @@ for i in ${1}/*.gz; do
 	old_name=$(basename ${i} | rev | cut -d'.' -f2- | rev)
 	dir_name=$(dirname ${i})
 	gunzip ${i}
-	tax_genus=$(head -n1 "${dir_name}/${old_name}.fna" | cut -d' ' -f2)
-	tax_species=$(head -n1 "${dir_name}/${old_name}.fna" | cut -d' ' -f3)
+	tax_genus=$(head -n1 "${dir_name}/${old_name}" | cut -d' ' -f2)
+	tax_species=$(head -n1 "${dir_name}/${old_name}" | cut -d' ' -f3)
 	echo "Taxes: ${tax_genus}:${tax_species}"
-	echo "rename ${dir_name}/${old_name}.fna ${dir_name}/${tax_genus}_${tax_species}_${old_name}.fna"
+	echo "rename ${dir_name}/${old_name} ${dir_name}/${tax_genus}_${tax_species}_${old_name}"
+	#gzip ${dir_name}/${tax_genus}_${tax_species}_${old_name}.fna
 done < "${1}"
