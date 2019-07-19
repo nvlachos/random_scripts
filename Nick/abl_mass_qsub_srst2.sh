@@ -68,6 +68,8 @@ echo "-${arr_size}:${arr[@]}-"
 counter=0
 max_subs=${2}
 
+"${shareScript}/clean_list.sh "${1}"
+
 # Set script directory
 main_dir="${3}/srst2_subs"
 if [[ ! -d "${3}/srst2_subs" ]]; then
