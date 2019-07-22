@@ -31,23 +31,23 @@ while IFS= read -r var  || [ -n "$var" ]; do
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 	if [[ "${3}" == "Abaum" ]]; then
 		if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]] && [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
-			echo "${project}/${sample} has both torsten abaums"
+			echo "${project}/${sample_name} has both torsten abaums"
 		elif [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]]; then
-			echo "${project}/${sample} has only abaumannii_2"
+			echo "${project}/${sample_name} has only abaumannii_2"
 		elif [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
-			echo "${project}/${sample} has only abaumannii"
+			echo "${project}/${sample_name} has only abaumannii"
 		else
-			echo "${project}/${sample} has no mlst files"
+			echo "${project}/${sample_name} has no mlst files"
 		fi
 	elif [[ "${3}" == "Ecoli" ]]; then
 		if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]] && [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst" ]]; then
-			echo "${project}/${sample} has both torsten ecolis"
+			echo "${project}/${sample_name} has both torsten ecolis"
 		elif [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]]; then
-			echo "${project}/${sample} has only ecoli"
+			echo "${project}/${sample_name} has only ecoli"
 		elif [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst" ]]; then
-			echo "${project}/${sample} has only ecoli_2"
+			echo "${project}/${sample_name} has only ecoli_2"
 		else
-			echo "${project}/${sample} has no mlst files"
+			echo "${project}/${sample_name} has no mlst files"
 		fi
 	fi
 done < "${1}"
