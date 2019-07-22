@@ -15,8 +15,8 @@ fi
 #. "${mod_changers}/prep_srst2.sh"
 #ml -Python2/2.7.15 Python2/2.7.11
 #ml bowtie2/2.2.4
-ml purge
-ml Python2/2.7.15 samtools/0.1.18 srst2/0.2.0 bowtie2/2.2.4 # perl/5.16.1-MT
+#ml purge
+ml srst2 bowtie2/2.2.4
 
 ml
 
