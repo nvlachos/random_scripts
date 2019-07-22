@@ -32,18 +32,18 @@ while IFS= read -r var  || [ -n "$var" ]; do
 	if [[ "${3}" == "Abaum" ]]; then
 		if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]] && [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
 			echo "${processed}/${project} has both torsten abaums"
-		elif [[ -s ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst]]; then
+		elif [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]]; then
 			echo "${processed}/${project} has only abaumannii_2"
-		elif [[ -s ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst]]; then
+		elif [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
 			echo "${processed}/${project} has only abaumannii"
 		else
 			echo "${processed}/${project} has no mlst files"
 	elif [[ "${3}" == "Ecoli" ]]; then
 		if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]] && [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst" ]]; then
 			echo "${processed}/${project} has both torsten ecolis"
-		elif [[ -s ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst]]; then
+		elif [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]]; then
 			echo "${processed}/${project} has only ecoli"
-		elif [[ -s ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst]]; then
+		elif [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst" ]]; then
 			echo "${processed}/${project} has only ecoli_2"
 		else
 			echo "${processed}/${project} has no mlst files"
