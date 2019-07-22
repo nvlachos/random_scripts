@@ -14,7 +14,7 @@
 #. "${mod_changers}/prep_srst2.sh"
 #. "${mod_changers}/list_modules.sh"
 
-ml Python2/2.7.12 samtools/0.1.18 perl/5.16.1-MT srst2 bowtie2/2.2.4
+ml srst2 bowtie2/2.2.4
 
 #
 # Usage ./run_srst2_mlst.sh   sample_name   MiSeq_Run_ID	Genus	species
