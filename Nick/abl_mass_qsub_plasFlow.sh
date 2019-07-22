@@ -121,9 +121,9 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#!/bin/bash -l\n" > "${main_dir}/pFlow_${sample}_${start_time}.sh"
 				echo -e "#$ -o pFlow_${sample}.out" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 				echo -e "#$ -e pFlow_${sample}.err" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-				echo -e "#$ -N pFlow_${sample}"   >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+				echo -e "#$ -N pFlow_${sample}" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 				echo -e "#$ -cwd"  >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
-				echo -e "#$ -q short.q\n"  >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
+				echo -e "#$ -q short.q\n" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 				# Add all necessary modules
 				### echo -e "module load XXX" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
 				echo -e "cd ${shareScript}" >> "${main_dir}/pFlow_${sample}_${start_time}.sh"
