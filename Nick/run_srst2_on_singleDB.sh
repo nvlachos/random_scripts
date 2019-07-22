@@ -7,21 +7,25 @@
 #$ -q short.q
 
 #Import the config file with shortcuts and settings
-
 if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
 . ./config.sh
 #Import the module file that loads all necessary mods
-# . "${mod_changers}/prep_srst2.sh"
-ml Python2/2.7.12 samtools/0.1.18 perl/5.16.1-MT srst2/0.1.7 bowtie2/2.2.4
+#. "${mod_changers}/prep_srst2.sh"
+#ml -Python2/2.7.15 Python2/2.7.11
+#ml bowtie2/2.2.4
+ml purge
+ml Python2/2.7.12 samtools/0.1.18 perl/5.16.1-MT srst2 bowtie2/2.2.4
+
+ml
 
 #
-# Usage ./run_srst2_on_singleDB.sh   sample_name   run_ID
+# Usage ./run_srst2.sh   sample_name   run_ID
 #
 # script uses srst2 to find AR genes from ResGANNOT DBs.
 #
-#  Modules needed (loaded via prep_srst2.sh script - Python/2.7.15, bowtie2/2.2.9, samtools/0.1.18
+#  Modules needed (loaded via prep_srst2.sh script - Python2/2.7.11, bowtie2/2.2.4, samtools/0.1.18
 #
 
 # Checks for proper argumentation
@@ -30,7 +34,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./run_srst2_on_singleDB.sh  sample_name run_ID"
+	echo "Usage is ./run_srst2.sh  sample_name run_ID"
 	echo "Output location is ${processed}/run_ID/sample_name/srst2"
 	exit 0
 fi
@@ -38,18 +42,18 @@ fi
 # Create output directory
 mkdir "${processed}/${2}/${1}/srst2"
 
-# Check if the proper files exist to perform srst2
-# Find R1 zipped file, or zip the raw trimmed reads, and copy to output directory
+
+# Prep any read files that have not been trimmed yet
 if [ ! -f "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" ]; then
 	if [ -f "${processed}/${2}/${1}/trimmed/${1}_R1_001.paired.fq.gz" ]; then
-		echo "1"
+		#echo "1"
 		cp "${processed}/${2}/${1}/trimmed/${1}_R1_001.paired.fq.gz" "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz"
 	elif [ -f "${processed}/${2}/${1}/trimmed/${1}_R1_001.paired.fq" ]; then
-		echo "2"
+		#echo "2"
 		gzip -c "${processed}/${2}/${1}/trimmed/${1}_R1_001.paired.fq" > "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz"
-		gzip < "${processed}/${2}/${1}/trimmed/${1}_R1_001.paired.fq" > "${processed}/${2}/${1}/trimmed/${1}_S1_L001_R1_001.fastq.gz"
+		#gzip < "${processed}/${2}/${1}/trimmed/${1}_R1_001.paired.fq" > "${processed}/${2}/${1}/trimmed/${1}_S1_L001_R1_001.fastq.gz"
 	elif [[ ! -d "${processed}/${2}/${1}/trimmed" ]]; then
-		echo "5"
+		#echo "5"
 		if [[ -f "${processed}/${2}/${1}/FASTQs/${1}_R1_001.fastq.gz" ]] && [[ ! -f "${processed}/${2}/${1}/FASTQs/${1}_R1_001.fastq" ]]; then
 			gunzip -c "${processed}/${2}/${1}/FASTQs/${1}_R1_001.fastq.gz" > "${processed}/${2}/${1}/FASTQs/${1}_R1_001.fastq"
 		fi
@@ -66,10 +70,10 @@ if [ ! -f "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" ]; then
 fi
 if [ ! -f "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" ]; then
 	if [ -f "${processed}/${2}/${1}/trimmed/${1}_R2_001.paired.fq.gz" ]; then
-		echo "3"
+		#echo "3"
 		cp "${processed}/${2}/${1}/trimmed/${1}_R2_001.paired.fq.gz" "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz"
 	elif [ -f "${processed}/${2}/${1}/trimmed/${1}_R2_001.paired.fq" ]; then
-		echo "4"
+		#echo "4"
 		gzip -c "${processed}/${2}/${1}/trimmed/${1}_R2_001.paired.fq" > "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz"
 		#gzip < "${processed}/${2}/${1}/trimmed/${1}_R2_001.paired.fq" > "${processed}/${2}/${1}/trimmed/${1}_S1_L001_R2_001.fastq.gz"
 	fi
@@ -79,8 +83,8 @@ fi
 echo "--input_pe ${processed}/${2}/${1}/trimmed/${1}_S1_L001_R1_001.fastq.gz ${processed}/${2}/${1}/trimmed/${1}_S1_L001_R2_001.fastq.gz --output ${processed}/${2}/${1}/srst2/${1}_ResGANNOT --gene_db ${resGANNOT_srst2}"
 
 # Calls srst2 with the options for AR discovery
-#python2 "${shareScript}/srst2/scripts/srst2.py" --input_pe "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" --output "${processed}/${2}/${1}/srst2/${1}_ResGANNOT" --gene_db "${resGANNOT_srst2}"
-srst2 --input_pe "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" --output "${processed}/${2}/${1}/srst2/${1}_ResGANNOT" --gene_db "${resGANNOT_srst2}"
+python2 ${shareScript}/srst2-master/scripts/srst2.py --input_pe "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" --output "${processed}/${2}/${1}/srst2/${1}_ResGANNOT" --gene_db "${resGANNOT_srst2}"
+#srst2 --input_pe "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" --output "${processed}/${2}/${1}/srst2/${1}_ResGANNOT" --gene_db "${resGANNOT_srst2}"
 
 # Cleans up leftover files
 rm -r "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz"

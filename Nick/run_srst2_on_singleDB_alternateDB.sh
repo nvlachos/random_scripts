@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o srst2_alt.out
-#$ -e srst2_alt.err
-#$ -N srst2_alt
+#$ -o srst2.out
+#$ -e srst2.err
+#$ -N srst2
 #$ -cwd
 #$ -q short.q
 
@@ -13,12 +13,13 @@ fi
 . ./config.sh
 #Import the module file that loads all necessary mods
 #. "${mod_changers}/prep_srst2.sh"
+
 ml Python2/2.7.12 samtools/0.1.18 perl/5.16.1-MT srst2 bowtie2/2.2.4
 
 #
-# Usage ./run_srst2_on_singleDB_alternateDB.sh   sample_name   MiSeq_Run_ID
+# Usage ./run_srst2_on_singleDB_alternateDB.sh.sh   sample_name   MiSeq_Run_ID
 #
-# script uses srst2 to find AR genes from resFinder and ARGANNOT DBs.
+# script uses srst2 to find AR genes from a custom srst2 formatted DB.
 #
 
 # Checks for proper argumentation
@@ -27,7 +28,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./run_srst2_on_singleDB_alternateDB.sh  sample_name MiSeq_Run_ID path_to_alt_DB"
+	echo "Usage is ./run_srst2_on_singleDB_alternateDB.sh.sh  sample_name MiSeq_Run_ID path_to_alt_DB"
 	echo "Output location is ${processed}/run_ID/srst2"
 	exit 0
 fi
@@ -36,16 +37,12 @@ alt_DB_path=${3}
 alt_DB=$(echo ${alt_DB_path##*/} | cut -d'.' -f1)
 alt_DB=${alt_DB//_srst2/}
 
-echo ${alt_DB_path}
-echo ${alt_DB}
-
-
-mkdir "${processed}/${2}/${1}/srst2"
-
-if [[ -d "${processed}/${2}/${1}/srst2/${1}_" ]]; then
-	rm -r "${processed}/${2}/${1}/srst2/${1}_"
+# Create output folder
+if [[ ! -d "${processed}/${2}/${1}/srst2" ]]; then
+	mkdir "${processed}/${2}/${1}/srst2"
 fi
 
+# Prep any reads that have not been trimmed
 if [ ! -f "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" ]; then
 	if [ -f "${processed}/${2}/${1}/trimmed/${1}_R1_001.paired.fq.gz" ]; then
 		#echo "1"
@@ -56,7 +53,7 @@ if [ ! -f "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" ]; then
 		#gzip < "${processed}/${2}/${1}/trimmed/${1}_R1_001.paired.fq" > "${processed}/${2}/${1}/trimmed/${1}_S1_L001_R1_001.fastq.gz"
 	fi
 else
-	echo "Found 'random' zipped R1"
+	echo "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz already exists"
 fi
 if [ ! -f "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" ]; then
 	if [ -f "${processed}/${2}/${1}/trimmed/${1}_R2_001.paired.fq.gz" ]; then
@@ -68,33 +65,30 @@ if [ ! -f "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" ]; then
 		#gzip < "${processed}/${2}/${1}/trimmed/${1}_R2_001.paired.fq" > "${processed}/${2}/${1}/trimmed/${1}_S1_L001_R2_001.fastq.gz"
 	fi
 else
-	echo "Found 'random' zipped R2"
+	echo "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz already exists"
 fi
 
-#cp "${argannot_srst2}" "${processed}/${2}/${1}/srst2/argannot.fna"
-#cp "${resFinder_srst2}" "${processed}/${2}/${1}/srst2/resFinder.fna"
+# Display command that will be submitted
+echo "--input_pe ${processed}/${2}/${1}/trimmed/${1}_S1_L001_R1_001.fastq.gz ${processed}/${2}/${1}/trimmed/${1}_S1_L001_R2_001.fastq.gz --output ${processed}/${2}/${1}/srst2/${alt_DB} --gene_db ${alt_DB_path}"
 
-echo "--input_pe ${processed}/${2}/${1}/trimmed/${1}_S1_L001_R1_001.fastq.gz ${processed}/${2}/${1}/trimmed/${1}_S1_L001_R2_001.fastq.gz --output ${processed}/${2}/${1}/srst2/${1}_${alt_DB} --gene_db ${alt_DB_path}"
+# Submit command to run srst2 on alternate DB
+python2 ${shareScript}/srst2-master/scripts/srst2.py --input_pe "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" --output "${processed}/${2}/${1}/srst2/${1}_${alt_DB}" --gene_db "${alt_DB_path}"
+#srst2 --input_pe "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" --output "${processed}/${2}/${1}/srst2/${1}_${alt_DB}" --gene_db "${alt_DB_path}"
 
-#python2 "${shareScript}/srst2/scripts/srst2.py" --input_pe "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" --output "${processed}/${2}/${1}/srst2/${1}_${alt_DB}" --gene_db "${alt_DB_path}"
-srst2 --input_pe "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" --output "${processed}/${2}/${1}/srst2/${1}" --gene_db "${alt_DB_path}"
-
+# Clean up extra files
 rm -r "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz"
 rm -r "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz"
 rm -r "${processed}/${2}/${1}/srst2/"*".bam"
 rm -r "${processed}/${2}/${1}/srst2/"*".pileup"
 
-
-find ${processed}/${2}/${1}/srst2 -type f -name "*ResGANNOT__*" | while read FILE ; do
+# Rename files to reduce redundancy
+find ${processed}/${2}/${1}/srst2 -type f -name "*_${alt_DB}__*" | while read FILE ; do
+	#echo "Doing - $FILE"
   dirname=$(dirname $FILE)
 	filename=$(basename $FILE)
-	second_word=$(echo ${filename} | cut -d'_' -f2,3)
-	if [[ "${second_word}" = "ResGANNOT_"* ]]; then
-		filename="${filename/_${second_word__}/__}"
-	fi
-	#echo "Found-${FILE}"
+	filename="${filename/_${alt_DB}__/__}"
 	#echo "${filename}"
-    mv "${FILE}" "${dirname}/${filename}"
+  mv "${FILE}" "${dirname}/${filename}"
 done
 
 #. "${mod_changers}/close_srst2.sh"

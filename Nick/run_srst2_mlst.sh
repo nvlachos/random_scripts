@@ -35,6 +35,7 @@ fi
 
 species="${4,,}"
 genus="${3,,}"
+genus="${genus^}"
 
 # Creates folder for output
 if [[ ! -d "${processed}/${2}/${1}/srst2" ]]; then
@@ -58,8 +59,10 @@ if [ ! -f "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" ]; then
 			gunzip -c "${processed}/${2}/${1}/FASTQs/${1}_R2_001.fastq.gz" > "${processed}/${2}/${1}/FASTQs/${1}_R2_001.fastq"
 		fi
 		echo "Running BBDUK and trimmomatic"
+		ml BBMAP/38.26 trimmomatic/0.35
 		bbduk.sh -"${bbduk_mem}" threads="${procs}" in="${processed}/${2}/${1}/FASTQs/${1}_R1_001.fastq" in2="${processed}/${2}/${1}/FASTQs/${1}_R2_001.fastq" out="${processed}/${2}/${1}/removedAdapters/${1}-noPhiX-R1.fsq" out2="${processed}/${2}/${1}/removedAdapters/${1}-noPhiX-R2.fsq" ref="${phiX_location}" k="${bbduk_k}" hdist="${bbduk_hdist}"
 		trimmomatic "${trim_endtype}" -"${trim_phred}" -threads "${procs}" "${processed}/${2}/${1}/removedAdapters/${1}-noPhiX-R1.fsq" "${processed}/${2}/${1}/removedAdapters/${1}-noPhiX-R2.fsq" "${processed}/${2}/${1}/trimmed/${1}_R1_001.paired.fq" "${processed}/${2}/${1}/trimmed/${1}_R1_001.unpaired.fq" "${processed}/${2}/${1}/trimmed/${1}_R2_001.paired.fq" "${processed}/${2}/${1}/trimmed/${1}_R2_001.unpaired.fq" ILLUMINACLIP:"${trim_adapter_location}:${trim_seed_mismatch}:${trim_palindrome_clip_threshold}:${trim_simple_clip_threshold}:${trim_min_adapt_length}:${trim_complete_palindrome}" SLIDINGWINDOW:"${trim_window_size}:${trim_window_qual}" LEADING:"${trim_leading}" TRAILING:"${trim_trailing}" MINLEN:"${trim_min_length}"
+		ml -BBMAP/38.26 -trimmomatic/0.35
 		#cat "${processed}/${2}/${1}/trimmed/${1}_R1_001.paired.fq" "${processed}/${2}/${1}/trimmed/${1}_R2_001.paired.fq" > "${processed}/${2}/${1}/trimmed/${1}.paired.fq"
 		#cat "${processed}/${2}/${1}/trimmed/${1}_R1_001.unpaired.fq" "${processed}/${2}/${1}/trimmed/${1}_R2_001.unpaired.fq" > "${processed}/${2}/${1}/trimmed/${1}.single.fq"
 		gzip -c "${processed}/${2}/${1}/trimmed/${1}_R1_001.paired.fq" > "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz"
@@ -82,19 +85,21 @@ fi
 
 cd "${processed}/${2}/${1}/MLST/srst2"
 
-getmlst.py --species "${genus} ${species}" > "${processed}/${2}/${1}/MLST/srst2/getmlst.out"
+
+python2 ${shareScript}/srst2-master/scripts/getmlst.py --species "${genus} ${species}" > "${processed}/${2}/${1}/MLST/srst2/getmlst.out"
+#getmlst.py --species "${genus} ${species}" > "${processed}/${2}/${1}/MLST/srst2/getmlst.out"
 
 db_name="Standard"
 # Checks for either of the 2 databases that have multiple scheme types and runs both
 if [[ "${genus}" == "Acinetobacter" ]]; then
 	echo "${processed}/${2}/${1}/MLST/srst2/${genus}_${species}.fasta"
 	if [[ "${species}" == "baumannii#1" ]]; then
-		#sed -i -e 's/>/>Oxf_/g' "${processed}/${2}/${1}/MLST/srst2/${genus}_${species}.fasta"
-		#sed -i -e 's/Oxf_//g' "${processed}/${2}/${1}/MLST/srst2/abaumannii(Oxford).txt"
+		sed -i -e 's/Oxf_//g' "${processed}/${2}/${1}/MLST/srst2/${genus}_${species}.fasta"
+		sed -i -e 's/Oxf_//g' "${processed}/${2}/${1}/MLST/srst2/abaumannii.txt"
 		db_name="Oxford"
 	elif [[ "${species}" == "baumannii#2" ]]; then
 		sed -i -e 's/Pas_//g' "${processed}/${2}/${1}/MLST/srst2/${genus}_${species}.fasta"
-	#	sed -i -e 's/Pas_//g' "${processed}/${2}/${1}/MLST/srst2/abaumannii_2(Pasteur).txt"
+		sed -i -e 's/Pas_//g' "${processed}/${2}/${1}/MLST/srst2/abaumannii_2.txt"
 		db_name="Pasteur"
 	else
 		echo "Unknown species in Acinetobacter MLST lookup"
@@ -102,12 +107,8 @@ if [[ "${genus}" == "Acinetobacter" ]]; then
 elif [[ "${genus}" == "Escherichia" ]]; then
 	echo "${processed}/${2}/${1}/MLST/srst2/${genus}_${species}.fasta"
 	if [[ "${species}" == "coli#1" ]]; then
-		sed -i -e 's/Oxf_//g' "${processed}/${2}/${1}/MLST/srst2/${genus}_${species}.fasta"
-	#	sed -i -e 's/Oxf_//g' "${processed}/${2}/${1}/MLST/srst2/ecoli(Achtman).txt"
 		db_name="Achtman"
 	elif [[ "${species}" == "coli#2" ]]; then
-		sed -i -e 's/Pas_//g' "${processed}/${2}/${1}/MLST/srst2/${genus}_${species}.fasta"
-	#	sed -i -e 's/Pas_//g' "${processed}/${2}/${1}/MLST/srst2/ecoli_2(Pasteur).txt"
 		db_name="Pasteur"
 	else
 		echo "Unknown species in Escherichia MLST lookup"
@@ -135,16 +136,16 @@ fi
 # Print out what command will be submitted
 echo "--input_pe ${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz ${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz --output ${processed}/${2}/${1}/MLST/srst2 --mlst_db ${mlst_db} --mlst_definitions ${mlst_defs} --mlst_delimiter ${mlst_delimiter}"
 # Run the srst2 command to find MLST types
-srst2 --input_pe "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" --output "${processed}/${2}/${1}/MLST/srst2/${1}" --mlst_db "${mlst_db}" --mlst_definitions "${mlst_defs}" --mlst_delimiter "${mlst_delimiter}"
+python2 ${shareScript}/srst2-master/scripts/srst2.py --input_pe "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" --output "${processed}/${2}/${1}/srst2/${1}_ResGANNOT" --gene_db "${resGANNOT_srst2}"
+#srst2 --input_pe "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" --output "${processed}/${2}/${1}/MLST/srst2/${1}" --mlst_db "${mlst_db}" --mlst_definitions "${mlst_defs}" --mlst_delimiter "${mlst_delimiter}"
 
 today=$(date "+%Y-%m-%d")
 
 # Cleans up extra files and renames output file
 mv "${processed}/${2}/${1}/MLST/srst2/${1}__mlst__${genus}_${species}__results.txt" "${processed}/${2}/${1}/MLST/${1}_srst2_${genus}_${species}-${db_name}.mlst"
 mv "${processed}/${2}/${1}/MLST/srst2/mlst_data_download_${genus}_${species}_${today}.log" "${processed}/${2}/${1}/MLST/"
-rm "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz"
-rm "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz"
-#rm -r "${processed}/${2}/${1}/MLST/srst2"
+rm -r "${processed}/${2}/${1}/MLST/srst2"
+
 if [[ -f "${processed}/${2}/${1}/MLST/srst2/${1}__${1}.${genus}_${species}.pileup" ]]; then
 	rm -r "${processed}/${2}/${1}/MLST/srst2/${1}__${1}.${genus}_${species}.pileup"
 fi
@@ -153,4 +154,4 @@ if [[ -f "${processed}/${2}/${1}/MLST/${1}__${1}.${genus}_${species}.sorted.bam"
 fi
 
 
-. "${mod_changers}/close_srst2.sh"
+# . "${mod_changers}/close_srst2.sh"
