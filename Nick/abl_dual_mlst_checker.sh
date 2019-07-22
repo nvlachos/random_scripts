@@ -38,6 +38,7 @@ while IFS= read -r var  || [ -n "$var" ]; do
 			echo "${processed}/${project} has only abaumannii"
 		else
 			echo "${processed}/${project} has no mlst files"
+		fi
 	elif [[ "${3}" == "Ecoli" ]]; then
 		if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]] && [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst" ]]; then
 			echo "${processed}/${project} has both torsten ecolis"
@@ -47,6 +48,7 @@ while IFS= read -r var  || [ -n "$var" ]; do
 			echo "${processed}/${project} has only ecoli_2"
 		else
 			echo "${processed}/${project} has no mlst files"
+		fi
 	fi
 done < "${1}"
 
