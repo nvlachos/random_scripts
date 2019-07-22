@@ -14,7 +14,8 @@ fi
 #Import the module file that loads all necessary mods
 #. "${mod_changers}/prep_srst2.sh"
 
-ml Python2/2.7.12 samtools/0.1.18 perl/5.16.1-MT srst2 bowtie2/2.2.4
+#ml Python2/2.7.12 samtools/0.1.18 perl/5.16.1-MT srst2 bowtie2/2.2.4
+ml srst2 bowtie2/2.2.4
 
 #
 # Usage ./run_srst2_on_singleDB_alternateDB.sh.sh   sample_name   MiSeq_Run_ID
