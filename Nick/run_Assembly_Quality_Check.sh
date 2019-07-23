@@ -64,11 +64,11 @@ if [[ "${do_plasFlow_only}" != "true" ]]; then
 	mv "${OUTDATADIR}/Assembly_Stats/report.tsv" "${OUTDATADIR}/Assembly_Stats/${1}_report.tsv"
 fi
 if [[ -s "${OUTDATADIR}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_plasmid_assembly_trimmed.fasta" ]]; then
- 	if [ ! -d "$OUTDATADIR/Assembly_Stats_plasmid" ]; then
+ 	if [ ! -d "$OUTDATADIR/Assembly_Stats_plasFlow" ]; then
  		echo "Creating $OUTDATADIR/Assembly_Stats_plasFlow"
  		mkdir -p "$OUTDATADIR/Assembly_Stats_plasFlow"
  	fi
- 	python2 "/apps/x86_64/quast/quast-4.3/quast.py" -o "${OUTDATADIR}/Assembly_Stats_plasFlow" "${OUTDATADIR}/plasFlow/Unicycler_assemblies/2018-20-89_uni_assembly/${1}_plasmid_assembly_trimmed.fasta"
+ 	python2 "/apps/x86_64/quast/quast-4.3/quast.py" -o "${OUTDATADIR}/Assembly_Stats_plasFlow" "${OUTDATADIR}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_plasmid_assembly_trimmed.fasta"
  	mv "${OUTDATADIR}/Assembly_Stats_plasFlow/report.txt" "${OUTDATADIR}/Assembly_Stats_plasFlow/${1}_report.txt"
  	mv "${OUTDATADIR}/Assembly_Stats_plasFlow/report.tsv" "${OUTDATADIR}/Assembly_Stats_plasFlow/${1}_report.tsv"
  else
