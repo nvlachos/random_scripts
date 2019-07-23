@@ -128,7 +128,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					break
 				fi
 				# Check if "waiting" sample has completed
-				if [[ -f "${main_dir}/complete/${waiting_sample}_ACSP_complete.txt" ]] || [[ ! -f "${processed}/${project}/${waiting_sample}//plasFlow/Unicycler_assemblies/${waiting_sample}_uni_assembly/${waiting_sample}_plasmid_assembly_trimmed.fasta" ]]; then
+				if [[ -f "${main_dir}/complete/${waiting_sample}_ACSP_complete.txt" ]] || [[ ! -f "${processed}/${project}/${waiting_sample}/plasFlow/Unicycler_assemblies/${waiting_sample}_uni_assembly/${waiting_sample}_plasmid_assembly_trimmed.fasta" ]]; then
 					# Check if old data exists, skip if so
 					if [[ ! -f "${processed}/${project}/${sample}/Assembly_Stats_plasFlow/${sample}_report.txt" ]] ; then
 						echo  "Index is below max submissions, submitting"
@@ -169,7 +169,7 @@ done
 timer=0
 for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
-	if [[ -f "${main_dir}/complete/${waiting_sample}_ACSP_complete.txt" ]] || [[ ! -f "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_scaffolds_trimmed.fasta" ]]; then
+	if [[ -f "${main_dir}/complete/${waiting_sample}_ACSP_complete.txt" ]] || [[ ! -f "${processed}/${project}/${waiting_sample}/plasFlow/Unicycler_assemblies/${waiting_sample}_uni_assembly/${waiting_sample}_plasmid_assembly_trimmed.fasta" ]]; then
 		echo "${item} is complete"
 		if [[ -f "${shareScript}/ACSP_${waiting_sample}.out" ]]; then
 			mv "${shareScript}/ACSP_${waiting_sample}.out" ${main_dir}
