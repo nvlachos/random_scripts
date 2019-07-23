@@ -86,9 +86,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	# Delete old files if clobber is set
 	if [[ "${clobberness}" == "clobber" ]]; then
-		if [[ -d "${processed}/${project}/${sample}/Assembly_Stats" ]]; then
-			rm -r "${processed}/${project}/${sample}/Assembly_Stats"
-		fi
 		if [[ "${processed}/${project}/${sample}/Assembly_Stats_plasFlow" ]]; then
 			rm -r "${processed}/${project}/${sample}/Assembly_Stats_plasFlow"
 		fi
