@@ -99,7 +99,7 @@ find ${processed}/${2}/${1}/srst2 -type f -name "*ResGANNOT__*" | while read FIL
 	filename="${filename/_ResGANNOT__/__}"
 	#echo "Found-${FILE}"
 	#echo "${filename}"
-    mv "${FILE}" "${dirname}/${filename}"
+  mv "${FILE}" "${dirname}/${filename}"
 done
 
 # Close out modules that were loaded specifically for srst2
