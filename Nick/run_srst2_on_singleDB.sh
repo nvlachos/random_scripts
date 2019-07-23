@@ -18,6 +18,8 @@ fi
 #ml purge
 ml srst2 bowtie2/2.2.4
 
+echo $HOSTNAME
+
 ml
 
 #
