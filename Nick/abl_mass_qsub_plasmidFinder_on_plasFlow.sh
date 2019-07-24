@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o ablmq-pf.out
-#$ -e ablmq-pf.err
-#$ -N ablmq-pf
+#$ -o ablmq-pFp.out
+#$ -e ablmq-pfp.err
+#$ -N ablmq-pfp
 #$ -cwd
 #$ -q short.q
 
@@ -162,11 +162,11 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			echo "${project}/${sample} has no plasFlow assembly to run plasmidFinder on "
 			echo "$(date)" > "${main_dir}/complete/${sample}_pFp_complete.txt"
 		fi
-		counter=$(( counter + 1 ))
 	else
 		echo "${project}/${sample} has no plasFlow folder"
 		echo "$(date)" > "${main_dir}/complete/${sample}_pFp_complete.txt"
 	fi
+	counter=$(( counter + 1 ))
 done
 
 # Check for completion of all samples
