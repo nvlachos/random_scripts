@@ -259,7 +259,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 		else
 			largest16s="NOT_FOUND"
 		fi
-		16s="B:${best16s}\|L:${largest16s}"
+		16s=$(echo "B:${best16s}|L:${largest16s}")
 	else
 		16s="NOT_FOUND"
 	fi
