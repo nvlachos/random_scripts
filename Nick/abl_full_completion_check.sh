@@ -34,7 +34,7 @@ fi
 # Loop through and act on each sample name in the passed/provided list
 counter=0
 echo "c-sstar:c-sstar_plasmid:srst2"
-echo "Identification	Raw_Read_1	Zipped_Read_1	Raw_Read_2	Zipped_Read_2	Trimmed_R1	Zipped_Trimmed_R1	Trimmed_R2	Zipped_Trimmed_R2	Raw_QC_Counts	Trimmed_QC_Counts	Kraker_reads	Gottcha	Assembly	Assembly_Stats	Kraker_Assembly	BUSCO	PROKKA	16s	mash_ANI	ANI_genus	ANI_All	MLST	MLST_SRST2	plasmidFinder	csstar-20180608	srst2AR-20180608	csstar-ResGANNOT_${2}	srst2-ResGANNOT_${2}	plasFlow	plasFlow_Assembly_Stats	csstar_plasFlow-ResGANNOT_${2}	plasmidFinder_on_plasFlow" > "${3}"
+echo "Identification	Raw_Read_1	Zipped_Read_1	Raw_Read_2	Zipped_Read_2	Trimmed_R1	Zipped_Trimmed_R1	Trimmed_R2	Zipped_Trimmed_R2	Raw_QC_Counts	Trimmed_QC_Counts	Kraker_reads	Gottcha	Assembly	Assembly_Stats	Kraker_Assembly	BUSCO	PROKKA	family	Genus	Species	16s	mash_ANI	ANI_genus	ANI_All	MLST	MLST_SRST2	plasmidFinder	csstar-20180608	srst2AR-20180608	csstar-ResGANNOT_${2}	srst2-ResGANNOT_${2}	plasFlow	plasFlow_Assembly_Stats	csstar_plasFlow-ResGANNOT_${2}	plasmidFinder_on_plasFlow" > "${3}"
 #echo "Identification	20180608-c-sstar	20180608-srst2	${2}-c-sstar	${2}-srst2 plaFlow ${2}-c-sstar-plasFlow	plasmidFinder	plasmidFinder_on_plasFlow" > "${3}"
 while IFS= read -r var || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
@@ -180,7 +180,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 		FQTR1="NOT FOUND"
 	fi
 
-	if [[ -s "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R1_001.paired.fq.gz" ]]; then
+	if [[ -s "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq.gz" ]]; then
 		FQTZR1="Found"
 	else
 		FQTZR1="NOT FOUND"
@@ -211,7 +211,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 	fi
 
 	if [[ -s "${processed}/${project}/${sample_name}/kraken/preAssembly/${sample_name}_kraken_summary_paired.txt" ]]; then
-		krakr="FOUND"
+		krakr="Found"
 	else
 		krakr="NOT_FOUND"
 	fi
@@ -264,7 +264,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 		sixteenS="NOT_FOUND"
 	fi
 
-	if [[ -s "${processed}/${project}/${sample_name}/prokka/${sample_name}_PROKKA.gbf" ]]; then
+	if [[ -s "${processed}/${project}/${sample_name}/prokka/${sample_name}_PROKKA.gbf" ]] || [[ -s "${processed}/${project}/${sample_name}/prokka/${sample_name}_PROKKA.gbk" ]]; then
 		prokka="Found"
 	else
 		prokka="NOT_FOUND"
@@ -287,7 +287,9 @@ while IFS= read -r var || [ -n "$var" ]; do
 
 	if [[ -f "${processed}/${project}/${sample_name}/${sample_name}.tax" ]]; then
 		# Parse tax file
-		family=""
+		family="Unknown"
+		genus="Unknown"
+		species="Unknown"
 		while IFS= read -r line  || [ -n "$line" ]; do
 			# Grab first letter of line (indicating taxonomic level)
 			first=${line:0:1}
@@ -330,7 +332,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 					plasFlow_Stats="NOT_FOUND"
 				fi
 			fi
-		elif [[ "${family}" == "" ]]; then
+		elif [[ "${family}" == "Unknown" ]]; then
 			plasFlow="No_family_in_TAX_file"
 			cplas="No_plasFlow"
 			pFin_plas="No_plasFlow"
@@ -415,8 +417,8 @@ while IFS= read -r var || [ -n "$var" ]; do
 		anigenus="NO_TAX_FILE"
 	fi
 
-	echo -e "${counter}:${project}/${sample_name}:	${FQR1}	${FQZR1}	${FQR2}	${FQZR2}	${FQTR1}	${FQTZR1}	${FQTR2}	${FQTZR2}	${preQCr}	${preQCt}	${krakr}	${gott}	${Assembly}	${Assembly_stats}	${kraka}	${busco}	${prokka}	${sixteenS}	${animash}	${anigenus}	${aniAll}	${mlst}	${srst2_mlst}	${pFin}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_srst2}	${plasFlow}	${plasFlow_Stats}	${cplas}	${pFin_plas}"
-	echo -e "${project}/${sample_name}:	${FQR1}	${FQZR1}	${FQR2}	${FQZR2}	${FQTR1}	${FQTZR1}	${FQTR2}	${FQTZR2}	${preQCr}	${preQCt}	${krakr}	${gott}	${Assembly}	${Assembly_stats}	${kraka}	${busco}	${prokka}	${sixteenS}	${animash}	${anigenus}	${aniAll}	${mlst}	${srst2_mlst}	${pFin}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_srst2}	${plasFlow}	${plasFlow_Stats}	${cplas}	${pFin_plas}" >> "${3}"
+	echo -e "${counter}:${project}/${sample_name}:	${FQR1}	${FQZR1}	${FQR2}	${FQZR2}	${FQTR1}	${FQTZR1}	${FQTR2}	${FQTZR2}	${preQCr}	${preQCt}	${krakr}	${gott}	${Assembly}	${Assembly_stats}	${kraka}	${busco}	${prokka}	${family}	${genus}	${species}	${sixteenS}	${animash}	${anigenus}	${aniAll}	${mlst}	${srst2_mlst}	${pFin}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_srst2}	${plasFlow}	${plasFlow_Stats}	${cplas}	${pFin_plas}"
+	echo -e "${project}/${sample_name}:	${FQR1}	${FQZR1}	${FQR2}	${FQZR2}	${FQTR1}	${FQTZR1}	${FQTR2}	${FQTZR2}	${preQCr}	${preQCt}	${krakr}	${gott}	${Assembly}	${Assembly_stats}	${kraka}	${busco}	${prokka}	${family}	${genus}	${species}	${sixteenS}	${animash}	${anigenus}	${aniAll}	${mlst}	${srst2_mlst}	${pFin}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_srst2}	${plasFlow}	${plasFlow_Stats}	${cplas}	${pFin_plas}" >> "${3}"
 	counter=$(( counter + 1 ))
 done < "${1}"
 echo "All isolates completed"
