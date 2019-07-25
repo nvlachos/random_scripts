@@ -259,9 +259,9 @@ while IFS= read -r var || [ -n "$var" ]; do
 		else
 			largest16s="NOT_FOUND"
 		fi
-		16s="${best16s}:${largest16s}"
+		sixteenS="B:${best16s}|L:${largest16s}"
 	else
-		16s="NOT_FOUND"
+		sixteenS="NOT_FOUND"
 	fi
 
 	if [[ -s "${processed}/${project}/${sample_name}/prokka/${sample_name}_PROKKA.gbf" ]]; then
@@ -415,8 +415,8 @@ while IFS= read -r var || [ -n "$var" ]; do
 		anigenus="NO_TAX_FILE"
 	fi
 
-	echo "${counter}:${project}/${sample_name}:	${FQR1}	${FQZR1}	${FQR2}	${FQZR2}	${FQTR1}	${FQTZR1}	${FQTR2}	${FQTZR2}	${preQCr}	${preQCt}	${krakr}	${gott}	${Assembly}	${Assembly_stats}	${kraka}	${busco}	${prokka}	${16s}	${animash}	${anigenus}	${aniAll}	${mlst}	${srst2_mlst}	${pFin}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_srst2}	${plasFlow}	${plasFlow_Stats}	${cplas}	${pFin_plas}"
-	echo "${project}/${sample_name}:	${FQR1}	${FQZR1}	${FQR2}	${FQZR2}	${FQTR1}	${FQTZR1}	${FQTR2}	${FQTZR2}	${preQCr}	${preQCt}	${krakr}	${gott}	${Assembly}	${Assembly_stats}	${kraka}	${busco}	${prokka}	${16s}	${animash}	${anigenus}	${aniAll}	${mlst}	${srst2_mlst}	${pFin}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_srst2}	${plasFlow}	${plasFlow_Stats}	${cplas}	${pFin_plas}" >> "${3}"
+	echo "${counter}:${project}/${sample_name}:	${FQR1}	${FQZR1}	${FQR2}	${FQZR2}	${FQTR1}	${FQTZR1}	${FQTR2}	${FQTZR2}	${preQCr}	${preQCt}	${krakr}	${gott}	${Assembly}	${Assembly_stats}	${kraka}	${busco}	${prokka}	${sixteenS}	${animash}	${anigenus}	${aniAll}	${mlst}	${srst2_mlst}	${pFin}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_srst2}	${plasFlow}	${plasFlow_Stats}	${cplas}	${pFin_plas}"
+	echo "${project}/${sample_name}:	${FQR1}	${FQZR1}	${FQR2}	${FQZR2}	${FQTR1}	${FQTZR1}	${FQTR2}	${FQTZR2}	${preQCr}	${preQCt}	${krakr}	${gott}	${Assembly}	${Assembly_stats}	${kraka}	${busco}	${prokka}	${sixteenS}	${animash}	${anigenus}	${aniAll}	${mlst}	${srst2_mlst}	${pFin}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_srst2}	${plasFlow}	${plasFlow_Stats}	${cplas}	${pFin_plas}" >> "${3}"
 	counter=$(( counter + 1 ))
 done < "${1}"
 echo "All isolates completed"
