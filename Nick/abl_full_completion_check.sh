@@ -217,7 +217,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 	fi
 
 	if [[ -s "${processed}/${project}/${sample_name}/kraken/postAssembly/${sample_name}_kraken_summary_assembled_BP_data.txt" ]]; then
-		kraka="FOUND"
+		kraka="Found"
 	else
 		kraka="NOT_FOUND"
 	fi
@@ -250,12 +250,12 @@ while IFS= read -r var || [ -n "$var" ]; do
 		best16s_result=$(head -n1 "${processed}/${project}/${sample_name}/16s/${sample_name}_16s_blast_id.txt" | cut -d'	' -f3)
 		largest16s_result=$(tail -n1 "${processed}/${project}/${sample_name}/16s/${sample_name}_16s_blast_id.txt" | cut -d'	' -f3)
 		if [[ "${best16s_result}" != "" ]]; then
-			best16s="FOUND"
+			best16s="Found"
 		else
 			best16s="NOT_FOUND"
 		fi
 		if [[ "${largest16s_result}" != "" ]]; then
-			largest16s="FOUND"
+			largest16s="Found"
 		else
 			largest16s="NOT_FOUND"
 		fi
@@ -271,7 +271,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 	fi
 
 	if [[ -s "${processed}/${project}/${sample_name}/ANI/best_ANI_hits_ordered(${sample_name}_vs_All).txt" ]]; then
-		aniAll="FOUND"
+		aniAll="Found"
 	else
 		aniAll="NOT_FOUND"
 	fi
@@ -345,12 +345,12 @@ while IFS= read -r var || [ -n "$var" ]; do
 		fi
 
 		if [[ -s "${processed}/${project}/${sample_name}/ANI/${genus}_and_${sample_name}_mashtree.dnd" ]]; then
-			animash="FOUND"
+			animash="Found"
 		else
 			animash="NOT_FOUND"
 		fi
 		if [[ -s "${processed}/${project}/${sample_name}/ANI/best_ANI_hits_ordered(${sample_name}_vs_${genus}).txt" ]]; then
-			anigenus="FOUND"
+			anigenus="Found"
 		else
 			anigenus="NOT_FOUND"
 		fi
