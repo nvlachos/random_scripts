@@ -78,8 +78,6 @@ if [[ ! -f "${OUTDATADIR}/trimmed/${1}.paired.fq" ]]; then
 			exit
 		fi
 		cat "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq" > "${OUTDATADIR}/trimmed/${1}.paired.fq"
-		rm "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq"
-		rm "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq"
 	fi
 fi
 
