@@ -246,6 +246,12 @@ while IFS= read -r var || [ -n "$var" ]; do
 		busco="NOT_FOUND"
 	fi
 
+	if [[ -s "${processed}/${project}/${sample_name}/${sample_name}.tax" ]]; then
+		tax="Found"
+	else
+		tax="NOT_FOUND"
+	fi
+
 	if [[ -s "${processed}/${project}/${sample_name}/16s/${sample_name}_16s_blast_id.txt" ]]; then
 		best16s_result=$(head -n1 "${processed}/${project}/${sample_name}/16s/${sample_name}_16s_blast_id.txt" | cut -d'	' -f3)
 		largest16s_result=$(tail -n1 "${processed}/${project}/${sample_name}/16s/${sample_name}_16s_blast_id.txt" | cut -d'	' -f3)
@@ -285,7 +291,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 
 
 
-	if [[ -f "${processed}/${project}/${sample_name}/${sample_name}.tax" ]]; then
+	if [[ "${tax}" == "Found" ]]; then
 		# Parse tax file
 		family="Unknown"
 		genus="Unknown"
@@ -417,8 +423,8 @@ while IFS= read -r var || [ -n "$var" ]; do
 		anigenus="NO_TAX_FILE"
 	fi
 
-	echo -e "${counter}:${project}/${sample_name}:	${FQR1}	${FQZR1}	${FQR2}	${FQZR2}	${FQTR1}	${FQTZR1}	${FQTR2}	${FQTZR2}	${preQCr}	${preQCt}	${krakr}	${gott}	${Assembly}	${Assembly_stats}	${kraka}	${busco}	${prokka}	${family}	${genus}	${species}	${sixteenS}	${animash}	${anigenus}	${aniAll}	${mlst}	${srst2_mlst}	${pFin}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_srst2}	${plasFlow}	${plasFlow_Stats}	${cplas}	${pFin_plas}"
-	echo -e "${project}/${sample_name}:	${FQR1}	${FQZR1}	${FQR2}	${FQZR2}	${FQTR1}	${FQTZR1}	${FQTR2}	${FQTZR2}	${preQCr}	${preQCt}	${krakr}	${gott}	${Assembly}	${Assembly_stats}	${kraka}	${busco}	${prokka}	${family}	${genus}	${species}	${sixteenS}	${animash}	${anigenus}	${aniAll}	${mlst}	${srst2_mlst}	${pFin}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_srst2}	${plasFlow}	${plasFlow_Stats}	${cplas}	${pFin_plas}" >> "${3}"
+	echo -e "${counter}:${project}/${sample_name}:	${FQR1}	${FQZR1}	${FQR2}	${FQZR2}	${FQTR1}	${FQTZR1}	${FQTR2}	${FQTZR2}	${preQCr}	${preQCt}	${krakr}	${gott}	${Assembly}	${Assembly_stats}	${kraka}	${busco}	${prokka}	${tax}	${family}	${genus}	${species}	${sixteenS}	${animash}	${anigenus}	${aniAll}	${mlst}	${srst2_mlst}	${pFin}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_srst2}	${plasFlow}	${plasFlow_Stats}	${cplas}	${pFin_plas}"
+	echo -e "${project}/${sample_name}:	${FQR1}	${FQZR1}	${FQR2}	${FQZR2}	${FQTR1}	${FQTZR1}	${FQTR2}	${FQTZR2}	${preQCr}	${preQCt}	${krakr}	${gott}	${Assembly}	${Assembly_stats}	${kraka}	${busco}	${prokka}	${tax}	${family}	${genus}	${species}	${sixteenS}	${animash}	${anigenus}	${aniAll}	${mlst}	${srst2_mlst}	${pFin}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_srst2}	${plasFlow}	${plasFlow_Stats}	${cplas}	${pFin_plas}" >> "${3}"
 	counter=$(( counter + 1 ))
 done < "${1}"
 echo "All isolates completed"
