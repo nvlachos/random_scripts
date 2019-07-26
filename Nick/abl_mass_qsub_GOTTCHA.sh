@@ -83,7 +83,9 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	# Delete old data if clobber is set
 	if [[ "${clobberness}" == "clobber" ]]; then
-		rm -r ${processed}/${project}/${sample}/gottcha
+		if [[ -d "${processed}/${project}/${sample}/gottcha" ]]; then
+			rm -r "${processed}/${project}/${sample}/gottcha"
+		fi
 	fi
 	#echo ${counterr}"
 	# Check if counter is below max submission limit

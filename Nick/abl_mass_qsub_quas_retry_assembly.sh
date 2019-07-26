@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o ablmq_quass.out
-#$ -e ablmq_quass..err
-#$ -N ablquass
+#$ -o ablmq_quafa.out
+#$ -e ablmq_quafa.err
+#$ -N ablquafa
 #$ -cwd
 #$ -q short.q
 
@@ -12,7 +12,7 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./abl_mass_qsub_quas_from_assembly.sh path_to_list max_concurrent_submission output_directory_for_scripts
+# Usage ./abl_mass_qsub_quas_failed_assembly.sh path_to_list max_concurrent_submission output_directory_for_scripts
 #
 
 # Number regex to test max concurrent submission parametr
@@ -49,13 +49,13 @@ fi
 
 # Loop through and act on each sample name in the passed/provided list
 counter=0
-script_dir="${3}/quass_subs"
+script_dir="${3}/quafa_subs"
 main_dir="${shareScript}"
-if [[ ! -d "${3}/quass_subs" ]]; then
-	mkdir "${3}/quass_subs"
-	mkdir "${3}/quass_subs/complete"
-elif [[ ! -d  "${3}/quass_subs/complete" ]]; then
-	mkdir "${3}/quass_subs/complete"
+if [[ ! -d "${3}/quafa_subs" ]]; then
+	mkdir "${3}/quafa_subs"
+	mkdir "${3}/quafa_subs/complete"
+elif [[ ! -d  "${3}/quafa_subs/complete" ]]; then
+	mkdir "${3}/quafa_subs/complete"
 fi
 
 while [ ${counter} -lt ${arr_size} ] ; do
@@ -64,20 +64,18 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	echo "${counter} of ${arr_size}"
 	if [ ${counter} -lt ${max_subs} ]; then
 		echo  "Index is below max submissions, submitting"
-		echo -e "#!/bin/bash -l\n" > "${main_dir}/quass_${sample}_${start_time}.sh"
-		echo -e "#$ -o quass_${sample}.out" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-		echo -e "#$ -e quass_${sample}.err" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-		echo -e "#$ -N quass_${sample}" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-		echo -e "#$ -cwd" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-		echo -e "#$ -q short.q\n" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-		#echo -e "cd ${shareScript}" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-		echo -e "\"${shareScript}/quaisar_on_assembly_template.sh\" \"${sample}\" \"${project}\" \"${shareScript}/config.sh\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_quassonomy_complete.txt\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
+		echo -e "#!/bin/bash -l\n" > "${main_dir}/quafa_${sample}_${start_time}.sh"
+		echo -e "#$ -o quafa_${sample}.out" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
+		echo -e "#$ -e quafa_${sample}.err" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
+		echo -e "#$ -N quafa_${sample}" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
+		echo -e "#$ -cwd" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
+		echo -e "#$ -q short.q\n" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
+		#echo -e "cd ${shareScript}" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
+		echo -e "\"${shareScript}/quaisar_failed_assembly.sh\" \"${sample}\" \"${project}\" \"${shareScript}/config.sh\"" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
+		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_quafa_complete.txt\"" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
 		#cd "${main_dir}"
 		if [[ "${counter}" -lt "${last_index}" ]]; then
-			qsub "${main_dir}/quass_${sample}_${start_time}.sh"
-		else
-			qsub -sync y "${main_dir}/quass_${sample}_${start_time}.sh"
+			qsub "${main_dir}/quafa_${sample}_${start_time}.sh"
 		fi
 	else
 		waiting_for_index=$(( counter - max_subs ))
@@ -90,22 +88,20 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo "Timer exceeded limit of 1800 seconds 30 minutes"
 				break
 			fi
-			if [ -f "${main_dir}/complete/${waiting_sample}_quassonomy_complete.txt" ]; then
+			if [ -f "${main_dir}/complete/${waiting_sample}_quafa_complete.txt" ]; then
 				echo  "Index is below max submissions, submitting"
-				echo -e "#!/bin/bash -l\n" > "${main_dir}/quass_${sample}_${start_time}.sh"
-				echo -e "#$ -o quass_${sample}.out" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-				echo -e "#$ -e quass_${sample}.err" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-				echo -e "#$ -N quass_${sample}" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-				echo -e "#$ -cwd" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-				echo -e "#$ -q short.q\n" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-				#echo -e "cd ${shareScript}" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-				echo -e "\"${shareScript}/quaisar_on_assembly_template.sh\" \"${sample}\" \"${project}\" \"${shareScript}/config.sh\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_quass_complete.txt\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
+				echo -e "#!/bin/bash -l\n" > "${main_dir}/quafa_${sample}_${start_time}.sh"
+				echo -e "#$ -o quafa_${sample}.out" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
+				echo -e "#$ -e quafa_${sample}.err" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
+				echo -e "#$ -N quafa_${sample}" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
+				echo -e "#$ -cwd" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
+				echo -e "#$ -q short.q\n" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
+				#echo -e "cd ${shareScript}" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/quaisar_failed_assembly.sh\" \"${sample}\" \"${project}\" \"${shareScript}/config.sh\"" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
+				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_quafa_complete.txt\"" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
 				#cd "${main_dir}"
 				if [[ "${counter}" -lt "${last_index}" ]]; then
-					qsub "${main_dir}/quass_${sample}_${start_time}.sh"
-				else
-					qsub -sync y "${main_dir}/quass_${sample}_${start_time}.sh"
+					qsub "${main_dir}/quafa_${sample}_${start_time}.sh"
 				fi
 				break
 			fi
@@ -118,13 +114,13 @@ done
 timer=0
 for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
-	if [[ -f "${main_dir}/complete/${waiting_sample}_quass_complete.txt" ]]; then
+	if [[ -f "${main_dir}/complete/${waiting_sample}_quafa_complete.txt" ]]; then
 		echo "${item} is complete"
-		if [[ -f "${shareScript}/quass_${waiting_sample}.out" ]]; then
-			mv "${shareScript}/quass_${waiting_sample}.out" "${main_dir}"
+		if [[ -f "${shareScript}/quafa_${waiting_sample}.out" ]]; then
+			mv "${shareScript}/quafa_${waiting_sample}.out" "${main_dir}"
 		fi
-		if [[ -f "${shareScript}/quass_${waiting_sample}.err" ]]; then
-			mv "${shareScript}/quass_${waiting_sample}.err" "${main_dir}"
+		if [[ -f "${shareScript}/quafa_${waiting_sample}.err" ]]; then
+			mv "${shareScript}/quafa_${waiting_sample}.err" "${main_dir}"
 		fi
 	else
 		while :
@@ -133,13 +129,13 @@ for item in "${arr[@]}"; do
 					echo "Timer exceeded limit of 3600 seconds = 60 minutes"
 					exit 1
 				fi
-				if [[ -f "${main_dir}/complete/${waiting_sample}_quassonomy_complete.txt" ]]; then
+				if [[ -f "${main_dir}/complete/${waiting_sample}_quafa_complete.txt" ]]; then
 					echo "${item} is complete"
-					if [[ -f "${shareScript}/quass_${waiting_sample}.out" ]]; then
-						mv "${shareScript}/quass_${waiting_sample}.out" "${main_dir}"
+					if [[ -f "${shareScript}/quafa_${waiting_sample}.out" ]]; then
+						mv "${shareScript}/quafa_${waiting_sample}.out" "${main_dir}"
 					fi
-					if [[ -f "${shareScript}/quass_${waiting_sample}.err" ]]; then
-						mv "${shareScript}/quass_${waiting_sample}.err" "${main_dir}"
+					if [[ -f "${shareScript}/quafa_${waiting_sample}.err" ]]; then
+						mv "${shareScript}/quafa_${waiting_sample}.err" "${main_dir}"
 					fi
 					break
 				else

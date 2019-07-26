@@ -244,7 +244,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file, source_filetype):
 			db_items=db_line.split("	")
 			if db_items[0] == "ST":
 				for item in db_items:
-					if item != "clonal_complex" and item != "species":
+					if item != "clonal_complex" and item != "species" and item != "mlst_clade":
 						profile_size+=1
 					else:
 						break

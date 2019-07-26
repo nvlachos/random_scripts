@@ -72,7 +72,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		echo -e "#$ -q short.q\n" >> "${main_dir}/quass_${sample}_${start_time}.sh"
 		#echo -e "cd ${shareScript}" >> "${main_dir}/quass_${sample}_${start_time}.sh"
 		echo -e "\"${shareScript}/quaisar_on_assembly_template.sh\" \"${sample}\" \"${project}\" \"${shareScript}/config.sh\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
-		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_quassonomy_complete.txt\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
+		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_quass_complete.txt\"" >> "${main_dir}/quass_${sample}_${start_time}.sh"
 		#cd "${main_dir}"
 		if [[ "${counter}" -lt "${last_index}" ]]; then
 			qsub "${main_dir}/quass_${sample}_${start_time}.sh"
@@ -90,7 +90,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo "Timer exceeded limit of 1800 seconds 30 minutes"
 				break
 			fi
-			if [ -f "${main_dir}/complete/${waiting_sample}_quassonomy_complete.txt" ]; then
+			if [ -f "${main_dir}/complete/${waiting_sample}_quass_complete.txt" ]; then
 				echo  "Index is below max submissions, submitting"
 				echo -e "#!/bin/bash -l\n" > "${main_dir}/quass_${sample}_${start_time}.sh"
 				echo -e "#$ -o quass_${sample}.out" >> "${main_dir}/quass_${sample}_${start_time}.sh"
@@ -133,7 +133,7 @@ for item in "${arr[@]}"; do
 					echo "Timer exceeded limit of 3600 seconds = 60 minutes"
 					exit 1
 				fi
-				if [[ -f "${main_dir}/complete/${waiting_sample}_quassonomy_complete.txt" ]]; then
+				if [[ -f "${main_dir}/complete/${waiting_sample}_quass_complete.txt" ]]; then
 					echo "${item} is complete"
 					if [[ -f "${shareScript}/quass_${waiting_sample}.out" ]]; then
 						mv "${shareScript}/quass_${waiting_sample}.out" "${main_dir}"
