@@ -25,7 +25,7 @@ elif [[ "$1" = "-h" ]]; then
 	exit 0
 fi
 
-ml BBMAP/38.26 trimmomatic/0.35
+ml BBMap/38.26 trimmomatic/0.35
 
 # Loop through and act on each sample name in the passed/provided list
 while IFS= read -r var; do
@@ -37,7 +37,7 @@ while IFS= read -r var; do
 	cat "${processed}/${project}/${sample_name}/trimmed/${1}_R1_001.paired.fq" "${processed}/${project}/${sample_name}/trimmed/${1}_R2_001.paired.fq" > "${processed}/${project}/${sample_name}/trimmed/${1}.paired.fq"
 done < "${1}"
 
-ml -BBMAP/38.26 -trimmomatic/0.35
+ml -BBMap/38.26 -trimmomatic/0.35
 
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
