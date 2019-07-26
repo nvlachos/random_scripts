@@ -57,8 +57,37 @@ fi
 # Needs perl v5.12.3 to function properly
 . "${shareScript}/module_changers/perl_5221_to_5123.sh"
 
+if [[ ! -f "${OUTDATADIR}/trimmed/${1}.paired.fq" ]]; then
+	if [[ -f "${OUTDATADIR}/trimmed/${1}.paired.fq.gz" ]]; then
+		gunzip -c "${OUTDATADIR}/trimmed/${1}.paired.fq.gz" > "${OUTDATADIR}/trimmed/${1}.paired.fq"
+	else
+		if [[ -f "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" ]]; then
+			:
+		elif [[ -f "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq.gz" ]]; then
+			gunzip -c "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq.gz" > "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq"
+		else
+			echo "R1_001.paired.fq does not exist (either zipped or not)"
+			exit
+		fi
+		if [[ -f "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq" ]]; then
+			:
+		elif [[ -f "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq.gz" ]]; then
+			gunzip -c "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq.gz" > "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq"
+		else
+			echo "R2_001.paired.fq does not exist (either zipped or not)"
+			exit
+		fi
+		cat "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq" > "${OUTDATADIR}/trimmed/${1}.paired.fq"
+		rm "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq"
+		rm "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq"
+	fi
+fi
+
+
 ### Gottcha Taxonomy Classifier ### in species mode
 gottcha.pl --mode all --outdir "${OUTDATADIR}/gottcha/gottcha_S" --input "${OUTDATADIR}/trimmed/${1}.paired.fq" --database "${gottcha_db}"
+
+gzip "${OUTDATADIR}/trimmed/${1}.paired.fq"
 
 # Return perl to 5.22.1
 . "${shareScript}/module_changers/perl_5123_to_5221.sh"
