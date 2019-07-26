@@ -9,7 +9,7 @@
 #Import the config file with shortcuts and settings
 . ./config.sh
 #Import the module file that loads all necessary mods
-. "${mod_changers}/pipeline_mods"
+#. "${mod_changers}/pipeline_mods"
 
 #
 # Usage ./act_by_list_AR_completion_check.sh path_to_list ResGANNOT_identifier(YYYYMMDD) path_for_output_file
