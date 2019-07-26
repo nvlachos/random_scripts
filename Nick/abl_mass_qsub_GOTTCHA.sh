@@ -75,6 +75,8 @@ elif [[ ! -d  "${3}/gottcha_subs/complete" ]]; then
 	mkdir "${3}/gottcha_subs/complete"
 fi
 
+main_dir="${3}/gottcha_subs"
+
 start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 
 # Create and submit qsub scripts to perform gottcha analysis on the reads of all samples on the list
