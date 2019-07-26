@@ -26,13 +26,14 @@ elif [[ "$1" = "-h" ]]; then
 fi
 
 # Loop through and act on each sample name in the passed/provided list
-while IFS= read -r var  || [ -n "$var" ]; do
+while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 	if [[ -s "${processed}/${project}/${sample_name}/Assembly/scaffolds.fasta" ]]; then
-		echo "Has base"
+		#echo "Has base"
+		:
 	else
-		echo "${project}/${sample_name}: No Assembly at all"
+		echo "${project}/${sample_name}"
 	fi
 	#python3 "${shareScript}/removeShortContigs.py" -i "${processed}/${project}/${sample_name}/Assembly/scaffolds.fasta" -t 500 -s "normal_SPAdes"
 	#python3 "${shareScript}/fasta_headers.py" -i "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed_original.fasta" -o "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta"
