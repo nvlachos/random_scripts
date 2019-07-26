@@ -33,7 +33,7 @@ fi
 
 
 # Loop through and act on each sample name in the passed/provided list
-while IFS= read -r line_in || [ -n "$line_in" ]; do
+while IFS= read -r line_in; do
 	line_in=$(echo "${line_in}" | tr -d '\n')
 	sample=$(echo "${line_in}" | cut -d'/' -f2)
 	project=$(echo "${line_in}" | cut -d'/' -f1)
@@ -42,8 +42,9 @@ while IFS= read -r line_in || [ -n "$line_in" ]; do
 		echo "checking $mlst_file"
 		if [[ "${mlst_file}" == *".mlst" ]]; then
 			if [[ "${mlst_file}" == *"srst2"* ]]; then
-				echo "Dont have srst2 checker yet, need to find good srst2 files"
-				echo "${mlst_file}" >> /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/srst2_mlsts.txt
+				#echo "Dont have srst2 checker yet, need to find good srst2 files"
+				#echo "${mlst_file}" >> /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/srst2_mlsts.txt
+				python3 "${shareScript}/check_and_fix_MLST.py" -i "${mlst_file}" -t "srst2"
 			else
 				echo "About to do ${mlst_file}"
 				lines=$(wc -l < ${mlst_file})
