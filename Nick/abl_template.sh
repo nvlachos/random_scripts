@@ -29,13 +29,8 @@ fi
 while IFS= read -r var  || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	rm ${processed}/${project}/${sample_name}/MLST/${sample_name}_.mlst
-	sed -i -e 's/\n\n/\n/g' "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst"
-	if [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
-		sed -i -e 's/\n\n/\n/g' "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst"
-	elif [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst" ]]; then
-		sed -i -e 's/\n\n/\n/g' "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst"
-	fi
+	python3 "${shareScript}/removeShortContigs.py" -i "${processed}/${project}/${sample_name}/Assembly/scaffolds.fasta" -t 500 -s "normal_SPAdes"
+	python3 "${shareScript}/fasta_headers.py" -i "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed_original.fasta" -o "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta"
 done < "${1}"
 
 echo "All isolates completed"
