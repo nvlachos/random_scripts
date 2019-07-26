@@ -85,78 +85,71 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	if [[ "${clobberness}" == "clobber" ]]; then
 		rm -r ${processed}/${project}/${sample}/gottcha
 	fi
-	#echo ${counter}
-	# Check if there is an acceptable assembly to run kraken on
-	if [[ -s "${processed}/${project}/${sample}/trimmed/${sample}.paired.fq" ]]; then
-		# Check if counter is below max submission limit
-		if [[ ${counter} -lt ${max_subs} ]]; then
-			# Check if old data exists, skip if so
-			if [[ ! -f "${processed}/${project}/${sample}/gottcha/${sample}_gottcha_species_summary.txt" ]]; then
-				echo  "Index is below max submissions, submitting"
-				echo -e "#!/bin/bash -l\n" > "${main_dir}/gottcha_${sample}_${start_time}.sh"
-				echo -e "#$ -o gottcha_${sample}.out" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
-				echo -e "#$ -e gottcha_${sample}.err" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
-				echo -e "#$ -N gottcha_${sample}"   >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
-				echo -e "#$ -cwd"  >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
-				echo -e "#$ -q short.q\n"  >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
-				echo -e "cd ${shareScript}" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
-				echo -e "\"${shareScript}/run_gottcha.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
-				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_gottcha_complete.txt\"" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
-				cd "${main_dir}"
-				qsub "${main_dir}/gottcha_${sample}_${start_time}.sh"
-			# Old data exists, skipping
-			else
-				echo "${project}/${sample} already has gottcha summary"
-				echo "$(date)" > "${main_dir}/complete/${sample}_gottcha_complete.txt"
-			fi
-		# Counter is above max submissions, must wait until a slot opens up"
+	#echo ${counterr}"
+	# Check if counter is below max submission limit
+	if [[ ${counter} -lt ${max_subs} ]]; then
+		# Check if old data exists, skip if so
+		if [[ ! -f "${processed}/${project}/${sample}/gottcha/${sample}_gottcha_species_summary.txt" ]]; then
+			echo  "Index is below max submissions, submitting"
+			echo -e "#!/bin/bash -l\n" > "${main_dir}/gottcha_${sample}_${start_time}.sh"
+			echo -e "#$ -o gottcha_${sample}.out" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
+			echo -e "#$ -e gottcha_${sample}.err" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
+			echo -e "#$ -N gottcha_${sample}"   >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
+			echo -e "#$ -cwd"  >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
+			echo -e "#$ -q short.q\n"  >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
+			echo -e "cd ${shareScript}" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
+			echo -e "\"${shareScript}/run_gottcha.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
+			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_gottcha_complete.txt\"" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
+			cd "${main_dir}"
+			qsub "${main_dir}/gottcha_${sample}_${start_time}.sh"
+		# Old data exists, skipping
 		else
-			waiting_for_index=$(( counter - max_subs ))
-			waiting_sample=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
-			timer=0
-			echo "Index is above max submissions, waiting for index ${waiting_for_index}:${waiting_sample} to complete"
-			# Loop to check if "waiting" sample is complete
-			while :
-			do
-				# Check if timer has exceeded max amount of allowed time
-				if [[ ${timer} -gt 1800 ]]; then
-					echo "Timer exceeded limit of 1800 seconds 30 minutes"
-					break
-				fi
-				# Check if "waiting" sample has completed
-				if [[ -f "${main_dir}/complete/${waiting_sample}_gottcha_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/trimmed/${waiting_sample}.paired.fq" ]]; then
-					# Check if old data exists, skip if so
-					if [[ ! -f "${processed}/${project}/${sample}/gottcha/${sample}_gottcha_species_summary.txt" ]]; then
-						echo  "Index is below max submissions, submitting"
-						echo -e "#!/bin/bash -l\n" > "${main_dir}/gottcha_${sample}_${start_time}.sh"
-						echo -e "#$ -o gottcha_${sample}.out" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
-						echo -e "#$ -e gottcha_${sample}.err" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
-						echo -e "#$ -N gottcha_${sample}"   >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
-						echo -e "#$ -cwd"  >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
-						echo -e "#$ -q short.q\n"  >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
-						echo -e "cd ${shareScript}" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
-						echo -e "\"${shareScript}/run_gottcha.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
-						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_gottcha_complete.txt\"" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
-						cd "${main_dir}"
-						qsub "${main_dir}/gottcha_${sample}_${start_time}.sh"
-					# Old data exists, skipping
-					else
-						echo "${project}/${sample} already has gottcha summary"
-						echo "$(date)" > "${main_dir}/complete/${sample}_gottcha_complete.txt"
-					fi
-					break
-				# Wait 5 seconds ato check if "waiting" sample is complete yet
-				else
-					timer=$(( timer + 5 ))
-					echo "sleeping for 5 seconds, so far slept for ${timer}"
-					sleep 5
-				fi
-			done
+			echo "${project}/${sample} already has gottcha summary"
+			echo "$(date)" > "${main_dir}/complete/${sample}_gottcha_complete.txt"
 		fi
-	# No assembly file exist, can not run Kraken
+	# Counter is above max submissions, must wait until a slot opens up"
 	else
-		echo "${project}/${sample} has no paired.fq to run gottcha on"
-		echo "$(date)" > "${main_dir}/complete/${sample}_gottcha_complete.txt"
+		waiting_for_index=$(( counter - max_subs ))
+		waiting_sample=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
+		timer=0
+		echo "Index is above max submissions, waiting for index ${waiting_for_index}:${waiting_sample} to complete"
+		# Loop to check if "waiting" sample is complete
+		while :
+		do
+			# Check if timer has exceeded max amount of allowed time
+			if [[ ${timer} -gt 1800 ]]; then
+				echo "Timer exceeded limit of 1800 seconds 30 minutes"
+				break
+			fi
+			# Check if "waiting" sample has completed
+			if [[ -f "${main_dir}/complete/${waiting_sample}_gottcha_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/trimmed/${waiting_sample}.paired.fq" ]]; then
+				# Check if old data exists, skip if so
+				if [[ ! -f "${processed}/${project}/${sample}/gottcha/${sample}_gottcha_species_summary.txt" ]]; then
+					echo  "Index is below max submissions, submitting"
+					echo -e "#!/bin/bash -l\n" > "${main_dir}/gottcha_${sample}_${start_time}.sh"
+					echo -e "#$ -o gottcha_${sample}.out" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
+					echo -e "#$ -e gottcha_${sample}.err" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
+					echo -e "#$ -N gottcha_${sample}"   >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
+					echo -e "#$ -cwd"  >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
+					echo -e "#$ -q short.q\n"  >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
+					echo -e "cd ${shareScript}" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
+					echo -e "\"${shareScript}/run_gottcha.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
+					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_gottcha_complete.txt\"" >> "${main_dir}/gottcha_${sample}_${start_time}.sh"
+					cd "${main_dir}"
+					qsub "${main_dir}/gottcha_${sample}_${start_time}.sh"
+				# Old data exists, skipping
+				else
+					echo "${project}/${sample} already has gottcha summary"
+					echo "$(date)" > "${main_dir}/complete/${sample}_gottcha_complete.txt"
+				fi
+				break
+			# Wait 5 seconds ato check if "waiting" sample is complete yet
+			else
+				timer=$(( timer + 5 ))
+				echo "sleeping for 5 seconds, so far slept for ${timer}"
+				sleep 5
+			fi
+		done
 	fi
 	counter=$(( counter + 1 ))
 done
