@@ -60,7 +60,7 @@ mv "${OUTDATADIR}/${filename}/Assembly/scaffolds.fasta.TRIMMED.fasta" "${OUTDATA
 # Checks to see that the trimming and renaming worked properly, returns if unsuccessful
 if [ ! -s "${OUTDATADIR}/${filename}/Assembly/${filename}_scaffolds_trimmed.fasta" ]; then
 	echo "Trimmed contigs file does not exist continuing to next sample">&2
-	return 1
+	exit
 fi
 
 ### ReKraken on Assembly ###
