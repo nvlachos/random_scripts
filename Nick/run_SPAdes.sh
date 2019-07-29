@@ -73,6 +73,13 @@ else
 	echo "Unknown type requested...not running SPAdes"
 fi
 
+if [[ -f "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq.gz" ]] && [[ -f "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq" ]]; then
+	rm "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq"
+fi
+if [[ -f "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq.gz" ]] && [[ -f "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" ]]; then
+	rm "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq"
+fi
+
 ml -SPAdes/3.13.0
 
 #Script exited gracefully (unless something else inside failed)
