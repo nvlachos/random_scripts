@@ -45,6 +45,26 @@ fi
 OUTDATADIR="${processed}/${3}/${1}"
 
 #Calls spades depending on if it is supposed to look for plasmids or not, all other arguments are the same and pulled from config.sh
+if [[ -f "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" ]]; then
+	:
+else
+	if [[ -f "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq.gz" ]]; then
+		gunzip -c "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq.gz" > "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq"
+	else
+		echo "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq(.gz) does not exit, must exit"
+	fi
+fi
+if [[ -f "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" ]]; then
+	:
+else
+	if [[ -f "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq.gz" ]]; then
+		gunzip -c "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq.gz" > "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq"
+	else
+		echo "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq(.gz) does not exit, must exit"
+	fi
+fi
+
+
 if [ "${2}" = "normal" ]; then
 	spades.py --careful --memory "${spades_max_memory}" --only-assembler --pe1-1 "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" --pe1-2 "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq" --pe1-s "${OUTDATADIR}/trimmed/${1}.single.fq" -o "${OUTDATADIR}/Assembly" --phred-offset "${phred}" -t "${procs}"
 # elif [ "${2}" = "plasmid" ]; then
