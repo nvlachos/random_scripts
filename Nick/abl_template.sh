@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o abl-template.out
-#$ -e abl-template.err
-#$ -N abl-template
+#$ -o abl-template1.out
+#$ -e abl-template1.err
+#$ -N abl-template1
 #$ -cwd
 #$ -q short.q
 
