@@ -43,6 +43,7 @@ while IFS= read -r var; do
 	#gzip "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
 	#echo "About to zip - ${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
 	#gzip "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
+	echo "${project}/${sample_name} - Removing R1_001.unpaired.fq"
 	rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq"
 	rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq"
 done < "${1}"
