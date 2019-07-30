@@ -39,6 +39,8 @@ while IFS= read -r var; do
 	fi
 	if [[ ! -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.unpaired.fq" ]]; then
 		cat "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq" "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq" > "${processed}/${project}/${sample_name}/trimmed/${sample_name}.single.fq"
+		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq"
+		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq"
 	fi
 	echo "About to zip - ${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
 	gzip "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
