@@ -154,12 +154,12 @@ sort -nr -t' ' -k1 -o "${OUTDATADIR}/ANI/best_hits_ordered.txt" "${OUTDATADIR}/A
 best=$(head -n 1 "${OUTDATADIR}/ANI/best_hits_ordered.txt")
 #Creates an array from the best hit
 IFS=' ' read -r -a def_array <<< "${best}"
-#echo -${def_array[@]}+
+echo -${def_array[@]}+
 #Captures the assembly file name that the best hit came from
 best_file=${def_array[1]}
 #Formats the %id to standard percentage (xx.xx%)
 best_percent=$(awk -v per="${def_array[0]}" 'BEGIN{printf "%.2f", per * 100}')
-#echo "${best_file}"
+echo "${best_file}"
 # If the best match comes from the additional file, extract the taxonomy from that file
 if [[ "${best_file}" = *"_scaffolds_trimmed" ]]; then
 	best_outbreak_match=$(echo "${best_file}" | rev | cut -d'_' -f3- | rev)
@@ -214,14 +214,14 @@ species=$(tail -n2 ${OUTDATADIR}/${1}.tax | head -n1 | cut -d'	' -f2)
 echo -e "${genus^} ${species}"
 
 #Removes the transient hit files
-if [ -s "${OUTDATADIR}/ANI/best_hits.txt" ]; then
-	rm "${OUTDATADIR}/ANI/best_hits.txt"
+#if [ -s "${OUTDATADIR}/ANI/best_hits.txt" ]; then
+#	rm "${OUTDATADIR}/ANI/best_hits.txt"
 #	echo "1"
-fi
-if [ -s "${OUTDATADIR}/ANI/best_hits_ordered.txt" ]; then
-	rm "${OUTDATADIR}/ANI/best_hits_ordered.txt"
+#fi
+#if [ -s "${OUTDATADIR}/ANI/best_hits_ordered.txt" ]; then
+#	rm "${OUTDATADIR}/ANI/best_hits_ordered.txt"
 #	echo "2"
-fi
+#fi
 
 end_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 echo "ENDed ANI at ${end_time}"
