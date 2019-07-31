@@ -34,17 +34,42 @@ while IFS= read -r var; do
 	#bbduk.sh -"${bbduk_mem}" threads="${procs}" in="${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R1_001.fastq" in2="${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R2_001.fastq" out="${processed}/${project}/${sample_name}/removedAdapters/${sample_name}-noPhiX-R1.fsq" out2="${processed}/${project}/${sample_name}/removedAdapters/${sample_name}-noPhiX-R2.fsq" ref="${phiX_location}" k="${bbduk_k}" hdist="${bbduk_hdist}"
 	#trimmomatic "${trim_endtype}" -"${trim_phred}" -threads "${procs}" "${processed}/${project}/${sample_name}/removedAdapters/${sample_name}-noPhiX-R1.fsq" "${processed}/${project}/${sample_name}/removedAdapters/${sample_name}-noPhiX-R2.fsq" "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq" "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq" "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq" "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq" ILLUMINACLIP:"${trim_adapter_location}:${trim_seed_mismatch}:${trim_palindrome_clip_threshold}:${trim_simple_clip_threshold}:${trim_min_adapt_length}:${trim_complete_palindrome}" SLIDINGWINDOW:"${trim_window_size}:${trim_window_qual}" LEADING:"${trim_leading}" TRAILING:"${trim_trailing}" MINLEN:"${trim_min_length}"
 	#rm -r "${processed}/${project}/${sample_name}/removedAdapters"
-	if [[ ! -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq" ]]; then
-		cat "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq" "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq" > "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
+	#if [[ ! -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq" ]]; then
+	#	cat "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq" "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq" > "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
+	#fi
+	#echo "About to zip - ${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
+	#gzip "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
+	#echo "About to zip - ${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
+	#gzip "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
+	#echo "About to zip - ${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
+	#gzip "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
+	#rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq"
+	#rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq"
+
+	if [[ ! -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq.gz" ]]; then
+		if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq" ]]; then
+			gzip "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
+		else
+			echo "${project}/${sample_name}: No paired.fq file to zip"
+		fi
+	elif [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq" ]]; then
+		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
 	fi
-	echo "About to zip - ${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
-	gzip "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
-	echo "About to zip - ${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
-	gzip "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
-	echo "About to zip - ${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
-	gzip "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
-	rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq"
-	rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq"
+	if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq" ]]; then
+		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
+	fi
+	if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq" ]]; then
+		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
+	fi
+	if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq" ]]; then
+		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq"
+	fi
+	if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq" ]]; then
+		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq"
+	fi
+
+
+
 done < "${1}"
 
 #ml -BBMap/38.26 -trimmomatic/0.35
