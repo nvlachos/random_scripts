@@ -31,14 +31,11 @@ fi
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-
-	if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq.gz" ]]; then
-		echo "About to delete - ${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
-		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
-	fi
-	if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq.gz" ]]; then
-		echo "About to delete - ${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
-		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
+	if [[ -s "${processed}/${project}/${sample_name}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_plasmid_assembly_trimmed.fasta" ]]; then
+		FILESIZE=$(stat -c%s "${processed}/${project}/${sample_name}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_plasmid_assembly_trimmed.fasta")
+		echo "${project}/${sample_name}: ${FILESIZE}"
+	else
+		echo "${project}/${sample_name}: No plasFlow assembly"
 	fi
 done < "${1}"
 
