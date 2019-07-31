@@ -197,7 +197,7 @@ do_Kraken() {
 Check_source 0
 
 if [[ ! -z ${Genus} ]]; then
-	Genus=$(echo ${Genus} | tr -d [:space:])
+	Genus=$(echo ${Genus} | tr -d [:space:] | tr -d "[]")
 fi
 if [[ ! -z ${species} ]]; then
 	species=$(echo ${species} | tr -d [:space:])
