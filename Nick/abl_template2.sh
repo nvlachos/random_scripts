@@ -37,7 +37,7 @@ while IFS= read -r var; do
 	if [[ ! -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq" ]]; then
 		cat "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq" "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq" > "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
 	fi
-	if [[ ! -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.unpaired.fq" ]]; then
+	if [[ ! -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.single.fq" ]]; then
 		cat "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq" "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq" > "${processed}/${project}/${sample_name}/trimmed/${sample_name}.single.fq"
 		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq"
 		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq"
