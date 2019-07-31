@@ -56,7 +56,7 @@ while IFS= read -r var; do
 		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
 	fi
 	if [[ ! -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.single.fq" ]]; then
-		if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq" ]] && [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq"]]; then
+		if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq" ]] && [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq" ]]; then
 			cat "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq" "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq" > "${processed}/${project}/${sample_name}/trimmed/${sample_name}.single.fq"
 		else
 			echo "${project}/${sample_name}: An unpaired.fq is missing, cant cat to single file"
