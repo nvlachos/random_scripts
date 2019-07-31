@@ -83,6 +83,10 @@ me=$(whoami)
 # Sets the genus as the database that was passed in (The $2 seemed to be getting changed somewhere, so I just set it as a local variable)
 genus_in=${2}
 
+
+
+sed -i 's/Mycobacterium_chimaera_Sample71-PacBio/Mycobacterium_chimaera_DHQP_Sample71-PacBio/g' "${OUTDATADIR}/ANI/aniM/ANIm_percentage_identity.tab"
+
 #Extracts the top line from the %id file to get all the sample names used in analysis (they are tab separated along the top row)
 if [[ -s "${OUTDATADIR}/ANI/aniM/ANIm_percentage_identity.tab" ]]; then
 	firstline=$(head -n 1 "${OUTDATADIR}/ANI/aniM/ANIm_percentage_identity.tab")
@@ -90,11 +94,6 @@ else
 	echo "No ${OUTDATADIR}/ANI/aniM/ANIm_percentage_identity.tab file, exiting"
 	exit 1
 fi
-
-sed -i 's/Mycobacterium_chimaera_Sample71-PacBio/Mycobacterium_chimaera_DHQP_Sample71-PacBio/g' "${OUTDATADIR}/ANI/aniM/ANIm_percentage_identity.tab"
-echo "Sleeping"
-sleep 30
-echo "Waking"
 
 #Extracts the query sample info line for percentage identity from the percent identity file
 while IFS='' read -r line; do
