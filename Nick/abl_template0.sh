@@ -27,6 +27,8 @@ fi
 
 #ml BBMap/38.26 trimmomatic/0.35
 
+echo "Sample	Unpaired_R1	Unpaired_R2	Single_FQ	Paired_R1	Unpaired_R2	Paired_FQ"
+
 # Loop through and act on each sample name in the passed/provided list
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
@@ -47,35 +49,51 @@ while IFS= read -r var; do
 	#rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq"
 
 	if [[ ! -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq.gz" ]]; then
-		if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq" ]]; then
-			gzip "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
-		else
-			echo "${project}/${sample_name}: No paired.fq file to zip"
-		fi
+		#if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq" ]]; then
+			#gzip "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
+			pfq="Z"
+		#else
+			#echo "${project}/${sample_name}: No paired.fq file to zip"
+		#fi
 	elif [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq" ]]; then
-		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
+		#rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
+		pfq="U"
 	fi
 	if [[ ! -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.single.fq" ]]; then
-		if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq" ]] && [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq" ]]; then
-			cat "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq" "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq" > "${processed}/${project}/${sample_name}/trimmed/${sample_name}.single.fq"
-		else
-			echo "${project}/${sample_name}: An unpaired.fq is missing, cant cat to single file"
-		fi
+		#if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq" ]] && [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq" ]]; then
+			#cat "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq" "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq" > "${processed}/${project}/${sample_name}/trimmed/${sample_name}.single.fq"
+		#else
+			#echo "${project}/${sample_name}: An unpaired.fq is missing, cant cat to single file"
+		#fi
+		sfq="M"
+	else
+		sfq="P"
 	fi
-
-
 	if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq" ]]; then
-		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
+		#rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
+		pr1="U"
+	elif [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq.gz" ]]; then
+		pr1="Z"
 	fi
 	if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq" ]]; then
-		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
+		#rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
+		pr2="U"
+	elif [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq'gz" ]]; then
+		pr2="Z"
 	fi
 	if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq" ]]; then
-		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq"
+		#rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq"
+		ur1="P"
+	else
+		ur1="M"
 	fi
 	if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq" ]]; then
-		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq"
+		#rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq"
+		ur2="P"
+	else
+		ur2="M"
 	fi
+	echo "${project}/${sample_name}	${ur1}	${ur2}	${sfq}	${pr1}	${pr2}	${pfq}"
 
 
 
