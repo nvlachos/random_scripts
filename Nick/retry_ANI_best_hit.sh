@@ -91,6 +91,8 @@ else
 	exit 1
 fi
 
+sed -i 's/Mycobacterium_chimaera_Sample71-PacBio/Mycobacterium_chimaera_DHQP_Sample71-PacBio/g' "${OUTDATADIR}/ANI/aniM/ANIm_percentage_identity.tab"
+
 #Extracts the query sample info line for percentage identity from the percent identity file
 while IFS='' read -r line; do
 #	echo "!-${line}"
@@ -214,14 +216,14 @@ species=$(tail -n2 ${OUTDATADIR}/${1}.tax | head -n1 | cut -d'	' -f2)
 echo -e "${genus^} ${species}"
 
 #Removes the transient hit files
-#if [ -s "${OUTDATADIR}/ANI/best_hits.txt" ]; then
-#	rm "${OUTDATADIR}/ANI/best_hits.txt"
+if [ -s "${OUTDATADIR}/ANI/best_hits.txt" ]; then
+	rm "${OUTDATADIR}/ANI/best_hits.txt"
 #	echo "1"
-#fi
-#if [ -s "${OUTDATADIR}/ANI/best_hits_ordered.txt" ]; then
-#	rm "${OUTDATADIR}/ANI/best_hits_ordered.txt"
+fi
+if [ -s "${OUTDATADIR}/ANI/best_hits_ordered.txt" ]; then
+	rm "${OUTDATADIR}/ANI/best_hits_ordered.txt"
 #	echo "2"
-#fi
+fi
 
 end_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 echo "ENDed ANI at ${end_time}"
