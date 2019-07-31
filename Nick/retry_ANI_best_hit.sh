@@ -93,7 +93,7 @@ fi
 
 sed -i 's/Mycobacterium_chimaera_Sample71-PacBio/Mycobacterium_chimaera_DHQP_Sample71-PacBio/g' "${OUTDATADIR}/ANI/aniM/ANIm_percentage_identity.tab"
 echo "Sleeping"
-sleep 12
+sleep 30
 echo "Waking"
 
 #Extracts the query sample info line for percentage identity from the percent identity file
