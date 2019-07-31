@@ -78,7 +78,7 @@ while IFS= read -r var; do
 	if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq" ]]; then
 		#rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
 		pr2="U"
-	elif [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq'gz" ]]; then
+	elif [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq.gz" ]]; then
 		pr2="Z"
 	fi
 	if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq" ]]; then
