@@ -101,7 +101,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	#echo "${counter}-${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta"
 
 	# Ensure tax file exists to get proper DB to run ANI against
-	#if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
+	if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
 	#	# Parse tax file
 	#	while IFS= read -r line; do
 	#		# Grab first letter of line (indicating taxonomic level)
