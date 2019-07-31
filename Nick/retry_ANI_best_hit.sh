@@ -184,8 +184,10 @@ else
 	#Extracts the accession number from the definition line
 	accession=$(echo "${def_array[2]}" | cut -d' ' -f1  | cut -d'>' -f2)
 	#Looks up the NCBI genus species from the accession number
+	echo ${accession}
 	if [[ "${accession}" == "No_Accession_Number" ]]; then
 		best_organism_guess="${def_array[3]} ${def_array[4]}"
+		echo "${best_organism_guess}"
 	else
 		ml Entrez/latest
 		attempts=0
