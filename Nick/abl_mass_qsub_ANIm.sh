@@ -84,9 +84,13 @@ start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 
 # Create and submit qsub scripts to get ANI for all isolates
 while [ ${counter} -lt ${arr_size} ] ; do
-	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
+	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2 | cut -d':' -f1)
 	#sample=${sample:0:20}
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
+	genus=sample=$(echo "${arr[${counter}]}" | cut -d':' -f2)
+	species = "holder"
+
+
 	if [[ "${clobberness}" == "clobber" ]]; then
 		echo "Trying to remove ${processed}/${project}/${sample}/ANI"
 		rm -r "${processed}/${project}/${sample}/ANI"
@@ -97,24 +101,24 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	#echo "${counter}-${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta"
 
 	# Ensure tax file exists to get proper DB to run ANI against
-	if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
-		# Parse tax file
-		while IFS= read -r line; do
-			# Grab first letter of line (indicating taxonomic level)
-			first=${line:0:1}
-			# Assign taxonomic level value from 4th value in line (1st-classification level, 2nd-% by kraken, 3rd-true % of total reads, 4th-identifier)
-			if [ "${first}" = "s" ]
-			then
-				species=$(echo "${line}" | awk -F ' ' '{print $2}')
-			elif [ "${first}" = "G" ]
-			then
-				genus=$(echo "${line}" | awk -F ' ' '{print $2}')
-				# Only until ANI gets fixed
-				if [[ ${genus} == "Clostridioides" ]]; then
-					genus="Clostridium"
-				fi
-			fi
-		done < "${processed}/${project}/${sample}/${sample}.tax"
+	#if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
+	#	# Parse tax file
+	#	while IFS= read -r line; do
+	#		# Grab first letter of line (indicating taxonomic level)
+	#		first=${line:0:1}
+	#		# Assign taxonomic level value from 4th value in line (1st-classification level, 2nd-% by kraken, 3rd-true % of total reads, 4th-identifier)
+	#		if [ "${first}" = "s" ]
+	#		then
+	#			species=$(echo "${line}" | awk -F ' ' '{print $2}')
+	#		elif [ "${first}" = "G" ]
+	#		then
+	#			genus=$(echo "${line}" | awk -F ' ' '{print $2}')
+	#			# Only until ANI gets fixed
+	#			if [[ ${genus} == "Clostridioides" ]]; then
+	#				genus="Clostridium"
+	#			fi
+	#		fi
+	#	done < "${processed}/${project}/${sample}/${sample}.tax"
 
 
 		sleep 15
