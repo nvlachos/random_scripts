@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o abl-template1.out
-#$ -e abl-template1.err
-#$ -N abl-template1
+#$ -o abl-template0.out
+#$ -e abl-template0.err
+#$ -N abl-template0
 #$ -cwd
 #$ -q short.q
 
@@ -55,6 +55,15 @@ while IFS= read -r var; do
 	elif [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq" ]]; then
 		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}.paired.fq"
 	fi
+	if [[ ! -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}.single.fq" ]]; then
+		if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq" ]] && [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq"]]; then
+			cat "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.unpaired.fq" "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.unpaired.fq" > "${processed}/${project}/${sample_name}/trimmed/${sample_name}.single.fq"
+		else
+			echo "${project}/${sample_name}: An unpaired.fq is missing, cant cat to single file"
+		fi
+	fi
+
+
 	if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq" ]]; then
 		rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
 	fi
