@@ -118,7 +118,7 @@ if [[ ! -d "${OUTDATADIR}/ANI/localANIDB" ]]; then
 	mkdir "${OUTDATADIR}/ANI/localANIDB"
 	for (( i=0; i<n; i++ ));
 	do
-		temp_ref=$(find ${local_DBs}/aniDB/${genus_in,,} -maxdepth 1 -type f -name "${samples[i]}.fna.gz")
+		temp_ref=$(find ${local_DBs}/aniDB/${genus_in,,} -maxdepth 1 -type f -name "*${samples[i]}.fna.gz")
 		echo "Trying to copy ${temp_ref} --- *${samples[i]}.fna.gz"
 		if [[ -f ${temp_ref} ]]; then
 			cp "${temp_ref}" "${OUTDATADIR}/ANI/localANIDB"
@@ -132,6 +132,7 @@ else
 fi
 
 temp_ref=""
+for f in *${OUTDATADIR}/ANI/localANIDB; do mv $f `basename $f .fasta`.fna;done;
 
 for (( i=0; i<n; i++ ));
 do
@@ -140,7 +141,7 @@ do
 #		echo "Skipping ${i}"
 		continue
 	else
-		temp_ref=$(find "${OUTDATADIR}/ANI/localANIDB" -type f -name "${samples[i]}.fna")
+		temp_ref=$(find "${OUTDATADIR}/ANI/localANIDB" -type f -name "*${samples[i]}.fna")
 		if [[ -f ${temp_ref} ]]; then
 			definition=$(head -1 "${temp_ref}")
 			# Prints all matching samples to file (Except the self comparison) by line as percent_match  sample_name  fasta_header
