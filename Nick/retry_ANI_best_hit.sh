@@ -132,7 +132,7 @@ else
 fi
 
 temp_ref=""
-for f in *${OUTDATADIR}/ANI/localANIDB; do mv $f `basename $f .fasta`.fna;done;
+for f in ${OUTDATADIR}/ANI/localANIDB/*; do mv $f `basename $f .fasta`.fna;done;
 
 for (( i=0; i<n; i++ ));
 do
