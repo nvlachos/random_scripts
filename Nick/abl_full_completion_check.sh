@@ -353,7 +353,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 
 		if [[ "${genus}" = "Peptoclostridium" ]] || [[ "${genus}" = "Clostridioides" ]]; then
 			temp-genus="Clostridium"
-		elif [[ "${genus}" = "Shigella" ]];
+		elif [[ "${genus}" = "Shigella" ]]; then
 			temp-genus="Escherichia"
 		else
 			temp-genus=${genus}
