@@ -350,11 +350,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 			plasFlow_Stats="No_plasFlow"
 		fi
 
-		if [[ -s "${processed}/${project}/${sample_name}/ANI/${genus}_and_${sample_name}_mashtree.dnd" ]]; then
-			animash="Found"
-		else
-			animash="NOT_FOUND"
-		fi
+
 		if [[ "${genus}" = "Peptoclostridium" ]] || [[ "${genus}" = "Clostridioides" ]]; then
 			temp-genus="Clostridium"
 		elif [[ "${genus}" = "Shigella" ]];
@@ -366,6 +362,11 @@ while IFS= read -r var || [ -n "$var" ]; do
 			anigenus="Found"
 		else
 			anigenus="NOT_FOUND"
+		fi
+		if [[ -s "${processed}/${project}/${sample_name}/ANI/${temp-genus}_and_${sample_name}_mashtree.dnd" ]]; then
+			animash="Found"
+		else
+			animash="NOT_FOUND"
 		fi
 
 		if [[ "${genus}" == "Acinetobacter" ]] && [[ "${species}" == "baumannii" ]]; then
