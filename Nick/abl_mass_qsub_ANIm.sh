@@ -89,6 +89,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	genus=${5}
 	species=${6}
+	
 
 
 	if [[ "${clobberness}" == "clobber" ]]; then

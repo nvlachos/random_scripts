@@ -355,7 +355,14 @@ while IFS= read -r var || [ -n "$var" ]; do
 		else
 			animash="NOT_FOUND"
 		fi
-		if [[ -s "${processed}/${project}/${sample_name}/ANI/best_ANI_hits_ordered(${sample_name}_vs_${genus}).txt" ]]; then
+		if [[ "${genus}" = "Peptoclostridium" ]] || [[ "${genus}" = "Clostridioides" ]]; then
+			temp-genus="Clostridium"
+		elif [[ "${genus}" = "Shigella" ]];
+			temp-genus="Escherichia"
+		else
+			temp-genus=${genus}
+		fi
+		if [[ -s "${processed}/${project}/${sample_name}/ANI/best_ANI_hits_ordered(${sample_name}_vs_${temp-genus}).txt" ]]; then
 			anigenus="Found"
 		else
 			anigenus="NOT_FOUND"
