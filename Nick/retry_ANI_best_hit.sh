@@ -132,13 +132,13 @@ else
 fi
 
 temp_ref=""
-owd=$(pwd)
-cd ${OUTDATADIR}/ANI/localANIDB/
-for f in ${OUTDATADIR}/ANI/localANIDB/*;
-do
-	mv $f `basename $f .fasta`.fna
-done
-cd ${owd}
+# owd=$(pwd)
+# cd ${OUTDATADIR}/ANI/localANIDB/
+# for f in ${OUTDATADIR}/ANI/localANIDB/*;
+# do
+# 	mv $f `basename $f .fasta`.fna
+# done
+# cd ${owd}
 
 for (( i=0; i<n; i++ ));
 do
