@@ -32,7 +32,7 @@ while IFS= read -r var; do
 	#rm -r "${processed}/${project}/${sample_name}/ANI"
 	#rm "${processed}/${project}/${sample_name}.tax"
 	#"${shareScript}/determine_taxID.sh" ${sample_name} ${project_ID}
-	 sed -i 's/,/\//1' "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst"
+	 sed -i 's/|/\//1' "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst"
 done < "${1}"
 
 echo "All isolates completed"
