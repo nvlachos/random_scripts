@@ -18,7 +18,7 @@ ml ncbi-blast+/LATEST
 #
 # Finds anti-microbial resistance genes in the resFinder and ARG-ANNOT databases and exports a file containing list of all genes found
 #
-# Usage ./run_c-sstar_on_single_alternate_DB.sh sample_name run_type(g/u for gapped/ungapped) similarity(l/m/h/u/p/o for low(80),medium(95),high(98),ultra-high(99),perfect(100),other(set in config.sh)) miseq_run_id (DONT USE-plasmid(optional))
+# Usage ./run_c-sstar_on_single_alternate_DB.sh sample_name run_type(g/u for gapped/ungapped) similarity(l/m/h/u/p/o for low(80),medium(95),high(98),ultra-high(99),perfect(100),other(set in config.sh)) miseq_run_id path_to_DB (DONT USE-plasmid(optional))
 #
 # No Modules needed
 #
