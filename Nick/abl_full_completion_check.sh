@@ -390,7 +390,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 			else
 				srst2_mlst_result2="NOT_FOUND"
 			fi
-			srst2_mlst="${mlst_result1}|${mlst_result2}"
+			srst2_mlst="${srst2_mlst_result1}|${srst2_mlst_result2}"
 		elif [[ "${genus}" == "Escherichia" ]] && [[ "${species}" == "coli" ]]; then
 			if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]]; then
 				mlst_result1=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" | cut -d'	' -f3)
