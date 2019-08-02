@@ -31,12 +31,7 @@ fi
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	if [[ -f "${processed}/${project}/${sample_name}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_plasmid_assembly_trimmed.fasta" ]]; then
-		FILESIZE=$(stat -c%s "${processed}/${project}/${sample_name}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_plasmid_assembly_trimmed.fasta")
-		echo "${project}/${sample_name}: ${FILESIZE}"
-	else
-		echo "${project}/${sample_name}: No plasFlow assembly"
-	fi
+	${shareScript}/best_hit_from_gottcha1.sh ${sample_name} ${project}
 done < "${1}"
 
 #ml -BBMap/38.26 -trimmomatic/0.35
