@@ -32,6 +32,8 @@ elif [[ ! -f ${1} ]]; then
 fi
 
 
+${shareScript}/clean_list.sh ${1}
+
 # Loop through and act on each sample name in the passed/provided list
 while IFS= read -r line_in; do
 	#line_in=$(echo "${line_in}" | tr -d '\n')
