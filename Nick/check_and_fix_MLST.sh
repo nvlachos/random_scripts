@@ -38,7 +38,7 @@ while IFS= read -r line_in; do
 	sample=$(echo "${line_in}" | cut -d'/' -f2)
 	project=$(echo "${line_in}" | cut -d'/' -f1)
 	# Check main automated mlst file first
-	echo "Starting"
+	echo "Starting checking ${processed}/${project}/${sample}/MLST/"
 	for mlst_file in "${processed}/${project}/${sample}/MLST/"*; do
 		echo "checking ${mlst_file}"
 		if [[ "${mlst_file}" == *".mlst" ]]; then
