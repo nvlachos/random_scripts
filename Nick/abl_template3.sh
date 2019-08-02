@@ -26,14 +26,16 @@ elif [[ "$1" = "-h" ]]; then
 fi
 
 #ml BBMap/38.26 trimmomatic/0.35
-
+ml krona
 # Loop through and act on each sample name in the passed/provided list
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	${shareScript}/best_hit_from_gottcha1.sh ${sample_name} ${project}
-done < "${1}"
 
+	ktImportText "${processed}/${project}/${sample_name}/gottcha/gottcha_S/${1}_temp/${1}.lineage.tsv" -o "${processed}/${project}/${sample_name}/gottcha/${1}_species.krona.html"
+
+done < "${1}"
+ml -krona
 #ml -BBMap/38.26 -trimmomatic/0.35
 
 echo "All isolates completed"
