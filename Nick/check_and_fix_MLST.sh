@@ -34,7 +34,7 @@ fi
 
 # Loop through and act on each sample name in the passed/provided list
 while IFS= read -r line_in; do
-	line_in=$(echo "${line_in}" | tr -d '\n')
+	#line_in=$(echo "${line_in}" | tr -d '\n')
 	sample=$(echo "${line_in}" | cut -d'/' -f2)
 	project=$(echo "${line_in}" | cut -d'/' -f1)
 	# Check main automated mlst file first
