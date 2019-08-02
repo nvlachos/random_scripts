@@ -39,9 +39,9 @@ while IFS= read -r line_in; do
 	project=$(echo "${line_in}" | cut -d'/' -f1)
 	# Check main automated mlst file first
 	echo "Starting checking ${processed}/${project}/${sample}/MLST/"
-	for mlst_file in "${processed}/${project}/${sample}/MLST/"*; do
+	for mlst_file in ${processed}/${project}/${sample}/MLST/*.mlst; do
 		echo "checking ${mlst_file}"
-		if [[ "${mlst_file}" == *".mlst" ]]; then
+		#if [[ "${mlst_file}" == *".mlst" ]]; then
 			if [[ "${mlst_file}" == *"srst2"* ]]; then
 				#echo "Dont have srst2 checker yet, need to find good srst2 files"
 				#echo "${mlst_file}" >> /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/srst2_mlsts.txt
@@ -56,7 +56,7 @@ while IFS= read -r line_in; do
 				fi
 				python3 "${shareScript}/check_and_fix_MLST.py" -i "${mlst_file}" -t "standard"
 			fi
-		fi # Done with main mlst file
+		#fi # Done with main mlst file
 	done
 	echo "Done"
 done < ${1}
