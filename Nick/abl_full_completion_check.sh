@@ -351,19 +351,19 @@ while IFS= read -r var || [ -n "$var" ]; do
 		fi
 
 
-		if [[ "${genus}" = "Peptoclostridium" ]] || [[ "${genus}" = "Clostridioides" ]]; then
-			temp-genus="Clostridium"
-		elif [[ "${genus}" = "Shigella" ]]; then
-			temp-genus="Escherichia"
+		if [[ "${genus}" == "Peptoclostridium" ]] || [[ "${genus}" == "Clostridioides" ]]; then
+			tempgenus="Clostridium"
+		elif [[ "${genus}" == "Shigella" ]]; then
+			tempgenus="Escherichia"
 		else
-			temp-genus=${genus}
+			tempgenus=${genus}
 		fi
-		if [[ -s "${processed}/${project}/${sample_name}/ANI/best_ANI_hits_ordered(${sample_name}_vs_${temp-genus}).txt" ]]; then
+		if [[ -s "${processed}/${project}/${sample_name}/ANI/best_ANI_hits_ordered(${sample_name}_vs_${tempgenus}).txt" ]]; then
 			anigenus="Found"
 		else
 			anigenus="NOT_FOUND"
 		fi
-		if [[ -s "${processed}/${project}/${sample_name}/ANI/${temp-genus}_and_${sample_name}_mashtree.dnd" ]]; then
+		if [[ -s "${processed}/${project}/${sample_name}/ANI/${tempgenus}_and_${sample_name}_mashtree.dnd" ]]; then
 			animash="Found"
 		else
 			animash="NOT_FOUND"
