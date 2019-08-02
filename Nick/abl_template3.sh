@@ -32,7 +32,7 @@ while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 
-	ktImportText "${processed}/${project}/${sample_name}/gottcha/gottcha_S/${1}_temp/${1}.lineage.tsv" -o "${processed}/${project}/${sample_name}/gottcha/${1}_species.krona.html"
+	ktImportText "${processed}/${project}/${sample_name}/gottcha/gottcha_S/${sample_name}_temp/${sample_name}.lineage.tsv" -o "${processed}/${project}/${sample_name}/gottcha/${sample_name}_species.krona.html"
 
 done < "${1}"
 ml -krona
