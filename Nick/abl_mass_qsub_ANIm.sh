@@ -87,9 +87,9 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2 | cut -d':' -f1)
 	#sample=${sample:0:20}
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
-	genus=${5}
-	species=${6}
-	
+	#genus=${5}
+	#species=${6}
+
 
 
 	if [[ "${clobberness}" == "clobber" ]]; then
@@ -103,23 +103,23 @@ while [ ${counter} -lt ${arr_size} ] ; do
 
 	# Ensure tax file exists to get proper DB to run ANI against
 	if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
-	#	# Parse tax file
-	#	while IFS= read -r line; do
-	#		# Grab first letter of line (indicating taxonomic level)
-	#		first=${line:0:1}
-	#		# Assign taxonomic level value from 4th value in line (1st-classification level, 2nd-% by kraken, 3rd-true % of total reads, 4th-identifier)
-	#		if [ "${first}" = "s" ]
-	#		then
-	#			species=$(echo "${line}" | awk -F ' ' '{print $2}')
-	#		elif [ "${first}" = "G" ]
-	#		then
-	#			genus=$(echo "${line}" | awk -F ' ' '{print $2}')
-	#			# Only until ANI gets fixed
-	#			if [[ ${genus} == "Clostridioides" ]]; then
-	#				genus="Clostridium"
-	#			fi
-	#		fi
-	#	done < "${processed}/${project}/${sample}/${sample}.tax"
+		# Parse tax file
+		while IFS= read -r line; do
+			# Grab first letter of line (indicating taxonomic level)
+			first=${line:0:1}
+			# Assign taxonomic level value from 4th value in line (1st-classification level, 2nd-% by kraken, 3rd-true % of total reads, 4th-identifier)
+			if [ "${first}" = "s" ]
+			then
+				species=$(echo "${line}" | awk -F ' ' '{print $2}')
+			elif [ "${first}" = "G" ]
+			then
+				genus=$(echo "${line}" | awk -F ' ' '{print $2}')
+				# Only until ANI gets fixed
+				if [[ ${genus} == "Clostridioides" ]]; then
+					genus="Clostridium"
+				fi
+			fi
+		done < "${processed}/${project}/${sample}/${sample}.tax"
 
 
 		sleep 15
