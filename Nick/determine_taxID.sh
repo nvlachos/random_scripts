@@ -222,4 +222,6 @@ while IFS= read -r line  || [ -n "$line" ]; do
 	fi
 done < "${local_DBs}/taxes.csv"
 
+echo "(${source})-${confidence_index}%%-${source_file}\nD:	${Domain}\nP:	${Phylum}\nC:	${Class}\nO:	${Order}\nF:	${Family}\nG:	${Genus}\ns:	${species}\n"
+
 printf "(${source})-${confidence_index}%%-${source_file}\nD:	${Domain}\nP:	${Phylum}\nC:	${Class}\nO:	${Order}\nF:	${Family}\nG:	${Genus}\ns:	${species}\n" > "${processed}/${project}/${sample}/${sample}.tax"
