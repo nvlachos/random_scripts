@@ -29,8 +29,7 @@ fi
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	${shareScript}/run_ANI.sh ${sample_name} ${2,} ${3} ${project}
-	${shareScript}/determine_taxID.sh ${sample_name} ${project}
+	${shareScript}/retry_ANI_mash.sh ${sample_name} ${2} ${3} ${project}
 done < "${1}"
 
 echo "All isolates completed"
