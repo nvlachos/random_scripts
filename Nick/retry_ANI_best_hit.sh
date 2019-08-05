@@ -123,7 +123,7 @@ if [[ ! -d "${OUTDATADIR}/ANI/localANIDB" ]]; then
 		fi
 	done
 	gunzip "${OUTDATADIR}/ANI/localANIDB/"*
-	for f in ${OUTDATADIR}/ANI/localANIDB/*;
+	for f in ${OUTDATADIR}/ANI/localANIDB/*; do
 		if [[ "${f}" == *".fasta" ]]; then
 			mv $f `basename $f .fasta`.fna
 		fi
