@@ -132,11 +132,13 @@ else
 	echo "Already/still has its localANIDB folder"
 fi
 
+ls -l "${OUTDATADIR}/ANI/localANIDB"
+
 temp_ref=""
 
 for (( i=0; i<n; i++ ));
 do
-#	echo ${i}-${samples[i]}
+	echo ${i}-${samples[i]}
 	if [[ ${samples[i]:0:7} = "sample_" ]]; then
 #		echo "Skipping ${i}"
 		continue
