@@ -118,14 +118,17 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				if [[ ${genus} == "Clostridioides" ]]; then
 					genus="Clostridium"
 				fi
+				if [[ ${genus} == "Shigella" ]]; then
+					genus="Escherichia"
+				fi
 			fi
 		done < "${processed}/${project}/${sample}/${sample}.tax"
 
 
 		sleep 15
 		#Temp assignment, if specific DB is necessary
-		genus="Acinetobacter"
-		species="baumannii"
+		#genus="Acinetobacter"
+		#species="baumannii"
 
 		echo "G-${genus},S-${species}"
 
