@@ -124,8 +124,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 
 		sleep 15
 		#Temp assignment, if specific DB is necessary
-		#genus="Acinetobacter"
-		#species="baumannii"
+		genus="Acinetobacter"
+		species="baumannii"
 
 		echo "G-${genus},S-${species}"
 
