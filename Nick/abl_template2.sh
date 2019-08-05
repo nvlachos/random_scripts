@@ -25,7 +25,7 @@ elif [[ "$1" = "-h" ]]; then
 	exit 0
 fi
 
-#ml BBMap/38.26 trimmomatic/0.35
+ml BBMap/38.26 trimmomatic/0.35
 
 # Loop through and act on each sample name in the passed/provided list
 while IFS= read -r var; do
@@ -59,7 +59,7 @@ while IFS= read -r var; do
 
 done < "${1}"
 
-#ml -BBMap/38.26 -trimmomatic/0.35
+ml -BBMap/38.26 -trimmomatic/0.35
 
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
