@@ -123,18 +123,16 @@ if [[ ! -d "${OUTDATADIR}/ANI/localANIDB" ]]; then
 		fi
 	done
 	gunzip "${OUTDATADIR}/ANI/localANIDB/"*
+	for f in ${OUTDATADIR}/ANI/localANIDB/*;
+		if [[ "${f}" == *".fasta" ]]; then
+			mv $f `basename $f .fasta`.fna
+		fi
+	done
 else
 	echo "Already/still has its localANIDB folder"
 fi
 
 temp_ref=""
- owd=$(pwd)
- cd ${OUTDATADIR}/ANI/localANIDB/
- for f in ${OUTDATADIR}/ANI/localANIDB/*;
- do
- 	mv $f `basename $f .fasta`.fna
- done
- cd ${owd}
 
 for (( i=0; i<n; i++ ));
 do
