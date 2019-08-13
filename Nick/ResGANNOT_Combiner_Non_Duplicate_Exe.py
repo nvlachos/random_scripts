@@ -68,7 +68,7 @@ def Duplicate_Gene_Remover(input_fasta, output_file, output_copy_file):
             else:
                 errors=""
                 for base in str(Gene_List[genes].seq):
-                    if base not in ("A","C","G","T"):
+                    if base not in ("A","C","G","T","a","c","g","t"):
                         if (errors == ""):
                             errors = base
                         else:
