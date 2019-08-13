@@ -31,7 +31,7 @@ def Duplicate_Gene_Remover(input_fasta, output_file, output_copy_file):
     copies_fasta = open(output_copy_file, 'w')
     bad_seqs=[]
     for genes in range(1, len(Gene_List)):
-        if genes > 0: then
+        if genes > 0:
             for genes_2 in range(len(Gene_List_out)):
                 if str(Gene_List[genes].seq).upper() == str(Gene_List_out[genes_2].seq).upper():
                     Gene_Adder = 1
