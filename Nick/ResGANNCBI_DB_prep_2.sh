@@ -68,14 +68,15 @@ today=$(date '+%Y%m%d')
 if [[ "${non_duplicated}" != "true" ]]; then
 	# #FASTA files containing most up to date databases from resFinder and ARGANNOT
 	#echo ":${ARGANNOT_source}:${resFinder_source}:"
-	if [[ "${RESGANNOT_source}" == "" ]]; then
+	if [[ "${ResGANNOT_source}" == "" ]]; then
 		#echo "looking ar:${DATADIR}"
-		RESGANNOT_source=$(find ${DATADIR} -name 'ResGANNOT*')
-		if [[ ! -f "${RESGANNOT_source}" ]]; then
+		ResGANNOT_source="${DATADIR}/ResGANNOT_${today}.fasta"
+		#ResGANNOT_source=$(find ${DATADIR} -name 'ResGANNOT*.fasta')
+		if [[ ! -f "${ResGANNOT_source}" ]]; then
 			echo "No ResGANNOT fasta found, exiting"
 		fi
 	fi
-	echo ":${RESGANNOT_source}:${NCBI_source}:"
+	echo ":${ResGANNOT_source}:${NCBI_source}:"
 
 		if [[ "${NCBI_source}" == "" ]]; then
 		#echo "looking ar:${DATADIR}"
@@ -86,7 +87,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 			echo "No NCBI fasta found, exiting"
 		fi
 	fi
-	echo "${RESGANNOT_source}:${NCBI_source}"
+	echo "${ResGANNOT_source}:${NCBI_source}"
 
 	ResGANNCBI_source="${DATADIR}/ResGANNCBI_${today}.fasta"
 	echo "resGANNOT-source=${ResGANNOT_source}"
