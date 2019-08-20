@@ -107,7 +107,7 @@ def Dual_Fasta_Combiner(res_File, arg_file, new_file,t1,t2):
         if (line[0] == ">") and (line[1] != "("):
             resist=line[1:4]
             oldline=line[4:]
-            newline=title_two+("+resist+")"+oldline
+            newline=title_two+"("+resist+")"+oldline
             f2.write(newline)
         else:
             f2.write(line.replace('>', title_two).replace('/','-'))
