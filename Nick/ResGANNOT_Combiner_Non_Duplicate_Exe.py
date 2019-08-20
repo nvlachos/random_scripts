@@ -90,13 +90,15 @@ def Duplicate_Gene_Remover(input_fasta, output_file, output_copy_file):
         SeqIO.write(output_genes, bad_output_fasta, 'fasta')
     bad_output_fasta.close()
 
-def Dual_Fasta_Combiner(res_File, arg_file, new_file):
+def Dual_Fasta_Combiner(res_File, arg_file, new_file,t1,t2):
     """Reads in Two fasta files and writes them out to a single new file"""
+    title_one=">["+t1+"]"
+    title_two=">["+t2+"]"
     print(res_File,"and",arg_file)
     f1 = open(res_File, 'r')
     f2 = open(new_file, 'w')
     for line in f1:
-        f2.write(line.replace('>', '>[RES]').replace('/', '-'))
+        f2.write(line.replace('>', title_one).replace('/', '-'))
     f1.close()
     f2.close()
     f1 = open(arg_file, 'r')
@@ -105,10 +107,10 @@ def Dual_Fasta_Combiner(res_File, arg_file, new_file):
         if (line[0] == ">") and (line[1] != "("):
             resist=line[1:4]
             oldline=line[4:]
-            newline=">[ARG]("+resist+")"+oldline
+            newline=title_two+("+resist+")"+oldline
             f2.write(newline)
         else:
-            f2.write(line.replace('>', '>[ARG]').replace('/','-'))
+            f2.write(line.replace('>', title_two).replace('/','-'))
 
-Dual_Fasta_Combiner(sys.argv[1], sys.argv[2], sys.argv[3])
+Dual_Fasta_Combiner(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[5], sys.argv[6])
 Duplicate_Gene_Remover(sys.argv[3], sys.argv[3], sys.argv[4])
