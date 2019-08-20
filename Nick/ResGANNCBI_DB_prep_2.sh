@@ -195,6 +195,9 @@ echo "Assigning definitions to new group members"
 
 eval uniq_new_groups=($(printf "%q\n" "${new_groups[@]}" | sort -u))
 
+echo "UNG#=${#uniq_new_groups[@]}"
+echo "${uniq_new_groups[*]}"
+
 for i in ${uniq_new_groups[@]}
 do
 	if [[ ! -z "${i}" ]]; then
