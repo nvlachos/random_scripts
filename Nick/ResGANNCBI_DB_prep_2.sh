@@ -192,7 +192,10 @@ while IFS= read -r line || [ -n "$line" ]; do
 done < ${ResGANNCBI_source}
 
 echo "Assigning definitions to new group members"
-for i in ${new_groups[@]}
+
+eval uniq_new_groups=($(printf "%q\n" "${new_groups[@]}" | sort -u))
+
+for i in ${uniq_new_groups[@]}
 do
 	if [[ ! -z "${i}" ]]; then
 		read -p "${i} is not in the group definitions...what resistance does it confer?" new_conf
