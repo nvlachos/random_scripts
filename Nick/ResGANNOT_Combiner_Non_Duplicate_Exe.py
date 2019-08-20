@@ -91,7 +91,7 @@ def Duplicate_Gene_Remover(input_fasta, output_file, output_copy_file):
     bad_output_fasta.close()
 
 def Dual_Fasta_Combiner(res_File, arg_file, new_file,t1,t2):
-    """Reads in Two fasta files and writes them out to a single new file"""
+    """Reads in Two fasta files and writes them out to a single new file, if using an ARG it must always be second"""
     title_one=">["+t1+"]"
     title_two=">["+t2+"]"
     print(res_File,"and",arg_file)
@@ -104,7 +104,7 @@ def Dual_Fasta_Combiner(res_File, arg_file, new_file,t1,t2):
     f1 = open(arg_file, 'r')
     f2 = open(new_file, 'a')
     for line in f1:
-        if (line[0] == ">") and (line[1] != "("):
+        if (line[0] == ">") and (line[1] != "(") and t2 == "ARG":
             resist=line[1:4]
             oldline=line[4:]
             newline=title_two+"("+resist+")"+oldline

@@ -94,7 +94,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 	echo "NCBI-scource=${NCBI_source}"
 	echo "ResGANNCBI-source=${ResGANNCBI_source}"
 
-	python "${shareScript}/ResGANNOT_Combiner_Non_Duplicate_Exe.py" "${ResGANNOT_source}" "${NCBI_source}" "${ResGANNCBI_source}" "${DATADIR}/_ResGANNCBI_Copies.fasta" "RGN" "NCBI"
+	python "${shareScript}/ResGANNOT_Combiner_Non_Duplicate_Exe.py" "${ResGANNOT_source}" "${NCBI_source}" "${ResGANNCBI_source}" "${DATADIR}/ResGANNCBI_Copies.fasta" "RGN" "NCBI"
 	sed -i 's/>\[RGN\]/>/g' "${ResGANNCBI_source}"
 
 
@@ -177,7 +177,7 @@ while IFS= read -r line || [ -n "$line" ]; do
 				new_groups+=(${gene_type})
 			fi
 		elif [[ "${source}" == "NCBI" ]]; then
-			gene_type=$(echo ${header} | cut -d'|' -f4)
+			gene_type=$(echo ${header} | cut -d'|' -f6)
 			gene_type=${gene_type:0:3}
 			#echo "${gene_type,,}"
 			confers="${groups[${gene_type,,}]}"
