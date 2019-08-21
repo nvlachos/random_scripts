@@ -45,11 +45,17 @@ while IFS= read -r var; do
 		echo "Attempting to copy: ${sample_name}"
 		if [[ ! -s "${OUTDATADIR}/${sample_name}_R1_001.fastq" ]]; then
 #			gunzip -c "${full_name1}" > "${OUTDATADIR}/${sample_name}_R1_001.fastq"
+			echo "Unzipping R1-${sample_name}"
 			gunzip -c "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R1_001.fastq.gz" > "${OUTDATADIR}/${sample_name}_R1_001.fastq"
+		else
+			echo "R1 already exists-${sample_name}"
 		fi
 		if [[ ! -s "${OUTDATADIR}/${shname}_R2_001.fastq" ]]; then
 #			gunzip -c "${full_name2}" > "${OUTDATADIR}/${sample_name}_R2_001.fastq"
+			echo "Unzipping R2-${sample_name}"
 			gunzip -c "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz" > "${OUTDATADIR}/${sample_name}_R2_001.fastq"
+		else
+			echo "R2 already exists-${sample_name}"
 		fi
 	fi
 done < ${2}

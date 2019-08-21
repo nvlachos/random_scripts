@@ -111,7 +111,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 	rm -r ${DATADIR}/*.fsa
 	rm -r ${DATADIR}/${temp_dir}
 
-	python "${shareScript}/ResGANNOT_Combiner_Non_Duplicate_Exe.py" "${resFinder_source}" "${ARGANNOT_source}" "${ResGANNOT_source}" "${DATADIR}/Copies.fasta"
+	python "${shareScript}/ResGANNOT_Combiner_Non_Duplicate_Exe.py" "${resFinder_source}" "${ARGANNOT_source}" "${ResGANNOT_source}" "${DATADIR}/Copies.fasta" "RES" "ARG"
 fi
 
 #Creates an associative array for looking up the genes to what they confer
