@@ -50,7 +50,7 @@ while IFS= read -r var; do
 		else
 			echo "R1 already exists-${sample_name}"
 		fi
-		if [[ ! -s "${OUTDATADIR}/${shname}_R2_001.fastq" ]]; then
+		if [[ ! -s "${OUTDATADIR}/${samlpe_name}_R2_001.fastq" ]]; then
 #			gunzip -c "${full_name2}" > "${OUTDATADIR}/${sample_name}_R2_001.fastq"
 			echo "Unzipping R2-${sample_name}"
 			gunzip -c "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz" > "${OUTDATADIR}/${sample_name}_R2_001.fastq"
