@@ -15,7 +15,7 @@ module load Python/2.7.13
 #
 # Consolidates resFinders multi fasta to one
 #
-# Usage ./ResGANNOT_DB_prep_2.sh path_to_dir
+# Usage ./ResGANNCBI_DB_prep_2.sh path_to_dir
 #
 
 $(python2 -V)
@@ -24,7 +24,7 @@ $(python2 -V)
 today=$(date '+%Y%m%d')
 
 DATADIR="${local_DBs}/star/db_prep"
-ResGANNOT_source="${DATADIR}/ResGANNOT_${today}.fasta"
+ResGANNCBI_source="${DATADIR}/ResGANNCBI_${today}.fasta"
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -39,9 +39,9 @@ else
 		exit 1
 	# Gives the user a brief usage and help section if requested with the -h option argument
 	elif [[ "${1}" = "-h" ]]; then
-		echo "Usage is ./ResGANNOT_DB_prep.sh "
+		echo "Usage is ./ResGANNCBI_DB_prep.sh "
 		echo "Converts the ARGANNOT fasta and resFinder ZIP files into a single fasta file to a single srst2 db fasta for use with csstar and srst2"
-		echo "Output is ResGANNOT_date_srst2.fasta"
+		echo "Output is ResGANNCBI_date_srst2.fasta"
 		exit 0
 	elif [[ "${1}" = "-f" ]]; then
 		if [[ -z "${2}" ]]; then
@@ -49,7 +49,7 @@ else
 			exit 1
 		else
 			sourced="true"
-			ResGANNOT_source="${DATADIR}/${2}"
+			ResGANNCBI_source="${DATADIR}/${2}"
 		fi
 	else
 		DATADIR="${1}"
@@ -74,21 +74,21 @@ done < "${local_DBs}/star/group_defs.txt"
 
 
 
-module load CD-HIT/4.6
+ml CD-HIT/4.6
 # #switch to python 2.7 temporarily for cdhit to csv scripts/config
 cp "${local_DBs}/star/cdhit_to_csv.py" "${DATADIR}"
 cp "${local_DBs}/star/csv_to_gene_db.py" "${DATADIR}"
 
 cd "${DATADIR}"
 
-echo "--- About to CD-HIT-EST on ResGANNOT DB-${ResGANNOT_source} ---"
-cd-hit-est "-i" "${ResGANNOT_source}" "-o" "${DATADIR}/ResGANNOT_${today}_cdhit90" "-d" "0" > "${DATADIR}/ResGANNOT_${today}_cdhit90.stdout"
-# cd-hit-est -i /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/Combined.fasta -o /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/ResGANNOT_040518_cdhit90 -d 0 > /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/ResGANNOT_040518_cdhit90.stdout
+echo "--- About to CD-HIT-EST on ResGANNCBI DB-${ResGANNCBI_source} ---"
+cd-hit-est "-i" "${ResGANNCBI_source}" "-o" "${DATADIR}/ResGANNCBI_${today}_cdhit90" "-d" "0" > "${DATADIR}/ResGANNCBI_${today}_cdhit90.stdout"
+# cd-hit-est -i /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/Combined.fasta -o /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/ResGANNCBI_040518_cdhit90 -d 0 > /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/ResGANNCBI_040518_cdhit90.stdout
 
-echo "--- About to CD-HIT-to-CSV on ResGANNOT DB-${ResGANNOT_source} ---"
+echo "--- About to CD-HIT-to-CSV on ResGANNCBI DB-${ResGANNCBI_source} ---"
 
-python "${DATADIR}/cdhit_to_csv.py" "--cluster_file" "${DATADIR}/ResGANNOT_${today}_cdhit90.clstr" "--infasta" "${ResGANNOT_source}" "--outfile" "${DATADIR}/ResGANNOT_${today}_clustered.csv"
-# python /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/cdhit_to_csv.py --cluster_file /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/ResGANNOT_040518_cdhit90.clstr --infasta /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/Combined.fasta --outfile /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/ResGANNOT_040518_clustered.csv
+python "${DATADIR}/cdhit_to_csv.py" "--cluster_file" "${DATADIR}/ResGANNCBI_${today}_cdhit90.clstr" "--infasta" "${ResGANNCBI_source}" "--outfile" "${DATADIR}/ResGANNCBI_${today}_clustered.csv"
+# python /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/cdhit_to_csv.py --cluster_file /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/ResGANNCBI_040518_cdhit90.clstr --infasta /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/Combined.fasta --outfile /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/ResGANNCBI_040518_clustered.csv
 
 rm -r "${DATADIR}/"*".fsa"
 
@@ -105,7 +105,7 @@ declare -A seqarr
 counter=0
 count=0
 seq=""
-echo "Creating ResGANNOT seq reference array"
+echo "Creating ResGANNCBI seq reference array"
 while IFS= read -r line  || [ -n "$line" ]; do
 	line=$(echo ${line} | tr -d '\040\011\012\015')
 	if [[ "${line:0:1}" == ">" ]]; then
@@ -122,15 +122,15 @@ while IFS= read -r line  || [ -n "$line" ]; do
 	fi
 	counter=$(( counter + 1 ))
 	echo "${counter}"
-done < "${ResGANNOT_source}"
+done < "${ResGANNCBI_source}"
 #add the last sequence to the array, since there is no > to trigger its addition
 #echo "${header}:${seq}" >> ${DATADIR}/hits.txt
 echo "Adding final item, number ${count}"
 seqarr[${header}]="${seq}"
 echo "There are ${#seqarr[@]} different entries, and counter equals ${count}"
 
-if [ -f ${DATADIR}/ResGANNOT_${today}_clustered.csv ]; then
-	echo "found ${DATADIR}/ResGANNOT_${today}_clustered.csv"
+if [ -f ${DATADIR}/ResGANNCBI_${today}_clustered.csv ]; then
+	echo "found ${DATADIR}/ResGANNCBI_${today}_clustered.csv"
 fi
 
 
@@ -206,15 +206,15 @@ while IFS= read -r gene_line || [ -n "$gene_line" ]; do
 	fi
 	echo "${seqID}/${clusterID}/${gene}/${allele}/${accession}/${group}"
 #	echo "${dnaseq}"
-	echo -e "${seqID},${clusterID},${gene},${allele},${dnaseq},${DB_ID},${accession},${group},${from_source}" >> "${DATADIR}/ResGANNOT_${today}_cluster90_edited.csv"
+	echo -e "${seqID},${clusterID},${gene},${allele},${dnaseq},${DB_ID},${accession},${group},${from_source}" >> "${DATADIR}/ResGANNCBI_${today}_cluster90_edited.csv"
 	counter=$(( counter + 1 ))
-done < ${DATADIR}/ResGANNOT_${today}_clustered.csv
+done < ${DATADIR}/ResGANNCBI_${today}_clustered.csv
 echo "After"
 
-cp "${DATADIR}/ResGANNOT_${today}_cluster90_edited.csv" "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/"
+cp "${DATADIR}/ResGANNCBI_${today}_cluster90_edited.csv" "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/"
 
 echo "--- About to csv to gene ---"
-python "${DATADIR}/csv_to_gene_db.py" "-t" "${DATADIR}/ResGANNOT_${today}_cluster90_edited.csv" "-o" "${DATADIR}/ResGANNOT_${today}_srst2.fasta" "-f" "${ResGANNOT_source}" "-c" "6" "-s" "5"
+python "${DATADIR}/csv_to_gene_db.py" "-t" "${DATADIR}/ResGANNCBI_${today}_cluster90_edited.csv" "-o" "${DATADIR}/ResGANNCBI_${today}_srst2.fasta" "-f" "${ResGANNCBI_source}" "-c" "6" "-s" "5"
 
 #Additional Enumerator, specfically to address fos gene ambiguity
 # declare -A allele_tally
@@ -230,7 +230,7 @@ python "${DATADIR}/csv_to_gene_db.py" "-t" "${DATADIR}/ResGANNOT_${today}_cluste
 	# else
 		# echo "Unknown data, not editing line"
 	# fi
-# done < "${DATADIR}/ResGANNOT_${today}_srst2.fasta"
+# done < "${DATADIR}/ResGANNCBI_${today}_srst2.fasta"
 
 
 

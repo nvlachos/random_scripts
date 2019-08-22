@@ -81,13 +81,25 @@ if [[ "${non_duplicated}" != "true" ]]; then
 		if [[ "${NCBI_source}" == "" ]]; then
 		#echo "looking ar:${DATADIR}"
 		NCBI_source=$(find ${DATADIR} -name 'NCBI*')
-		cp "${NCBI_source}" "${DATADIR}/NCBI_${today}.fasta"
+		cp "${NCBI_source}" "${DATADIR}/NCBI_${today}_original.fasta"
 		NCBI_source="${DATADIR}/NCBI_${today}.fasta"
 		if [[ ! -f  "${NCBI_source}" ]]; then
 			echo "No NCBI fasta found, exiting"
 		fi
 	fi
 	echo "${ResGANNOT_source}:${NCBI_source}"
+
+	while IFS= read -r line; do
+		if [[ "${line:0:1}" == ">"]]; then
+			class=$(echo "${line}" | cut -d'|' -f6)
+			accession=$(echo "${line}" | cut -d'|' -f3)
+			series=$(echo "${line}" | cut -d'|' -f3)
+			line=">[NCBI]${class}_${series}_${accession}"
+		else
+			echo "${line}" >> "${DATADIR}/ResGANNCBI_${today}.fasta"
+		fi
+	done < "${DATADIR}/NCBI_${today}_original.fasta"
+
 
 	ResGANNCBI_source="${DATADIR}/ResGANNCBI_${today}.fasta"
 	echo "resGANNOT-source=${ResGANNOT_source}"
@@ -177,7 +189,7 @@ while IFS= read -r line || [ -n "$line" ]; do
 				new_groups+=(${gene_type})
 			fi
 		elif [[ "${source}" == "NCBI" ]]; then
-			gene_type=$(echo ${header} | cut -d'|' -f6)
+			gene_type=$(echo ${header} | cut -d']' -f2 | cut -d '_' -f1)
 			gene_type=${gene_type:0:3}
 			#echo "${gene_type,,}"
 			confers="${groups[${gene_type,,}]}"
