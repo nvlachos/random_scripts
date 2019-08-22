@@ -94,7 +94,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 		if [[ "${line::1}" == ">" ]]; then
 			class=$(echo "${line}" | cut -d'|' -f6)
 			accession=$(echo "${line}" | cut -d'|' -f3)
-			series=$(echo "${line}" | cut -d'|' -f3)
+			series=$(echo "${line}" | cut -d'|' -f4)
 			line=">[NCBI]${class}_${series}_${accession}"
 		fi
 			echo "${line}" >> "${DATADIR}/ResGANNCBI_${today}.fasta"
