@@ -90,7 +90,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 	echo "${ResGANNOT_source}:${NCBI_source}"
 
 	while IFS= read -r line; do
-		if [[ "${line:0:1}" == ">"]]; then
+		if [[ "${line:0:1}" == ">" ]]; then
 			class=$(echo "${line}" | cut -d'|' -f6)
 			accession=$(echo "${line}" | cut -d'|' -f3)
 			series=$(echo "${line}" | cut -d'|' -f3)
