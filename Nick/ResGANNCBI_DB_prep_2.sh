@@ -106,7 +106,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 	echo "NCBI-scource=${NCBI_source}"
 	echo "ResGANNCBI-source=${ResGANNCBI_source}"
 
-	python "${shareScript}/ResGANNOT_Combiner_Non_Duplicate_Exe.py" "${ResGANNOT_source}" "${NCBI_source}" "${ResGANNCBI_source}" "${DATADIR}/ResGANNCBI_Copies.fasta" "RGN" "NCBI"
+	python "${shareScript}/ResGANNOT_Combiner_Non_Duplicate_Exe.py" "${ResGANNOT_source}" "${NCBI_source}" "${ResGANNCBI_source}" "${DATADIR}/ResGANNCBI_${today}_Copies.fasta" "RGN" "NCBI"
 	sed -i 's/>\[RGN\]/>/g' "${ResGANNCBI_source}"
 
 
