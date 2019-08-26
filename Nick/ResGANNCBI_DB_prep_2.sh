@@ -128,6 +128,7 @@ while IFS= read -r line || [ -n "$line" ]; do
 		continue
 	fi
 	confers=$(echo "${line}" | cut -d ':' -f2)
+	echo "${gene} --- ${confers}"
 	groups[${gene}]="${confers}"
 	#echo "${counter}:${gene}:${confers}"
 	counter=$(( counter + 1))
