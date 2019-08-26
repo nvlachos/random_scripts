@@ -109,9 +109,12 @@ if [[ "${non_duplicated}" != "true" ]]; then
 
 	python "${shareScript}/ResGANNOT_Combiner_Non_Duplicate_Exe.py" "${ResGANNOT_source}" "${NCBI_source}" "${ResGANNCBI_source}" "${DATADIR}/ResGANNCBI_${today}_Copies.fasta" "RGN" "NCBI"
 	sed -i 's/>\[RGN\]/>/g' "${ResGANNCBI_source}"
+	sed -i 's/>\[NCBI\]/>/g' "${ResGANNCBI_source}"
 
 
 fi
+
+sed -i 's/>\[NCBI\]/>/g' "${ResGANNCBI_source}"
 
 #Creates an associative array for looking up the genes to what they confer
 declare -A groups
