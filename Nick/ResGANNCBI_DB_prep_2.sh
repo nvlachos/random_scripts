@@ -98,7 +98,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 			line=">[NCBI]${class}_${series}_${accession}"
 		fi
 			#echo "${line}"
-			echo "${line}" >> "${DATADIR}/ResGANNCBI_${today}.fasta"
+			echo "${line}" >> "${DATADIR}/NCBI_${today}.fasta"
 	done < "${DATADIR}/NCBI_${today}_original.fasta"
 
 
