@@ -115,6 +115,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 fi
 
 sed -i 's/>\[NCBI\]/>/g' "${ResGANNCBI_source}"
+ResGANNCBI="${DATADIR}/ResGANNCBI_${today}.fasta"
 
 #Creates an associative array for looking up the genes to what they confer
 declare -A groups
