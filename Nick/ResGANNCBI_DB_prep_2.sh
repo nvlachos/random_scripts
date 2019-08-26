@@ -97,6 +97,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 			series=$(echo "${line}" | cut -d'|' -f4)
 			line=">[NCBI]${class}_${series}_${accession}"
 		fi
+			echo "${line}"
 			echo "${line}" >> "${DATADIR}/ResGANNCBI_${today}.fasta"
 	done < "${DATADIR}/NCBI_${today}_original.fasta"
 
