@@ -44,9 +44,9 @@ mkdir "${3}"
 while IFS= read -r var || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${resGANNOT_srst2_filename}.gapped_98_sstar_summary.txt" ]]; then
-		ar_file="${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${resGANNOT_srst2_filename}.gapped_98_sstar_summary.txt"
-		blast_file="${processed}/${project}/${sample_name}/c-sstar/${resGANNOT_srst2_filename}_gapped/${sample_name}_scaffolds_trimmed.blastn.tsv"
+	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${ResGANNCBI_srst2_filename}.gapped_98_sstar_summary.txt" ]]; then
+		ar_file="${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${ResGANNCBI_srst2_filename}.gapped_98_sstar_summary.txt"
+		blast_file="${processed}/${project}/${sample_name}/c-sstar/${ResGANNCBI_srst2_filename}_gapped/${sample_name}_scaffolds_trimmed.blastn.tsv"
 	else
 		ls "${processed}/${project}/${sample_name}/c-sstar/"
 		break

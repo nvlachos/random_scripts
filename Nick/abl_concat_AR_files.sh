@@ -23,10 +23,10 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./act_by_list_concat_csstar_plasFlow_files.sh path_to_list_file DB_Identifier(resGANNOT_date, for example) path_for_output_file %ID_to_find_correct_csstar_file[80|95|98|99|100]"
+	echo "Usage is ./act_by_list_concat_csstar_plasFlow_files.sh path_to_list_file DB_Identifier(ResGANNCBI_date, for example) path_for_output_file %ID_to_find_correct_csstar_file[80|95|98|99|100]"
 	exit 0
 elif [[ -z "${2}" ]]; then     #! [[ ${2} =~ $number ]] ||
-	echo "${2} is not a number or is empty. Please input correct date for ResGANNOT DB...exiting"
+	echo "${2} is not a number or is empty. Please input correct date for ResGANNCBI DB...exiting"
 	exit 2
 elif [[ ! -f "${3}" ]]; then
 	echo "${3} does not exist"

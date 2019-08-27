@@ -21,7 +21,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./get_mlsts_of_dir.sh path_to_list_file ResGANNOT_Identifier(YYYYMMDD) path_for_output_file"
+	echo "Usage is ./get_mlsts_of_dir.sh path_to_dir"
 	exit 0
 elif [[ ! -d "${1}" ]]; then
 	echo  "No folder, exiting..."

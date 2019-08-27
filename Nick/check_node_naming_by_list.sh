@@ -12,7 +12,7 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./check_node_naming_by_list.sh path_to_list ResGANNOT_identifier(YYYYMMDD)
+# Usage ./check_node_naming_by_list.sh path_to_list ResGANNCBI_identifier(YYYYMMDD)
 #
 
 # Checks for proper argumentation
@@ -21,7 +21,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./check_node_naming_by_list.sh path_to_list_file ResGANNOT_Identifier(YYYYMMDD)"
+	echo "Usage is ./check_node_naming_by_list.sh path_to_list_file ResGANNCBI_Identifier(YYYYMMDD)"
 	exit 0
 fi
 

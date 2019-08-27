@@ -29,7 +29,7 @@ else
 	# Gives the user a brief usage and help section if requested with the -h option argument
 	if [[ "${1}" = "-h" ]]; then
 		echo "Usage is ./DB_prep.sh input_fasta output_directory"
-		echo "Output is ResGANNOT_date_srst2.fasta"
+		echo "Output is DBshortName_date_srst2.fasta"
 		exit 0
 	fi
 	if [[ -z "${2}" ]]; then
@@ -58,10 +58,10 @@ today=$(date '+%Y%m%d')
 
  cd "${DATADIR}"
 
-echo "--- About to CD-HIT-EST on ResGANNOT DB ---"
+echo "--- About to CD-HIT-EST on DB ---"
 cd-hit-est "-i" "${DB_source}" "-o" "${DATADIR}/${DB_short_name}_${today}_cdhit90" "-d" "0" > "${DATADIR}/${DB_short_name}_${today}_cdhit90.stdout"
 
-echo "--- About to CD-HIT-to-CSV on ResGANNOT DB ---"
+echo "--- About to CD-HIT-to-CSV on DB ---"
 python "${DATADIR}/cdhit_to_csv.py" "--cluster_file" "${DATADIR}/${DB_short_name}_${today}_cdhit90.clstr" "--infasta" "${DB_source}" "--outfile" "${DATADIR}/${DB_short_name}_${today}_clustered.csv"
 # python /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/cdhit_to_csv.py --cluster_file /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/ResGANNOT_040518_cdhit90.clstr --infasta /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/Combined.fasta --outfile /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep/ResGANNOT_040518_clustered.csv
 

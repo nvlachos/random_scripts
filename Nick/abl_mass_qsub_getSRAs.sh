@@ -79,7 +79,7 @@ fi
 
 start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 
-# Creates and submits qsub scripts to check all isolates on the list against the newest ResGANNOT DB
+# Creates and submits qsub scripts to check all isolates on the list against the newest ResGANNCBI DB
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)

@@ -23,10 +23,10 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./act_by_list_concat_csstar_plasFlow_files.sh path_to_list_file ResGANNOT_Identifier(YYYYMMDD) path_for_output_file"
+	echo "Usage is ./act_by_list_concat_csstar_plasFlow_files.sh path_to_list_file ResGANNCBI_Identifier(YYYYMMDD) path_for_output_file"
 	exit 0
 elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
-	echo "${2} is not a number or is empty. Please input correct date for ResGANNOT DB...exiting"
+	echo "${2} is not a number or is empty. Please input correct date for ResGANNCBI DB...exiting"
 	exit 2
 elif [[ ! -f "${3}" ]]; then
 	echo "${3} does not exist"
@@ -44,8 +44,8 @@ while IFS= read -r var || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 	#echo "${counter} - ${processed}/${project}/${sample_name}/MLST/"
-	if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt" ]]; then
-		cat "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt" >> ${3}
+	if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.ResGANNCBI_${2}.gapped_40_sstar_summary.txt" ]]; then
+		cat "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.ResGANNCBI_${2}.gapped_40_sstar_summary.txt" >> ${3}
 	else
 		echo "${project}/${sample_name} does not have c-sstar_plasFlow 40 file"
 	fi

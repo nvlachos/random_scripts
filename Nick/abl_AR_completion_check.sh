@@ -12,7 +12,7 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list_AR_completion_check.sh path_to_list ResGANNOT_identifier(YYYYMMDD) path_for_output_file
+# Usage ./act_by_list_AR_completion_check.sh path_to_list ResGANNCBI_identifier(YYYYMMDD) path_for_output_file
 #
 
 # Checks for proper argumentation
@@ -21,10 +21,10 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./act_by_list_AR_completion_check.sh path_to_list_file ResGANNOT_Identifier(YYYYMMDD) path_for_output_file"
+	echo "Usage is ./act_by_list_AR_completion_check.sh path_to_list_file ResGANNCBI_Identifier(YYYYMMDD) path_for_output_file"
 	exit 0
 elif [[ -z "${2}" ]]; then
-	echo "ResGANNOT identifier is empty, please input the DB identifier using YYYYMMDD that it was created, exiting..."
+	echo "ResGANNCBI identifier is empty, please input the DB identifier using YYYYMMDD that it was created, exiting..."
 	exit 1
 elif [[ -z "${3}" ]]; then
 	echo  "No output file input, exiting..."
@@ -114,10 +114,10 @@ while IFS= read -r var || [ -n "$var" ]; do
 	else
 		ohsixoheight="NO_ASSEMBLY_TO_RUN_CSSTAR_ON"
 	fi
-	
+
 	if [[ -s "${processed}/${project}/${sample_name}/Assembly/${sample_name}_scaffolds_trimmed.fasta" ]]; then
-		if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_${2}.gapped_98_sstar_summary.txt" ]]; then
-			header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_${2}.gapped_98_sstar_summary.txt")
+		if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNCBI_${2}.gapped_98_sstar_summary.txt" ]]; then
+			header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNCBI_${2}.gapped_98_sstar_summary.txt")
 			if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
 				input_DB_csstar="No_chromo_AR"
 			else
@@ -136,7 +136,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 	else
 		ohsixoheights="File Missing"
 	fi
-	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNOT_${2}_srst2__results.txt" ]] || [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__ResGANNOT_${2}_srst2__results.txt" ]]; then
+	if [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__genes__ResGANNCBI_${2}_srst2__results.txt" ]] || [[ -f "${processed}/${project}/${sample_name}/srst2/${sample_name}__fullgenes__ResGANNCBI_${2}_srst2__results.txt" ]]; then
 		input_DB_srst2="File Found"
 	else
 		input_DB_srst2="File Missing"
@@ -157,8 +157,8 @@ while IFS= read -r var || [ -n "$var" ]; do
 		if [[ "${family}" == "Enterobacteriaceae" ]]; then
 			if [[ -s "${processed}/${project}/${sample_name}/plasFlow/Unicycler_assemblies/${sample_name}_uni_assembly/${sample_name}_plasmid_assembly_trimmed.fasta" ]]; then
 				plasFlow="Completed"
-				if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt" ]]; then
-					header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.ResGANNOT_${2}.gapped_40_sstar_summary.txt")
+				if [[ -f "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.ResGANNCBI_${2}.gapped_40_sstar_summary.txt" ]]; then
+					header=$(head -n1 "${processed}/${project}/${sample_name}/c-sstar_plasFlow/${sample_name}.ResGANNCBI_${2}.gapped_40_sstar_summary.txt")
 					if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
 						cplas="No_chromo_AR"
 					else

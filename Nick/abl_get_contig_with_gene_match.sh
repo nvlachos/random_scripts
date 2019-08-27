@@ -49,8 +49,8 @@ need_qsub="false"
 while IFS= read -r var || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${resGANNOT_srst2_filename}.gapped_98_sstar_summary.txt" ]]; then
-		ar_file="${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${resGANNOT_srst2_filename}.gapped_98_sstar_summary.txt"
+	if [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${ResGANNCBI_srst2_filename}.gapped_98_sstar_summary.txt" ]]; then
+		ar_file="${processed}/${project}/${sample_name}/c-sstar/${sample_name}.${ResGANNCBI_srst2_filename}.gapped_98_sstar_summary.txt"
 	# elif [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181003.gapped_98_sstar_summary.txt" ]]; then
 	# 	ar_file="${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20181003.gapped_98_sstar_summary.txt"
 	# elif [[ -f "${processed}/${project}/${sample_name}/c-sstar/${sample_name}.ResGANNOT_20180817.gapped_98_sstar_summary.txt" ]]; then
@@ -80,7 +80,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 	counter=$(( counter + 1 ))
 done < "${1}"
 if [[ "${need_qsub}" = "true" ]]; then
-	echo "Some samples needed to be run with the newest ResGANNOT DB, submitting to qsub and then rerunning"
+	echo "Some samples needed to be run with the newest ResGANNCBI DB, submitting to qsub and then rerunning"
 	${shareScript}/abl_mass_qsub_csstar.sh "${3}/csstar_to_do.txt" 25
 	${shareScript}/"abl_get_contig_with_gene_match.sh" ${1} ${2} ${3}
 fi
