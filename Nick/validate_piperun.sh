@@ -899,13 +899,14 @@ if [[ -d "${OUTDATADIR}/c-sstar/" ]]; then
 	else
 		sim="98"
 	fi
-	csstar_file=$(find ${OUTDATADIR}/c-sstar/${1}.ResGANNCBI_*.${gapping}_${sim}_sstar_summary.txt -maxdepth 1 -type f -printf '%p\n' | sort -k2,2 -rt '_' -n | head -n 1)
-	if [[ -z "${ResGANNCBI_srst2}" ]]; then
+	csstar_file=$(find ${OUTDATADIR}/c-sstar/${1}.ResGANN*.${gapping}_${sim}_sstar_summary.txt -maxdepth 1 -type f -printf '%p\n' | sort -k2,2 -rt '_' -n | head -n 1)
+	if [[ -z "${csstar_file}" ]]; then
 		printf "%-20s: %-8s : %s\\n" "c-SSTAR" "FAILED" "/c-sstar/ does not have an sstar_summary file"
 		status="FAILED"
 	else
 		header=$(head -n1 "${csstar_file}")
 		ResGANNCBI_DB=$(echo "${csstar_file}" | rev | cut -d'.' -f3 | rev)
+		echo "${ResGANNCBI_DB} = ${ResGANNCBI_srst2_filename} ?"
 		if [[ ${header} = *"No anti-microbial genes were found"* ]]; then
 			if [[ "${ResGANNCBI_DB}" = "${ResGANNCBI_srst2_filename}" ]]; then
 				printf "%-20s: %-8s : %s\\n" "c-SSTAR" "ALERT" "Completed, but NO KNOWN AMR genes were found in ${ResGANNCBI_DB} (DB up to date, as of ${today})"
@@ -944,7 +945,7 @@ if [[ "${plasmidsFoundviaplasFlow}" -eq 1 ]]; then
 		else
 			sim="40"
 		fi
-		csstar_plasFlow_file=$(find ${OUTDATADIR}/c-sstar_plasFlow/${1}.ResGANNCBI_*.${gapping}_${sim}_sstar_summary.txt -maxdepth 1 -type f -printf '%p\n' | sort -k2,2 -rt '_' -n | head -n 1)
+		csstar_plasFlow_file=$(find ${OUTDATADIR}/c-sstar_plasFlow/${1}.ResGANN*.${gapping}_${sim}_sstar_summary.txt -maxdepth 1 -type f -printf '%p\n' | sort -k2,2 -rt '_' -n | head -n 1)
 		if [[ -z "${csstar_plasFlow_file}" ]]; then
 			printf "%-20s: %-8s : %s\\n" "c-SSTAR_plasFlow" "FAILED" "/c-sstar_plasFlow/ does not have an sstar_summary file"
 			status="FAILED"

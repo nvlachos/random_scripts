@@ -3,8 +3,9 @@
 
 
 #
-# Script to consolidate all configuration type settings for primary_processing.sh and any tools contained within
+# Script to consolidate all configuration type settings for quasar pipeline and any tools contained within
 #
+
 # Get hostname to help determine if certain tools can be run and how to specifically get others to run with the right options
 hostname=$(hostname -f)
 host=$(echo ${hostname} | cut -d'.' -f1)
@@ -56,7 +57,7 @@ pacbio="/scicomp/instruments/23-12-651_PacBio-RSII-RS42135"
 all_instruments=($miseq1 $miseq2 $miseq3 $miseq4) # $pacbio)
 
 # Number of processors requested by numerous applications within the pipeline
-procs=13 # Number of processors
+procs=12 # Number of processors
 
 # Phred scoring scale to be used (33 or 64)
 phred=33
@@ -132,15 +133,15 @@ argannot_srst2=$(find ${local_DBs}/star/argannot_*_srst2.fasta -maxdepth 1 -type
 #echo "ARG Summary found: ${argannot_srst2}"
 resFinder_srst2=$(find ${local_DBs}/star/resFinder_*_srst2.fasta -maxdepth 1 -type f -printf '%p\n' | sort -k2,2 -rt '_' -n | head -n 1)
 #echo "RES Summary found: ${resFinder_srst2}"
-#resGANNOT_srst2=$(find ${local_DBs}/star/ResGANNOT_*_srst2.fasta -maxdepth 1 -type f -printf '%p\n' | sort -k2,2 -rt '_' -n | head -n 1)
-#resGANNOT_previous_srst2=$(find /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/ResGANNOT_*_srst2.fasta -maxdepth 1 -type f -printf '%p\n' | sort -k2,2 -rt '_' -n | head -n 2 | tail -n 1)
+resGANNOT_srst2=$(find ${local_DBs}/star/ResGANNOT_*_srst2.fasta -maxdepth 1 -type f -printf '%p\n' | sort -k2,2 -rt '_' -n | head -n 1)
+resGANNOT_previous_srst2=$(find ${local_DBs}/star/ResGANNOT_*_srst2.fasta -maxdepth 1 -type f -printf '%p\n' | sort -k2,2 -rt '_' -n | head -n 2 | tail -n 1)
 #echo "ResGANNOT Summary found: ${resGANNOT_srst2}"
 ResGANNCBI_srst2=$(find ${local_DBs}/star/ResGANNCBI_*_srst2.fasta -maxdepth 1 -type f -printf '%p\n' | sort -k2,2 -rt '_' -n | head -n 1)
-ResGANNCBI_previous_srst2=$(find /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/ResGANNCBI_*_srst2.fasta -maxdepth 1 -type f -printf '%p\n' | sort -k2,2 -rt '_' -n | head -n 2 | tail -n 1)
+resGANNCBI_previous_srst2=$(find ${local_DBs}/star/ResGANNCBI_*_srst2.fasta -maxdepth 1 -type f -printf '%p\n' | sort -k2,2 -rt '_' -n | head -n 2 | tail -n 1)
 #echo "ResGANNOT Summary found: ${resGANNOT_srst2}"
 argannot_srst2_filename=$(echo "${argannot_srst2}" | rev | cut -d'/' -f1 | rev | cut -d'_' -f1,2)
 resFinder_srst2_filename=$(echo "${resFinder_srst2}" | rev | cut -d'/' -f1 | rev | cut -d'_' -f1,2)
-#resGANNOT_srst2_filename=$(echo "${resGANNOT_srst2}" | rev | cut -d'/' -f1 | rev | cut -d'_' -f1,2)
+resGANNOT_srst2_filename=$(echo "${resGANNOT_srst2}" | rev | cut -d'/' -f1 | rev | cut -d'_' -f1,2)
 ResGANNCBI_srst2_filename=$(echo "${ResGANNCBI_srst2}" | rev | cut -d'/' -f1 | rev | cut -d'_' -f1,2)
 # gapped (g) versus ungapped(u)
 csstar_gapping="g"
@@ -153,7 +154,12 @@ csstar_plasmid_identity="o"
 unclass_flag=30
 # MiniKraken DB (smaller, but effective option)
 kraken_mini_db="${local_DBs}/minikrakenDB/"
+#kraken_mini_db="/scicomp/agave/execution/database/public/references/organizations/CDC/NCEZID/kraken/cdc-20171227"
 kraken_full_db="${scicomp_DBs}/kraken/1.0.0/kraken_db/"
+# MiniKraken DB (smaller, but effective option)
+kraken2_mini_db="${local_DBs}/minikraken2DB/"
+#kraken_mini_db="/scicomp/agave/execution/database/public/references/organizations/CDC/NCEZID/kraken/cdc-20171227"
+kraken2_full_db="${scicomp_DBs}/kraken/2.0.0/kraken_db/"
 ### MOVE THESE TO SHARE/DBS
 # Kraken normal, specially made by Tom with bacteria,archae, and viruses
 # kraken_db="/scicomp/groups/OID/NCEZID/DHQP/CEMB/databases/kraken_BAV_17/"
