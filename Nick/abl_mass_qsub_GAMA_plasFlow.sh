@@ -86,87 +86,91 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	if [[ "${clobberness}" = "clobber" ]]; then
-		rm ${processed}/${project}/${sample}/GAMA/${sample}_${ResGANNCBI_srst2_filename}.GAMA
 		rm ${processed}/${project}/${sample}/GAMA_plasFlow/${sample}_${ResGANNCBI_srst2_filename}.GAMA
 	fi
 	echo ${counter}
-	# Check if counter is below max number of concurrent submissions
-	if [ ${counter} -lt ${max_subs} ]; then
-		# Check if the output file of GAMA exist, skip submission if so
-		if [[ ! -f "${processed}/${project}/${sample}/GAMA/${sample}_${ResGANNCBI_srst2_filename}.GAMA" ]]; then
-			echo  "Index is below max submissions, submitting"
-			echo -e "#!/bin/bash -l\n" > "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-			echo -e "#$ -o GAMAAR_${sample}.out" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-			echo -e "#$ -e GAMAAR_${sample}.err" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-			echo -e "#$ -N GAMAAR_${sample}"   >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-			echo -e "#$ -cwd"  >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-			echo -e "#$ -q short.q\n"  >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-			echo -e "cd ${shareScript}" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-			echo -e "\"${shareScript}/run_GAMA_on_singleDB.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_GAMAAR_complete.txt\"" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
+	if [[ -s "${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_trimmed.fasta" ]]; then
+		# Check if counter is below max number of concurrent submissions
+		if [ ${counter} -lt ${max_subs} ]; then
+			# Check if the output file of GAMA exist, skip submission if so
+			if [[ ! -f "${processed}/${project}/${sample}/GAMA_plasmid/${sample}_${ResGANNCBI_srst2_filename}.GAMA" ]]; then
+				echo  "Index is below max submissions, submitting"
+				echo -e "#!/bin/bash -l\n" > "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+				echo -e "#$ -o GAMAPAR_${sample}.out" >> "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+				echo -e "#$ -e GAMAPAR_${sample}.err" >> "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+				echo -e "#$ -N GAMAPAR_${sample}"   >> "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+				echo -e "#$ -cwd"  >> "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+				echo -e "#$ -q short.q\n"  >> "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+				echo -e "cd ${shareScript}" >> "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/run_GAMA.sh\" \"${sample}\" \"${project}\" -p" >> "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_GAMAPAR_complete.txt\"" >> "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
 
-			#cd "${main_dir}"
-			if [[ "${counter}" -lt "${last_index}" ]]; then
-				qsub "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-			else
-				qsub -sync y "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-			fi
-			mv "${shareScript}/GAMAAR_${sample}.err" ${main_dir}
-			mv "${shareScript}/GAMAAR_${sample}.out" ${main_dir}
-		# Old data existed, skipping
-		else
-			echo -e $(date) > "${main_dir}/complete/${sample}_GAMAAR_complete.txt"
-			echo "${project}/${sample} already has newest GAMA ResGANNCBI ${ResGANNCBI_srst2_filename}"
-		fi
-	# Counter is above max submission, must wait for previous ones to finish before moving on
-	else
-		waiting_for_index=$(( counter - max_subs ))
-		waiting_sample=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
-		timer=0
-		echo "Index is above max submissions, waiting for index ${waiting_for_index}:${waiting_sample} to complete"
-		while :
-		do
-			# Check if timer is above max time allowed
-			if [[ ${timer} -gt 1800 ]]; then
-				echo "Timer exceeded limit of 1800 seconds 30 minutes"
-				break
-			fi
-			# Check if waiting sample is finished
-			if [ -f "${main_dir}/complete/${waiting_sample}_GAMAAR_complete.txt" ]; then
-				# Check if current sample has etiher one of the output files from GAMA, skip analysis if so
-				if [[ ! -f "${processed}/${project}/${sample}/GAMA/${sample}_${ResGANNCBI_srst2_filename}.GAMA" ]]; then
-					echo  "Index is below max submissions, submitting"
-					echo -e "#!/bin/bash -l\n" > "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-					echo -e "#$ -o GAMAAR_${sample}.out" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-					echo -e "#$ -e GAMAAR_${sample}.err" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-					echo -e "#$ -N GAMAAR_${sample}"   >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-					echo -e "#$ -cwd"  >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-					echo -e "#$ -q short.q\n"  >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-					echo -e "cd ${shareScript}" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-					echo -e "\"${shareScript}/run_GAMA_on_singleDB.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_GAMAAR_complete.txt\"" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-
-					#cd "${main_dir}"
-					if [[ "${counter}" -lt "${last_index}" ]]; then
-						qsub "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-					else
-						qsub -sync y "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-					fi
-					mv "${shareScript}/GAMAAR_${sample}.err" ${main_dir}
-					mv "${shareScript}/GAMAAR_${sample}.out" ${main_dir}
-				# Old data existed, skipping
+				#cd "${main_dir}"
+				if [[ "${counter}" -lt "${last_index}" ]]; then
+					qsub "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
 				else
-					echo -e $(date) > "${main_dir}/complete/${sample}_GAMAAR_complete.txt"
-					echo "${project}/${sample} already has newest GAMA ResGANNCBI ${ResGANNCBI_srst2_filename}"
+					qsub -sync y "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
 				fi
-				break
-			# Wait 5 seconds and then check if "waiting" sample is complete
+				mv "${shareScript}/GAMAPAR_${sample}.err" ${main_dir}
+				mv "${shareScript}/GAMAPAR_${sample}.out" ${main_dir}
+			# Old data existed, skipping
 			else
-				timer=$(( timer + 5 ))
-				echo "sleeping for 5 seconds, so far slept for ${timer}"
-				sleep 5
+				echo -e $(date) > "${main_dir}/complete/${sample}_GAMAPAR_complete.txt"
+				echo "${project}/${sample} already has newest GAMA ResGANNCBI ${ResGANNCBI_srst2_filename}"
 			fi
-		done
+		# Counter is above max submission, must wait for previous ones to finish before moving on
+		else
+			waiting_for_index=$(( counter - max_subs ))
+			waiting_sample=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
+			timer=0
+			echo "Index is above max submissions, waiting for index ${waiting_for_index}:${waiting_sample} to complete"
+			while :
+			do
+				# Check if timer is above max time allowed
+				if [[ ${timer} -gt 1800 ]]; then
+					echo "Timer exceeded limit of 1800 seconds 30 minutes"
+					break
+				fi
+				# Check if waiting sample is finished
+				if [ -f "${main_dir}/complete/${waiting_sample}_GAMAPAR_complete.txt" ]; then
+					# Check if current sample has etiher one of the output files from GAMA, skip analysis if so
+					if [[ ! -f "${processed}/${project}/${sample}/GAMA_plasmid/${sample}_${ResGANNCBI_srst2_filename}.GAMA" ]]; then
+						echo  "Index is below max submissions, submitting"
+						echo -e "#!/bin/bash -l\n" > "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+						echo -e "#$ -o GAMAPAR_${sample}.out" >> "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+						echo -e "#$ -e GAMAPAR_${sample}.err" >> "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+						echo -e "#$ -N GAMAPAR_${sample}"   >> "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+						echo -e "#$ -cwd"  >> "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+						echo -e "#$ -q short.q\n"  >> "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+						echo -e "cd ${shareScript}" >> "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+						echo -e "\"${shareScript}/run_GAMA.sh\" \"${sample}\" \"${project}\" -p" >> "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_GAMAPAR_complete.txt\"" >> "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+
+						#cd "${main_dir}"
+						if [[ "${counter}" -lt "${last_index}" ]]; then
+							qsub "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+						else
+							qsub -sync y "${main_dir}/GAMAPAR_${sample}_${start_time}.sh"
+						fi
+						mv "${shareScript}/GAMAPAR_${sample}.err" ${main_dir}
+						mv "${shareScript}/GAMAPAR_${sample}.out" ${main_dir}
+					# Old data existed, skipping
+					else
+						echo -e $(date) > "${main_dir}/complete/${sample}_GAMAPAR_complete.txt"
+						echo "${project}/${sample} already has newest GAMA ResGANNCBI ${ResGANNCBI_srst2_filename}"
+					fi
+					break
+				# Wait 5 seconds and then check if "waiting" sample is complete
+				else
+					timer=$(( timer + 5 ))
+					echo "sleeping for 5 seconds, so far slept for ${timer}"
+					sleep 5
+				fi
+			done
+		fi
+	else
+		echo "${project}/${sample} has no plasflow assembly to run csstar on (! ${processed}/${project}/${sample}/plasFlow/Unicycler_assemblies/${sample}_uni_assembly/${sample}_plasmid_assembly_trimmed.fasta)"
+		echo "$(date)" > "${main_dir}/complete/${sample}_GAMAPAR_complete.txt"
 	fi
 	counter=$(( counter + 1 ))
 done
@@ -175,13 +179,13 @@ done
 timer=0
 for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
-	if [[ -f "${main_dir}/complete/${waiting_sample}_GAMAAR_complete.txt" ]]; then
+	if [[ -f "${main_dir}/complete/${waiting_sample}_GAMAPAR_complete.txt" ]]; then
 		echo "${item} is complete"
-		if [[ -f "${shareScript}/GAMAAR_${waiting_sample}.out" ]]; then
-			mv "${shareScript}/GAMAAR_${waiting_sample}.out" "${main_dir}"
+		if [[ -f "${shareScript}/GAMAPAR_${waiting_sample}.out" ]]; then
+			mv "${shareScript}/GAMAPAR_${waiting_sample}.out" "${main_dir}"
 		fi
-		if [[ -f "${shareScript}/GAMAAR_${waiting_sample}.err" ]]; then
-			mv "${shareScript}/GAMAAR_${waiting_sample}.err" "${main_dir}"
+		if [[ -f "${shareScript}/GAMAPAR_${waiting_sample}.err" ]]; then
+			mv "${shareScript}/GAMAPAR_${waiting_sample}.err" "${main_dir}"
 		fi
 	else
 		while :
@@ -190,13 +194,13 @@ for item in "${arr[@]}"; do
 					echo "Timer exceeded limit of 3600 seconds = 60 minutes"
 					exit 1
 				fi
-				if [[ -f "${main_dir}/complete/${waiting_sample}_GAMAAR_complete.txt" ]]; then
+				if [[ -f "${main_dir}/complete/${waiting_sample}_GAMAPAR_complete.txt" ]]; then
 					echo "${item} is complete"
-					if [[ -f "${shareScript}/GAMAAR_${waiting_sample}.out" ]]; then
-						mv "${shareScript}/GAMAAR_${waiting_sample}.out" "${main_dir}"
+					if [[ -f "${shareScript}/GAMAPAR_${waiting_sample}.out" ]]; then
+						mv "${shareScript}/GAMAPAR_${waiting_sample}.out" "${main_dir}"
 					fi
-					if [[ -f "${shareScript}/GAMAAR_${waiting_sample}.err" ]]; then
-						mv "${shareScript}/GAMAAR_${waiting_sample}.err" "${main_dir}"
+					if [[ -f "${shareScript}/GAMAPAR_${waiting_sample}.err" ]]; then
+						mv "${shareScript}/GAMAPAR_${waiting_sample}.err" "${main_dir}"
 					fi
 					break
 				else
