@@ -49,9 +49,6 @@ if [[ ! -z "${4}" ]]; then
 	OUTDATADIR="${4}/${project}"
 fi
 
-time_summary="${OUTDATADIR}/${1}_time_summary_post_assembly_redo.txt"
->${time_summary}
-
 ### Removing Short Contigs  ###
 echo "----- Removing Short Contigs -----"
 python3 "${shareScript}/removeShortContigs.py" -i "${OUTDATADIR}/${filename}/Assembly/scaffolds.fasta" -t 500 -s "normal_SPAdes"
@@ -60,7 +57,7 @@ mv "${OUTDATADIR}/${filename}/Assembly/scaffolds.fasta.TRIMMED.fasta" "${OUTDATA
 # Checks to see that the trimming and renaming worked properly, returns if unsuccessful
 if [ ! -s "${OUTDATADIR}/${filename}/Assembly/${filename}_scaffolds_trimmed.fasta" ]; then
 	echo "Trimmed contigs file does not exist continuing to next sample">&2
-	exit
+	return 1
 fi
 
 ### ReKraken on Assembly ###
@@ -231,9 +228,9 @@ start=$SECONDS
 # Run csstar in default mode from config.sh
 "${shareScript}/run_c-sstar_on_single.sh" "${filename}" "${csstar_gapping}" "${csstar_identity}" "${project}"
 "${shareScript}/run_c-sstar_on_single_alternate_DB.sh" "${filename}" "${csstar_gapping}" "${csstar_identity}" "${project}" "${local_DBs}/star/ResGANNOT_20180608_srst2.fasta"
-# Should the parameters be different when checking on plasmids specifically
-"${shareScript}/run_c-sstar_on_single.sh" "${filename}" "${csstar_gapping}" "${csstar_plasmid_identity}" "${project}" "--plasmid"
-"${shareScript}/run_c-sstar_on_single_alternate_DB.sh" "${filename}" "${csstar_gapping}" "${csstar_plasmid_identity}" "${project}" "--plasmid" "${local_DBs}/star/ResGANNOT_20180608_srst2.fasta"
+
+# Run GAMA on Assembly
+${shareScript}/run_GAMA.sh "${filename}" "${project}" -c
 
 # Get end time of csstar and calculate run time and append to time summary (and sum to total time used
 end=$SECONDS
@@ -299,6 +296,7 @@ if [[ "${family}" == "Enterobacteriaceae" ]]; then
 	${shareScript}/run_plasFlow.sh "${filename}" "${project}"
 	${shareScript}/run_c-sstar_on_single_plasFlow.sh "${filename}" g o "${project}" -p
 	${shareScript}/run_plasmidFinder.sh "${filename}" "${project}" plasmid_on_plasFlow
+	${shareScript}/run_GAMA.sh "${filename}" "${project}" -p
 	end=$SECONDS
 	timeplasflow=$((end - start))
 	echo "plasmidFlow - ${timeplasflow} seconds" >> "${time_summary_redo}"

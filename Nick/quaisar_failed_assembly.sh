@@ -1,15 +1,22 @@
 #!/bin/bash -l
 
-#$ -o qfa_X.out
-#$ -e qfa_X.err
-#$ -N qfa_X
+#$ -o qfa.out
+#$ -e qfa.err
+#$ -N qfa
 #$ -pe smp 10
 #$ -cwd
 #$ -q short.q
 
+#Import the config file with shortcuts and settings
+if [[ ! -f "./config.sh" ]]; then
+	cp config_template.sh config.sh
+fi
+. ./config.sh
+
+#
 # Accessory to original quaisar that only completes from assembly on for any failed assembly isolates
 #
-# Usage ./quaisar_failed_assembly.sh isolate_name project_name config_file_to_use
+# Usage ./quaisar_failed_assembly.sh isolate_name project_name
 #  project/isolate_name must already have a populated FASTQs folder to work with
 #
 
@@ -25,15 +32,6 @@ elif [[ "${1}" = "-h" ]]; then
 elif [[ -z "${2}" ]]; then
 	echo "No Project/Run_ID supplied to quaisar_template.sh, exiting"
 	exit 33
-fi
-
-if [[ ! -f "${3}" ]]; then
-	echo "no config file to load (${3}), exiting"
-	exit 223
-else
-	echo "${2}/${1} is loading config file ${3}"
-	. "${3}"
-	. ${mod_changers}/pipeline_mods
 fi
 
 #Time tracker to gauge time used by each step
@@ -344,6 +342,10 @@ start=$SECONDS
 "${shareScript}/run_c-sstar_on_single.sh" "${sample_name}" "${csstar_gapping}" "${csstar_identity}" "${project}"
 "${shareScript}/run_c-sstar_on_single_alternate_DB.sh" "${sample_name}" "${csstar_gapping}" "${csstar_identity}" "${project}" "${local_DBs}/star/ResGANNOT_20180608_srst2.fasta"
 
+
+# Run GAMA on Assembly
+${shareScript}/run_GAMA.sh "${filename}" "${project}" -c
+
 # Get end time of csstar and calculate run time and append to time summary (and sum to total time used
 end=$SECONDS
 timestar=$((end - start))
@@ -398,20 +400,22 @@ timeplasfin=$((end - start))
 echo "plasmidFinder - ${timeplasfin} seconds" >> "${time_summary_redo}"
 totaltime=$((totaltime + timeplasfin))
 
+"${shareScript}/sample_cleaner.sh" "${sample_name}" "${project}"
+"${shareScript}/validate_piperun.sh" "${sample_name}" "${project}" > "${processed}/${project}/${sample_name}/${sample_name}_pipeline_stats.txt"
+
 # Run plasFlow if isolate is from the Enterobacteriaceae family  ##### When should we check if this will be expanded?
 if [[ "${family}" == "Enterobacteriaceae" ]]; then
 	start=$SECONDS
 	${shareScript}/run_plasFlow.sh "${sample_name}" "${project}"
 	${shareScript}/run_c-sstar_on_single_plasFlow.sh "${sample_name}" g o "${project}" -p
 	${shareScript}/run_plasmidFinder.sh "${sample_name}" "${project}" plasmid_on_plasFlow
+	${shareScript}/run_GAMA.sh "${filename}" "${project}" -p
+	
 	end=$SECONDS
 	timeplasflow=$((end - start))
 	echo "plasmidFlow - ${timeplasflow} seconds" >> "${time_summary_redo}"
 	totaltime=$((totaltime + timeplasflow))
 fi
-
-"${shareScript}/sample_cleaner.sh" "${sample_name}" "${project}"
-"${shareScript}/validate_piperun.sh" "${sample_name}" "${project}" > "${processed}/${project}/${sample_name}/${sample_name}_pipeline_stats.txt"
 
 # Extra dump cleanse in case anything else failed
 	if [ -n "$(find "${shareScript}" -maxdepth 1 -name 'core.*' -print -quit)" ]; then
