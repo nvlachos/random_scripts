@@ -29,7 +29,7 @@ fi
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	echo ""${processed}/${project}/${sample_name}"
+	echo "${processed}/${project}/${sample_name}"
 	if [[ -f "${processed}/${project}/${sample_name}/GAMA/${sample_name}_ResGANNCBI_20190826.GAMA" ]]; then
 		echo "1"
 		mv "${processed}/${project}/${sample_name}/GAMA/${sample_name}_ResGANNCBI_20190826.GAMA" "${processed}/${project}/${sample_name}/GAMA/${sample_name}.ResGANNCBI_20190826.GAMA"
