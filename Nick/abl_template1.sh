@@ -29,7 +29,18 @@ fi
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	${shareScript}/retry_ANI_mash.sh ${sample_name} ${2} ${3} ${project}
+	if [[ -f "${processed}/${project}/${sample_name}/GAMA/${sample_name}_ResGANNCBI_20190826.GAMA" ]]; then
+		mv "${processed}/${project}/${sample_name}/GAMA/${sample_name}_ResGANNCBI_20190826.GAMA" "${processed}/${project}/${sample_name}/GAMA/${sample_name}.ResGANNCBI_20190826.GAMA"
+	fi
+	if [[ -f "${processed}/${project}/${sample_name}/GAMA/${sample_name}_ResGANNOT_20190812.GAMA" ]]; then
+		mv "${processed}/${project}/${sample_name}/GAMA/${sample_name}_ResGANNOT_20190812.GAMA" "${processed}/${project}/${sample_name}/GAMA/${sample_name}.ResGANNOT_20190812.GAMA"
+	fi
+	if [[ -f "${processed}/${project}/${sample_name}/GAMA_plasFlow/${sample_name}_ResGANNCBI_20190826.GAMA" ]]; then
+		mv "${processed}/${project}/${sample_name}/GAMA_plasFlow/${sample_name}_ResGANNCBI_20190826.GAMA" "${processed}/${project}/${sample_name}/GAMA_plasFlow/${sample_name}.ResGANNCBI_20190826.GAMA"
+	fi
+	if [[ -f "${processed}/${project}/${sample_name}/GAMA_plasFlow/${sample_name}_ResGANNOT_20190812.GAMA" ]]; then
+		mv "${processed}/${project}/${sample_name}/GAMA_plasFlow/${sample_name}_ResGANNOT_20190812.GAMA" "${processed}/${project}/${sample_name}/GAMA_plasFlow/${sample_name}.ResGANNOT_20190812.GAMA"
+	fi
 done < "${1}"
 
 echo "All isolates completed"
