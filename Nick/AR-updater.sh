@@ -14,24 +14,27 @@
 #
 # Usage ./AR_updater.sh
 #
-#
-#
-
-# Checks for proper argumentation
-if [[ "$1" = "-h" ]]; then
-	echo "Usage is ./AR-updater.sh"
-	exit 0
-fi
 
 # Makes list of ALL samples in MiSeqAnalysisFiles
 today=$(date "+%Y%m%d")
-${shareScript}/make_sample_list_from_run_list.sh ${shareScript}/sample_list_${today}.txt ${shareScript}/directory_list_${today}.txt
 
-# Exits if a sample list from TODAY was not creaetd
-if [[ ! -f ${shareScript}/sample_list_${today}.txt ]]; then
-	echo "No sample list file was created (${shareScript}/sample_list_${today}.txt), must exit..."
-	exit 245
+# Checks for proper argumentation
+if [[ "$1" = "-h" ]]; then
+	echo "Usage is ./AR-updater.sh [path_to_list]"
+	exit 0
+elif [ ! -z "${1}" ]; then
+	list_path=${1}
+else
+	${shareScript}/make_sample_list_from_run_list.sh ${shareScript}/sample_list_${today}.txt ${shareScript}/directory_list_${today}.txt
+	# Exits if a sample list from TODAY was not creaetd
+	if [[ ! -f ${shareScript}/sample_list_${today}.txt ]]; then
+		echo "No sample list file was created (${shareScript}/sample_list_${today}.txt), must exit..."
+		exit 245
+	fi
+	list_path="${shareScript}/sample_list_${today}.txt"
+	dir_path="${shareScript}/dir_list_${today}.txt"
 fi
+
 
 # Checks the last time isolates were updated for AR. If databases havent changed since then, then no need to do any updating
 last_run=$(tail -n1 ${local_DBs}/ar_updater.txt)
@@ -46,10 +49,15 @@ fi
 ResGANNCBI_date=$(echo ${ResGANNCBI_srst2_filename} | cut -d'_' -f2)
 
 # Submit the list of samples for csstar and srst2
-qsub "${shareScript}/abl_mass_qsub_csstar.sh" "${shareScript}/sample_list_${today}.txt" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs" "keep"
-qsub -sync y "${shareScript}/abl_mass_qsub_srst2.sh" "${shareScript}/sample_list_${today}.txt" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs" "keep"
-qsub "${shareScript}/abl_mass_qsub_runsum.sh" "${shareScript}/directory_list_${today}.txt" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs"
-qsub -sync y "${shareScript}/abl_AR_completion_check.sh" "${shareScript}/sample_list_${today}.txt" "${ResGANNCBI_date}" "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/AR_check_${today}.txt"
+qsub "${shareScript}/abl_mass_qsub_csstar.sh" "${list_path}" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs" "keep"
+qsub "${shareScript}/abl_mass_qsub_csstar_plasFlow.sh" "${list_path}" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs" "keep"
+qsub "${shareScript}/abl_mass_qsub_GAMA.sh" "${list_path}" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs" "keep"
+qsub "${shareScript}/abl_mass_qsub_GAMA_plasFlow.sh" "${list_path}" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs" "keep"
+qsub -sync y "${shareScript}/abl_mass_qsub_srst2.sh" "${list_path}" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs" "keep"
+if [ ! -z "${dir_path}" ]; then
+	qsub "${shareScript}/abl_mass_qsub_runsum.sh" "${dir_path}" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs"
+fi
+qsub -sync y "${shareScript}/abl_AR_completion_check.sh" "${list_path}" "${ResGANNCBI_date}" "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/AR_check_${today}.txt"
 
 
 
@@ -57,8 +65,8 @@ echo "All isolates are UTD on AR files, check /scicomp/groups/OID/NCEZID/DHQP/CE
 echo "${ResGANNCBI_srst2_filename}" >> ${local_DBs}/ar_updater.txt
 
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
-rm ${shareScript}/sample_list_${today}.txt
-rm ${shareScript}/directory_list_${today}.txt
+#rm ${shareScript}/sample_list_${today}.txt
+#rm ${shareScript}/directory_list_${today}.txt
 #Script exited gracefully (unless something else inside failed)
 printf "%s %s" "AR_updater.sh has completed ${1}" "${global_end_time}" | mail -s "AR_updater complete" nvx4@cdc.gov
 exit 0
