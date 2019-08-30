@@ -55,25 +55,29 @@ OUTDATADIR="${processed}/${2}/${1}"
 
 # Create necessary output directories
 echo "Running GAMA Taxonomic Classifier"
-if [ ! -d "$OUTDATADIR/GAMA" ]; then  #create outdir if absent
-	echo "Creating $OUTDATADIR/GAMA"
-	mkdir -p "$OUTDATADIR/GAMA"
-fi
 
 OUTDATA="${OUTDATADIR}"
 
 if [[ "${3}" == "-c" ]]; then
 	assembly_source="${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta"
+	if [ ! -d "$OUTDATADIR/GAMA" ]; then  #create outdir if absent
+		echo "Creating $OUTDATADIR/GAMA"
+		mkdir -p "$OUTDATADIR/GAMA"
+	fi
 	OUTDATADIR="${OUTDATADIR}/GAMA"
 elif [[ "${3}" == "-p" ]]; then
 	assembly_source="${OUTDATADIR}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_plasmid_assembly_trimmed.fasta"
+	if [ ! -d "$OUTDATADIR/GAMA_plasFlow" ]; then  #create outdir if absent
+		echo "Creating $OUTDATADIR/GAMA_plasFlow"
+		mkdir -p "$OUTDATADIR/GAMA_plasFlow"
+	fi
 	OUTDATADIR="${OUTDATADIR}/GAMA_plasFlow"
 else
 	echo "Unknown Assembly source identifier, exiting"
 	exit 5564
 fi
 ### GAMA AR Classifier ### in species mode
-python2 GAMA_4.6_ResGANNOT_SciComp_Exe.py "${OUTDATA}/Assembly/${1}_scaffolds_trimmed.fasta" "${ARDB}" "${OUTDATADIR}/${1}.${ResGANNCBI_srst2_filename}.GAMA"
+python2 GAMA_ResGANNCBI_SciComp_Exe.py "${assembly_source}" "${ARDB}" "${OUTDATADIR}/${1}.${ResGANNCBI_srst2_filename}.GAMA"
 
 ml -blat -Python/2.7.3
 

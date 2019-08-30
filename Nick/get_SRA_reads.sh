@@ -50,9 +50,11 @@ fi
 
 ml sratoolkit/2.9.1 BBMap/38.26 trimmomatic/0.35
 
-ecoh "Saving to ${OUTDATADIR}"
+echo "Saving to ${OUTDATADIR}"
 
 fasterq-dump --split-files ${1} -O ${OUTDATADIR}/FASTQs
+
+1="${1}_reference"
 
 complete="true"
 if [[ -s "${OUTDATADIR}/FASTQs/${1}_1.fastq" ]]; then
@@ -74,6 +76,9 @@ if [[ "${complete}" == "true" ]]; then
 	trimmomatic "${trim_endtype}" -"${trim_phred}" -threads "${procs}" "${OUTDATADIR}/removedAdapters/${1}-noPhiX-R1.fsq" "${OUTDATADIR}/removedAdapters/${1}-noPhiX-R2.fsq" "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R1_001.unpaired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.unpaired.fq" ILLUMINACLIP:"${trim_adapter_location}:${trim_seed_mismatch}:${trim_palindrome_clip_threshold}:${trim_simple_clip_threshold}:${trim_min_adapt_length}:${trim_complete_palindrome}" SLIDINGWINDOW:"${trim_window_size}:${trim_window_qual}" LEADING:"${trim_leading}" TRAILING:"${trim_trailing}" MINLEN:"${trim_min_length}"
 	cat "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq" > "${OUTDATADIR}/trimmed/${1}.paired.fq"
 	cat "${OUTDATADIR}/trimmed/${1}_R1_001.unpaired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.unpaired.fq" > "${OUTDATADIR}/trimmed/${1}.single.fq"
+	gzip ${OUTDATADIR}/trimmed/*.paired.fq
+	rm ${OUTDATADIR}/trimmed/*.unpaired.gq
+	rm -r ${OUTDATADIR}/removedAdapters
 fi
 
 ml -sratoolkit/2.9.1 -BBMap/38.26 -trimmomatic/0.35
