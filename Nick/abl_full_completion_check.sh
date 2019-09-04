@@ -128,6 +128,9 @@ while IFS= read -r var || [ -n "$var" ]; do
 			input_DB_csstar="NO_CSSTAR_file(HAS_ASSEMBLY)"
 		fi
 		if [[ -s "${processed}/${project}/${sample_name}/GAMA/${sample_name}.ResGANNCBI_${2}.GAMA" ]]; then
+			gama_lines=$(grep -c '^' "${processed}/${project}/${sample_name}/GAMA/${sample_name}.ResGANNCBI_${2}.GAMA" )
+			gama_lines=$(( gama_lines - 1 ))
+			if [[ ${gama_lines} -eq 0 ]]; then
 				input_DB_GAMA="No_chromo_AR"
 			else
 				input_DB_GAMA="AR_Found"
@@ -291,8 +294,8 @@ while IFS= read -r var || [ -n "$var" ]; do
 		aniAll="NOT_FOUND"
 	fi
 
-	if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]]; then
-		mlst=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" | cut -d'	' -f3)
+	if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" ]]; then
+		mlst=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" | cut -d'	' -f3)
 	else
 		mlst="NOT_FOUND"
 	fi
@@ -330,15 +333,18 @@ while IFS= read -r var || [ -n "$var" ]; do
 					if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
 						cplas="No_plasmid_AR"
 					else
-						cplas="AR_Found"
+						cplas="plasmid_AR_Found"
 					fi
 				else
 					cplas="NO_plasFlow_CSSTAR_file(HAS_plasFlow_ASSEMBLY)"
 				fi
 				if [[ -s "${processed}/${project}/${sample_name}/GAMA_plasFlow/${sample_name}.ResGANNCBI_${2}.GAMA" ]]; then
-						gplas="No_plasmid_AR"
+					gama_p_lines=$(grep -c '^' "${processed}/${project}/${sample_name}/GAMA/${sample_name}.ResGANNCBI_${2}.GAMA" )
+					gama_p_lines=$(( gama_lines - 1 ))
+					if [[ ${gama_p_lines} -eq 0 ]]; then
+						input_DB_GAMA="No_plasmid_AR"
 					else
-						gplas="AR_Found"
+						input_DB_GAMA="plasmid_AR_Found"
 					fi
 				else
 					gplas="NO_plasFlow_GAMA_file(HAS_plasFlow_ASSEMBLY)"
@@ -387,13 +393,13 @@ while IFS= read -r var || [ -n "$var" ]; do
 		fi
 
 		if [[ "${genus}" == "Acinetobacter" ]] && [[ "${species}" == "baumannii" ]]; then
-			if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]]; then
-				mlst_result1=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" | cut -d'	' -f3)
+			if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" ]]; then
+				mlst_result1=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" | cut -d'	' -f3)
 			else
 				mlst_result1="NOT_FOUND"
 			fi
-			if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
-				mlst_result2=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" | cut -d'	' -f3)
+			if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_Oxford.mlst" ]]; then
+				mlst_result2=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_Oxford.mlst" | cut -d'	' -f3)
 			else
 				mlst_result2="NOT_FOUND"
 			fi
@@ -410,13 +416,13 @@ while IFS= read -r var || [ -n "$var" ]; do
 			fi
 			srst2_mlst="${srst2_mlst_result1}|${srst2_mlst_result2}"
 		elif [[ "${genus}" == "Escherichia" ]] && [[ "${species}" == "coli" ]]; then
-			if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]]; then
-				mlst_result1=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" | cut -d'	' -f3)
+			if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" ]]; then
+				mlst_result1=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" | cut -d'	' -f3)
 			else
 				mlst_result1="NOT_FOUND"
 			fi
-			if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst" ]]; then
-				mlst_result2=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst" | cut -d'	' -f3)
+			if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_Achtman.mlst" ]]; then
+				mlst_result2=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_Achtman.mlst" | cut -d'	' -f3)
 			else
 				mlst_result2="NOT_FOUND"
 			fi
@@ -434,7 +440,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 			srst2_mlst="${srst2_mlst_result1}|${srst2_mlst_result2}"
 		else
 			if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_${genus}_${species}.mlst" ]]; then
-				srst2_mlst=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_${genus}_${species}.mlst" | cut -d'	' -f2)
+				srst2_mlst=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_${genus}_${species}-Pasteur.mlst" | cut -d'	' -f2)
 			else
 				srst2_mlst="NOT_FOUND"
 			fi
