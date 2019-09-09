@@ -122,7 +122,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	# Delete old results if clobbering
 	if [[ "${5}" == "clobber" ]]; then
-		rm ${processed}/${project}/${sample}/c-sstar/${sample}.${alt_database}.gapped_${simnum}_sstar_summary
+		rm ${processed}/${project}/${sample}/c-sstar/${sample}.${alt_database}.gapped_${simnum}_sstar_summary.txt
 		rm -r ${processed}/${project}/${sample}/c-sstar/${alt_database}_gapped/
 	fi
 
