@@ -87,7 +87,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	if [[ "${clobberness}" = "clobber" ]]; then
 		rm ${processed}/${project}/${sample}/GAMA/${sample}_${ResGANNCBI_srst2_filename}.GAMA
-		rm ${processed}/${project}/${sample}/GAMA_plasFlow/${sample}_${ResGANNCBI_srst2_filename}.GAMA
 	fi
 	echo ${counter}
 	# Check if counter is below max number of concurrent submissions

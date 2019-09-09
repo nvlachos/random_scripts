@@ -13,7 +13,7 @@ fi
 
 . ./config.sh
 
-module load ncbi-blast+/2.6.0
+module load ncbi-blast+/2.6.0 Python3/3.5.2
 
 #
 # Finds anti-microbial resistance genes in the resFinder and ARG-ANNOT databases and exports a file containing list of all genes found

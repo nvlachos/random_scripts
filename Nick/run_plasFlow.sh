@@ -87,14 +87,14 @@ if [[ -s "${processed}/${2}/${1}/Assembly/${1}_scaffolds_trimmed.fasta" ]]; then
 	# Run plasflow on newly trimmed assembly file
 	PlasFlow.py --input "${processed}/${2}/${1}/plasFlow/${1}_scaffolds_trimmed_2000.fasta" --output "${processed}/${2}/${1}/plasFlow/${1}_plasFlow_results.tsv" --threshold 0.7
 	# Load all necessary modules to complete the realignment portion of analysis
-	module load Python/3.5.4;
+	module load Python3/3.5.4;
 	module load bowtie2/2.2.9;
 	module load samtools/1.4.1;
 	module load bam2fastq/1.1.0;
 	module load Unicycler/0.4.4;
 	module load gcc/5.5;
-	module load SPAdes/3.11.1;
-	module load racon/1.2.0;
+	module load SPAdes/3.13.0;
+	module load racon/1.3.1;
 	module load perl/5.22.1
 
 	mkdir ${processed}/${2}/${1}/plasFlow/bowtie2-index/

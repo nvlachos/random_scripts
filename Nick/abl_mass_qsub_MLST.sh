@@ -73,9 +73,42 @@ start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
-	if [[ "${clobberness}" == "clobber" ]]; then
-		rm "${processed}/${project}/${sample}/${sample}.mlst"
+
+	# Ensure tax file exists to get proper DB to run ANI against
+	if [[ -s "${processed}/${project}/${sample}/${sample}.tax" ]]; then
+		# Parse tax file
+		while IFS= read -r line; do
+			# Grab first letter of line (indicating taxonomic level)
+			first=${line:0:1}
+			# Assign taxonomic level value from 4th value in line (1st-classification level, 2nd-% by kraken, 3rd-true % of total reads, 4th-identifier)
+			if [ "${first}" = "s" ]
+			then
+				species=$(echo "${line}" | awk -F ' ' '{print $2}')
+			elif [ "${first}" = "G" ]
+			then
+				genus=$(echo "${line}" | awk -F ' ' '{print $2}')
+				# Only until ANI gets fixed
+				if [[ ${genus} == "Clostridioides" ]]; then
+					genus="Clostridium"
+				fi
+				if [[ ${genus} == "Shigella" ]]; then
+					genus="Escherichia"
+				fi
+			fi
+		done < "${processed}/${project}/${sample}/${sample}.tax"
+	else
+		echo "No tax file, cannot not determine if secondary mlst needs to be deleted and rerun"
 	fi
+
+	if [[ "${clobberness}" == "clobber" ]]; then
+		rm "${processed}/${project}/${sample}/${sample}_Pasteur.mlst"
+		if [[ "${genus}_${species}" == "Acinetobacter_baumannii" ]]; then
+			rm "${processed}/${project}/${sample}/${sample}_Oxford.mlst"
+		elif [[ "${genus}_${species}" == "Escherichia_coli" ]]; then
+			rm "${processed}/${project}/${sample}/${sample}_Achtman.mlst"
+		fi
+	fi
+
 	# Check if there is an acceptable assembly file to use with MLST
 	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]]; then
 		# Check if counter is below max sub limit
@@ -90,7 +123,12 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -cwd"  >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 				echo -e "cd ${shareScript}" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
-				echo -e "\"${shareScript}/run_MLST.sh\" \"${sample}\" \"${project}\" \"-f\" \"abaumannii\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/run_MLST.sh\" \"${sample}\" \"${project}\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
+				if [[ "${genus}_${species}" == "Acinetobacter_baumannii" ]]; then
+					echo -e "\"${shareScript}/run_MLST.sh\" \"${sample}\" \"${project}\" -f abaumannii" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
+				elif [[ "${genus}_${species}" == "Escherichia_coli" ]]; then
+					echo -e "\"${shareScript}/run_MLST.sh\" \"${sample}\" \"${project}\" -f ecoli_2" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
+				fi
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_mlst_complete.txt\"" >> "${main_dir}/mlst_${sample}_${start_time}.sh"
 				cd "${main_dir}"
 				#if [[ "${counter}" -lt "${last_index}" ]]; then
