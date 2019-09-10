@@ -19,7 +19,7 @@ fi
 # requires kraken/2.0.0 perl/5.12.3 (NOT!!! 5.16.1-MT or 5.22.1)
 #
 
-ml kraken/2.0.0 krona/2.7 perl/5.12.3
+ml kraken/2.0.0 krona/2.7 perl/5.12.3 Python3/3.5.2
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
