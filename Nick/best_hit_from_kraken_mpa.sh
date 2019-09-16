@@ -42,20 +42,16 @@ elif [ -z "$3" ]; then
 elif [ -z "$4" ]; then
 	echo "Empty project id supplied to $0, exiting"
 	exit 1
-elif [ -z "$5" ]; then
-	echo "Empty out folder supplied to $0, exiting"
-	exit 1
 fi
-fi
-# Checks what source flag was set as,indicating that it was from kraken or kraken2
-if [[ "${5}" != "kraken"]] || [[ "${5}" != "kraken2" ]]; then
-	full=""
+# Checks if full flag was set,indicating that it was a full kraken database comparison (and also in a different location)
+if [[ "${5}" = "full" ]]; then
+	full="_full"
 else
-	source="${5}"
+	full=""
 fi
 
 #Sets output folder to the correct path relative to assembly completion
-OUTDATADIR="${processed}/${4}/${1}/${5}/${2}Assembly${full}"
+OUTDATADIR="${processed}/${4}/${1}/kraken/${2}Assembly${full}"
 echo "-${OUTDATADIR}-"
 
 #Creates the default values for output in case any calculations are interrupted.
@@ -166,7 +162,7 @@ while IFS= read -r line  || [ -n "$line" ]; do
 		species_reads=${reads}
 		echo "New: ${species}-${species_reads}"
 	fi
-done < "${OUTDATADIR}/${1}_${3}.list"
+done < "${OUTDATADIR}/${1}_${3}.mpa"
 
 # Calculate % of unclassified reads using sum of highest taxon level reads against total reads found in QC counts
 # Grabs total possible reads from preQC counts if kraken was used on reads (pre assembly)

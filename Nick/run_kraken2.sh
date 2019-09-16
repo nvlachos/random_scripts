@@ -19,7 +19,7 @@ fi
 # requires kraken/2.0.0 perl/5.12.3 (NOT!!! 5.16.1-MT or 5.22.1)
 #
 
-ml kraken/2.0.0 krona/2.7 perl/5.12.3 Python3/3.5.2
+ml kraken/2.0.0 krona/2.7 perl/5.22.1 Python3/3.5.2
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -65,7 +65,13 @@ echo "[:] Running kraken2.  Output: ${1}.kraken2 / ${1}.classified"
 if [ "${3}" = "paired" ]; then
 	#gunzip -c "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq.gz" > "${OUTDATADIR}/trimmed/${1}_1.fq"
 	#gunzip -c "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq.gz"  > "${OUTDATADIR}/trimmed/${1}_2.fq"
-	kraken2 --paired --db "${kraken2_mini_db}" --report --use-mpa-style "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.list" --use-names --threads "${procs}" --output "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.kraken2" --classified-out "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.classified" "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq"
+	#kraken2 --paired --db "${kraken2_mini_db}" --report --use-mpa-style "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.list" --use-names --threads "${procs}" --output "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.kraken2" --classified-out "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}\#.classified" "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq"
+	kraken2 -db "${kraken2_mini_db}" --threads ${procs} --classified-out "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}#.classified" --output "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.kraken2" --report "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.mpa" -use-mpa-style --paired --use-names "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq"
+	kraken2 -db "${kraken2_mini_db}" --threads ${procs} --output - --report "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.list" --paired --use-names "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq"
+
+	# Original call
+	#kraken2 --paired --db "${kraken2_mini_db}" --report --use-mpa-style "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.list" --use-names --threads "${procs}" --output "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}#.kraken2" --classified-out "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}#.classified" "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq"
+
 	#rm "${OUTDATADIR}/trimmed/${1}_1.fq"
 	#rm "${OUTDATADIR}/trimmed/${1}_2.fq"
 # Runs kraken2 in single end mode on the concatenated single read file
@@ -73,8 +79,11 @@ elif [ "${3}" = "single" ]; then
 	kraken2 --db "${kraken2_mini_db}" --fastq-input --threads "${procs}" --output "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.kraken2" --classified-out "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.classified ${OUTDATADIR}/FASTQs/${1}.single.fastq"
 # Runs kraken2 on the assembly
 elif [ "${3}" = "assembled" ]; then
-	#kraken2 --db "${kraken2_mini_db}" --report "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.mpa" --use-mpa-style --threads "${procs}" --output "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.kraken2" --classified-out "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.classified" "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta"
-	kraken2 --db "${kraken2_mini_db}" --report "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.list" --threads "${procs}" --output "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.kraken2" --classified-out "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.classified" "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta"
+	# Makes MPA output for unweighted assembly
+	#kraken2 -db "${kraken2_mini_db}" --threads ${procs} --output - --report "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.mpa" --use-mpa-style --use-names "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta"
+	# Makes original list file to be used for calculations of % in pipeline stats. Makes kraken2 output to be used for weighing contigs later
+	kraken2 -db "${kraken2_mini_db}" --threads ${procs} --classified-out "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.classified" --output "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.kraken2" --report "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.list" --use-names "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta"
+
 
 	# Attempting to weigh contigs and produce standard krona and list output using a modified version of Rich's weighting scripts (will also be done on pure contigs later)
 	echo "1"
@@ -110,17 +119,17 @@ elif [ "${3}" = "assembled" ]; then
 #	 "${shareScript}/module_changers/perl_5123_to_5221.sh"
 	# Runs the extractor for pulling best taxonomic hit from a kraken2 run
 	echo "8"
-	"${shareScript}/best_hit_from_kraken.sh" "${1}" "${2}" "${3}_BP_data" "${4}"
+	"${shareScript}/best_hit_from_kraken.sh" "${1}" "${2}" "${3}_BP_data" "${4}" "kraken2"
 else
 	echo "Argument combination is incorrect"
 	exit 1
 fi
 
 # Run the metaphlan generator on the kraken2 output
-module load kraken/0.10.5
+#module load kraken/0.10.5
 #. "${shareScript}/module_changers/perl_5221_to_5123.sh"
-echo "[:] Generating metaphlan compatible report."
-kraken-mpa-report --db "${kraken_mini_db}" "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.kraken2" > "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.mpa"
+#echo "[:] Generating metaphlan compatible report."
+#kraken-mpa-report --db "${kraken_mini_db}" "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.kraken2" > "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.mpa"
 # Run the krona generator on the metaphlan output
 echo "[:] Generating krona output for ${1}."
 # Convert mpa to krona file
@@ -131,16 +140,16 @@ perl "${shareScript}/Methaplan_to_krona.pl" -p "${OUTDATADIR}/kraken2/${2}Assemb
 ktImportText "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.krona" -o "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.html"
 # Return perl version back to 5.22.1
 #. "${shareScript}/module_changers/perl_5123_to_5221.sh"
-module unload kraken/0.10.5
+#module unload kraken/0.10.5
 # Creates the taxonomy list file from the kraken2 output
 echo "[:] Creating alternate report for taxonomic extraction"
 #kraken2 --report --db "${kraken2_mini_db}" "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.kraken2" > "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.list"
 # Parses the output for the best taxonomic hit
 echo "[:] Extracting best taxonomic matches"
 # Runs the extractor for pulling best taxonomic hit from a kraken2 run
-"${shareScript}/best_hit_from_kraken.sh" "${1}" "${2}" "${3}" "${4}"
+"${shareScript}/best_hit_from_kraken.sh" "${1}" "${2}" "${3}" "${4}" "kraken2"
 
-ml -kraken/2.0.0 -krona/2.7 -perl/5.12.3
+ml -kraken/2.0.0 -krona/2.7 -perl/5.22.1 -Python3/3.5.2
 
 #Script exited gracefully (unless something else inside failed)
 exit 0
