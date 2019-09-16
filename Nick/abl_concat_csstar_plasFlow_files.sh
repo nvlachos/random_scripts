@@ -12,7 +12,7 @@
 . "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list_concat_csstar_plasFlow_files.sh path_to_list path_for_output_file
+# Usage ./act_by_list_concat_csstar_plasFlow_files.sh path_to_list date_of_ResGANNCBI_DB path_for_output_file
 #
 
 number='^[0-9]+$'
