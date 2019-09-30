@@ -25,18 +25,18 @@ elif [[ "$1" = "-h" ]]; then
 	exit 0
 fi
 
-#ml BBMap/38.26 trimmomatic/0.35
-ml krona
 # Loop through and act on each sample name in the passed/provided list
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 
-	ktImportText "${processed}/${project}/${sample_name}/gottcha/gottcha_S/${sample_name}_temp/${sample_name}.lineage.tsv" -o "${processed}/${project}/${sample_name}/gottcha/${sample_name}_species.krona.html"
+	if [[ -f "${OUTDATADIR}/GAMA/${sample_name}_${ResGANNCBI_srst2_filename}.GAMA" ]]; then
+		"${OUTDATADIR}/GAMA/${sample_name}_${ResGANNCBI_srst2_filename}.GAMA" "${OUTDATADIR}/GAMA/${sample_name}.${ResGANNCBI_srst2_filename}.GAMA"
+	fi
+
+	echo "Finished with ${project}/${sample_name}"
 
 done < "${1}"
-ml -krona
-#ml -BBMap/38.26 -trimmomatic/0.35
 
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
