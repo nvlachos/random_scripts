@@ -26,7 +26,7 @@ elif [[ -z "${1}" ]]; then
 	echo "Empty sample name supplied to validate_piperun.sh, exiting"
 	exit 1
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./validate_piperun.sh   sample_name   miseq_run_id"
+	echo "Usage is ./validate_piperun.sh   sample_name   miseq_run_ID"
 	echo "Output is only printed to screen, Pipe to file if desired"
 	exit 0
 elif [ -z "$2" ]; then

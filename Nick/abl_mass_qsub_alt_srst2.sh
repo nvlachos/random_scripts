@@ -132,7 +132,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			echo -e "module load srst2" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
 			echo -e "cd ${shareScript}" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			echo -e "\"${shareScript}/run_srst2_on_singleDB_alternateDB.sh\" \"${sample}\" \"${project}\" \"${alt_DB_path}\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+			echo -e "\"${shareScript}/run_srst2AR_altDB.sh\" \"${sample}\" \"${project}\" \"${alt_DB_path}\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2AR_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			cd "${main_dir}"
 			#if [[ "${counter}" -lt "${last_index}" ]]; then
@@ -180,7 +180,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					echo -e "module load srst2" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
 					echo -e "cd ${shareScript}" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-					echo -e "\"${shareScript}/run_srst2_on_singleDB_alternateDB.sh\" \"${sample}\" \"${project}\" \"${alt_DB_path}\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
+					echo -e "\"${shareScript}/run_srst2AR_altDB.sh\" \"${sample}\" \"${project}\" \"${alt_DB_path}\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2AR_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					cd "${main_dir}"
 					#if [[ "${counter}" -lt "${last_index}" ]]; then

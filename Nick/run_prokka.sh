@@ -18,7 +18,7 @@ ml prokka/1.12 perl/5.12.3
 #
 # Runs prokka gene identifier on sample to discover all identifiable genes. Also necessary for downstream busco processing
 #
-# Usage ./run_prokka.sh   sample_name   run_id
+# Usage ./run_prokka.sh   sample_name   run_ID
 #
 # requires prokka/1.12, perl/5.12.3 (loaded via perl_5221_to_5123.sh)
 #
@@ -33,8 +33,8 @@ elif [[ -z "${1}" ]]; then
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./run_prokka.sh sample_name run_id"
-	echo "Output is saved to ${processed}/miseq_run_id/sample_name/prokka"
+	echo "Usage is ./run_prokka.sh sample_name run_ID"
+	echo "Output is saved to ${processed}/miseq_run_ID/sample_name/prokka"
 	exit 0
 elif [ -z "$2" ]; then
 	echo "Empty project id supplied to run_prokka.sh, exiting"

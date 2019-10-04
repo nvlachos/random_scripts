@@ -17,7 +17,7 @@ fi
 #
 # A script that takes a sample and compares it to a busco database to discover number of similar genes (% conserved proteins) from prokka output
 #
-# Usage ./do_busco.sh sample_name DB(to search against) run_id
+# Usage ./do_busco.sh sample_name DB(to search against) run_ID
 #
 # requires modules busco/3.0.1, Python/3.6.1
 #
@@ -34,8 +34,8 @@ elif [[ -z "${1}" ]]; then
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./do busco.sh   sample_name   database_name   run_id"
-	echo "Output is saved to ${processed}/miseq_run_id/sample_name/busco"
+	echo "Usage is ./do busco.sh   sample_name   database_name   run_ID"
+	echo "Output is saved to ${processed}/miseq_run_ID/sample_name/busco"
 	exit 0
 elif [ -z "$2" ]; then
 	echo "Empty database name supplied to$0, exiting"

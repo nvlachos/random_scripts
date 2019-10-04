@@ -19,8 +19,8 @@ if [[ $# -eq 0 ]]; then
 	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./quaisar_on_assembly.sh  sample_name miseq_run_id(or_project_name) config_file_to_use optional_alternate_directory"
-	echo "Output by default is processed to processed/miseq_run_id/sample_name"
+	echo "Usage is ./quaisar_on_assembly.sh  sample_name miseq_run_ID(or_project_name) config_file_to_use optional_alternate_directory"
+	echo "Output by default is processed to processed/miseq_run_ID/sample_name"
 	exit 0
 elif [[ -z "{2}" ]]; then
 	echo "No Project/Run_ID supplied to quaisar_template.sh, exiting"
@@ -226,8 +226,8 @@ echo "----- Running c-SSTAR for AR Gene identification -----"
 start=$SECONDS
 
 # Run csstar in default mode from config.sh
-"${shareScript}/run_c-sstar_on_single.sh" "${filename}" "${csstar_gapping}" "${csstar_identity}" "${project}"
-"${shareScript}/run_c-sstar_on_single_alternate_DB.sh" "${filename}" "${csstar_gapping}" "${csstar_identity}" "${project}" "${local_DBs}/star/ResGANNOT_20180608_srst2.fasta"
+"${shareScript}/run_c-sstar.sh" "${filename}" "${csstar_gapping}" "${csstar_identity}" "${project}"
+"${shareScript}/run_c-sstar_altDB.sh" "${filename}" "${csstar_gapping}" "${csstar_identity}" "${project}" "${local_DBs}/star/ResGANNOT_20180608_srst2.fasta"
 
 # Run GAMA on Assembly
 ${shareScript}/run_GAMA.sh "${filename}" "${project}" -c
@@ -291,7 +291,7 @@ totaltime=$((totaltime + timeplasfin))
 if [[ "${family}" == "Enterobacteriaceae" ]]; then
 	start=$SECONDS
 	${shareScript}/run_plasFlow.sh "${filename}" "${project}"
-	${shareScript}/run_c-sstar_on_single_plasFlow.sh "${filename}" g o "${project}" -p
+	${shareScript}/run_c-sstar_plasFlow.sh "${filename}" g o "${project}" -p
 	${shareScript}/run_plasmidFinder.sh "${filename}" "${project}" plasmid_on_plasFlow
 	${shareScript}/run_GAMA.sh "${filename}" "${project}" -p
 	end=$SECONDS

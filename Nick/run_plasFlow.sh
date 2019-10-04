@@ -17,7 +17,7 @@ fi
 #
 # Will attempt to find any plasmids in sample
 #
-# Usage ./run_plasFlow.sh sample_name run_id
+# Usage ./run_plasFlow.sh sample_name run_ID
 #
 
 # Checks for proper argumentation
@@ -28,11 +28,11 @@ elif [[ -z "${1}" ]]; then
 	echo "Empty sample name supplied to run_plasmidFlow.sh, exiting"
 	exit 1
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./run_plasmFlow.sh  sample_name run_id"
-	echo "Output by default is ${processed}/miseq_run_id/sample_name/plasmFlow"
+	echo "Usage is ./run_plasmFlow.sh  sample_name run_ID"
+	echo "Output by default is ${processed}/miseq_run_ID/sample_name/plasmFlow"
 	exit 0
 elif [[ -z "${2}" ]]; then
-	echo "Empty run_id supplied to run_plasFlow.sh, exiting"
+	echo "Empty run_ID supplied to run_plasFlow.sh, exiting"
 	exit 1
 fi
 

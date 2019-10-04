@@ -11,20 +11,22 @@ if [[ ! -f "./config.sh" ]]; then
 	cp config_template.sh config.sh
 fi
 . ./config.sh
-#   ${mod_changers}/list_modules.sh
+
+#
+# Description: Will attempt to recalculate the best hit from a previously completed ANI analysis
+#
+# Usage: ./retry_ANI_best_hit.sh sample_name   genus	species   run_ID  list_samples_to_include(optional)
+#
+# Output location: default_config.sh_output_location/run_ID/sample_name/ANI/
+#
+# Modules required: Python/3.5.2
+#
+# v1.0 (10/3/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
+#
 
 ml Python3/3.5.2
-
-#
-# Script to calculate the average nucleotide identity of a sample to numerous other samples from the same genus (genus dependent)
-# The most similar match is identified and provided for confirmation
-#
-# Usage ./run_ANI.sh sample_name   DB(for looking up reference, just relative path, also is genus)   Species   run_id  list_samples_to_include(optional)
-#
-# Python/3.5.2 (pyani is located in Nick_DIR/script folder, not run from scicomp module)
-#
-
-
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -35,11 +37,11 @@ elif [[ -z "${1}" ]]; then
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./run_ANI.sh sample_name ani_database(which is also genus) species run_id list_of_samples_to_include(optional)"
+	echo "Usage is ./retry_ANI_best_hit.sh sample_name ani_database(which is also genus) species run_ID list_of_samples_to_include(optional)"
 	echo "Output is saved to in ${processed}/sample_name/ANI"
 	exit 0
 elif [ -z "$2" ]; then
-	echo "Empty database name supplied to run_ANI.sh. Second argument should be a genus found in ${local_DBs}/ANI/  ...Exiting"
+	echo "Empty database name supplied to retry_ANI_best_hit.sh. Second argument should be a genus found in ${local_DBs}/ANI/  ...Exiting"
 	exit 1
 elif [ ! -s "${local_DBs}/aniDB/${2,}" ]; then
 	echo "The genus does not exist in the ANI database. This will be noted and the curator of the database will be notified. However, since nothing can be done at the moment....exiting"
@@ -58,7 +60,7 @@ elif [ -z "$3" ]; then
 	echo "Empty species name supplied to run_ANI.sh. Third argument should be the suspected species of the sample. Exiting"
 	exit 1
 elif [ -z "$4" ]; then
-	echo "Empty miseq_run_id name supplied to run_ANI.sh. Fourth argument should be the run id. Exiting"
+	echo "Empty miseq_run_ID name supplied to run_ANI.sh. Fourth argument should be the run id. Exiting"
 	exit 1
 elif [ ! -z "$5" ]; then
 	others="true"
@@ -78,7 +80,6 @@ fi
 
 # Gets persons name to use as email during entrez request to identify best matching sample
 me=$(whoami)
-#echo ${me}"___"${1}___${2}___${3}___${4}
 
 # Sets the genus as the database that was passed in (The $2 seemed to be getting changed somewhere, so I just set it as a local variable)
 genus_in=${2}
@@ -115,30 +116,25 @@ if [[ ! -d "${OUTDATADIR}/ANI/localANIDB" ]]; then
 	for (( i=0; i<n; i++ ));
 	do
 		temp_ref=$(find ${local_DBs}/aniDB/${genus_in,,} -maxdepth 1 -type f -name "*${samples[i]}.fna.gz")
-		echo "Trying to copy ${temp_ref} --- *${samples[i]}.fna.gz"
+		echo "Trying to copy ${temp_ref} --- ${samples[i]}.fna.gz"
 		if [[ -f ${temp_ref} ]]; then
 			cp "${temp_ref}" "${OUTDATADIR}/ANI/localANIDB"
 		else
-			echo "Could not find ${temp_ref} (${samples[i]}.fna.gz)"
+			echo "Could not copy ${temp_ref} (*${samples[i]}.fna.gz)"
 		fi
 	done
 	gunzip "${OUTDATADIR}/ANI/localANIDB/"*
-	for f in ${OUTDATADIR}/ANI/localANIDB/*; do
-		if [[ "${f}" == *".fasta" ]]; then
-			mv $f `basename $f .fasta`.fna
-		fi
-	done
 else
 	echo "Already/still has its localANIDB folder"
 fi
 
-ls -l "${OUTDATADIR}/ANI/localANIDB"
-
 temp_ref=""
+
+#ls -l "${OUTDATADIR}/ANI/localANIDB"
 
 for (( i=0; i<n; i++ ));
 do
-	echo ${i}-${samples[i]}
+#	echo ${i}-${samples[i]}
 	if [[ ${samples[i]:0:7} = "sample_" ]]; then
 #		echo "Skipping ${i}"
 		continue
@@ -149,7 +145,7 @@ do
 			# Prints all matching samples to file (Except the self comparison) by line as percent_match  sample_name  fasta_header
 			echo "${percents[i+1]} ${samples[i]} ${definition}" >> "${OUTDATADIR}/ANI/best_hits.txt"
 		else
-			echo "Could not find ${temp_ref} ${samples[i]}.fna"
+			echo "Could not find ${temp_ref} (*${samples[i]}.fna)"
 			echo "${percents[i+1]} ${samples[i]} NO_FILE_FOUND-NO_ACCESSION" >> "${OUTDATADIR}/ANI/best_hits.txt"
 		fi
 	fi
@@ -161,12 +157,12 @@ sort -nr -t' ' -k1 -o "${OUTDATADIR}/ANI/best_hits_ordered.txt" "${OUTDATADIR}/A
 best=$(head -n 1 "${OUTDATADIR}/ANI/best_hits_ordered.txt")
 #Creates an array from the best hit
 IFS=' ' read -r -a def_array <<< "${best}"
-echo -${def_array[@]}+
+#echo -${def_array[@]}+
 #Captures the assembly file name that the best hit came from
 best_file=${def_array[1]}
 #Formats the %id to standard percentage (xx.xx%)
 best_percent=$(awk -v per="${def_array[0]}" 'BEGIN{printf "%.2f", per * 100}')
-echo "${best_file}"
+#echo "${best_file}"
 # If the best match comes from the additional file, extract the taxonomy from that file
 if [[ "${best_file}" = *"_scaffolds_trimmed" ]]; then
 	best_outbreak_match=$(echo "${best_file}" | rev | cut -d'_' -f3- | rev)
@@ -189,14 +185,13 @@ else
 	#Extracts the accession number from the definition line
 	accession=$(echo "${def_array[2]}" | cut -d' ' -f1  | cut -d'>' -f2)
 	#Looks up the NCBI genus species from the accession number
-	echo ${accession}
 	if [[ "${accession}" == "No_Accession_Number" ]]; then
 		best_organism_guess="${def_array[3]} ${def_array[4]}"
-		echo "${best_organism_guess}"
 	else
 		ml Entrez/latest
 		attempts=0
-		while [[ ${attempts} -lt 25 ]]; do
+		while [[ ${attempts} -lt 5 ]]; do
+			#echo "Trying to lookup - ${accession}"
 			best_organism_guess=$(python3 "${shareScript}/entrez_get_taxon_from_accession.py" -a "${accession}" -e "${me}")
 			if [[ ! -z ${best_organism_guess} ]]; then
 				best_organism_guess=$(echo "${best_organism_guess}" | tr -d "[]")
@@ -234,6 +229,8 @@ fi
 
 end_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 echo "ENDed ANI at ${end_time}"
+
+ml -Python3/3.5.2
 
 #Script exited gracefully (unless something else inside failed)
 exit 0

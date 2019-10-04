@@ -14,7 +14,7 @@ fi
 
 # Runs the kraken2 classification tool which identifies the most likely taxonomic classification for the sample
 #
-# Usage ./run_kraken2.sh sample_name pre/post(assembly) source_type(paired/R1/R2/single/assembled) run_id
+# Usage ./run_kraken2.sh sample_name pre/post(assembly) source_type(paired/R1/R2/single/assembled) run_ID
 #
 # requires kraken/2.0.0 perl/5.12.3 (NOT!!! 5.16.1-MT or 5.22.1)
 #
@@ -30,8 +30,8 @@ elif [[ -z "${1}" ]]; then
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./run_kraken2.sh   sample_name   assembly_relativity(pre or post)   read_type(paired,assembled, or single)   run_id"
-	echo "Output is saved to in ${processed}/miseq_run_id/sample_name/kraken2/assembly_relativity"
+	echo "Usage is ./run_kraken2.sh   sample_name   assembly_relativity(pre or post)   read_type(paired,assembled, or single)   run_ID"
+	echo "Output is saved to in ${processed}/miseq_run_ID/sample_name/kraken2/assembly_relativity"
 	exit 0
 elif [ -z "$2" ]; then
 	echo "Empty assembly relativity supplied to run_kraken2.sh. Second argument should be 'pre' or 'post' (no quotes). Exiting"
@@ -68,6 +68,8 @@ if [ "${3}" = "paired" ]; then
 	#kraken2 --paired --db "${kraken2_mini_db}" --report --use-mpa-style "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.list" --use-names --threads "${procs}" --output "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.kraken2" --classified-out "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}\#.classified" "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq"
 	kraken2 -db "${kraken2_mini_db}" --threads ${procs} --classified-out "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}#.classified" --output "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.kraken2" --report "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.mpa" -use-mpa-style --paired --use-names "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq"
 	kraken2 -db "${kraken2_mini_db}" --threads ${procs} --output - --report "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.list" --paired --use-names "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq"
+	#python3 ${shareScript}/kraken2_to_mpa.py -i "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}_BP.kraken2" -o "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}(nick).mpa"
+
 
 	# Original call
 	#kraken2 --paired --db "${kraken2_mini_db}" --report --use-mpa-style "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.list" --use-names --threads "${procs}" --output "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}#.kraken2" --classified-out "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}#.classified" "${OUTDATADIR}/trimmed/${1}_R1_001.paired.fq" "${OUTDATADIR}/trimmed/${1}_R2_001.paired.fq"
@@ -101,12 +103,12 @@ elif [ "${3}" = "assembled" ]; then
 	# Convert mpa to krona file# Convert mpa to krona file
 	echo "4"
 #	. "${shareScript}/module_changers/perl_5221_to_5123.sh"
-	perl "${shareScript}/Methaplan_to_krona.pl" -p "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}_weighted.mpa" -k "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}_weighted.krona"
+	python3 "${shareScript}/Metaphlan2krona.py" -p "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}_weighted.mpa" -k "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}_weighted.krona"
 	# Create taxonomy list file from kraken2 file
 	echo "5"
-	module load kraken/0.10.5
-	kraken-report --db "${kraken_mini_db}" "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}_BP.kraken2" > "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}_BP.list"
-	module unload kraken/0.10.5
+	#module load kraken/0.10.5
+	#kraken-report --db "${kraken_mini_db}" "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}_BP.kraken2" > "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}_BP.list"
+	#module unload kraken/0.10.5
 	# Weigh taxonomy list file
 	echo "6"
 	python3 ${shareScript}/Kraken_Assembly_Summary_Exe.py -k "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}_BP.kraken2" -l "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}_BP.labels" -t "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}_BP.list" -o "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}_BP_data.list"
@@ -133,7 +135,7 @@ fi
 # Run the krona generator on the metaphlan output
 echo "[:] Generating krona output for ${1}."
 # Convert mpa to krona file
-perl "${shareScript}/Methaplan_to_krona.pl" -p "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.mpa" -k "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.krona"
+python3 "${shareScript}/Metaphlan2krona.py" -p "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.mpa" -k "${OUTDATADIR}/kraken2/${2}Assembly/${1}_${3}.krona"
 # Change perl version to allow ktimporttext to work ( cant use anything but 5.12.3
 . "${shareScript}/module_changers/perl_5221_to_5123.sh"
 # Run the krona graph generator from krona output

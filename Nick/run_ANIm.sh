@@ -19,7 +19,7 @@ ml Python3/3.5.2 pyani/0.2.7 mashtree/0.29
 # Script to calculate the average nucleotide identity of a sample to numerous other samples from the same genus (genus dependent)
 # The most similar match is identified and provided for confirmation
 #
-# Usage ./run_ANI.sh sample_name   DB(for looking up reference, just relative path, also is genus)   Species   run_id  list_samples_to_include(optional)
+# Usage ./run_ANI.sh sample_name   DB(for looking up reference, just relative path, also is genus)   Species   run_ID  list_samples_to_include(optional)
 #
 # Python/3.5.2 (pyani is located in Nick_DIR/script folder, not run from scicomp module)
 #
@@ -35,7 +35,7 @@ elif [[ -z "${1}" ]]; then
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./run_ANI.sh sample_name ani_database(which is also genus) species run_id list_of_samples_to_include(optional)"
+	echo "Usage is ./run_ANI.sh sample_name ani_database(which is also genus) species run_ID list_of_samples_to_include(optional)"
 	echo "Output is saved to in ${processed}/sample_name/ANI"
 	exit 0
 elif [ -z "$2" ]; then
@@ -58,7 +58,7 @@ elif [ -z "$3" ]; then
 	echo "Empty species name supplied to run_ANI.sh. Third argument should be the suspected species of the sample. Exiting"
 	exit 1
 elif [ -z "$4" ]; then
-	echo "Empty miseq_run_id name supplied to run_ANI.sh. Fourth argument should be the run id. Exiting"
+	echo "Empty miseq_run_ID name supplied to run_ANI.sh. Fourth argument should be the run id. Exiting"
 	exit 1
 elif [ ! -z "$5" ]; then
 	others="true"

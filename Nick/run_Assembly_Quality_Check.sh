@@ -18,7 +18,7 @@ ml quast/4.3 Python2/2.7.15
 # Checks the Assembly quality  using Toms tool and QUAST and comparing the output of both
 # Important stats are # of contigs, assembly length, n%0 and G/C content
 #
-# Usage ./run_Assembly_Quality_Check.sh   sample_name   run_id [-p]
+# Usage ./run_Assembly_Quality_Check.sh   sample_name   run_ID [-p]
 #
 
 # Checks for proper argumentation
@@ -30,8 +30,8 @@ elif [[ -z "${1}" ]]; then
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./run_Assembly_Quality_Check.sh   sample_name run_id"
-	echo "Output is saved to ${processed}/miseq_run_id/sample_name/Assembly_Stats"
+	echo "Usage is ./run_Assembly_Quality_Check.sh   sample_name run_ID"
+	echo "Output is saved to ${processed}/miseq_run_ID/sample_name/Assembly_Stats"
 	exit 0
 elif [ -z "$2" ]; then
 	echo "Empty project id supplied to run_Assembly_Quality_Check.sh, exiting"

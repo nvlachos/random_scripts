@@ -21,7 +21,7 @@ ml perl/5.12.3 barrnap/0.8 ncbi-blast+/LATEST
 
 #
 # Creates a species prediction based on blasting the largest and also best hit of the suggested 16s sequences found using barrnap
-# Usage ./16s_blast.sh -n sample_name -p run_id
+# Usage ./16s_blast.sh -n sample_name -p run_ID
 #
 # Required modules: barrnap/0.8
 # Sub-required modules (loaded by required modules): hmmer/3.1b2
@@ -31,8 +31,8 @@ ml perl/5.12.3 barrnap/0.8 ncbi-blast+/LATEST
 
 #  Function to print out help blurb
 show_help () {
-	echo "Usage is ./16s_blast.sh -n sample_name -p run_id"
-	echo "Output is saved to ${processed}/run_id/sample_name/16s"
+	echo "Usage is ./16s_blast.sh -n sample_name -p run_ID"
+	echo "Output is saved to ${processed}/run_ID/sample_name/16s"
 }
 
 options_found=0

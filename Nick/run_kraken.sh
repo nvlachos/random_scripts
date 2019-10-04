@@ -14,12 +14,12 @@ fi
 
 # Runs the kraken classification tool which identifies the most likely taxonomic classification for the sample
 #
-# Usage ./run_kraken.sh sample_name pre/post(assembly) source_type(paired/R1/R2/single/assembled) run_id
+# Usage ./run_kraken.sh sample_name pre/post(assembly) source_type(paired/R1/R2/single/assembled) run_ID
 #
 # requires kraken/0.10.5 perl/5.12.3 (NOT!!! 5.16.1-MT or 5.22.1)
 #
 
-ml kraken/0.10.5 perl/5.12.3 krona/2.7
+ml kraken/0.10.5 perl/5.12.3 krona/2.7 Python3/3.5.2
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -30,8 +30,8 @@ elif [[ -z "${1}" ]]; then
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./run_kraken.sh   sample_name   assembly_relativity(pre or post)   read_type(paired,assembled, or single)   run_id"
-	echo "Output is saved to in ${processed}/miseq_run_id/sample_name/kraken/assembly_relativity"
+	echo "Usage is ./run_kraken.sh   sample_name   assembly_relativity(pre or post)   read_type(paired,assembled, or single)   run_ID"
+	echo "Output is saved to in ${processed}/miseq_run_ID/sample_name/kraken/assembly_relativity"
 	exit 0
 elif [ -z "$2" ]; then
 	echo "Empty assembly relativity supplied to run_kraken.sh. Second argument should be 'pre' or 'post' (no quotes). Exiting"
@@ -72,7 +72,7 @@ elif [ "${3}" = "assembled" ]; then
 	kraken --db "${kraken_mini_db}" --preload --threads "${procs}" --output "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}.kraken" --classified-out "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}.classified" "${OUTDATADIR}/Assembly/${1}_scaffolds_trimmed.fasta"
 	# Attempting to weigh contigs and produce standard krona and list output using a modified version of Rich's weighting scripts (will also be done on pure contigs later)
 	echo "1"
-	python ${shareScript}/Kraken_Assembly_Converter_2_Exe.py -i "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}.kraken"
+	python3 ${shareScript}/Kraken_Assembly_Converter_2_Exe.py -i "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}.kraken"
 	echo "2"
 	kraken-translate --db "${kraken_mini_db}" "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_BP.kraken" > "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_BP.labels"
 	# Create an mpa report
@@ -80,13 +80,13 @@ elif [ "${3}" = "assembled" ]; then
 	kraken-mpa-report --db "${kraken_mini_db}" "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_BP.kraken" > "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_weighted.mpa"
 	# Convert mpa to krona file
 	echo "4"
-	perl "${shareScript}/Methaplan_to_krona.pl" -p "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_weighted.mpa" -k "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_weighted.krona"
+	python3 "${shareScript}/Metaphlan2krona.py" -p "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_weighted.mpa" -k "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_weighted.krona"
 	# Create taxonomy list file from kraken file
 	echo "5"
 	kraken-report --db "${kraken_mini_db}" "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_BP.kraken" > "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_BP.list"
 	# Weigh taxonomy list file
 	echo "6"
-	python ${shareScript}/Kraken_Assembly_Summary_Exe.py -k "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_BP.kraken" -l "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_BP.labels" -t "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_BP.list" -o "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_BP_data.list"
+	python3 ${shareScript}/Kraken_Assembly_Summary_Exe.py -k "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_BP.kraken" -l "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_BP.labels" -t "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_BP.list" -o "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}_BP_data.list"
 	# Change perl version to allow ktimporttext to work ( cant use anything but 5.12.3
 	####. "${shareScript}/module_changers/perl_5221_to_5123.sh"
 	# Run the krona graph generator from krona output
@@ -108,7 +108,7 @@ kraken-mpa-report --db "${kraken_mini_db}" "${OUTDATADIR}/kraken/${2}Assembly/${
 # Run the krona generator on the metaphlan output
 echo "[:] Generating krona output for ${1}."
 # Convert mpa to krona file
-perl "${shareScript}/Methaplan_to_krona.pl" -p "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}.mpa" -k "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}.krona"
+python3 "${shareScript}/Metaphlan2krona.py" -p "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}.mpa" -k "${OUTDATADIR}/kraken/${2}Assembly/${1}_${3}.krona"
 # Change perl version to allow ktimporttext to work ( cant use anything but 5.12.3
 #. "${shareScript}/module_changers/perl_5221_to_5123.sh"
 # Run the krona graph generator from krona output
@@ -124,7 +124,7 @@ echo "[:] Extracting best taxonomic matches"
 # Runs the extractor for pulling best taxonomic hit from a kraken run
 "${shareScript}/best_hit_from_kraken.sh" "${1}" "${2}" "${3}" "${4}" "kraken"
 
-ml -kraken/0.10.5 -perl/5.12.3 -krona/2.7
+ml -kraken/0.10.5 -perl/5.12.3 -krona/2.7 -Python3/3.5.2
 
 #Script exited gracefully (unless something else inside failed)
 exit 0

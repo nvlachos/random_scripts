@@ -17,7 +17,7 @@ fi
 #
 # Grabs the best species match based on %/read hits from the kraken tool run
 #
-# Usage ./best_hit_from_kraken.sh sample_name pre/post(relative to assembly) source_type(paired/assembled) run_id source(kraken|kraken2)
+# Usage ./best_hit_from_kraken.sh sample_name pre/post(relative to assembly) source_type(paired/assembled) run_ID source(kraken|kraken2)
 #
 # No modules needed to run
 #
@@ -30,8 +30,8 @@ elif [ -z "$1" ]; then
 	echo "Empty sample name supplied to $0, exiting"
 	exit 1
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./best_hit_from_kraken.sh  sample_name  [pre/post] [paired/assembled] run_id	source(kraken|kraken2)"
-	echo "Output is saved to ${processed}/miseq_run_id_id/sample_name/kraken/(pre/post)assembly/sample_name_kraken_summary_(paired/assembled)"
+	echo "Usage is ./best_hit_from_kraken.sh  sample_name  [pre/post] [paired/assembled] run_ID	source(kraken|kraken2)"
+	echo "Output is saved to ${processed}/miseq_run_ID_id/sample_name/kraken/(pre/post)assembly/sample_name_kraken_summary_(paired/assembled)"
 	exit 0
 elif [ -z "$2" ]; then
 	echo "Empty assembly relativity supplied to $0, exiting"

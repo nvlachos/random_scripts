@@ -34,7 +34,7 @@ elif [[ "${1}" = "-h" ]]; then
 	echo "Output is saved to ${processed}/run_ID/sample_ID/taxonomy.csv"
 	exit 0
 elif [[ -z "${2}" ]]; then
-	echo "Empty run_id supplied to $0, exiting"
+	echo "Empty run_ID supplied to $0, exiting"
 	exit 1
 fi
 

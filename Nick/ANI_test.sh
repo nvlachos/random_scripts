@@ -21,7 +21,7 @@ fi
 # Script to calculate the average nucleotide identity of a sample to numerous other samples from the same genus (genus dependent)
 # The most similar match is identified and provided for confirmation
 #
-# Usage ./ANI_test.sh sample_name	run_id
+# Usage ./ANI_test.sh sample_name	run_ID
 #
 # Required modules: Python/3.5.2
 # sub-required modules (loaded by required module): MUMmer 3.9.4, gcc 4.8.5, perl 5.22.1

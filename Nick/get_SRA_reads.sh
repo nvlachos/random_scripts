@@ -29,8 +29,8 @@ elif [[ -z "${1}" ]]; then
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./get_SRA_reads.sh   SRA_Number   run_id"
-	echo "Output is saved to ${processed}/[References|run_id]/SRA_Number/"
+	echo "Usage is ./get_SRA_reads.sh   SRA_Number   run_ID"
+	echo "Output is saved to ${processed}/[References|run_ID]/SRA_Number/"
 	exit 0
 elif [[ -z "${2}" ]]; then
 	echo "No output directory given, using default ${processed}..."

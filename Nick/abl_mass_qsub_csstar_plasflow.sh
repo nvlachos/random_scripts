@@ -108,7 +108,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "module load Python/3.6.1\n" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 				# Defaulting to gapped/98, change if you want to include user preferences
 				echo -e "cd ${shareScript}" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
-				echo -e "\"${shareScript}/run_c-sstar_on_single_plasFlow.sh\" \"${sample}\" g o \"${project}\" \"-p\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/run_c-sstar_plasFlow.sh\" \"${sample}\" g o \"${project}\" \"-p\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarp_complete.txt\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 				cd "${main_dir}"
 				echo "submitting ${main_dir}/csstp_${sample}_${start_time}.sh"
@@ -146,7 +146,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "module load Python/3.6.1\n" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 						# Defaulting to gapped/98, change if you want to include user preferences
 						echo -e "cd ${shareScript}" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
-						echo -e "\"${shareScript}/run_c-sstar_on_single_plasFlow.sh\" \"${sample}\" g o \"${project}\" \"-p\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
+						echo -e "\"${shareScript}/run_c-sstar_plasFlow.sh\" \"${sample}\" g o \"${project}\" \"-p\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_csstarp_complete.txt\"" >> "${main_dir}/csstp_${sample}_${start_time}.sh"
 						cd ${main_dir}
 						qsub "${main_dir}/csstp_${sample}_${start_time}.sh"

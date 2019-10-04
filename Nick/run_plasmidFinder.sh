@@ -19,7 +19,7 @@ ml PlasmidFinder/1.3
 #
 # Will attempt to find any plasmids in sample
 #
-# Usage ./run_plasmidFinder.sh sample_name run_id force
+# Usage ./run_plasmidFinder.sh sample_name run_ID force
 #
 
 # Checks for proper argumentation
@@ -30,11 +30,11 @@ elif [[ -z "${1}" ]]; then
 	echo "Empty sample name supplied to run_plasmidFinder.sh, exiting"
 	exit 1
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./run_plasmidFinder.sh  sample_name run_id output_folder(either plasmid or plasmid_on_plasFlow) (-i number_minimum_identity, optional) (-f to force against all databases, optional)"
-	echo "Output by default is ${processed}/miseq_run_id/sample_name/plasmid"
+	echo "Usage is ./run_plasmidFinder.sh  sample_name run_ID output_folder(either plasmid or plasmid_on_plasFlow) (-i number_minimum_identity, optional) (-f to force against all databases, optional)"
+	echo "Output by default is ${processed}/miseq_run_ID/sample_name/plasmid"
 	exit 0
 elif [[ -z "${2}" ]]; then
-	echo "Empty miseq_run_id supplied to run_plasmidFinder.sh, exiting"
+	echo "Empty miseq_run_ID supplied to run_plasmidFinder.sh, exiting"
 	exit 1
 elif [[ "${4}" == "-f" ]] || [[ "${6}" == "-f" ]]; then
 	force="true"

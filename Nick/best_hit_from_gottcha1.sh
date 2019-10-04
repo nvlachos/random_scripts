@@ -16,7 +16,7 @@ fi
 #
 # Grabs the best species match based on read hits (not relative abundance) from the gottcha tool run
 #
-# Usage ./best_hit_from_gottcha1.sh sample_name run_id
+# Usage ./best_hit_from_gottcha1.sh sample_name run_ID
 #
 # No modules required
 #
@@ -33,8 +33,8 @@ elif [ -z "$2" ]; then
 	exit 1
 # command line version of usage for script
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./best_hit_from_gottcha1.sh   sample_name   run_id"
-	echo "Output is saved to ${processed}/miseq_run_id/sample_name/gottcha/"
+	echo "Usage is ./best_hit_from_gottcha1.sh   sample_name   run_ID"
+	echo "Output is saved to ${processed}/miseq_run_ID/sample_name/gottcha/"
 	exit 0
 fi
 

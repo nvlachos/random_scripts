@@ -13,12 +13,12 @@
 
 # Runs the kraken classification tool which identifies the most likely taxonomic classification for the sample
 #
-# Usage ./run_kraken_on_full.sh sample_name run_id
+# Usage ./run_kraken_on_full.sh sample_name run_ID
 #
 # requires kraken/0.10.5 perl/5.12.3 (NOT!!! 5.16.1-MT or 5.22.1)
 #
 
-ml kraken/0.10.5 perl/5.12.3 krona/2.7
+ml kraken/0.10.5 perl/5.12.3 krona/2.7 Python3/3.5.2
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -29,8 +29,8 @@ elif [[ -z "${1}" ]]; then
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./run_kraken.sh   sample_name	run_id"
-	echo "Output is saved to in ${processed}/miseq_run_id/sample_name/kraken/full"
+	echo "Usage is ./run_kraken.sh   sample_name	run_ID"
+	echo "Output is saved to in ${processed}/miseq_run_ID/sample_name/kraken/full"
 	exit 0
 elif [ -z "$2" ]; then
 	echo "Empty assembly relativity supplied to run_kraken.sh. Second argument should be 'pre' for paired reads or 'post' for assembly (no quotes). Exiting"
@@ -59,7 +59,7 @@ kraken --db "${kraken_full_db}" --preload --threads "${procs}" --output "${OUTDA
 python ${shareScript}/Kraken_Assembly_Converter_2_Exe.py -i "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full.kraken"
 kraken-translate --db "${kraken_full_db}" "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full_BP.kraken" > "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full_BP.labels"
 kraken-mpa-report --db "${kraken_full_db}" "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full_BP.kraken" > "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full_weighted.mpa"
-perl "${shareScript}/Methaplan_to_krona.pl" -p "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full_weighted.mpa" -k "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full_weighted.krona"
+python3 "${shareScript}/Metaphlan2krona.py" -p "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full_weighted.mpa" -k "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full_weighted.krona"
 kraken-report --db "${kraken_full_db}" "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full_BP.kraken" > "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full_BP.list"
 python ${shareScript}/Kraken_Assembly_Summary_Exe.py -k "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full_BP.kraken" -l "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full_BP.labels" -t "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full_BP.list" -o "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full_BP_data.list"
 #. "${shareScript}/module_changers/perl_5221_to_5123.sh"
@@ -73,7 +73,7 @@ kraken-mpa-report --db "${kraken_full_db}" "${OUTDATADIR}/kraken/${2}Assembly_fu
 
 # Run the krona generator on the metaphlan output
 echo "[:] Generating krona output for ${1}."
-perl "${shareScript}/Methaplan_to_krona.pl" -p "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full.mpa" -k "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full.krona"
+python3 "${shareScript}/Metaphlan2krona.py" -p "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full.mpa" -k "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full.krona"
 
 # Run the krona graph generator from krona output
 #. "${shareScript}/module_changers/perl_5221_to_5123.sh"
