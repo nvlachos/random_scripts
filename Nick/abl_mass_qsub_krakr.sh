@@ -83,15 +83,15 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	# Delete old data if clobber is set
 	if [[ "${clobberness}" == "clobber" ]]; then
-		rm -r ${processed}/${project}/${sample}/kraken/postAssembly
+		rm -r ${processed}/${project}/${sample}/kraken/preAssembly
 	fi
 	#echo ${counter}
 	# Check if there is an acceptable assembly to run kraken on
-	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]] && [[ -s "${processed}/${project}/${sample}/trimmed/${sample}]]; then
+	if [[ -s "${processed}/${project}/${sample}/Assembly/${sample}_scaffolds_trimmed.fasta" ]] && [[ -s "${processed}/${project}/${sample}/trimmed/${sample}" ]]; then
 		# Check if counter is below max submission limit
 		if [[ ${counter} -lt ${max_subs} ]]; then
 			# Check if old data exists, skip if so
-			if [[ ! -f "${processed}/${project}/${sample}/kraken/postAssembly/${sample}_kraken_summary_assembled_BP_data.txt" ]]; then
+			if [[ ! -f "${processed}/${project}/${sample}/kraken/preAssembly/${sample}_kraken_summary_paired.txt" ]]; then
 				echo  "Index is below max submissions, submitting"
 				echo -e "#!/bin/bash -l\n" > "${main_dir}/krakr_${sample}_${start_time}.sh"
 				echo -e "#$ -o krakr_${sample}.out" >> "${main_dir}/krakr_${sample}_${start_time}.sh"
@@ -131,7 +131,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				# Check if "waiting" sample has completed
 				if [[ -f "${main_dir}/complete/${waiting_sample}_krakr_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_scaffolds_trimmed.fasta" ]]; then
 					# Check if old data exists, skip if so
-					if [[ ! -f "${processed}/${project}/${sample}/kraken/postAssembly/${sample}_kraken_summary_assembled_BP_data.txt" ]]; then
+					if [[ ! -f "${processed}/${project}/${sample}/kraken/preAssembly/${sample}_kraken_summary_paired.txt" ]]; then
 						echo  "Index is below max submissions, submitting"
 						echo -e "#!/bin/bash -l\n" > "${main_dir}/krakr_${sample}_${start_time}.sh"
 						echo -e "#$ -o krakr_${sample}.out" >> "${main_dir}/krakr_${sample}_${start_time}.sh"
@@ -141,7 +141,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/krakr_${sample}_${start_time}.sh"
 						echo -e "module load Python/3.6.1\n" >> "${main_dir}/krakr_${sample}_${start_time}.sh"
 						echo -e "cd ${shareScript}" >> "${main_dir}/krakr_${sample}_${start_time}.sh"
-						echo -e "\"${shareScript}/run_kraken.sh\" \"${sample}\" post assembled \"${project}\"" >> "${main_dir}/krakr_${sample}_${start_time}.sh"
+						echo -e "\"${shareScript}/run_kraken.sh\" \"${sample}\" pre paired \"${project}\"" >> "${main_dir}/krakr_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_krakr_complete.txt\"" >> "${main_dir}/krakr_${sample}_${start_time}.sh"
 						cd "${main_dir}"
 						#if [[ "${counter}" -lt "${last_index}" ]]; then

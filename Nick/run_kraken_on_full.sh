@@ -65,7 +65,7 @@ python ${shareScript}/Kraken_Assembly_Summary_Exe.py -k "${OUTDATADIR}/kraken/${
 #. "${shareScript}/module_changers/perl_5221_to_5123.sh"
 ktImportText "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full_weighted.krona" -o "${OUTDATADIR}/kraken/${2}Assembly_full/${1}_full_weighted_BP_krona.html"
 #. "${shareScript}/module_changers/perl_5123_to_5221.sh"
-"${shareScript}/best_hit_from_kraken.sh" "${1}" "${2}" "full_BP_data" "${4}"
+"${shareScript}/best_hit_from_kraken.sh" "${1}" "${2}" "full_BP" "${4}"
 
 # Run the metaphlan generator on the kraken output
 echo "[:] Generating metaphlan compatible report."

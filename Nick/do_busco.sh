@@ -12,15 +12,20 @@ if [[ ! -f "./config.sh" ]]; then
 fi
 . ./config.sh
 
-# . "${mod_changers}/load_python_3.6.1.sh"
-
 #
-# A script that takes a sample and compares it to a busco database to discover number of similar genes (% conserved proteins) from prokka output
+# Description: A script that takes a sample and compares it to a busco database to discover number of similar genes (% conserved proteins) from prokka output
 #
 # Usage ./do_busco.sh sample_name DB(to search against) run_ID
 #
-# requires modules busco/3.0.1, Python/3.6.1
+# Output location: default_config.sh_output_location/run_ID/sample_name/BUSCO/
 #
+# Modules required: busco/3.0.1, Python3/3.5.4 (whatever version used to install it, must have pipebricks)
+#
+# v1.0.1 (10/10/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
+#
+
 ml busco/3.0.1 Python3/3.5.4
 
 python3 -V
@@ -79,8 +84,12 @@ mkdir -p "$OUTDATADIR/BUSCO"
 owd=$(pwd)
 cd "${OUTDATADIR}"
 
+export PYTHONPATH=$PYTHONPATH:"/apps/x86_64/busco/busco/build/lib/"
+echo "${PATH//:/$'\n'}"
+
 # Run busco on the prokka output using the database provided by command line ($2)
 run_BUSCO.py -i "${OUTDATADIR}/prokka/${1}_PROKKA.faa" -o "${1}" -l "${buscoDB}" -m prot
+
 
 # Moves output files to proper location and removes temp files
 mv -f "${OUTDATADIR}/run_${1}/"* "${OUTDATADIR}/BUSCO"
@@ -93,7 +102,7 @@ cd "${owd}"
 # Unloads python 3.6.1 (and loads python 3.5.2 back in)
 #. "${mod_changers}/unload_python_3.6.1.sh"
 
-ml -Python3/3.5.4 -busco/3.0.1
+ml -Python/3.5.4 -busco/3.0.1
 
 #Script exited gracefully (unless something else inside failed)
 exit 0

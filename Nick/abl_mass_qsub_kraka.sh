@@ -91,7 +91,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		# Check if counter is below max submission limit
 		if [[ ${counter} -lt ${max_subs} ]]; then
 			# Check if old data exists, skip if so
-			if [[ ! -f "${processed}/${project}/${sample}/kraken/postAssembly/${sample}_kraken_summary_assembled_BP_data.txt" ]]; then
+			if [[ ! -f "${processed}/${project}/${sample}/kraken/postAssembly/${sample}_kraken_summary_assembled_BP.txt" ]]; then
 				echo  "Index is below max submissions, submitting"
 				echo -e "#!/bin/bash -l\n" > "${main_dir}/kraka_${sample}_${start_time}.sh"
 				echo -e "#$ -o kraka_${sample}.out" >> "${main_dir}/kraka_${sample}_${start_time}.sh"
@@ -131,7 +131,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				# Check if "waiting" sample has completed
 				if [[ -f "${main_dir}/complete/${waiting_sample}_kraka_complete.txt" ]] || [[ ! -s "${processed}/${project}/${waiting_sample}/Assembly/${waiting_sample}_scaffolds_trimmed.fasta" ]]; then
 					# Check if old data exists, skip if so
-					if [[ ! -f "${processed}/${project}/${sample}/kraken/postAssembly/${sample}_kraken_summary_assembled_BP_data.txt" ]]; then
+					if [[ ! -f "${processed}/${project}/${sample}/kraken/postAssembly/${sample}_kraken_summary_assembled_BP.txt" ]]; then
 						echo  "Index is below max submissions, submitting"
 						echo -e "#!/bin/bash -l\n" > "${main_dir}/kraka_${sample}_${start_time}.sh"
 						echo -e "#$ -o kraka_${sample}.out" >> "${main_dir}/kraka_${sample}_${start_time}.sh"

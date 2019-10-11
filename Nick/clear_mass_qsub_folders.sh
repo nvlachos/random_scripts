@@ -7,16 +7,46 @@
 #$ -q short.q
 
 #Import the config file with shortcuts and settings
+if [[ ! -f "./config.sh" ]]; then
+	cp ./config_template.sh ./config.sh
+fi
 . ./config.sh
-#Import the module file that loads all necessary mods
-. "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./clear_mass_qsub_fodlers [1,2,3] (1-qsub folders, 2-qsub outs/errs, 3-Both) folder_containinng_script_files_to_be_deleted
+# Description: Script to clean up script and mass qsub folders of proscripts made while mass submitting many parallele jobs
 #
+# Usage ./clear_mass_qsub_folders 1|2|3 (1-qsub folders, 2-sharescript outs/errs, 3-Both) folder_containing_script_files_to_be_deleted
+#
+# Output location: No output created
+#
+# Modules required: None
+#
+# v1.0.1 (10/9/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
+#
+
+# Number regex to test max concurrent submission parametr
+number='^[1-3]+$'
+
+# Checks for proper argumentation
+if [[ $# -eq 0 ]]; then
+	echo "No argument supplied to $0, exiting"
+	exit 1
+elif [[ "${1}" = "-h" ]]; then
+	echo "Usage is ./clear_mass_qsub_folders.sh  1|2|3 (1-qsub folders, 2-sharescript outs/errs, 3-Both) folder_containing_script_files_to_be_deleted"
+	echo "Output by default is downloaded to ${processed}/run_ID and extracted to ${processed}/run_ID/sample_name/FASTQs"
+	exit 0
+elif [[ -z "${2}" ]]; then
+	echo "Empty folder supplied to $0, exiting"
+	exit 1
+elif ! [[ ${1} =~ $number ]]; then
+	echo "Arg1 is not a number or is empty. Please input 1,2, or 3 (1-qsub folders, 2-sharescript outs/errs, 3-Both)...exiting"
+	exit 2
+fi
 
 # Clears out script folder of all .sh, .err, and .out files and the complete folders within each qsub type folder
-if [[ ${1} -eq 1 ]] || [[ ${1} -eq 3 ]] && [[ ! -z "${2}" ]]; then
+if [[ ${1} -eq 1 ]] || [[ ${1} -eq 3 ]]; then
 	for folder in ${2}/*
 	do
 		if [[ -d ${folder} ]]; then
@@ -32,6 +62,8 @@ if [[ ${1} -eq 1 ]] || [[ ${1} -eq 3 ]] && [[ ! -z "${2}" ]]; then
 			done
 		fi
 	done
+elif [[ ${1} = "-h" ]]; then
+	echo "Will clean out script directory and mass qsub folders depending on parameter. 1 for qsub folder, 2, script folder, or 3 for both"
 fi
 
 # Deletes all straggling .err and .out files left in the home shareScript directory
@@ -74,6 +106,8 @@ if [[ ${1} -eq 2 ]] || [[ ${1} -eq 3 ]]; then
 	rm ${shareScript}/SPAdp_*.err
 	rm ${shareScript}/plasFlow_*.out
 	rm ${shareScript}/plasFlow_*.err
+	rm ${shareScript}/pFlow_*.out
+	rm ${shareScript}/pFlow_*.err
 	rm ${shareScript}/pFinf_*.out
 	rm ${shareScript}/pFinf_*.err
 	rm ${shareScript}/PROKK_*.out
@@ -108,4 +142,8 @@ if [[ ${1} -eq 2 ]] || [[ ${1} -eq 3 ]]; then
 	rm ${shareScript}/node_*.out
 	rm ${shareScript}/node_*.err
 	rm ${shareScript}/core.*
+	rm ${shareScript}/quaisar_*.out
+	rm ${shareScript}/quaisar_*.err
+	rm ${shareScript}/SNVPhyl_*.out
+	rm ${shareScript}/SNVPhyl_*.err
 fi

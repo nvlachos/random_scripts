@@ -228,7 +228,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 		krakr="NOT_FOUND"
 	fi
 
-	if [[ -s "${processed}/${project}/${sample_name}/kraken/postAssembly/${sample_name}_kraken_summary_assembled_BP_data.txt" ]]; then
+	if [[ -s "${processed}/${project}/${sample_name}/kraken/postAssembly/${sample_name}_kraken_summary_assembled_BP.txt" ]]; then
 		kraka="Found"
 	else
 		kraka="NOT_FOUND"

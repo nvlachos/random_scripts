@@ -75,7 +75,6 @@ time_run=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 # Creates and submits qsub scripts to perform summaries of each run in the list
 while [ ${counter} -lt ${arr_size} ] ; do
 	project=${arr[${counter}]}
-	#echo ${counter}"-${processed}/${project}/${project}/kraken/postAssembly/${project}_kraken_summary_assembled_BP_data.txt"
 	if [[ ${counter} -lt ${max_subs} ]]; then
 		echo  "Index is below max submissions, submitting"
 		echo -e "#!/bin/bash -l\n" > "${main_dir}/runsum_${project}_${time_run}.sh"
