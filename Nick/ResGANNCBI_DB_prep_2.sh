@@ -22,7 +22,7 @@ $(python2 -V)
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to $0, using DEFAULT DATADIR=/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep"
+	echo "No argument supplied to $0, using DEFAULT DATADIR=${local_DBs}/DBs/star/db_prep"
 	DATADIR="${local_DBs}/star/db_prep"
 	if [ -d "${DATADIR}" ]; then
 		#echo "Directory already exists, try another or delete ${DATADIR}, exiting"

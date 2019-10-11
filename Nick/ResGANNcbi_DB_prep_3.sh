@@ -28,7 +28,7 @@ ResGANNCBI_source="${DATADIR}/ResGANNCBI_${today}.fasta"
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
-	echo "No argument supplied to $0, using default DATADIR=/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/DBs/star/db_prep"
+	echo "No argument supplied to $0, using default DATADIR=${local_DBs}/star/db_prep"
 	#if [ -d "${DATADIR}" ]; then
 	#	rm -r "${DATADIR}"
 	#fi
