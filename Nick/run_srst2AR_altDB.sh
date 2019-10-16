@@ -11,17 +11,22 @@ if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
 . ./config.sh
-#Import the module file that loads all necessary mods
-#. "${mod_changers}/prep_srst2.sh"
 
-#ml Python2/2.7.12 samtools/0.1.18 perl/5.16.1-MT srst2 bowtie2/2.2.4
+#
+# Description: Script to use srst2 to attempt to find AR genes in parllel with assembly searches by other tools. This uses an alternate DB of genes
+#
+# Usage: ./run_srst2AR_altDB.sh   sample_name   MiSeq_Run_ID	path_to_alternate_DB
+#
+# Output location: default_config.sh_output_location/run_ID/sample_name/srst2/
+#
+# Modules required: srst2/0.2.0 bowtie2/2.2.4(?)
+#
+# v1.0 (10/3/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
+#
+
 ml srst2 bowtie2/2.2.4
-
-#
-# Usage ./run_srst2AR_altDB.sh.sh   sample_name   MiSeq_Run_ID
-#
-# script uses srst2 to find AR genes from a custom srst2 formatted DB.
-#
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -92,4 +97,4 @@ find ${processed}/${2}/${1}/srst2 -type f -name "*_${alt_DB}__*" | while read FI
   mv "${FILE}" "${dirname}/${filename}"
 done
 
-#. "${mod_changers}/close_srst2.sh"
+ml -srst2 -bowtie2/2.2.4

@@ -6,21 +6,28 @@
 #$ -cwd
 #$ -q short.q
 
-#Import the config file with shortcuts and settings
+# Import the config file with shortcuts and settings
+if [[ ! -f "./config.sh" ]]; then
+	cp ./config_template.sh ./config.sh
+fi
 . ./config.sh
-#Import the module file that loads all necessary mods
-#. "${mod_changers}/pipeline_mods"
-#module clear
-#. "${mod_changers}/prep_srst2.sh"
-#. "${mod_changers}/list_modules.sh"
+
+#
+# Description: Script to use srst2 to attempt to find mlst profile on reads. Used if standard mlst profiling fails
+#
+# Usage: ./run_srst2_mlst.sh   sample_name   MiSeq_Run_ID	Genus	species
+#
+# Output location: default_config.sh_output_location/run_ID/sample_name/MLST/
+#
+# Modules required: srst2/0.2.0 bowtie2/2.2.4(?)
+#
+# v1.0 (10/3/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
+#
 
 ml srst2 bowtie2/2.2.4
-
-#
-# Usage ./run_srst2_mlst.sh   sample_name   MiSeq_Run_ID	Genus	species
-#
-# script uses srst2 to find MLST types
-#
+ml
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -136,7 +143,7 @@ fi
 # Print out what command will be submitted
 echo "--input_pe ${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz ${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz --output ${processed}/${2}/${1}/MLST/srst2 --mlst_db ${mlst_db} --mlst_definitions ${mlst_defs} --mlst_delimiter ${mlst_delimiter}"
 # Run the srst2 command to find MLST types
-#python2 ${shareScript}/srst2-master/scripts/srst2.py --input_pe "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" --output "${processed}/${2}/${1}/srst2/${1}_ResGANNOT" --gene_db "${resGANNOT_srst2}"
+#python2 ${shareScript}/srst2-master/scripts/srst2.py --input_pe "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" --output "${processed}/${2}/${1}/srst2/${1}_ResGANNCBI" --gene_db "${ResGANNCBI_srst2}"
 srst2 --input_pe "${processed}/${2}/${1}/srst2/${1}_S1_L001_R1_001.fastq.gz" "${processed}/${2}/${1}/srst2/${1}_S1_L001_R2_001.fastq.gz" --output "${processed}/${2}/${1}/MLST/srst2/${1}" --mlst_db "${mlst_db}" --mlst_definitions "${mlst_defs}" --mlst_delimiter "${mlst_delimiter}"
 
 today=$(date "+%Y-%m-%d")
@@ -153,5 +160,4 @@ if [[ -f "${processed}/${2}/${1}/MLST/${1}__${1}.${genus}_${species}.sorted.bam"
 	rm -r "${processed}/${2}/${1}/MLST/${1}__${1}.${genus}_${species}.sorted.bam"
 fi
 
-
-# . "${mod_changers}/close_srst2.sh"
+ml -srst2 -bowtie2/2.2.4
