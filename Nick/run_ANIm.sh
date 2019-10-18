@@ -11,20 +11,22 @@ if [[ ! -f "./config.sh" ]]; then
 	cp config_template.sh config.sh
 fi
 . ./config.sh
-#  ${mod_changers}/list_modules.sh
+
+#
+# Description: Script to calculate the average nucleotide identity of a sample
+#
+# Usage: ./run_ANI.sh sample_name genus species	run_ID
+#
+# Output location: default_config.sh_output_location/run_ID/sample_name/ANI/
+#
+# Modules required: Python3/3.5.2, pyani/0.2.7, mashtree/0.29
+#
+# V1.0.1(10/18/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
+#
 
 ml Python3/3.5.2 pyani/0.2.7 mashtree/0.29
-
-#
-# Script to calculate the average nucleotide identity of a sample to numerous other samples from the same genus (genus dependent)
-# The most similar match is identified and provided for confirmation
-#
-# Usage ./run_ANI.sh sample_name   DB(for looking up reference, just relative path, also is genus)   Species   run_ID  list_samples_to_include(optional)
-#
-# Python/3.5.2 (pyani is located in Nick_DIR/script folder, not run from scicomp module)
-#
-
-
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -42,7 +44,7 @@ elif [ -z "$2" ]; then
 	echo "Empty database name supplied to run_ANI.sh. Second argument should be a genus found in ${local_DBs}/ANI/  ...Exiting"
 	exit 1
 elif [ ! -s "${local_DBs}/aniDB/${2,}" ]; then
-	echo "The genus (${2}) does not exist in the ANI database. This will be noted and the curator of the database will be notified. However, since nothing can be done at the moment....exiting"
+	echo "The genus does not exist in the ANI database. This will be noted and the curator of the database will be notified. However, since nothing can be done at the moment....exiting"
 	# Create a dummy folder to put non-results into (if it doesnt exist
 	if [ ! -d "${processed}/${4}/${1}/ANI" ]; then  #create outdir if absent
 		echo "${processed}/${4}/${1}/ANI"
@@ -96,8 +98,6 @@ fi
 
 # Gets persons name to use as email during entrez request to identify best matching sample
 me=$(whoami)
-#echo ${me}"___"${1}___${2}___${3}___${4}
-
 # Sets the genus as the database that was passed in (The $2 seemed to be getting changed somewhere, so I just set it as a local variable)
 genus_in=${2}
 
@@ -140,9 +140,7 @@ done
 # Mashtree trimming to reduce run time for ANI
 owd=$(pwd)
 cd ${OUTDATADIR}/ANI/localANIDB/
-. "${mod_changers}/perl_5221_to_5161mt.sh"
 mashtree.pl --numcpus ${procs} *.fasta --tempdir ${OUTDATADIR}/ANI/temp > ${OUTDATADIR}/ANI/"${genus_in}_and_${1}_mashtree.dnd";
-. "${mod_changers}/perl_5161mt_to_5221.sh"
 
 # Get total number of isolates compared in tree
 sample_count=$(find ${OUTDATADIR}/ANI/localANIDB/ -type f | wc -l)
