@@ -34,6 +34,8 @@ elif [[ -z "${2}" ]]; then
 	exit 33
 fi
 
+ml Python3/3.5.2
+
 #Time tracker to gauge time used by each step
 totaltime=0
 start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
@@ -436,3 +438,5 @@ echo "
 				completed at ${global_end_time}
 
 "
+
+ml -Python3/3.5.2
