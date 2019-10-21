@@ -13,12 +13,18 @@ fi
 . ./config.sh
 
 #
-# Script to find mlst profile using tseeman's mlst script and pubmlst
-# The most similar match is identified and provided for confirmation
+#  Description: Script to find mlst profile using tseeman's mlst script and pubmlst
+# 	The most similar match is identified and provided for confirmation
 #
-# Usage ./run_MLST.sh sample_name run_ID -f(force to certain DB) DB_to force_comparison_to
+# Usage: ./run_MLST.sh sample_name run_ID -f(force to certain DB) DB_to force_comparison_to
 #
-# mlst/2.9
+# Output location: default_config.sh_output_location/run_ID/sample_name/MLST/
+#
+# Modules required: mlst/2.16, perl/5.16.1-MT
+#
+# v1.0 (10/3/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
 #
 
 ml mlst/2.16 perl/5.16.1-MT
@@ -32,7 +38,7 @@ elif [[ -z "${1}" ]]; then
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./run_MLST.sh   sample_name   run_ID"
+	echo "Usage is ./run_MLST.sh   sample_name   run_ID [-f] [DB_to_force_to]"
 	echo "Output is saved to ${processed}/run-id/sample_name/mlst"
 	exit 0
 elif [ -z "$2" ]; then
