@@ -344,7 +344,7 @@ start=$SECONDS
 
 
 # Run GAMA on Assembly
-${shareScript}/run_GAMA.sh "${filename}" "${project}" -c
+${shareScript}/run_GAMA.sh "${sample_name}" "${project}" -c
 
 # Get end time of csstar and calculate run time and append to time summary (and sum to total time used
 end=$SECONDS
@@ -406,7 +406,7 @@ if [[ "${family}" == "Enterobacteriaceae" ]]; then
 	${shareScript}/run_plasFlow.sh "${sample_name}" "${project}"
 	${shareScript}/run_c-sstar_plasFlow.sh "${sample_name}" g o "${project}" -p
 	${shareScript}/run_plasmidFinder.sh "${sample_name}" "${project}" plasmid_on_plasFlow
-	${shareScript}/run_GAMA.sh "${filename}" "${project}" -p
+	${shareScript}/run_GAMA.sh "${sample_name}" "${project}" -p
 
 	end=$SECONDS
 	timeplasflow=$((end - start))
