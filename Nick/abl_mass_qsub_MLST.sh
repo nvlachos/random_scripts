@@ -33,7 +33,7 @@ if [[ $# -eq 0 ]]; then
 elif [[ "$1" = "-h" ]]; then
 	echo "Usage is ./abl_mass_qsub_MLST.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions output_directory_for_scripts clobberness[keep|clobber]"
 	exit 1
-
+fi
 
 # Check that clobberness is a valid option
 if [[ "${4}" != "keep" ]] && [[ "${4}" != "clobber" ]]; then
