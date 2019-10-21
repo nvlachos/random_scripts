@@ -12,14 +12,18 @@ if [[ ! -f "./config.sh" ]]; then
 fi
 . ./config.sh
 
-# No MODs needed
-
 #
-# Grabs the best species match based on %/read hits from the kraken tool run
+# Description: Grabs the best species match based on %/read hits from the kraken tool run
 #
-# Usage ./best_hit_from_kraken.sh sample_name pre/post(relative to assembly) source_type(paired/assembled) run_ID source(kraken|kraken2)
+# Usage: ./best_hit_from_kraken.sh sample_name pre/post(relative to assembly) source_type(paired/assembled) run_ID source(kraken|kraken2)
 #
-# No modules needed to run
+# Output location: default_config.sh_output_location/run_ID/sample_name/kraken/pre|post-Assembly/
+#
+# Modules required: None
+#
+# v1.0 (10/3/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
 #
 
 # Checks for proper argumentation
@@ -46,16 +50,17 @@ elif [ -z "$5" ]; then
 	echo "Empty out folder supplied to $0, exiting"
 	exit 1
 fi
-fi
+
 # Checks what source flag was set as,indicating that it was from kraken or kraken2
-if [[ "${5}" != "kraken"]] || [[ "${5}" != "kraken2" ]]; then
-	full=""
+if [[ "${5}" != "kraken" ]] && [[ "${5}" != "kraken2" ]]; then
+	echo "Source must be kraken or kraken2, exiting"
+	exit 334
 else
 	source="${5}"
 fi
 
 #Sets output folder to the correct path relative to assembly completion
-OUTDATADIR="${processed}/${4}/${1}/${5}/${2}Assembly${full}"
+OUTDATADIR="${processed}/${4}/${1}/${5}/${2}Assembly"
 echo "-${OUTDATADIR}-"
 
 #Creates the default values for output in case any calculations are interrupted.
@@ -95,7 +100,7 @@ species="N/A"
 
 #Checks to see if the list file used for calculations exists and exits if it does not
 if [[ ! -s "${OUTDATADIR}/${1}_${3}.list" ]]; then
-	#echo "${OUTDATADIR}/${1}_${3}.list does not exist"
+	echo "${OUTDATADIR}/${1}_${3}.list does not exist"
 	exit 1
 fi
 
