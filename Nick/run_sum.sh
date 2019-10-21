@@ -7,18 +7,23 @@
 #$ -q short.q
 
 #Import the config file with shortcuts and settings
-echo $(pwd)
 if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
 . ./config.sh
 
 #
-# Creates a summary file for the run and prints out a one word status for each sample in the run
+# Description: Creates a summary file for the run and prints out a one word status and a short description of each step being reported
 #
 # Usage ./run_sum.sh run_ID
 #
-# No modules required
+# Output loction: default_config.sh_output_location/run_ID/
+#
+# Modules required: None
+#
+# v1.0 (10/3/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
 #
 
 # Checks for proper argumentation
@@ -36,6 +41,7 @@ fi
 
 echo "Checking for ${processed}/${1}/${1}_list(_ordered).txt"
 
+# Checks for existence of list files in specific order
 if [[ -z ${2} ]]; then
 	if [[ -f ${processed}/${1}/${1}_list_ordered.txt ]]; then
 		list="${processed}/${1}/${1}_list_ordered.txt"
@@ -50,6 +56,8 @@ else
 	type="list"
 	list=${1}
 fi
+
+# Gets todays date to show when summary was run
 runsumdate=$(date "+%Y_%m_%d_at_%Hh_%Mm")
 echo "Creating run summary at ${runsumdate}"
 # Status of each individual sample is updated in its own folder and the run_summary file
@@ -61,8 +69,7 @@ else
 	echo "named as list"
 fi
 
-echo "${list}"
-
+# Run validate_piperun.sh on every sample in the list and cat output into one summary file
 while IFS= read -r samples || [ -n "$samples" ]; do
 	echo ${file}
 	file=$(echo "${samples}" | awk -F/ '{ print $2}' | tr -d '[:space:]')
