@@ -1,3 +1,21 @@
+#!/usr/bin/env python3
+
+#
+# Description: Script to go through an isolates MLST output and check and reformat any instances of partial or multiple profiles found. SUB for profile or allele means that there is
+# 	a novel allele or the profile has not been assigned yet, hence something needs to be submitted to pubmlst. AU (Allele Unknown) implies that an allele can not be determined
+# 	no profile can be determined from the current assembly/qc_reads
+#
+# Usage: is python3 ./check_and_fix_MLST.py -i input_MLST_file -t filetype_of_MLST_input_file (standard or srst2)
+#
+# Output location: default_config.sh_output_location/run_ID/sample_name/MLST/
+#
+# Modules required: None
+#
+# v1.0 (10/3/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
+#
+
 import sys
 import os
 import glob
@@ -199,7 +217,7 @@ def do_MLST_check(input_MLST_file, MLST_filetype):
 				if MLST_filetype == "standard":
 					blanks.write(filepath+"	standard:"+",".join(problem)+"	"+"	".join(MLST_items[1:])+"\n")
 				elif MLST_filetype == "srst2":
-					blanks.write(filepath+"	srst2"+",".join(problem)+"	"+"	".join(MLST_items_second[1:])+"\n")
+					blanks.write(filepath+"	srst2:"+",".join(problem)+"	"+"	".join(MLST_items_second[1:])+"\n")
 				blanks.close()
 			# Change original type to new type(s) depending on source filetype
 			if MLST_filetype == "standard":
@@ -244,7 +262,7 @@ def get_type(list_of_profiles, list_of_allele_names, DB_file, source_filetype):
 			db_items=db_line.split("	")
 			if db_items[0] == "ST":
 				for item in db_items:
-					if item != "clonal_complex" and item != "species" and item != "mlst_clade":
+					if item != "clonal_complex" and item != "species":
 						profile_size+=1
 					else:
 						break
