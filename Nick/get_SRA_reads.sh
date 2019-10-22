@@ -48,7 +48,7 @@ fi
 
 
 
-ml sratoolkit/2.9.1 BBMap/38.26 trimmomatic/0.36
+ml sratoolkit/2.9.1 BBMap/38.26 trimmomatic/0.35
 
 echo "Saving to ${OUTDATADIR}"
 
@@ -81,6 +81,6 @@ if [[ "${complete}" == "true" ]]; then
 	rm -r ${OUTDATADIR}/removedAdapters
 fi
 
-ml -sratoolkit/2.9.1 -BBMap/38.26 -trimmomatic/0.36
+ml -sratoolkit/2.9.1 -BBMap/38.26 -trimmomatic/0.35
 
 exit 0
