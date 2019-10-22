@@ -75,6 +75,7 @@ else
 	trimmomatic "${trim_endtype}" -"${trim_phred}" -threads "${procs}" "${processed}/${2}/${1}/removedAdapters/${1}-noPhiX-R1.fsq" "${processed}/${2}/${1}/removedAdapters/${1}-noPhiX-R2.fsq" "${processed}/${2}/${1}/trimmed/${1}_R1_001.paired.fq" "${processed}/${2}/${1}/trimmed/${1}_R1_001.unpaired.fq" "${processed}/${2}/${1}/trimmed/${1}_R2_001.paired.fq" "${processed}/${2}/${1}/trimmed/${1}_R2_001.unpaired.fq" ILLUMINACLIP:"${trim_adapter_location}:${trim_seed_mismatch}:${trim_palindrome_clip_threshold}:${trim_simple_clip_threshold}:${trim_min_adapt_length}:${trim_complete_palindrome}" SLIDINGWINDOW:"${trim_window_size}:${trim_window_qual}" LEADING:"${trim_leading}" TRAILING:"${trim_trailing}" MINLEN:"${trim_min_length}"
 fi
 
+ml Python3/3.5.4
 
 # Check if sample has original assembly to process plasflow from
 if [[ -s "${processed}/${2}/${1}/Assembly/${1}_scaffolds_trimmed.fasta" ]]; then
@@ -98,7 +99,7 @@ if [[ -s "${processed}/${2}/${1}/Assembly/${1}_scaffolds_trimmed.fasta" ]]; then
 	#module load racon/1.3.1;
 	#module load perl/5.22.1
 
-	ml Python3/3.5.4 bowtie2/2.2.9 samtools/1.4.1 bam2fastq/1.1.0 Unicycler/0.4.4 gcc/5.5 SPAdes/3.13.0 racon/1.3.1 perl/5.22.1
+	ml -Python3/3.5.4 bowtie2/2.2.9 samtools/1.4.1 bam2fastq/1.1.0 Unicycler/0.4.4 gcc/5.5 SPAdes/3.13.0 racon/1.3.1 perl/5.22.1
 
 	mkdir ${processed}/${2}/${1}/plasFlow/bowtie2-index/
 	bowtie2-build -f "${processed}/${2}/${1}/plasFlow/${1}_plasFlow_results.tsv_chromosomes.fasta" "${processed}/${2}/${1}/plasFlow/bowtie2-index/bowtie2_${1}_chr"
@@ -125,4 +126,4 @@ fi
 #module unload SPAdes/3.11.1;
 #module unload racon/1.2.0;
 
-ml -Python3/3.5.4 -bowtie2/2.2.9 -samtools/1.4.1 -bam2fastq/1.1.0 -Unicycler/0.4.4 -gcc/5.5 -SPAdes/3.13.0 -racon/1.3.1 -perl/5.22.1
+ml -bowtie2/2.2.9 -samtools/1.4.1 -bam2fastq/1.1.0 -Unicycler/0.4.4 -gcc/5.5 -SPAdes/3.13.0 -racon/1.3.1 -perl/5.22.1
