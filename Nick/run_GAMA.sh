@@ -13,16 +13,20 @@ fi
 . ./config.sh
 
 #
-# Runs the GAMA AR classification tool
+# Description: Runs the GAMA AR classification tool
 #
-# Usage ./run_GAMA.sh sample_name run_ID -c|p [path_to_alt_DB]
+# Usage: ./run_GAMA.sh sample_name run_ID -c|p [path_to_alt_DB]
 #
-# requires modules blat Python/2.7.3
+# Output location: default_config.sh_output_location/run_ID/sample_name/GAMA/
 #
-# !Version 1
+# Modules required: blat, Python3/3.5.2
+#
+# v1.0.2 (10/8/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
 #
 
-ml blat Python/2.7.3
+ml blat Python3/3.5.4
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -54,7 +58,7 @@ fi
 OUTDATADIR="${processed}/${2}/${1}"
 
 # Create necessary output directories
-echo "Running GAMA Taxonomic Classifier"
+echo "Running GAMA Antibiotic Resistance Gene Identifier"
 
 OUTDATA="${OUTDATADIR}"
 
@@ -77,9 +81,9 @@ else
 	exit 5564
 fi
 ### GAMA AR Classifier ### in species mode
-python3 GAMA_ResGANNCBI_SciComp_Exe.py "-i" "${assembly_source}" "-d" "${ARDB}" "-o" "${OUTDATADIR}/${1}.${ResGANNCBI_srst2_filename}.GAMA"
+python3 GAMA_ResGANNCBI_SciComp_Exe.py -i "${assembly_source}" -d "${ARDB}" -o "${OUTDATADIR}/${1}.${ResGANNCBI_srst2_filename}.GAMA"
 
-ml -blat -Python/2.7.3
+ml -blat -Python3/3.5.4
 
 #Script exited gracefully (unless something else inside failed)
 exit 0
