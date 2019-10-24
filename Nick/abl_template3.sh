@@ -30,7 +30,7 @@ while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 
-	gzip ${processed}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq
+	rm ${processed}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq
 
 	echo "Finished with ${project}/${sample_name}"
 
