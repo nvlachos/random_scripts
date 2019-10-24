@@ -30,9 +30,7 @@ while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 
-	if [[ -f "${OUTDATADIR}/GAMA/${sample_name}_${ResGANNCBI_srst2_filename}.GAMA" ]]; then
-		"${OUTDATADIR}/GAMA/${sample_name}_${ResGANNCBI_srst2_filename}.GAMA" "${OUTDATADIR}/GAMA/${sample_name}.${ResGANNCBI_srst2_filename}.GAMA"
-	fi
+	gzip ${processed}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq
 
 	echo "Finished with ${project}/${sample_name}"
 
