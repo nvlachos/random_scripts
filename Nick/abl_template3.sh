@@ -35,7 +35,7 @@ ml ncbi-blast+/LATEST
 #
 #done < "${1}"
 
-makeblastdb -in /scicomp/reference/ncbi-blast/nr.faa -out /scicomp/groups/OID/NCEZID/DHQP/CEMB/databases/nr/ncbi -dbtype nucl
+makeblastdb -in /scicomp/reference/ncbi-blast/nr.faa -out /scicomp/groups/OID/NCEZID/DHQP/CEMB/databases/ncbi/nr -dbtype nucl
 
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
