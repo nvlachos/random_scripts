@@ -107,7 +107,14 @@ while IFS= read -r var || [ -n "$var" ]; do
 			if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
 				ohsixoheight="No_chromo_AR"
 			else
-				ohsixoheight="AR_Found"
+				contig_name=$(echo "${header}" | cut -d'	' -f6 | cut -d'_' -f1)
+				if [[ "${contig_name,,}" == "node" ]]; then
+					ohsixoheight="AR_Found-NODE"
+				elif
+					ohsixoheight="AR_Found-Sample_Name"
+				else
+					ohsixoheight="AR_Found-UNKNOWN"
+				fi
 			fi
 		else
 			ohsixoheight="NO_CSSTAR_file(HAS_ASSEMBLY)"
@@ -122,7 +129,14 @@ while IFS= read -r var || [ -n "$var" ]; do
 			if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
 				input_DB_csstar="No_chromo_AR"
 			else
-				input_DB_csstar="AR_Found"
+				contig_name=$(echo "${header}" | cut -d'	' -f6 | cut -d'_' -f1)
+				if [[ "${contig_name,,}" == "node" ]]; then
+					input_DB_csstar="AR_Found-NODE"
+				elif
+					input_DB_csstar="AR_Found-Sample_Name"
+				else
+					input_DB_csstar="AR_Found-UNKNOWN"
+				fi
 			fi
 		else
 			input_DB_csstar="NO_CSSTAR_file(HAS_ASSEMBLY)"
@@ -133,7 +147,14 @@ while IFS= read -r var || [ -n "$var" ]; do
 			if [[ ${gama_lines} -eq 0 ]]; then
 				input_DB_GAMA="No_chromo_AR"
 			else
-				input_DB_GAMA="AR_Found"
+				contig_name=$(head -n2 "${processed}/${project}/${sample_name}/GAMA/${sample_name}.ResGANNCBI_${2}.GAMA" | tail -n1 | cut -d'	' -f5 | cut -d'_' -f1)
+				if [[ "${contig_name,,}" == "node" ]]; then
+					input_DB_GAMA="AR_Found-NODE"
+				elif
+					input_DB_GAMA="AR_Found-Sample_Name"
+				else
+					input_DB_GAMA="AR_Found-UNKNOWN"
+				fi
 			fi
 		else
 			input_DB_GAMA="NO_GAMA_file(HAS_ASSEMBLY)"
@@ -333,7 +354,14 @@ while IFS= read -r var || [ -n "$var" ]; do
 					if [[ "${header}" = "No anti-microbial genes were found"* ]]; then
 						cplas="No_plasmid_AR"
 					else
-						cplas="plasmid_AR_Found"
+						contig_name=$(echo "${header}" | cut -d'	' -f6 | cut -d'_' -f1)
+						if [[ "${contig_name,,}" == "node" ]]; then
+							cplas="plasmid_AR_Found-NODE"
+						elif
+							cplas="plasmid_AR_Found-Sample_Name"
+						else
+							cplas="plasmid_AR_Found-UNKNOWN"
+						fi
 					fi
 				else
 					cplas="NO_plasFlow_CSSTAR_file(HAS_plasFlow_ASSEMBLY)"
@@ -344,7 +372,14 @@ while IFS= read -r var || [ -n "$var" ]; do
 					if [[ ${gama_p_lines} -eq 0 ]]; then
 						input_DB_GAMA="No_plasmid_AR"
 					else
-						input_DB_GAMA="plasmid_AR_Found"
+						contig_name=$(head -n2 "${processed}/${project}/${sample_name}/GAMA_plasFlow/${sample_name}.ResGANNCBI_${2}.GAMA" | tail -n1 | cut -d'	' -f5 | cut -d'_' -f1)
+						if [[ "${contig_name,,}" == "node" ]]; then
+							input_DB_GAMA="plasmid_AR_Found-NODE"
+						elif
+							input_DB_GAMA="plasmid_AR_Found-Sample_Name"
+						else
+							input_DB_GAMA="plasmid_AR_Found-UNKNOWN"
+						fi
 					fi
 				else
 					gplas="NO_plasFlow_GAMA_file(HAS_plasFlow_ASSEMBLY)"
