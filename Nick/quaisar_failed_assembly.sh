@@ -3,7 +3,7 @@
 #$ -o qfa.out
 #$ -e qfa.err
 #$ -N qfa
-#$ -pe smp 10
+#$ -pe smp 12
 #$ -cwd
 #$ -q short.q
 
@@ -14,27 +14,38 @@ fi
 . ./config.sh
 
 #
-# Accessory to original quaisar that only completes from assembly on for any failed assembly isolates
+# Description: Alternate version of the main QuAISAR-H pipeline that (re)starts from the assembly step, project/isolate_name must already have a populated FASTQs folder to work with
+# 	This script assumes the sample is located in the default location ($processed) specified within the config file
 #
-# Usage ./quaisar_failed_assembly.sh isolate_name project_name
-#  project/isolate_name must already have a populated FASTQs folder to work with
+# Usage: ./quaisar_failed_assembly.sh isolate_name project_name [continue]
 #
+# Output location: default_config.sh_output_location
+#
+# Modules required: Python3/3.5.4
+#
+# v1.0.2 (10/22/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
+#
+
+ml Python3/3.5.4
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
 	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./quaisar_failed_assembly.sh  sample_name miseq_run_ID(or_project_name)"
-	echo "Populated FASTQs folder needs to be present in ${2}/${1}, wherever it resides"
+	echo "Usage is ./quaisar_failed_assembly.sh  sample_name miseq_run_ID(or_project_name) [continue]"
+	echo "Populated trimmed folder needs to be present in ${2}/${1}, wherever it resides"
 	echo "Output by default is processed to processed/miseq_run_ID/sample_name"
 	exit 0
 elif [[ -z "${2}" ]]; then
-	echo "No Project/Run_ID supplied to quaisar_template.sh, exiting"
+	echo "No Project/Run_ID supplied to quaisar_failed_assembly.sh, exiting"
 	exit 33
+elif [[ ! -z "${3}" ]] && [[ "${3}" != "continue" ]]; then
+	echo "Continue flag not set correctly, can ONLY be continue, exiting"
+	exit 34
 fi
-
-ml Python3/3.5.2
 
 #Time tracker to gauge time used by each step
 totaltime=0
@@ -97,7 +108,11 @@ do
 		echo "Previous assembly already exists, using it (delete/rename the assembly folder at ${OUTDATADIR}/ if you'd like to try to reassemble"
 	# Run normal mode if no assembly file was found
 	else
-		"${shareScript}/run_SPAdes.sh" "${sample_name}" normal "${project}"
+		if [[ "${3}" == "continue" ]] || [[ "${i}" -gt 1 ]]; then
+			"${shareScript}/run_SPAdes.sh" "${sample_name}" "continue" "${project}"
+		else
+			"${shareScript}/run_SPAdes.sh" "${sample_name}" normal "${project}"
+		fi
 	fi
 	# Removes any core dump files (Occured often during testing and tweaking of memory parameter
 	if [ -n "$(find "${shareScript}" -maxdepth 1 -name 'core.*' -print -quit)" ]; then
@@ -135,8 +150,8 @@ fi
 if [[ -d ${OUTDATADIR}/${sample_name}/plasFlow ]]; then
 	rm -r ${OUTDATADIR}/${sample_name}/plasFlow
 fi
-if [[ -d ${OUTDATADIR}/${sample_name}/plasmidFinder ]]; then
-	rm -r ${OUTDATADIR}/${sample_name}/plasmidFinder
+if [[ -d ${OUTDATADIR}/${sample_name}/plasmid ]]; then
+	rm -r ${OUTDATADIR}/${sample_name}/plasmid
 fi
 if [[ -d ${OUTDATADIR}/${sample_name}/plasmid_on_plasFlow ]]; then
 	rm -r ${OUTDATADIR}/${sample_name}/plasmid_on_plasFlow
@@ -144,7 +159,15 @@ fi
 if [[ -d ${OUTDATADIR}/${sample_name}/prokka ]]; then
 	rm -r ${OUTDATADIR}/${sample_name}/prokka
 fi
-
+if [[ -d ${OUTDATADIR}/${sample_name}/GAMA ]]; then
+	rm -r ${OUTDATADIR}/${sample_name}/GAMA
+fi
+if [[ -d ${OUTDATADIR}/${sample_name}/Assembly_Stats ]]; then
+	rm -r ${OUTDATADIR}/${sample_name}/Assembly_Stats
+fi
+if [[ -d ${OUTDATADIR}/${sample_name}/kraken/postAssembly ]]; then
+	rm -r ${OUTDATADIR}/${sample_name}/postAssembly
+fi
 
 
 # Get end time of SPAdes and calculate run time and append to time summary (and sum to total time used)
@@ -285,7 +308,6 @@ if [[ -d "${OUTDATADIR}/${sample_name}/ANI" ]]; then
 fi
 
 "${shareScript}/run_ANI.sh" "${sample_name}" "${genus}" "${species}" "${project}"
-#"${shareScript}/run_ANI.sh" "${sample_name}" "All" "All" "${project}"
 # Get end time of ANI and calculate run time and append to time summary (and sum to total time used
 end=$SECONDS
 timeANI=$((end - start))
@@ -345,8 +367,9 @@ start=$SECONDS
 "${shareScript}/run_c-sstar_altDB.sh" "${sample_name}" "${csstar_gapping}" "${csstar_identity}" "${project}" "${local_DBs}/star/ResGANNOT_20180608_srst2.fasta"
 
 
-# Run GAMA on Assembly
-${shareScript}/run_GAMA.sh "${sample_name}" "${project}" -c
+### GAMA - finding AR Genes ###
+echo "----- Running GAMA for AR Gene identification -----"
+"${shareScript}/run_GAMA.sh" "${sample_name}" "${project}" -c
 
 # Get end time of csstar and calculate run time and append to time summary (and sum to total time used
 end=$SECONDS
@@ -362,6 +385,8 @@ python3 "${shareScript}/check_and_fix_MLST.py" -i "${processed}/${project}/${sam
 if [[ "${genus}_${species}" = "Acinetobacter_baumannii" ]]; then
 	"${shareScript}/run_MLST.sh" "${sample_name}" "${project}" "-f" "abaumannii"
 	python3 "${shareScript}/check_and_fix_MLST.py" -i "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" -t standard
+	mv "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" "${processed}/${project}/${sample_name}/MLST/${sample_name}_Oxford.mlst"
+	mv "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst"
 	#Check for "-", unidentified type
 	type1=$(tail -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst | cut -d' ' -f3)
 	type2=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst | cut -d' ' -f3)
@@ -377,6 +402,8 @@ elif [[ "${genus}_${species}" = "Escherichia_coli" ]]; then
 	# Verify that ecoli_2 is default and change accordingly
 	"${shareScript}/run_MLST.sh" "${sample_name}" "${project}" "-f" "ecoli_2"
 	python3 "${shareScript}/check_and_fix_MLST.py" -i "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst" -t standard
+	mv "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst" "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst"
+	mv "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" "${processed}/${project}/${sample_name}/MLST/${sample_name}_Achtman.mlst"
 	type2=$(tail -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst | cut -d' ' -f3)
 	type1=$(head -n1 ${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst | cut -d' ' -f3)
 	if [[ "${type1}" = "-" ]]; then
@@ -387,8 +414,9 @@ elif [[ "${genus}_${species}" = "Escherichia_coli" ]]; then
 		"${shareScript}/run_srst2_mlst.sh" "${sample_name}" "${project}" "Escherichia" "coli#2"
 		python3 "${shareScript}/check_and_fix_MLST.py" -i "${processed}/${project}/${sample_name}/MLST/${sample_name}_srst2_escherichia_coli-coli#2.mlst" -t srst2
 	fi
-fi
-end=$SECONDS
+else
+	mv "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst"
+fiend=$SECONDS
 timeMLST=$((end - start))
 echo "MLST - ${timeMLST} seconds" >> "${time_summary_redo}"
 totaltime=$((totaltime + timeMLST))
@@ -416,8 +444,12 @@ if [[ "${family}" == "Enterobacteriaceae" ]]; then
 	totaltime=$((totaltime + timeplasflow))
 fi
 
-"${shareScript}/sample_cleaner.sh" "${sample_name}" "${project}"
-"${shareScript}/validate_piperun.sh" "${sample_name}" "${project}" > "${processed}/${project}/${sample_name}/${sample_name}_pipeline_stats.txt"
+"${shareScript}/validate_piperun.sh" "${filename}" "${project}" > "${processed}/${project}/${filename}/${filename}_pipeline_stats.txt"
+
+status=$(tail -n1 "${processed}/${project}/${filename}/${filename}_pipeline_stats.txt" | cut -d' ' -f5)
+if [[ "${status}" != "FAILED" ]]; then
+	"${shareScript}/sample_cleaner.sh" "${filename}" "${project}"
+fi
 
 # Extra dump cleanse in case anything else failed
 	if [ -n "$(find "${shareScript}" -maxdepth 1 -name 'core.*' -print -quit)" ]; then
@@ -439,4 +471,4 @@ echo "
 
 "
 
-ml -Python3/3.5.2
+ml -Python3/3.5.4

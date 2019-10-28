@@ -30,9 +30,12 @@ while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 
-	rm ${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq
+	SIZES1=$(stat -f "%z" "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R1_001.fastq.gz")
+	SIZEA1=$(stat -f "%z" "${processed}/AdrianMissingQuaisars/${sample_name}/FASTQs/${sample_name}_R1_001.fastq.gz")
+	SIZES2=$(stat -f "%z" "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz")
+	SIZEA2=$(stat -f "%z" "${processed}/AdrianMissingQuaisars/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz")
 
-	echo "Finished with ${project}/${sample_name}"
+	echo "${SIZES1}:${SIZEA1}-${SIZES2}:${SIZEA2}" 
 
 done < "${1}"
 
