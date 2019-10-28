@@ -38,13 +38,13 @@ while IFS= read -r var; do
 	if [[ "${SIZES1}" == "${SIZEA1}" ]]; then
 		R1="SAME"
 	else
-		R1="NOT_SAME"
+		R1="${sample_name}:NOT_SAME (${SIZES1}:${SIZEA1})"
 	fi
 
 	if [[ "${SIZES2}" == "${SIZEA2}" ]]; then
 		R2="SAME"
 	else
-		R2="NOT_SAME"
+		R2="${sample_name}:NOT_SAME (${SIZES2}:${SIZEA2})"
 	fi
 
 	echo "${R1}:${R2}"
