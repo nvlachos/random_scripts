@@ -32,8 +32,8 @@ while IFS= read -r var; do
 
 	SIZES1=$(md5sum "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R1_001.fastq.gz")
 	SIZEA1=$(md5sum "${processed}/AdrianMissingQuaisars/${sample_name}/FASTQs/${sample_name}_R1_001.fastq.gz")
-	SIZES2=$(md5sum "%z" "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz")
-	SIZEA2=$(md5sum -f "%z" "${processed}/AdrianMissingQuaisars/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz")
+	SIZES2=$(md5sum "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz")
+	SIZEA2=$(md5sum "${processed}/AdrianMissingQuaisars/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz")
 
 	echo "${SIZES1}:${SIZEA1}"
 	echo "${SIZES2}:${SIZEA2}"
