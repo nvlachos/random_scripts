@@ -12,7 +12,7 @@
 #. "${mod_changers}/pipeline_mods"
 
 #
-# Usage ./act_by_list_template.sh path_to_list path_for_output_file
+# Usage ./act_by_list_template.sh path_to_list
 #
 
 # Checks for proper argumentation
@@ -30,12 +30,14 @@ while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 
-	SIZES1=$(stat -f "%z" "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R1_001.fastq.gz")
-	SIZEA1=$(stat -f "%z" "${processed}/AdrianMissingQuaisars/${sample_name}/FASTQs/${sample_name}_R1_001.fastq.gz")
-	SIZES2=$(stat -f "%z" "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz")
-	SIZEA2=$(stat -f "%z" "${processed}/AdrianMissingQuaisars/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz")
+	SIZES1=$(md5sum "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R1_001.fastq.gz")
+	SIZEA1=$(md5sum "${processed}/AdrianMissingQuaisars/${sample_name}/FASTQs/${sample_name}_R1_001.fastq.gz")
+	SIZES2=$(md5sum "%z" "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz")
+	SIZEA2=$(md5sum -f "%z" "${processed}/AdrianMissingQuaisars/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz")
 
-	echo "${SIZES1}:${SIZEA1}-${SIZES2}:${SIZEA2}" 
+	echo "${SIZES1}:${SIZEA1}"
+	echo "${SIZES2}:${SIZEA2}"
+	echo ""
 
 done < "${1}"
 
