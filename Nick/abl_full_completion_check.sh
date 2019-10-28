@@ -110,7 +110,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 				contig_name=$(echo "${header}" | cut -d'	' -f6 | cut -d'_' -f1)
 				if [[ "${contig_name,,}" == "node" ]]; then
 					ohsixoheight="AR_Found-NODE"
-				elif
+				elif [[ "${contig_name}" == "${sample_name}" ]]; then
 					ohsixoheight="AR_Found-Sample_Name"
 				else
 					ohsixoheight="AR_Found-UNKNOWN"
@@ -132,7 +132,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 				contig_name=$(echo "${header}" | cut -d'	' -f6 | cut -d'_' -f1)
 				if [[ "${contig_name,,}" == "node" ]]; then
 					input_DB_csstar="AR_Found-NODE"
-				elif
+				elif [[ "${contig_name}" == "${sample_name}" ]]; then
 					input_DB_csstar="AR_Found-Sample_Name"
 				else
 					input_DB_csstar="AR_Found-UNKNOWN"
@@ -150,7 +150,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 				contig_name=$(head -n2 "${processed}/${project}/${sample_name}/GAMA/${sample_name}.ResGANNCBI_${2}.GAMA" | tail -n1 | cut -d'	' -f5 | cut -d'_' -f1)
 				if [[ "${contig_name,,}" == "node" ]]; then
 					input_DB_GAMA="AR_Found-NODE"
-				elif
+				elif [[ "${contig_name}" == "${sample_name}" ]]; then
 					input_DB_GAMA="AR_Found-Sample_Name"
 				else
 					input_DB_GAMA="AR_Found-UNKNOWN"
@@ -357,7 +357,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 						contig_name=$(echo "${header}" | cut -d'	' -f6 | cut -d'_' -f1)
 						if [[ "${contig_name,,}" == "node" ]]; then
 							cplas="plasmid_AR_Found-NODE"
-						elif
+						elif [[ "${contig_name}" == "${sample_name}" ]]; then
 							cplas="plasmid_AR_Found-Sample_Name"
 						else
 							cplas="plasmid_AR_Found-UNKNOWN"
@@ -375,7 +375,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 						contig_name=$(head -n2 "${processed}/${project}/${sample_name}/GAMA_plasFlow/${sample_name}.ResGANNCBI_${2}.GAMA" | tail -n1 | cut -d'	' -f5 | cut -d'_' -f1)
 						if [[ "${contig_name,,}" == "node" ]]; then
 							input_DB_GAMA="plasmid_AR_Found-NODE"
-						elif
+						elif [[ "${contig_name}" == "${sample_name}" ]]; then
 							input_DB_GAMA="plasmid_AR_Found-Sample_Name"
 						else
 							input_DB_GAMA="plasmid_AR_Found-UNKNOWN"
