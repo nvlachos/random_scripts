@@ -30,10 +30,10 @@ while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 
-	SIZES1=$(md5sum "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R1_001.fastq.gz" | cut -d'  ' -f1)
-	SIZEA1=$(md5sum "${processed}/AdrianMissingQuaisars/${sample_name}/FASTQs/${sample_name}_R1_001.fastq.gz" | cut -d'  ' -f1)
-	SIZES2=$(md5sum "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz" | cut -d'  ' -f1)
-	SIZEA2=$(md5sum "${processed}/AdrianMissingQuaisars/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz" | cut -d'  ' -f1)
+	SIZES1=$(md5sum "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R1_001.fastq.gz" | cut -d' ' -f1)
+	SIZEA1=$(md5sum "${processed}/AdrianMissingQuaisars/${sample_name}/FASTQs/${sample_name}_R1_001.fastq.gz" | cut -d' ' -f1)
+	SIZES2=$(md5sum "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz" | cut -d' ' -f1)
+	SIZEA2=$(md5sum "${processed}/AdrianMissingQuaisars/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz" | cut -d' ' -f1)
 
 	if [[ "${SIZES1}" == "${SIZEA1}" ]]; then
 		R1="SAME"
