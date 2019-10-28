@@ -25,16 +25,17 @@ elif [[ "$1" = "-h" ]]; then
 	exit 0
 fi
 
+ml ncbi-blast+/LATEST
+
 # Loop through and act on each sample name in the passed/provided list
-while IFS= read -r var; do
-	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
-	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
+#while IFS= read -r var; do
+#	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
+#	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
+#	echo "Finished with ${project}/${sample_name}"
+#
+#done < "${1}"
 
-	gzip ${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq
-
-	echo "Finished with ${project}/${sample_name}"
-
-done < "${1}"
+makeblastdb -in /scicomp/reference/ncbi-blast/nr.faa -out /scicomp/groups/OID/NCEZID/DHQP/CEMB/databases/nr/ncbi -dbtype nucl
 
 echo "All isolates completed"
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
