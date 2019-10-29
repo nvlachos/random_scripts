@@ -10,18 +10,23 @@
 if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
-
 . ./config.sh
 
-ml ncbi-blast+/LATEST Python3/3.5.2
+#
+# Description: Finds anti-microbial resistance genes in the resFinder and ARG-ANNOT databases and exports a file containing list of all genes found
+#
+# Usage: ./run_c-sstar_plasFlow.sh sample_name run_type(g/u for gapped/ungapped) similarity(l/m/h/u/p/o for low(80),medium(95),high(98),ultra-high(99),perfect(100),other(set in config.sh)) run_ID
+#
+# Output location: default_config.sh_output_location/run_ID/sample_name/csstar_plasFlow/
+#
+# Modules required: Python3/3.5.2, ncbi-blast+/LATEST
+#
+# v1.0 (10/3/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
+#
 
-#
-# Finds anti-microbial resistance genes in the resFinder and ARG-ANNOT databases and exports a file containing list of all genes found
-#
-# Usage ./run_c-sstar_plasFlow.sh sample_name run_type(g/u for gapped/ungapped) similarity(l/m/h/u/p/o for low(80),medium(95),high(98),ultra-high(99),perfect(100),other(set in config.sh)) run_ID
-#
-# Python/3.5.2
-#
+ml ncbi-blast+/LATEST Python3/3.5.2
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
