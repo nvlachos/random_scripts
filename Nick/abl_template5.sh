@@ -30,14 +30,16 @@ while IFS= read -r var; do
 	echo "${var}"
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-
-
-
-	if [[ -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq" ]]; then
-		echo "Zipping"
-		gzip "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
+	if [[ -f "${processed}/${projects}/${sample_name}/MLST/${sample_name}.mlst" ]]; then
+		if [[ ! -f "${processed}/${projects}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" ]]; then
+			echo "Moving .mlst to _Pasteur.mlst"
+			mv "${processed}/${projects}/${sample_name}/MLST/${sample_name}.mlst" "${processed}/${projects}/${sample_name}/MLST/${sample_name}_Pasteur.mlst"
+		else
+			echo "_Pasteur.mlst already exists...removing .mlst"
+			rm "${processed}/${projects}/${sample_name}/MLST/${sample_name}.mlst"
+		fi
 	else
-		echo "Not found - ${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
+			echo ".mlst not found"
 	fi
 
 	echo "Finished with ${project}/${sample_name}"
