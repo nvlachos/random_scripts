@@ -43,10 +43,10 @@ while IFS= read -r var; do
 	fi
 	if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq" ]]; then
 		if [[ ! -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq.gz" ]]; then
-			echo"2-1"
+			echo "2-1"
 			gzip "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
 		else
-			echo"2-2"
+			echo "2-2"
 			rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
 		fi
 	else
