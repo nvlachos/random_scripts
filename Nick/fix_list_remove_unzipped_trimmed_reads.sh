@@ -30,24 +30,24 @@ while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 
-	if [[ -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq" ]]; then
-		if [[ ! -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq.gz" ]]; then
+	if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq" ]]; then
+		if [[ ! -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq.gz" ]]; then
 			echo "1-1"
-			gzip "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
+			gzip "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
 		else
 			echo "1-2"
-			rm "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
+			rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
 		fi
 	else
 		echo "1-0"
 	fi
-	if [[ -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq" ]]; then
-		if [[ ! -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq.gz" ]]; then
+	if [[ -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq" ]]; then
+		if [[ ! -f "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq.gz" ]]; then
 			echo"2-1"
-			gzip "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
+			gzip "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
 		else
 			echo"2-2"
-			rm "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
+			rm "${processed}/${project}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
 		fi
 	else
 		echo "2-0"
