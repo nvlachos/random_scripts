@@ -31,7 +31,10 @@ while IFS= read -r var; do
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 
 	if [[ -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq" ]]; then
+		echo "Zipping"
 		gzip "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
+	else
+		echo "Not found - ${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
 	fi
 
 	echo "Finished with ${project}/${sample_name}"
