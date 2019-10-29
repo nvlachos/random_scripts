@@ -27,19 +27,22 @@ fi
 
 # Loop through and act on each sample name in the passed/provided list
 while IFS= read -r var; do
-	echo "${var}"
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-	if [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]]; then
-		if [[ ! -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" ]]; then
-			echo "Moving .mlst to _Pasteur.mlst"
-			mv "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst"
+
+	if [[ -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq" ]]; then
+		if [[ ! -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq.gz" ]]; then
+			gzip "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
 		else
-			echo "_Pasteur.mlst already exists...removing .mlst"
-			rm "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst"
+			rm "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
 		fi
-	else
-			echo ".mlst not found"
+	fi
+	if [[ -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fastq" ]]; then
+		if [[ ! -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq.gz" ]]; then
+			gzip "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
+		else
+			rm "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
+		fi
 	fi
 
 	echo "Finished with ${project}/${sample_name}"

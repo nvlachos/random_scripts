@@ -374,11 +374,11 @@ while IFS= read -r var || [ -n "$var" ]; do
 					else
 						contig_name=$(head -n2 "${processed}/${project}/${sample_name}/GAMA_plasFlow/${sample_name}.ResGANNCBI_${2}.GAMA" | tail -n1 | cut -d'	' -f5 | cut -d'_' -f1)
 						if [[ "${contig_name,,}" == "node" ]]; then
-							input_DB_GAMA="plasmid_AR_Found-NODE"
+							gplas="plasmid_AR_Found-NODE"
 						elif [[ "${contig_name}" == "${sample_name}" ]]; then
-							input_DB_GAMA="plasmid_AR_Found-Sample_Name"
+							gplas="plasmid_AR_Found-Sample_Name"
 						else
-							input_DB_GAMA="plasmid_AR_Found-UNKNOWN"
+							gplas="plasmid_AR_Found-UNKNOWN"
 						fi
 					fi
 				else
