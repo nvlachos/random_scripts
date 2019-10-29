@@ -30,11 +30,8 @@ while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 
-	if [[ -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq" ]]; then
-		rm "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
-	fi
 	if [[ -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq" ]]; then
-		rm "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
+		gzip "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
 	fi
 
 	echo "Finished with ${project}/${sample_name}"
