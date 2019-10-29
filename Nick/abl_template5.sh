@@ -27,8 +27,9 @@ fi
 
 # Loop through and act on each sample name in the passed/provided list
 while IFS= read -r var; do
+	echo "${var}"
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
-	project=$(echo "${var}" | cut -d'/' -f1)
+	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 
 
 
