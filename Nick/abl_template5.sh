@@ -30,13 +30,13 @@ while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 
-	if [[ "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fastq" ]]; then
-		rm "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fastq"
+	if [[ -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq" ]]; then
+		rm "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
 	fi
-	if [[ "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fastq" ]]; then
-		rm "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fastq"
+	if [[ -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq" ]]; then
+		rm "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
 	fi
-	
+
 	echo "Finished with ${project}/${sample_name}"
 
 done < "${1}"
