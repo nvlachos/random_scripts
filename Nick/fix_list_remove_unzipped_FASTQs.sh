@@ -32,17 +32,25 @@ while IFS= read -r var; do
 
 	if [[ -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq" ]]; then
 		if [[ ! -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq.gz" ]]; then
+			echo "1-1"
 			gzip "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
 		else
+			echo "1-2"
 			rm "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq"
 		fi
+	else
+		echo "1-0"
 	fi
-	if [[ -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fastq" ]]; then
+	if [[ -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq" ]]; then
 		if [[ ! -f "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq.gz" ]]; then
+			echo"2-1"
 			gzip "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
 		else
+			echo"2-2"
 			rm "${processed}/${projects}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq"
 		fi
+	else
+		echo "2-0"
 	fi
 
 	echo "Finished with ${project}/${sample_name}"
