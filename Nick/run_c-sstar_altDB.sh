@@ -11,17 +11,22 @@ if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
 . ./config.sh
-# No modules needed
+
+#
+# Description: Finds anti-microbial resistance genes in the resFinder and ARG-ANNOT databases and exports a file containing list of all genes found using a non-standard srst2 formatted database (see rules for formatting alternate databases in readme ..... eventually)
+#
+# Usage: ./run_c-sstar_altDB.sh sample_name run_type(g/u for gapped/ungapped) similarity(l/m/h/u/p/o for low(80),medium(95),high(98),ultra-high(99),perfect(100),other(set in config.sh)) miseq_run_ID path_to_alt_DB
+#
+# Output location: default_config.sh_output_location/run_ID/sample_name/csstar(_plasFlow)/
+#
+# Modules required: Python3/3.5.2, ncbi-blast+/LATEST
+#
+# v1.0.1 (10/29/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
+#
 
 ml ncbi-blast+/LATEST Python3/3.5.2
-
-#
-# Finds anti-microbial resistance genes in the resFinder and ARG-ANNOT databases and exports a file containing list of all genes found
-#
-# Usage ./run_c-sstar_altDB.sh sample_name run_type(g/u for gapped/ungapped) similarity(l/m/h/u/p/o for low(80),medium(95),high(98),ultra-high(99),perfect(100),other(set in config.sh)) miseq_run_ID path_to_DB (DONT USE-plasmid(optional))
-#
-# No Modules needed
-#
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -32,7 +37,7 @@ elif [[ -z "${1}" ]]; then
 	exit 1
 # Gives the user a brief usage and help section if requested with the -h option argument
 elif [[ "${1}" = "-h" ]]; then
-	echo "Usage is ./run_c-sstar.sh   sample_name   run-type[g/u](for gapped/ungapped)   similarity[l/m/h/u/p/o](for low/medium/high/ultra-high/perfect as 80/95/98/99/100, other(st in config.sh) miseq_run_ID path/to/DB (DONT USE-plasmid(optional))"
+	echo "Usage is ./run_c-sstar.sh   sample_name   run-type[g/u](for gapped/ungapped)   similarity[l/m/h/u/p/o](for low/medium/high/ultra-high/perfect as 80/95/98/99/100, other(st in config.sh) miseq_run_ID path/to/DB"
 	echo "Output is saved to ${processed}/sample_name/c-sstar"
 	exit
 elif [ -z "$2" ]; then
@@ -105,7 +110,7 @@ if [ "${2}" == "u" ]; then
 	fi
 	owd=$(pwd)
 	cd "${OUTDATADIR}/${alt_database}_${suffix}"
-	echo "Running c-SSTAR on alternate DB"
+	echo "Running c-SSTAR on ResGANNCBI DB"
 	python "${shareScript}/c-SSTAR_ungapped.py" -g "${source_assembly}" -s "${sim}" -d "${5}" > "${OUTDATADIR}/${alt_database}_${suffix}/${1}.${alt_database}.${suffix}_${sim}.sstar"
 elif [ "${2}" == "g" ]; then
 	suffix="gapped"
@@ -115,7 +120,7 @@ elif [ "${2}" == "g" ]; then
 	fi
 	owd=$(pwd)
 	cd "${OUTDATADIR}/${alt_database}_${suffix}"
-	echo "Running c-SSTAR on alternate DB"
+	echo "Running c-SSTAR on ResGANNCBI DB"
 	python "${shareScript}/c-SSTAR_gapped.py" -g "${source_assembly}" -s "${sim}" -d "${5}" > "${OUTDATADIR}/${alt_database}_${suffix}/${1}.${alt_database}.${suffix}_${sim}.sstar"
 else
 	echo "Unknown run type set (only use 'g' or 'u' for gapped/ungapped analysis"
@@ -126,10 +131,10 @@ fi
 
 ###################################### FIND WAY TO CATCH FAILURE !!!!!!!!!! ###############################
 
-# Goes through outfile and adds labels as well as resistance conferred to the beginning of the line
+# Goes through ResGANNCBI outfile and adds labels as well as resistance conferred to the beginning of the line
 # Takes .sstar file in and outputs as .sstar_grouped
 while IFS= read -r line || [ -n "$line" ]; do
-	line=${line,,}
+	line=${line}
 	#echo ${line}
 	label1=$(echo "${line}" | cut -d '	' -f3 | tr '[:upper:]' '[:lower:]')
 	label2=$(echo "${line}" | cut -d '	' -f4 | tr '[:upper:]' '[:lower:]')
@@ -158,7 +163,7 @@ while IFS= read -r line || [ -n "$line" ]; do
 	fi
 	label1=$(echo "${label1,,}" | tr -d '*?$')
 	label2=$(echo "${label2,,}" | tr -d '*?$')
-	source=$(echo "${line}" | cut -d '	' -f1 | tr -d '[:space:]')
+	source=$(echo "${line,,}" | cut -d '	' -f1 | tr -d '[:space:]')
 	resistance=$(echo "${line}" | cut -d '	' -f2 | tr -d '[:space:]')
 	contig=$(echo "${line}" | cut -d '	' -f5 | tr -d '[:space:]')
 	percent=$(echo "${line}" | cut -d '	' -f6 | cut -d'%' -f1 | tr -d '[:space:]')

@@ -181,7 +181,7 @@ while IFS= read -r line || [ -n "$line" ]; do
 	label1=$(echo "${label1,,}" | tr -d '*?$')
 	label2=$(echo "${label2,,}" | tr -d '*?$')
 	# Extract source database that AR gene match came from
-	source=$(echo "${line}" | cut -d '	' -f1 | tr -d '[:space:]')
+	source=$(echo "${line,,}" | cut -d '	' -f1 | tr -d '[:space:]')
 	# Extract the type of resistance that is conferred by the gene
 	resistance=$(echo "${line}" | cut -d '	' -f2 | tr -d '[:space:]')
 	# Trim contig identifier of spaces
