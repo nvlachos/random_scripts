@@ -34,7 +34,7 @@ fi
 # Loop through and act on each sample name in the passed/provided list
 counter=0
 echo "c-sstar:c-sstar_plasmid:srst2"
-echo "Identification	Raw_Read_1	Zipped_Read_1	Raw_Read_2	Zipped_Read_2	Trimmed_R1	Zipped_Trimmed_R1	Trimmed_R2	Zipped_Trimmed_R2	Raw_QC_Counts	Trimmed_QC_Counts	Kraker_reads	Gottcha	Assembly	Assembly_Stats	Kraker_Assembly	BUSCO	PROKKA	tax_file	family	Genus	Species	16s	mash_ANI	ANI_genus	ANI_All	MLST	MLST_SRST2	plasmidFinder	csstar-20180608	srst2AR-20180608	csstar-ResGANNCBI_${2}	srst2-ResGANNCBI_${2}	GAMA-ResGANNCBI_${2}	plasFlow	plasFlow_Assembly_Stats	csstar_plasFlow-ResGANNCBI_${2}	GAMA_plasmid-ResGANNCBI_${2}	plasmidFinder_on_plasFlow" > "${3}"
+echo "Identification	Raw_Read_1	Zipped_Read_1	Raw_Read_2	Zipped_Read_2	Trimmed_R1	Zipped_Trimmed_R1	Trimmed_R2	Zipped_Trimmed_R2	Raw_QC_Counts	Trimmed_QC_Counts	Kraker_reads	Gottcha	Assembly	Assembly_Stats	Kraker_Assembly	BUSCO	PROKKA	tax_file	family	Genus	Species	16s	mash_ANI	ANI_genus	ANI_All	MLST	MLST_SRST2	plasmidFinder	csstar-20180608	srst2AR-20180608	csstar-ResGANNCBI_${2}	GAMA-ResGANNCBI_${2}	srst2-ResGANNCBI_${2}	plasFlow	plasFlow_Assembly_Stats	csstar_plasFlow-ResGANNCBI_${2}	GAMA_plasmid-ResGANNCBI_${2}	plasmidFinder_on_plasFlow" > "${3}"
 #echo "Identification	20180608-c-sstar	20180608-srst2	${2}-c-sstar	${2}-srst2 plaFlow ${2}-c-sstar-plasFlow	plasmidFinder	plasmidFinder_on_plasFlow" > "${3}"
 while IFS= read -r var || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
