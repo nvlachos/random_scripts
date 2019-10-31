@@ -23,7 +23,7 @@ fi
 #
 # Modules required: Python3/3.5.4
 #
-# v1.0.2 (10/22/2019)
+# v1.0.3 (10/30/2019)
 #
 # Created by Nick Vlachos (nvx4@cdc.gov)
 #
@@ -74,7 +74,7 @@ echo "${project}/${sample_name} started at ${global_time}"
 # unzipping paired reads for SPAdes
 if [[ ! -f ${OUTDATADIR}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq ]]; then
 		if [[ -f ${OUTDATADIR}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq.gz ]]; then
-			echo "unzipping paired1"
+			echo "Unzipping paired1"
 			gunzip < ${OUTDATADIR}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq.gz > ${OUTDATADIR}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq
 		else
 			echo "No R1 trimmed paired read, can NOT continue...exiting)"
@@ -109,9 +109,9 @@ do
 	# Run normal mode if no assembly file was found
 	else
 		if [[ "${3}" == "continue" ]] || [[ "${i}" -gt 1 ]]; then
-			"${shareScript}/run_SPAdes.sh" "${sample_name}" "continue" "${project}"
+			"${shareScript}/run_SPAdes.sh" "${filename}" "continue" "${project}"
 		else
-			"${shareScript}/run_SPAdes.sh" "${sample_name}" normal "${project}"
+			"${shareScript}/run_SPAdes.sh" "${filename}" normal "${project}"
 		fi
 	fi
 	# Removes any core dump files (Occured often during testing and tweaking of memory parameter
@@ -166,9 +166,8 @@ if [[ -d ${OUTDATADIR}/${sample_name}/Assembly_Stats ]]; then
 	rm -r ${OUTDATADIR}/${sample_name}/Assembly_Stats
 fi
 if [[ -d ${OUTDATADIR}/${sample_name}/kraken/postAssembly ]]; then
-	rm -r ${OUTDATADIR}/${sample_name}/postAssembly
+	rm -r ${OUTDATADIR}/${sample_name}/kraken/postAssembly
 fi
-
 
 # Get end time of SPAdes and calculate run time and append to time summary (and sum to total time used)
 end=$SECONDS
@@ -330,8 +329,7 @@ if [ -s "${OUTDATADIR}/${sample_name}/prokka/${sample_name}_PROKKA.gbf" ] || [ -
 	busco_found=0
 	for tax in $species $genus $family $order $class $phylum $kingdom $domain
 	do
-		if [ -d "${local_DBs}/BUSCO/${tax,}_odb9" ]
-		then
+		if [ -d "${local_DBs}/BUSCO/${tax,}_odb9" ]; then
 			buscoDB="${tax,}_odb9"
 			busco_found=1
 			break
@@ -416,7 +414,8 @@ elif [[ "${genus}_${species}" = "Escherichia_coli" ]]; then
 	fi
 else
 	mv "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst"
-fiend=$SECONDS
+fi
+end=$SECONDS
 timeMLST=$((end - start))
 echo "MLST - ${timeMLST} seconds" >> "${time_summary_redo}"
 totaltime=$((totaltime + timeMLST))
@@ -424,7 +423,7 @@ totaltime=$((totaltime + timeMLST))
 # Try to find any plasmids
 echo "----- Identifying plasmids using plasmidFinder -----"
 start=$SECONDS
-"${shareScript}/run_plasmidFinder.sh" "${sample_name}" "${project}" "plasmid"
+"${shareScript}/run_plasmidFinder.sh" "${sample_name}" "${project}" plasmid
 end=$SECONDS
 timeplasfin=$((end - start))
 echo "plasmidFinder - ${timeplasfin} seconds" >> "${time_summary_redo}"
@@ -444,18 +443,18 @@ if [[ "${family}" == "Enterobacteriaceae" ]]; then
 	totaltime=$((totaltime + timeplasflow))
 fi
 
-"${shareScript}/validate_piperun.sh" "${filename}" "${project}" > "${processed}/${project}/${filename}/${filename}_pipeline_stats.txt"
+"${shareScript}/validate_piperun.sh" "${sample_name}" "${project}" > "${processed}/${project}/${sample_name}/${sample_name}_pipeline_stats.txt"
 
-status=$(tail -n1 "${processed}/${project}/${filename}/${filename}_pipeline_stats.txt" | cut -d' ' -f5)
+status=$(tail -n1 "${processed}/${project}/${sample_name}/${sample_name}_pipeline_stats.txt" | cut -d' ' -f5)
 if [[ "${status}" != "FAILED" ]]; then
-	"${shareScript}/sample_cleaner.sh" "${filename}" "${project}"
+	"${shareScript}/sample_cleaner.sh" "${sample_name}" "${project}"
 fi
 
 # Extra dump cleanse in case anything else failed
-	if [ -n "$(find "${shareScript}" -maxdepth 1 -name 'core.*' -print -quit)" ]; then
-		echo "Found core dump files at end of processing ${sample_name} and attempting to delete"
-		find "${shareScript}" -maxdepth 1 -name 'core.*' -exec rm -f {} \;
-	fi
+if [ -n "$(find "${shareScript}" -maxdepth 1 -name 'core.*' -print -quit)" ]; then
+	echo "Found core dump files at end of processing ${sample_name} and attempting to delete"
+	find "${shareScript}" -maxdepth 1 -name 'core.*' -exec rm -f {} \;
+fi
 
 global_end_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 

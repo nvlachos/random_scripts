@@ -120,8 +120,15 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	echo ${counter}
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
+	node="false"
+	if [[ -f "${processed}/${project}/${sample}/c-sstar/${sample}.${alt_database}.gapped_${simnum}_sstar_summary.txt" ]]; then
+		id=$(head -n1 "${processed}/${project}/${sample}/c-sstar/${sample}.${alt_database}.gapped_${simnum}_sstar_summary.txt" | cut -d'	' -f6)
+		if [[ "${id}" = "node" ]]; then
+			node="true"
+		fi
+	fi
 	# Delete old results if clobbering
-	if [[ "${5}" == "clobber" ]]; then
+	if [[ "${5}" == "clobber" ]] || [[ "${renode}" = "true" ]]; then
 		rm ${processed}/${project}/${sample}/c-sstar/${sample}.${alt_database}.gapped_${simnum}_sstar_summary.txt
 		rm -r ${processed}/${project}/${sample}/c-sstar/${alt_database}_gapped/
 	fi
