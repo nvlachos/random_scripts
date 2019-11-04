@@ -30,24 +30,9 @@ while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 
-	SIZES1=$(md5sum "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R1_001.fastq.gz" | cut -d' ' -f1)
-	SIZEA1=$(md5sum "${processed}/AdrianMissingQuaisars/${sample_name}/FASTQs/${sample_name}_R1_001.fastq.gz" | cut -d' ' -f1)
-	SIZES2=$(md5sum "${processed}/${project}/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz" | cut -d' ' -f1)
-	SIZEA2=$(md5sum "${processed}/AdrianMissingQuaisars/${sample_name}/FASTQs/${sample_name}_R2_001.fastq.gz" | cut -d' ' -f1)
-
-	if [[ "${SIZES1}" == "${SIZEA1}" ]]; then
-		R1="SAME"
-	else
-		R1="${sample_name}:NOT_SAME (${SIZES1}:${SIZEA1})"
+	if [[ -f "${processed}/${project}/${sample_name}/GAMA/${sample_name}_ResGANNCBI_20190826.GAMA" ]] && [[ ! -f "${processed}/${project}/${sample_name}/GAMA/${sample_name}.ResGANNCBI_20190826.GAMA"]]; then
+		mv "${processed}/${project}/${sample_name}/GAMA/${sample_name}_ResGANNCBI_20190826.GAMA" "${processed}/${project}/${sample_name}/GAMA/${sample_name}.ResGANNCBI_20190826.GAMA"
 	fi
-
-	if [[ "${SIZES2}" == "${SIZEA2}" ]]; then
-		R2="SAME"
-	else
-		R2="${sample_name}:NOT_SAME (${SIZES2}:${SIZEA2})"
-	fi
-
-	echo "${R1}:${R2}"
 
 done < "${1}"
 
