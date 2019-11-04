@@ -10,16 +10,19 @@
 if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
-pwd
 . ./config.sh
 
 #
-# Creates a single file that attempts to pull the best taxonomic information from the isolate. Currently, it operates in a linear fashion, e.g. 1.ANI, 2.kraken, 3.Gottcha, 4.16s
-# The taxon is chosen based on the highest ranked classifier first
+# Description: Creates a single file that attempts to pull the best taxonomic information from the isolate. Currently, it operates in a linear fashion, e.g. 1.ANI, 2.16s, 3.kraken, 4.Gottcha
+# 	The taxon is chosen based on the highest ranked classifier first
 #
-# Usage ./determine_texID.sh sample_name project_ID
+# Usage: ./determine_texID.sh sample_name project_ID
 #
-# No modules required
+# Modules required: None
+#
+# v1.0.1 (11/4/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
 #
 
 # Checks for proper argumentation
@@ -27,14 +30,14 @@ if [[ $# -eq 0 ]]; then
 	echo "No argument supplied to $0, exiting"
 	exit 1
 elif [[ -z "${1}" ]]; then
-	echo "Empty sample_id supplied to $0, exiting"
+	echo "Empty sample_id supplied to determine_taxID.sh, exiting"
 	exit 1
 elif [[ "${1}" = "-h" ]]; then
 	echo "Usage is ./determine_taxID.sh sample_ID run_ID"
 	echo "Output is saved to ${processed}/run_ID/sample_ID/taxonomy.csv"
 	exit 0
 elif [[ -z "${2}" ]]; then
-	echo "Empty run_ID supplied to $0, exiting"
+	echo "Empty run_ID supplied to determine_taxID.sh, exiting"
 	exit 1
 fi
 
@@ -42,6 +45,7 @@ fi
 sample=${1}
 project=${2}
 
+# Set default values for a ll taxonomic levels
 Domain="Not_assigned"
 Phylum="Not_assigned"
 Class="Not_assigned"
@@ -54,13 +58,14 @@ confidence_index="0"
 source_file="Not_assigned"
 
 
+# Function to check which source to use as the 'determinator'. Single int parameter can be used to tell which level to jump in at
 Check_source() {
 	start_at="${1}"
 	if [[ "${start_at}" -le 1 ]]; then
 		for f in ${processed}/${project}/${sample}/ANI/*; do
 			if [[ "${f}" = *"best_ANI_hits_ordered"* ]]; then
 				header=$(head -n1 ${f})
-				if [[ ${header} != "No matching ANI database found for"* ]] && [[ ${header} != "0.00%-(.fna)" ]] ; then
+				if [[ ${header} != "No matching ANI database found for"* ]] && [[ ${header} != "0.00%"* ]] ; then
 		    	do_ANI
 		    	return
 				fi
@@ -80,14 +85,14 @@ Check_source() {
 			#echo "largest:${largest_species}:"
 			#echo "best:${best_species}:"
 			if [[ "${largest_arr_size}" -ge 3 ]]; then
-				if [[ "${largest_array[2]}" == "Unidentified" ]] || [[ "${largest_array[2]}" == "No_16s_"* ]]; then
+				if [[ "${largest_array[2]}" == "Unidentified" ]] || [[ "${largest_array[2]}" == "No_16s_"* ]] || [[ "${largest_array[2]}" == "uncultured" ]]; then
 					:
 				else
 					do_16s "largest"
 					return
 				fi
 			elif [[ "${best_arr_size}" -ge 3 ]] ; then
-				if [[ "${best_array[2]}" == "Unidentified" ]]  || [[ "${best_array[2]}" == "No_16s_"* ]]; then
+				if [[ "${best_array[2]}" == "Unidentified" ]]  || [[ "${best_array[2]}" == "No_16s_"* ]] || [[ "${best_array[2]}" == "uncultured" ]]; then
 					:
 				else
 					do_16s "best"
@@ -111,6 +116,7 @@ Check_source() {
 	echo "No ACCEPTABLE source found to determine taxonomy"
 }
 
+# Function to pull info from ANI output
 do_ANI() {
 	source="ANI"
 	#echo "${source}"
@@ -122,11 +128,12 @@ do_ANI() {
 	header=$(head -n 1 "${source_file}")
 	#echo "${header}"
 	Genus=$(echo "${header}" | cut -d' ' -f1 | cut -d'-' -f2)
-	species=$(echo "${header}" | cut -d' ' -f2 | cut -d'(' -f1)
+	species=$(echo "${header}" | cut -d' ' -f2 | cut -d'(' -f1 | sed 's/[][]//g')
 	confidence_index=$(echo "${header}" | cut -d' ' -f1 | cut -d'%' -f1)
 	#echo "${Genus}-${species}"
 }
 
+# Function to pull best info from 16s output (largest vs highest bit score)
 do_16s() {
 	if [[ "${1}" = "largest" ]]; then
 		source_file="${processed}/${project}/${sample}/16s/${sample}_16s_blast_id.txt"
@@ -154,6 +161,7 @@ do_16s() {
 	species=$(echo "${line}" | cut -d"	" -f3 | cut -d" " -f2)
 }
 
+# Function to pull info from gottcha output
 do_GOTTCHA() {
 	source="GOTTCHA"
 	source_file="${processed}/${project}/${sample}/gottcha/${sample}_gottcha_species_summary.txt"
@@ -174,6 +182,7 @@ do_GOTTCHA() {
 	done < "${processed}/${project}/${sample}/gottcha/${sample}_gottcha_species_summary.txt"
 }
 
+# Function to pull info from kraken output based on assembly
 do_Kraken() {
 	source="Kraken"
 	source_file="${processed}/${project}/${sample}/kraken/postAssembly/${sample}_kraken_summary_assembled_BP.txt"
@@ -194,19 +203,24 @@ do_Kraken() {
 	confidence_index="${confidence_index}"
 }
 
+# Start the program by checking ALL sources
 Check_source 0
 
+# Check if genus was assigned
 if [[ ! -z ${Genus} ]]; then
 	Genus=$(echo ${Genus} | tr -d [:space:] | tr -d "[]")
 fi
+# Check if species was assigned
 if [[ ! -z ${species} ]]; then
 	species=$(echo ${species} | tr -d [:space:])
 fi
 
+# Check if genus was assigned as peptoclostridium and relabel it as Clostridium for downstream analyses relying on this older naming convention
 if [[ ${Genus} == "Peptoclostridium" ]]; then
 	Genus="Clostridium"
 fi
 
+# Using premade database fill in upper levels of taxonomy info based on genus
 while IFS= read -r line  || [ -n "$line" ]; do
 	DB_genus=$(echo ${line} | cut -d"," -f1)
 	#echo ":${Genus}:${DB_genus}:"
@@ -222,6 +236,5 @@ while IFS= read -r line  || [ -n "$line" ]; do
 	fi
 done < "${local_DBs}/taxes.csv"
 
-echo "(${source})-${confidence_index}%%-${source_file}\nD:	${Domain}\nP:	${Phylum}\nC:	${Class}\nO:	${Order}\nF:	${Family}\nG:	${Genus}\ns:	${species}\n"
-
-printf "(${source})-${confidence_index}%%-${source_file}\nD:	${Domain}\nP:	${Phylum}\nC:	${Class}\nO:	${Order}\nF:	${Family}\nG:	${Genus}\ns:	${species}\n" > "${processed}/${project}/${sample}/${sample}.tax"
+# Print output to tax file for sample
+echo -e "(${source})-${confidence_index}%-${source_file}\nD:	${Domain}\nP:	${Phylum}\nC:	${Class}\nO:	${Order}\nF:	${Family}\nG:	${Genus}\ns:	${species}\n" > "${processed}/${project}/${sample}/${sample}.tax"

@@ -34,7 +34,7 @@ fi
 # Loop through and act on each sample name in the passed/provided list
 counter=0
 echo "c-sstar:c-sstar_plasmid:srst2"
-echo "Identification	Raw_Read_1	Zipped_Read_1	Raw_Read_2	Zipped_Read_2	Trimmed_R1	Zipped_Trimmed_R1	Trimmed_R2	Zipped_Trimmed_R2	Raw_QC_Counts	Trimmed_QC_Counts	Kraker_reads	Gottcha	Assembly	Assembly_Stats	Kraker_Assembly	BUSCO	PROKKA	tax_file	family	Genus	Species	16s	mash_ANI	ANI_genus	ANI_All	MLST	MLST_SRST2	plasmidFinder	csstar-20180608	srst2AR-20180608	csstar-ResGANNCBI_${2}	GAMA-ResGANNCBI_${2}	srst2-ResGANNCBI_${2}	plasFlow	plasFlow_Assembly_Stats	csstar_plasFlow-ResGANNCBI_${2}	GAMA_plasmid-ResGANNCBI_${2}	plasmidFinder_on_plasFlow" > "${3}"
+echo "Identification	Raw_Read_1	Zipped_Read_1	Raw_Read_2	Zipped_Read_2	Trimmed_R1	Zipped_Trimmed_R1	Trimmed_R2	Zipped_Trimmed_R2	Raw_QC_Counts	Trimmed_QC_Counts	Kraker_reads	Gottcha	Assembly	Assembly_Stats	Kraker_Assembly	BUSCO	PROKKA	tax_file tex_determinant	family	Genus	Species	16s	mash_ANI	ANI_genus	ANI_All	MLST	MLST_SRST2	plasmidFinder	csstar-20180608	srst2AR-20180608	csstar-ResGANNCBI_${2}	GAMA-ResGANNCBI_${2}	srst2-ResGANNCBI_${2}	plasFlow	plasFlow_Assembly_Stats	csstar_plasFlow-ResGANNCBI_${2}	GAMA_plasmid-ResGANNCBI_${2}	plasmidFinder_on_plasFlow" > "${3}"
 #echo "Identification	20180608-c-sstar	20180608-srst2	${2}-c-sstar	${2}-srst2 plaFlow ${2}-c-sstar-plasFlow	plasmidFinder	plasmidFinder_on_plasFlow" > "${3}"
 while IFS= read -r var || [ -n "$var" ]; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
@@ -281,8 +281,10 @@ while IFS= read -r var || [ -n "$var" ]; do
 
 	if [[ -s "${processed}/${project}/${sample_name}/${sample_name}.tax" ]]; then
 		tax="Found"
+		tax_det=$(head -n1 "${processed}/${project}/${sample_name}/${sample_name}.tax" | cut -d'(' -f2 | cut -d')' -f1)
 	else
 		tax="NOT_FOUND"
+		tax_det="NO_TAX_FILE"
 	fi
 
 	if [[ -s "${processed}/${project}/${sample_name}/16s/${sample_name}_16s_blast_id.txt" ]]; then
@@ -368,7 +370,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 				fi
 				if [[ -s "${processed}/${project}/${sample_name}/GAMA_plasFlow/${sample_name}.ResGANNCBI_${2}.GAMA" ]]; then
 					gama_p_lines=$(grep -c '^' "${processed}/${project}/${sample_name}/GAMA/${sample_name}.ResGANNCBI_${2}.GAMA" )
-					gama_p_lines=$(( gama_lines - 1 ))
+					gama_p_lines=$(( gama_p_lines - 1 ))
 					if [[ ${gama_p_lines} -eq 0 ]]; then
 						input_DB_GAMA="No_plasmid_AR"
 					else
@@ -489,8 +491,8 @@ while IFS= read -r var || [ -n "$var" ]; do
 		anigenus="NO_TAX_FILE"
 	fi
 
-	echo -e "${counter}:${project}/${sample_name}	${FQR1}	${FQZR1}	${FQR2}	${FQZR2}	${FQTR1}	${FQTZR1}	${FQTR2}	${FQTZR2}	${preQCr}	${preQCt}	${krakr}	${gott}	${Assembly}	${Assembly_stats}	${kraka}	${busco}	${prokka}	${tax}	${family}	${genus}	${species}	${sixteenS}	${animash}	${anigenus}	${aniAll}	${mlst}	${srst2_mlst}	${pFin}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_GAMA}	${input_DB_srst2}	${plasFlow}	${plasFlow_Stats}	${cplas}	${gplas}	${pFin_plas}"
-	echo -e "${project}/${sample_name}	${FQR1}	${FQZR1}	${FQR2}	${FQZR2}	${FQTR1}	${FQTZR1}	${FQTR2}	${FQTZR2}	${preQCr}	${preQCt}	${krakr}	${gott}	${Assembly}	${Assembly_stats}	${kraka}	${busco}	${prokka}	${tax}	${family}	${genus}	${species}	${sixteenS}	${animash}	${anigenus}	${aniAll}	${mlst}	${srst2_mlst}	${pFin}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_GAMA}	${input_DB_srst2}	${plasFlow}	${plasFlow_Stats}	${cplas}	${gplas}	${pFin_plas}" >> "${3}"
+	echo -e "${counter}:${project}/${sample_name}	${FQR1}	${FQZR1}	${FQR2}	${FQZR2}	${FQTR1}	${FQTZR1}	${FQTR2}	${FQTZR2}	${preQCr}	${preQCt}	${krakr}	${gott}	${Assembly}	${Assembly_stats}	${kraka}	${busco}	${prokka}	${tax}	${tax_det}	${family}	${genus}	${species}	${sixteenS}	${animash}	${anigenus}	${aniAll}	${mlst}	${srst2_mlst}	${pFin}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_GAMA}	${input_DB_srst2}	${plasFlow}	${plasFlow_Stats}	${cplas}	${gplas}	${pFin_plas}"
+	echo -e "${project}/${sample_name}	${FQR1}	${FQZR1}	${FQR2}	${FQZR2}	${FQTR1}	${FQTZR1}	${FQTR2}	${FQTZR2}	${preQCr}	${preQCt}	${krakr}	${gott}	${Assembly}	${Assembly_stats}	${kraka}	${busco}	${prokka}	${tax}	${tax_det}	${family}	${genus}	${species}	${sixteenS}	${animash}	${anigenus}	${aniAll}	${mlst}	${srst2_mlst}	${pFin}	${ohsixoheight}	${ohsixoheights}	${input_DB_csstar}	${input_DB_GAMA}	${input_DB_srst2}	${plasFlow}	${plasFlow_Stats}	${cplas}	${gplas}	${pFin_plas}" >> "${3}"
 	counter=$(( counter + 1 ))
 done < "${1}"
 echo "All isolates completed"
