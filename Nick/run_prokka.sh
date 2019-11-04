@@ -13,16 +13,21 @@ fi
 . ./config.sh
 #. "${mod_changers}/perl_5221_to_5123.sh"
 
-ml prokka/1.12 perl/5.12.3
-
 #
-# Runs prokka gene identifier on sample to discover all identifiable genes. Also necessary for downstream busco processing
+# Description: Runs prokka gene identifier on sample to discover all identifiable genes. Also necessary for downstream busco processing
 #
 # Usage ./run_prokka.sh   sample_name   run_ID
 #
-# requires prokka/1.12, perl/5.12.3 (loaded via perl_5221_to_5123.sh)
+# Output location: default_config.sh_output_location/run_ID/sample_name/prokka
 #
-# !!!!! prokka requires perl 5.12.3 (at least works on it, but fails on 5.22.1)
+# Modules required: prokka/1.12, perl/5.12.3
+#
+# v1.0 (10/3/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
+#
+
+ml prokka/1.12 perl/5.12.3
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
@@ -70,8 +75,6 @@ for pfile in ${OUTDATADIR}/prokka/*.*; do
 done
 
 #Script exited gracefully (unless something else inside failed)
-# reload perl to 5.22.1 before exiting
-#. "${mod_changers}/perl_5123_to_5221.sh"
 
 ml -prokka/1.12 -perl/5.12.3
 
