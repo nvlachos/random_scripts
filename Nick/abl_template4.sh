@@ -30,8 +30,11 @@ while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 
-	if [[ -f "${processed}/${project}/${sample_name}/GAMA/${sample_name}_ResGANNCBI_20190826.GAMA" ]] && [[ ! -f "${processed}/${project}/${sample_name}/GAMA/${sample_name}.ResGANNCBI_20190826.GAMA" ]]; then
-		mv "${processed}/${project}/${sample_name}/GAMA/${sample_name}_ResGANNCBI_20190826.GAMA" "${processed}/${project}/${sample_name}/GAMA/${sample_name}.ResGANNCBI_20190826.GAMA"
+	if [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]]; then
+		mv "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" "${processed}/${project}/${sample_name}/MLST/${sample_name}_Achtman.mlst"
+	fi
+	if [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst" ]]; then
+		mv "${processed}/${project}/${sample_name}/MLST/${sample_name}_ecoli_2.mlst" "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst"
 	fi
 
 done < "${1}"
