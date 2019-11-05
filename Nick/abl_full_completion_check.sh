@@ -429,7 +429,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 			animash="NOT_FOUND"
 		fi
 
-		if [[ "${genus}" == "Acinetobacter" ]] && [[ "${species}" == "baumannii" ]]; then
+		if [[ "${tempgenus}" == "Acinetobacter" ]] && [[ "${species}" == "baumannii" ]]; then
 			if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" ]]; then
 				mlst_result1=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" | cut -d'	' -f3)
 			else
@@ -452,7 +452,7 @@ while IFS= read -r var || [ -n "$var" ]; do
 				srst2_mlst_result2="NOT_FOUND"
 			fi
 			srst2_mlst="${srst2_mlst_result1}|${srst2_mlst_result2}"
-		elif [[ "${genus}" == "Escherichia" ]] && [[ "${species}" == "coli" ]]; then
+		elif [[ "${tempgenus}" == "Escherichia" ]] && [[ "${species}" == "coli" ]]; then
 			if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" ]]; then
 				mlst_result1=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" | cut -d'	' -f3)
 			else
@@ -476,8 +476,8 @@ while IFS= read -r var || [ -n "$var" ]; do
 			fi
 			srst2_mlst="${srst2_mlst_result1}|${srst2_mlst_result2}"
 		else
-			if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_${genus}_${species}.mlst" ]]; then
-				srst2_mlst=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_${genus}_${species}-Pasteur.mlst" | cut -d'	' -f2)
+			if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_${tempgenus}_${species}.mlst" ]]; then
+				srst2_mlst=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_${tempgenus}_${species}-Pasteur.mlst" | cut -d'	' -f2)
 			else
 				srst2_mlst="NOT_FOUND"
 			fi
