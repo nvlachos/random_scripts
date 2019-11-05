@@ -88,13 +88,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		echo -e "\"${shareScript}/run_sum.sh\" \"${project}\"" >> "${main_dir}/runsum_${project}_${time_run}.sh"
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${project}_runsum_complete.txt\"" >> "${main_dir}/runsum_${project}_${time_run}.sh"
 		cd "${main_dir}"
-		if [[ "${counter}" -lt "${last_index}" ]]; then
-			qsub "${main_dir}/runsum_${project}_${time_run}.sh"
-		else
-			qsub -sync y "${main_dir}/runsum_${project}_${time_run}.sh"
-		fi
-		mv "${shareScript}/runsum_${project}.out" ${main_dir}
-		mv "${shareScript}/runsum_${project}.err" ${main_dir}
+		qsub "${main_dir}/runsum_${project}_${time_run}.sh"
 	else
 		waiting_for_index=$(( counter - max_subs ))
 		waiting_project=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
@@ -118,14 +112,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "\"${shareScript}/run_runsum.sh\" \"${project}\"" >> "${main_dir}/runsum_${project}_${time_run}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${project}_runsum_complete.txt\"" >> "${main_dir}/runsum_${project}_${time_run}.sh"
 				cd "${main_dir}"
-				if [[ "${counter}" -lt "${last_index}" ]]; then
-					qsub "${main_dir}/runsum_${project}_${time_run}.sh"
-				else
-					qsub -sync y "${main_dir}/runsum_${project}_${time_run}.sh"
-				fi
-				mv "${shareScript}/runsum_${project}.out" ${main_dir}
-				mv "${shareScript}/runsum_${project}.err" ${main_dir}
-				break
+				qsub "${main_dir}/runsum_${project}_${time_run}.sh"
 			else
 				timer=$(( timer + 5 ))
 				echo "sleeping for 5 seconds, so far slept for ${timer}"
