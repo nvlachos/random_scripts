@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o abl-template3.out
-#$ -e abl-template3.err
-#$ -N abl-template3
+#$ -o abl-plsCLN.out
+#$ -e abl-plsCLN.err
+#$ -N abl-plsCLN
 #$ -cwd
 #$ -q short.q
 
