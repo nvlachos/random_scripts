@@ -25,15 +25,22 @@ elif [[ "$1" = "-h" ]]; then
 	exit 0
 fi
 
+
+total_size=0
+
 # Loop through and act on each sample name in the passed/provided list
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 
 	if [[ -f "${processed}/${project}/${sample_name}/plasFlow/filtered_reads_70/${sample_name}.bam" ]]; then
+		temp_size=$(cat "${processed}/${project}/${sample_name}/plasFlow/filtered_reads_70/${sample_name}.bam" | wc -c)
+		total_size=$(( total_size + temp_size ))
 		rm "${processed}/${project}/${sample_name}/plasFlow/filtered_reads_70/${sample_name}.bam"
 	fi
 	if [[ "${processed}/${project}/${sample_name}/plasFlow/filtered_reads_70/${sample_name}.sam" ]]; then
+		temp_size=$(cat "${processed}/${project}/${sample_name}/plasFlow/filtered_reads_70/${sample_name}.sam" | wc -c)
+		total_size=$(( total_size + temp_size ))
 		rm "${processed}/${project}/${sample_name}/plasFlow/filtered_reads_70/${sample_name}.sam"
 	fi
 
