@@ -78,7 +78,7 @@ done < ${input}
 
 # Call mashtree on all copied fasta
 cd ${outdir}
-mashtree.pl --numcpus ${procs} *.fasta --tempdir ${outdir}/temp > "${outdir}/${output_file}.dnd";
+mashtree --numcpus ${procs} *.fasta --tempdir ${outdir}/temp > "${outdir}/${output_file}.dnd";
 
 module unload perl/5.16.1-MT
 module load perl/5.22.1

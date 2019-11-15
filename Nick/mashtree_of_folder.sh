@@ -69,7 +69,7 @@ fi
 
 # Call mashtree on all copied fasta
 cd ${DATADIR}
-mashtree.pl --numcpus ${procs} *.${extension} --tempdir ${DATADIR}/temp > "${DATADIR}/${outfile}.dnd";
+mashtree --numcpus ${procs} *.${extension} --tempdir ${DATADIR}/temp > "${DATADIR}/${outfile}.dnd";
 
 ml -perl/5.16.1-MT
 

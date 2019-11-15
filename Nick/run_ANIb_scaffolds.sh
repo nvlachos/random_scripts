@@ -143,7 +143,7 @@ done
 owd=$(pwd)
 cd ${OUTDATADIR}/Contig_check/ANI/localANIDB_aniB_scaffolds/
 . "${mod_changers}/perl_5221_to_5161mt.sh"
-mashtree.pl --numcpus ${procs} *.fasta --tempdir ${OUTDATADIR}/Contig_check/ANI/temp > ${OUTDATADIR}/Contig_check/ANI/"${genus_in}_and_${1}_mashtree_ANIb_scaffolds.dnd";
+mashtree --numcpus ${procs} *.fasta --tempdir ${OUTDATADIR}/Contig_check/ANI/temp > ${OUTDATADIR}/Contig_check/ANI/"${genus_in}_and_${1}_mashtree_ANIb_scaffolds.dnd";
 . "${mod_changers}/perl_5161mt_to_5221.sh"
 
 # Get total number of isolates compared in tree
