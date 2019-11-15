@@ -99,11 +99,11 @@ fi
 # Gets persons name to use as email during entrez request to identify best matching sample
 me=$(whoami)
 # Sets the genus as the database that was passed in (The $2 seemed to be getting changed somewhere, so I just set it as a local variable)
-genus_in=${2}
+genus_in=${2^}
 
 #Creates a local copy of the database folder
-echo "trying to copy ${local_DBs}/aniDB_2/${genus_in,}/"
-cp "${local_DBs}/aniDB_2/${genus_in,}/"*".fna.gz" "${OUTDATADIR}/ANI_2/localANIDB/"
+echo "trying to copy ${local_DBs}/aniDB_2/${genus_in}/"
+cp "${local_DBs}/aniDB_2/${genus_in}/"*".fna.gz" "${OUTDATADIR}/ANI_2/localANIDB/"
 gunzip ${OUTDATADIR}/ANI_2/localANIDB/*.gz
 
 #Copies the samples assembly contigs to the local ANI db folder
