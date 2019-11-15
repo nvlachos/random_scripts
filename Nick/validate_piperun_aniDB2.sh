@@ -838,22 +838,23 @@ else
 	printf "%-20s: %-8s : %s\\n" "BUSCO" "FAILED" "/BUSCO/short_summary_${1}.txt not found"
 	status="FAILED"
 fi
+
 #Check ANI
 ani_found=false
 # Goes through each file in the ANI folder to find if any match the proper format of the ANI output (this keeps old version and formats from sneaking in, pretty much uselss at this point)
-if [[ -s "${OUTDATADIR}/ANI_2/best_ANI_hits_ordered(${1}_vs_${dec_genus,}).txt" ]]; then
-	mv "${OUTDATADIR}/ANI_2/best_ANI_hits_ordered(${1}_vs_${dec_genus,}).txt" "${OUTDATADIR}/ANI_2/best_ANI_hits_ordered(${1}_vs_${dec_genus^}).txt"
-		 #"${OUTDATADIR}/ANI_2/best_ANI_hits_ordered(${1}_vs_${dec_genus^}).txt"
+if [[ -s "${OUTDATADIR}/ANI/best_ANI_hits_ordered(${1}_vs_${dec_genus,}).txt" ]]; then
+	mv "${OUTDATADIR}/ANI/best_ANI_hits_ordered(${1}_vs_${dec_genus,}).txt" "${OUTDATADIR}/ANI/best_ANI_hits_ordered(${1}_vs_${dec_genus^}).txt"
+		 #"${OUTDATADIR}/ANI/best_ANI_hits_ordered(${1}_vs_${dec_genus^}).txt"
 fi
-if [[ -f "${OUTDATADIR}/ANI_2/best_ANI_hits_ordered(${1}_vs_All).txt" ]]; then
+if [[ -f "${OUTDATADIR}/ANI/best_ANI_hits_ordered(${1}_vs_All).txt" ]]; then
 	#echo "ALL"
-	ani_info=$(head -n 1 "${OUTDATADIR}/ANI_2/best_ANI_hits_ordered(${1}_vs_All).txt")
+	ani_info=$(head -n 1 "${OUTDATADIR}/ANI/best_ANI_hits_ordered(${1}_vs_All).txt")
 	ani_found=true
-elif [[ -f "${OUTDATADIR}/ANI_2/best_ANI_hits_ordered(${1}_vs_${dec_genus^}).txt" ]]; then
-	ani_info=$(head -n 1 "${OUTDATADIR}/ANI_2/best_ANI_hits_ordered(${1}_vs_${dec_genus^}).txt")
+elif [[ -f "${OUTDATADIR}/ANI/best_ANI_hits_ordered(${1}_vs_${dec_genus^}).txt" ]]; then
+	ani_info=$(head -n 1 "${OUTDATADIR}/ANI/best_ANI_hits_ordered(${1}_vs_${dec_genus^}).txt")
 	ani_found=true
 else
-	for file in "${OUTDATADIR}/ANI_2/"*
+	for file in "${OUTDATADIR}/ANI/"*
 	do
 		if [[ "${file}" == *"best_ANI_hits_ordered(${1}_vs_"* ]]; then
 			filename=${file}
@@ -886,11 +887,68 @@ else
 	if [[ "${dec_genus}" == "" ]]; then
 		printf "%-20s: %-8s : %s\\n" "ANI" "FAILED" "Determine_TAXID did not discover a genus. Cant ANI on all samples, yet"
 		status="FAILED"
-	elif [[ ! -d "${OUTDATADIR}/ANI_2/" ]]; then
-		printf "%-20s: %-8s : %s\\n" "ANI" "FAILED" "/ANI_2/ does not exist"
+	elif [[ ! -d "${OUTDATADIR}/ANI/" ]]; then
+		printf "%-20s: %-8s : %s\\n" "ANI" "FAILED" "/ANI/ does not exist"
 		status="FAILED"
 	else
-		printf "%-20s: %-8s : %s\\n" "ANI" "FAILED" "Attempted to compare to ${dec_genus} but /ANI_2/ does not have a best_ANI_hits file"
+		printf "%-20s: %-8s : %s\\n" "ANI" "FAILED" "Attempted to compare to ${dec_genus} but /ANI/ does not have a best_ANI_hits file"
+		status="FAILED"
+	fi
+fi
+
+#Check ANI_2
+ani2_found=false
+# Goes through each file in the ANI folder to find if any match the proper format of the ANI output (this keeps old version and formats from sneaking in, pretty much uselss at this point)
+if [[ -s "${OUTDATADIR}/ANI_2/best_ANI_hits_ordered(${1}_vs_${dec_genus,}).txt" ]]; then
+	mv "${OUTDATADIR}/ANI_2/best_ANI_hits_ordered(${1}_vs_${dec_genus,}).txt" "${OUTDATADIR}/ANI_2/best_ANI_hits_ordered(${1}_vs_${dec_genus^}).txt"
+		 #"${OUTDATADIR}/ANI_2/best_ANI_hits_ordered(${1}_vs_${dec_genus^}).txt"
+fi
+if [[ -f "${OUTDATADIR}/ANI_2/best_ANI_hits_ordered(${1}_vs_All).txt" ]]; then
+	#echo "ALL"
+	ani2_info=$(head -n 1 "${OUTDATADIR}/ANI_2/best_ANI_hits_ordered(${1}_vs_All).txt")
+	ani2_found=true
+elif [[ -f "${OUTDATADIR}/ANI_2/best_ANI_hits_ordered(${1}_vs_${dec_genus^}).txt" ]]; then
+	ani2_info=$(head -n 1 "${OUTDATADIR}/ANI_2/best_ANI_hits_ordered(${1}_vs_${dec_genus^}).txt")
+	ani2_found=true
+else
+	for file in "${OUTDATADIR}/ANI_2/"*
+	do
+		if [[ "${file}" == *"best_ANI_hits_ordered(${1}_vs_"* ]]; then
+			filename=${file}
+			#echo "${OUTDATADIR}"
+			#echo "${file}"
+			#echo "${dec_genus^}"
+			ani2_info=$(head -n 1 "${file}")
+			ani2_found=true
+			break
+		fi
+	done
+fi
+# Checks to see if the match boolean was toggled, if so it extracts the best match info and database from the string
+if [[ "${ani_found}" = true ]]; then
+	genusDB2=$(echo "${filename##*/}" | cut -d'_' -f6 | cut -d')' -f1)
+	percent_match2="${ani2_info:0:2}"
+	#echo "${percent_match--}"
+	if [[ "${percent_match2}" = "0." ]]; then
+		printf "%-20s: %-8s : %s\\n" "ANI_2" "FAILED" "No assembly file to work with"
+		status="FAILED"
+	else
+		if [[ "${percent_match2}" -ge 95 ]]; then
+			printf "%-20s: %-8s : %s\\n" "ANI_2" "SUCCESS" "${ani2_info} against ${genusDB2}"
+		else
+			printf "%-20s: %-8s : %s\\n" "ANI_2" "FAILED" "${percent_match2}% is too low, ${ani2_info}"
+			status="FAILED"
+		fi
+	fi
+else
+	if [[ "${dec_genus}" == "" ]]; then
+		printf "%-20s: %-8s : %s\\n" "ANI_2" "FAILED" "Determine_TAXID did not discover a genus. Cant ANI on all samples, yet"
+		status="FAILED"
+	elif [[ ! -d "${OUTDATADIR}/ANI_2/" ]]; then
+		printf "%-20s: %-8s : %s\\n" "ANI_2" "FAILED" "/ANI_2/ does not exist"
+		status="FAILED"
+	else
+		printf "%-20s: %-8s : %s\\n" "ANI_2" "FAILED" "Attempted to compare to ${dec_genus} but /ANI_2/ does not have a best_ANI_hits file"
 		status="FAILED"
 	fi
 fi
