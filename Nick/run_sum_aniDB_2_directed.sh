@@ -15,7 +15,7 @@ fi
 #
 # Description: Creates a summary file for the run and prints out a one word status and a short description of each step being reported
 #
-# Usage ./run_sum.sh output_filename
+# Usage ./run_sum.sh input_list output_filename
 #
 # Output loction: parameter
 #
