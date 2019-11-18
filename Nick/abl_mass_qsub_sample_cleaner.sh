@@ -75,18 +75,18 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	project=${arr[${counter}]}
 	if [[ ${counter} -lt ${max_subs} ]]; then
 		echo  "Index is below max submissions, submitting"
-		echo -e "#!/bin/bash -l\n" > "${main_dir}/sclean_${project}_${time_run}.sh"
-		echo "Saving to ${main_dir}/sclean_${project}_${time_run}.sh"
-		echo -e "#$ -o sclean_${project}.out" >> "${main_dir}/sclean_${project}_${time_run}.sh"
-		echo -e "#$ -e sclean_${project}.err" >> "${main_dir}/sclean_${project}_${time_run}.sh"
-		echo -e "#$ -N sclean_${project}"   >> "${main_dir}/sclean_${project}_${time_run}.sh"
-		echo -e "#$ -cwd"  >> "${main_dir}/sclean_${project}_${time_run}.sh"
-		echo -e "#$ -q short.q\n"  >> "${main_dir}/sclean_${project}_${time_run}.sh"
-		echo -e "cd ${shareScript}" >> "${main_dir}/sclean_${project}_${time_run}.sh"
-		echo -e "\"${shareScript}/sample_cleaner.sh\" \"${sample_name}\" \"${project}\"" >> "${main_dir}/sclean_${project}_${time_run}.sh"
-		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${project}_sclean_complete.txt\"" >> "${main_dir}/sclean_${project}_${time_run}.sh"
+		echo -e "#!/bin/bash -l\n" > "${main_dir}/sclean_${sample_name}_${time_run}.sh"
+		echo "Saving to ${main_dir}/sclean_${sample_name}_${time_run}.sh"
+		echo -e "#$ -o sclean_${sample_name}.out" >> "${main_dir}/sclean_${sample_name}_${time_run}.sh"
+		echo -e "#$ -e sclean_${sample_name}.err" >> "${main_dir}/sclean_${sample_name}_${time_run}.sh"
+		echo -e "#$ -N sclean_${sample_name}" >> "${main_dir}/sclean_${sample_name}_${time_run}.sh"
+		echo -e "#$ -cwd"  >> "${main_dir}/sclean_${sample_name}_${time_run}.sh"
+		echo -e "#$ -q short.q\n"  >> "${main_dir}/sclean_${sample_name}_${time_run}.sh"
+		echo -e "cd ${shareScript}" >> "${main_dir}/sclean_${sample_name}_${time_run}.sh"
+		echo -e "\"${shareScript}/sample_cleaner.sh\" \"${sample_name}\" \"${project}\"" >> "${main_dir}/sclean_${sample_name}_${time_run}.sh"
+		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample_name}_sclean_complete.txt\"" >> "${main_dir}/sclean_${sample_name}_${time_run}.sh"
 		cd "${main_dir}"
-		qsub "${main_dir}/sclean_${project}_${time_run}.sh"
+		qsub "${main_dir}/sclean_${sample_name}_${time_run}.sh"
 	else
 		waiting_for_index=$(( counter - max_subs ))
 		waiting_project=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
@@ -100,17 +100,17 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			fi
 			if [[ -f "${main_dir}/complete/${waiting_project}_sclean_complete.txt" ]]; then
 				echo  "Index is below max submissions, submitting"
-				echo -e "#!/bin/bash -l\n" > "${main_dir}/sclean_${project}_${time_run}.sh"
-				echo -e "#$ -o sclean_${project}.out" >> "${main_dir}/sclean_${project}_${time_run}.sh"
-				echo -e "#$ -e sclean_${project}.err" >> "${main_dir}/sclean_${project}_${time_run}.sh"
-				echo -e "#$ -N sclean_${project}"   >> "${main_dir}/sclean_${project}_${time_run}.sh"
-				echo -e "#$ -cwd"  >> "${main_dir}/sclean_${project}_${time_run}.sh"
-				echo -e "#$ -q short.q\n"  >> "${main_dir}/sclean_${project}_${time_run}.sh"
-				echo -e "cd ${shareScript}" >> "${main_dir}/sclean_${project}_${time_run}.sh"
-				echo -e "\"${shareScript}/sample_cleaner.sh\" \"${sample_name}\" \"${project}\"" >> "${main_dir}/sclean_${project}_${time_run}.sh"
-				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${project}_sclean_complete.txt\"" >> "${main_dir}/sclean_${project}_${time_run}.sh"
+				echo -e "#!/bin/bash -l\n" > "${main_dir}/sclean_${sample_name}_${time_run}.sh"
+				echo -e "#$ -o sclean_${sample_name}.out" >> "${main_dir}/sclean_${sample_name}_${time_run}.sh"
+				echo -e "#$ -e sclean_${sample_name}.err" >> "${main_dir}/sclean_${sample_name}_${time_run}.sh"
+				echo -e "#$ -N sclean_${sample_name}"   >> "${main_dir}/sclean_${sample_name}_${time_run}.sh"
+				echo -e "#$ -cwd"  >> "${main_dir}/sclean_${sample_name}_${time_run}.sh"
+				echo -e "#$ -q short.q\n"  >> "${main_dir}/sclean_${sample_name}_${time_run}.sh"
+				echo -e "cd ${shareScript}" >> "${main_dir}/sclean_${sample_name}_${time_run}.sh"
+				echo -e "\"${shareScript}/sample_cleaner.sh\" \"${sample_name}\" \"${project}\"" >> "${main_dir}/sclean_${sample_name}_${time_run}.sh"
+				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample_name}_sclean_complete.txt\"" >> "${main_dir}/sclean_${sample_name}_${time_run}.sh"
 				cd "${main_dir}"
-				qsub "${main_dir}/sclean_${project}_${time_run}.sh"
+				qsub "${main_dir}/sclean_${sample_name}_${time_run}.sh"
 				break
 			else
 				timer=$(( timer + 5 ))
