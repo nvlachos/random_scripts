@@ -87,7 +87,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${project}_sclean_complete.txt\"" >> "${main_dir}/sclean_${project}_${time_run}.sh"
 		cd "${main_dir}"
 		qsub "${main_dir}/sclean_${project}_${time_run}.sh"
-		fi
 	else
 		waiting_for_index=$(( counter - max_subs ))
 		waiting_project=$(echo "${arr[${waiting_for_index}]}" | cut -d'/' -f2)
