@@ -21,7 +21,7 @@ fi
 #
 # Modules required: None
 #
-# v1.0.1 (10/9/2019)
+# v1.0.2 (11/18/2019)
 #
 # Created by Nick Vlachos (nvx4@cdc.gov)
 #
@@ -146,4 +146,8 @@ if [[ ${1} -eq 2 ]] || [[ ${1} -eq 3 ]]; then
 	rm ${shareScript}/quaisar_*.err
 	rm ${shareScript}/SNVPhyl_*.out
 	rm ${shareScript}/SNVPhyl_*.err
+	rm ${shareScript}/GAMAAR_*.out
+	rm ${shareScript}/GAMAAR_*.err
+	rm ${shareScript}/quass_*.out
+	rm ${shareScript}/quass_*.err
 fi
