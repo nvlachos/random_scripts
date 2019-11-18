@@ -21,7 +21,7 @@ fi
 #
 # Modules required: None
 #
-# v1.0 (10/3/2019)
+# v1.0.1 (11/18/2019)
 #
 # Created by Nick Vlachos (nvx4@cdc.gov)
 #
@@ -871,12 +871,21 @@ fi
 if [[ "${ani_found}" = true ]]; then
 	genusDB=$(echo "${filename##*/}" | cut -d'_' -f6 | cut -d')' -f1)
 	percent_match="${ani_info:0:2}"
+	# pyani doesnt showanything under 80%, so if it is 10 then it is really 100%
+	if [[ "${percent_match}" -eq 10 ]]; then
+		percent_match=100
+	fi
 	#echo "${percent_match--}"
 	if [[ "${percent_match}" = "0." ]]; then
 		printf "%-20s: %-8s : %s\\n" "ANI" "FAILED" "No assembly file to work with"
 		status="FAILED"
 	else
-		if [[ "${percent_match}" -ge 95 ]]; then
+		if [[ "${percent_match}" -eq 100 ]]; then
+			printf "%-20s: %-8s : %s\\n" "ANI" "ALERT" "${ani_info} against ${genusDB}"
+			if [[ "${status}" == "SUCCESS" ]]; then
+				status="ALERT"
+			fi
+		elif [[ "${percent_match}" -ge 95 ]]; then
 			printf "%-20s: %-8s : %s\\n" "ANI" "SUCCESS" "${ani_info} against ${genusDB}"
 		else
 			printf "%-20s: %-8s : %s\\n" "ANI" "FAILED" "${percent_match}% is too low, ${ani_info}"
@@ -928,12 +937,21 @@ fi
 if [[ "${ani_found}" = true ]]; then
 	genusDB2=$(echo "${filename##*/}" | cut -d'_' -f6 | cut -d')' -f1)
 	percent_match2="${ani2_info:0:2}"
+	# pyani doesnt showanything under 80%, so if it is 10 then it is really 100%
+	if [[ "${percent_match2}" -eq 10 ]]; then
+		percent_match2=100
+	fi
 	#echo "${percent_match--}"
 	if [[ "${percent_match2}" = "0." ]]; then
 		printf "%-20s: %-8s : %s\\n" "ANI_2" "FAILED" "No assembly file to work with"
 		status="FAILED"
 	else
-		if [[ "${percent_match2}" -ge 95 ]]; then
+		if [[ "${percent_match2}" -eq 100 ]]; then
+			printf "%-20s: %-8s : %s\\n" "ANI_2" "ALERT" "${ani2_info} against ${genusDB2}"
+			if [[ "${status}" == "SUCCESS" ]]; then
+				status="ALERT"
+			fi
+		elif [[ "${percent_match2}" -ge 95 ]]; then
 			printf "%-20s: %-8s : %s\\n" "ANI_2" "SUCCESS" "${ani2_info} against ${genusDB2}"
 		else
 			printf "%-20s: %-8s : %s\\n" "ANI_2" "FAILED" "${percent_match2}% is too low, ${ani2_info}"
