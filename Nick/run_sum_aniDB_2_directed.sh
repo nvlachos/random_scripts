@@ -45,6 +45,7 @@ echo "Creating run summary at ${runsumdate}"
 while IFS= read -r samples || [ -n "$samples" ]; do
 	file=$(echo "${samples}" | awk -F/ '{ print $2}' | tr -d '[:space:]')
 	proj=$(echo "${samples}" | awk -F/ '{ print $1}' | tr -d '[:space:]')
+	echo "${proj}/${file}"
 	"${shareScript}/validate_piperun_aniDB2.sh" "${file}" "${proj}" > "${processed}/${proj}/${file}/${file}_pipeline_stats_aniDB2.txt"
 	cat "${processed}/${proj}/${file}/${file}_pipeline_stats_aniDB2.txt" >> "${2}"
 done < ${1}
