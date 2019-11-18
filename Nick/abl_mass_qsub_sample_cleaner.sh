@@ -72,7 +72,7 @@ time_run=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 
 # Creates and submits qsub scripts to perform summaries of each run in the list
 while [ ${counter} -lt ${arr_size} ] ; do
-	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
+	sample_name=$(echo "${arr[${counter}]}" | cut -d'/' -f2)
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
 	if [[ ${counter} -lt ${max_subs} ]]; then
 		echo  "Index is below max submissions, submitting"
