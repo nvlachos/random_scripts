@@ -23,7 +23,7 @@ fi
 #
 # Modules required: Python3/3.5.4
 #
-# v1.0.3 (10/30/2019)
+# v1.0.4 (11/18/2019)
 #
 # Created by Nick Vlachos (nvx4@cdc.gov)
 #
@@ -60,8 +60,8 @@ if [[ ! -z "${4}" ]]; then
 fi
 
 # Remove old run stats as the presence of the file indicates run completion
-if [[ -f "${processed}/${proj}/${file}/${file}_pipeline_stats.txt" ]]; then
-	rm "${processed}/${proj}/${file}/${file}_pipeline_stats.txt"
+if [[ -f "${processed}/${proj}/${sample_name}/${sample_name}_pipeline_stats.txt" ]]; then
+	rm "${processed}/${proj}/${sample_name}/${sample_name}_pipeline_stats.txt"
 fi
 
 # Create an empty time_summary_redo file that tracks clock time of tools used
@@ -77,7 +77,7 @@ if [[ ! -f ${OUTDATADIR}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq 
 			echo "Unzipping paired1"
 			gunzip < ${OUTDATADIR}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq.gz > ${OUTDATADIR}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq
 		else
-			echo "No R1 trimmed paired read, can NOT continue...exiting)"
+			echo "${OUTDATADIR}/${sample_name}/trimmed/${sample_name}_R1_001.paired.fq(.gz) does not exist, can NOT continue...exiting)"
 			exit 3
 		fi
 else
@@ -88,7 +88,7 @@ if [[ ! -f ${OUTDATADIR}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq 
 			echo "Unzipping paired2"
 			gunzip < ${OUTDATADIR}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq.gz > ${OUTDATADIR}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq
 		else
-			echo "No R2 trimmed paired read, can NOT continue...exiting)"
+			echo "${OUTDATADIR}/${sample_name}/trimmed/${sample_name}_R2_001.paired.fq(.gz) does not exist, can NOT continue...exiting)"
 			exit 3
 		fi
 else
@@ -114,7 +114,7 @@ do
 		#else
 		#	"${shareScript}/run_SPAdes.sh" "${filename}" normal "${project}"
 		#fi
-		"${shareScript}/run_SPAdes.sh" "${filename}" normal "${project}"
+		"${shareScript}/run_SPAdes.sh" "${sample_name}" normal "${project}"
 	fi
 	# Removes any core dump files (Occured often during testing and tweaking of memory parameter
 	if [ -n "$(find "${shareScript}" -maxdepth 1 -name 'core.*' -print -quit)" ]; then
