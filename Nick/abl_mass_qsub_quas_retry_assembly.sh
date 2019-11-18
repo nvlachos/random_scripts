@@ -71,7 +71,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 		echo -e "#$ -cwd" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
 		echo -e "#$ -q short.q\n" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
 		#echo -e "cd ${shareScript}" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
-		echo -e "\"${shareScript}/quaisar_failed_assembly.sh\" \"${sample}\" \"${project}\" \"${shareScript}/config.sh\"" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
+		echo -e "\"${shareScript}/quaisar_failed_assembly.sh\" \"${sample}\" \"${project}\" continue \"${shareScript}/config.sh\"" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
 		echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_quafa_complete.txt\"" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
 		#cd "${main_dir}"
 		if [[ "${counter}" -lt "${last_index}" ]]; then
@@ -97,7 +97,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -cwd" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
 				#echo -e "cd ${shareScript}" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
-				echo -e "\"${shareScript}/quaisar_failed_assembly.sh\" \"${sample}\" \"${project}\" \"${shareScript}/config.sh\"" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/quaisar_failed_assembly.sh\" \"${sample}\" \"${project}\" continue \"${shareScript}/config.sh\"" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_quafa_complete.txt\"" >> "${main_dir}/quafa_${sample}_${start_time}.sh"
 				#cd "${main_dir}"
 				if [[ "${counter}" -lt "${last_index}" ]]; then
