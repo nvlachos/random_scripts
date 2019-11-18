@@ -74,10 +74,10 @@ while IFS= read -r samples || [ -n "$samples" ]; do
 	echo ${file}
 	file=$(echo "${samples}" | awk -F/ '{ print $2}' | tr -d '[:space:]')
 	proj=$(echo "${samples}" | awk -F/ '{ print $1}' | tr -d '[:space:]')
-	"${shareScript}/validate_piperun.sh" "${file}" "${proj}" > "${processed}/${proj}/${file}/${file}_pipeline_stats.txt"
+	"${shareScript}/validate_piperun_aniDB2.sh" "${file}" "${proj}" > "${processed}/${proj}/${file}/${file}_pipeline_stats_aniDB2.txt"
 	if [[ "${type}" = "project" ]]; then
-		cat "${processed}/${proj}/${file}/${file}_pipeline_stats.txt" >> "${processed}/${proj}/${sum_name}"
+		cat "${processed}/${proj}/${file}/${file}_pipeline_stats_aniDB2.txt" >> "${processed}/${proj}/${sum_name}"
 	else
-		cat "${processed}/${proj}/${file}/${file}_pipeline_stats.txt" >> "${3}/${sum_name}"
+		cat "${processed}/${proj}/${file}/${file}_pipeline_stats_aniDB2.txt" >> "${3}/${sum_name}"
 	fi
 done < ${list}
