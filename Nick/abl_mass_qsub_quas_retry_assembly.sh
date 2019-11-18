@@ -8,8 +8,6 @@
 
 #Import the config file with shortcuts and settings
 . ./config.sh
-#Import the module file that loads all necessary mods
-. "${mod_changers}/pipeline_mods"
 
 #
 # Usage ./abl_mass_qsub_quas_failed_assembly.sh path_to_list max_concurrent_submission output_directory_for_scripts
@@ -46,6 +44,8 @@ if [[ -z ${2} ]]; then
 else
 	max_subs=${2}
 fi
+
+start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
 
 # Loop through and act on each sample name in the passed/provided list
 counter=0

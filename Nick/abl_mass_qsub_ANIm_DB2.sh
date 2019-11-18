@@ -93,9 +93,9 @@ while [ ${counter} -lt ${arr_size} ] ; do
 
 
 	if [[ "${clobberness}" == "clobber" ]]; then
-		echo "Trying to remove ${processed}/${project}/${sample}/ANI"
-		rm -r "${processed}/${project}/${sample}/ANI"
-		rm -r "${processed}/${project}/${sample}/${sample}.tax"
+		echo "Trying to remove ${processed}/${project}/${sample}/ANI_2"
+		rm -r "${processed}/${project}/${sample}/ANI_2"
+		rm -r "${processed}/${project}/${sample}/${sample}_aniDB2.tax"
 		"${shareScript}/determine_taxID.sh" "${sample}" "${project}"
 	fi
 	#echo "${sample} and ${project}:"
