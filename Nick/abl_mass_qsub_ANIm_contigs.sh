@@ -134,7 +134,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 				echo -e "#$ -cwd"  >> "${main_dir}/animc_${sample}_${start_time}.sh"
 				echo -e "#$ -q short.q\n"  >> "${main_dir}/animc_${sample}_${start_time}.sh"
 				echo -e "cd ${shareScript}" >> "${main_dir}/animc_${sample}_${start_time}.sh"
-				echo -e "\"${shareScript}/run_ANIm_contigs.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/animc_${sample}_${start_time}.sh"
+				echo -e "\"${shareScript}/run_ANI_contigs.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/animc_${sample}_${start_time}.sh"
 				echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_animc_complete.txt\"" >> "${main_dir}/animc_${sample}_${start_time}.sh"
 				cd "${main_dir}"
 				#if [[ "${counter}" -lt "${last_index}" ]]; then
@@ -180,7 +180,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 						echo -e "#$ -cwd"  >> "${main_dir}/animc_${sample}_${start_time}.sh"
 						echo -e "#$ -q short.q\n"  >> "${main_dir}/animc_${sample}_${start_time}.sh"
 						echo -e "cd ${shareScript}" >> "${main_dir}/animc_${sample}_${start_time}.sh"
-						echo -e "\"${shareScript}/run_ANIm_contigs.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/animc_${sample}_${start_time}.sh"
+						echo -e "\"${shareScript}/run_ANI_contigs.sh\" \"${sample}\" \"${genus}\" \"${species}\" \"${project}\"" >> "${main_dir}/animc_${sample}_${start_time}.sh"
 						echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_animc_complete.txt\"" >> "${main_dir}/animc_${sample}_${start_time}.sh"
 						cd "${main_dir}"
 						#if [[ "${counter}" -lt "${last_index}" ]]; then
