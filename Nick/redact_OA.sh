@@ -71,7 +71,7 @@ if [[ -d /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1} ]]; then
 		if [[ -f /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_AR_plasmid_report_redacted.csv ]]; then
 			rm /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_AR_plasmid_report_redacted.csv
 		fi
-		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_AR_plasmid_report.csv /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_AR_plasmid_report_redacted.csv
+		cp /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_AR_plasmid_report.tsv /scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/Projects/${1}/${2}/${2}_AR_plasmid_report_redacted.csv
 		while IFS= read -r var  || [ -n "$var" ]; do
 			original_name=$(echo "${var}" | cut -d',' -f1 | cut -d'/' -f2 | tr -d '[:space:]')
 			original_project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
