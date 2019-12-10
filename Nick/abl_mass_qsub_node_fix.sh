@@ -12,8 +12,6 @@ if [[ ! -f "./config.sh" ]]; then
 fi
 
 . ./config.sh
-#Import the module file that loads all necessary mods
-. "${mod_changers}/pipeline_mods"
 
 #List all currently loaded modules
 #. ./module_changers/list_modules.sh
