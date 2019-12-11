@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o prepCSSTARDB_2.out
-#$ -e prepCSSTARDB_2.err
-#$ -N prepCSSTARDB_2
+#$ -o prepCSSTARDB_3.out
+#$ -e prepCSSTARDB_3.err
+#$ -N prepCSSTARDB_3
 #$ -cwd
 #$ -q short.q
 
@@ -15,7 +15,7 @@ module load Python/2.7.13
 #
 # Consolidates resFinders multi fasta to one
 #
-# Usage ./ResGANNCBI_DB_prep_2.sh path_to_dir
+# Usage ./ResGANNCBI_DB_prep_3.sh path_to_dir
 #
 
 $(python2 -V)
@@ -39,7 +39,7 @@ else
 		exit 1
 	# Gives the user a brief usage and help section if requested with the -h option argument
 	elif [[ "${1}" = "-h" ]]; then
-		echo "Usage is ./ResGANNCBI_DB_prep.sh "
+		echo "Usage is ./ResGANNCBI_DB_prep_3.sh "
 		echo "Converts the ARGANNOT fasta and resFinder ZIP files into a single fasta file to a single srst2 db fasta for use with csstar and srst2"
 		echo "Output is ResGANNCBI_date_srst2.fasta"
 		exit 0

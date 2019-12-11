@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-#$ -o prepCSSTARDB_1.out
-#$ -e prepCSSTARDB_1.err
-#$ -N prepCSSTARDB_1
+#$ -o prepCSSTARDB_2.out
+#$ -e prepCSSTARDB_2.err
+#$ -N prepCSSTARDB_2
 #$ -cwd
 #$ -q short.q
 
