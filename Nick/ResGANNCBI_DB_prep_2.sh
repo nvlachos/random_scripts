@@ -48,8 +48,8 @@ else
 		exit 0
 	elif [[ ! -z ${2} ]]; then
 		if [[ -f "${1}" ]] && [[ -f "${2}" ]]; then
-			ARGANNOT_source=${2}
-			resFinder_source=${1}
+			NCBI_source=${2}
+			ResGANNOT_source=${1}
 			if [[ ! -z "${3}" ]]; then
 				DATADIR="${3}"
 				if [[ ! -d "${DATADIR}" ]] ;then
@@ -90,7 +90,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 	echo "${ResGANNOT_source}:${NCBI_source}"
 
 	while IFS= read -r line; do
-		echo ${line::1}
+		#echo ${line::1}
 		if [[ "${line::1}" == ">" ]]; then
 			class=$(echo "${line}" | cut -d'|' -f6)
 			accession=$(echo "${line}" | cut -d'|' -f3)
