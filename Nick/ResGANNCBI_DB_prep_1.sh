@@ -85,7 +85,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 	#echo "Looking rf:${DATADIR}"
 		resFinder_zip=$(find ${DATADIR} -name 'genomicepidemiology-resfinder_db-*')
 	fi
-	echo ":${ARGANNOT_source}:${resFinder_zip}:"
+	echo "::${ARGANNOT_source}:${resFinder_zip}::"
 
 	temp_dir=$(basename "${resFinder_zip}" ".zip")
 	#echo "${resFinder_zip}, ${temp_dir}"
