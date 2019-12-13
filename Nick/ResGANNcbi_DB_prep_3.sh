@@ -182,6 +182,7 @@ while IFS= read -r gene_line || [ -n "$gene_line" ]; do
 			#echo "looking up sequence:${line_items[3]}:"
 			dnaseq="${seqarr[${line_items[3]}]}"
 			#echo "result:${dnaseq}:"
+		elif [[ "${source}" == "NCBI" ]]; then
 		# Create a new way to identify other DB entries
 		else
 			seqID=${line_items[0]}

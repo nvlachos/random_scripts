@@ -90,29 +90,34 @@ def Duplicate_Gene_Remover(input_fasta, output_file, output_copy_file):
         SeqIO.write(output_genes, bad_output_fasta, 'fasta')
     bad_output_fasta.close()
 
-def Dual_Fasta_Combiner(source_File, check_file, out_file,t1,t2):
+def Tri_Fasta_Combiner(file_1, file_2, file_3, out_file,t1,t2,t3):
     """Reads in Two fasta files and writes them out to a single new file, if using an ARG it must always be second"""
     title_one=">["+t1+"]"
     title_two=">["+t2+"]"
-    print(source_file,"and",check_file)
-    f1 = open(source_file, 'r')
-    f2 = open(out_file, 'w')
-    for line in f1:
-        if line[0:6] == ">[RES]" or line[0:6] == ">[ARG]":
-            title_one=line[0:6]
-        f2.write(line.replace('>', title_one).replace('/', '-'))
+    title_three=">["+t3+"]"
+    print(file_1+"\n"+file_2+"\n"+file_3)
+    f1 = open(file_1, 'r')
+    fo = open(out_file, 'w')
+        for line in f1:
+            fo.write(line.replace('>', title_one).replace('/', '-'))
     f1.close()
-    f2.close()
-    f1 = open(check_file, 'r')
-    f2 = open(out_file, 'a')
-    for line in f1:
+    f2 = open(file_2, 'r')
+    for line in f2:
         if (line[0] == ">") and (line[1] != "(") and t2 == "ARG":
             resist=line[1:4]
             oldline=line[4:]
             newline=title_two+"("+resist+")"+oldline
-            f2.write(newline)
+            fo.write(newline)
         else:
-            f2.write(line.replace('>', title_two).replace('/','-'))
+            fo.write(line.replace('>', title_two).replace('/','-'))
+    f2.close()
+    f3 = open(file_3, 'r')
+    for line in f3:
+        fo.write(line.replace('>', title_three).replace('/', '-'))
+    f3.close()
+    fo.close()        
 
-Dual_Fasta_Combiner(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[5], sys.argv[6])
+
+
+Tri_Fasta_Combiner(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[5], sys.argv[6])
 Duplicate_Gene_Remover(sys.argv[3], sys.argv[3], sys.argv[4])

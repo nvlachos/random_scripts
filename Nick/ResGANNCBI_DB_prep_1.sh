@@ -48,6 +48,7 @@ else
 		exit 0
 	elif [[ ! -z ${2} ]]; then
 		if [[ -f "${1}" ]] && [[ -f "${2}" ]]; then
+			NCBI_source=${3}
 			ARGANNOT_source=${2}
 			resFinder_source=${1}
 			if [[ ! -z "${3}" ]]; then
@@ -72,7 +73,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 		#echo "looking ar:${DATADIR}"
 		ARGANNOT_source=$(find ${DATADIR} -name 'arg-annot-nt*')
 	fi
-	echo ":${ARGANNOT_source}:${resFinder_source}:"
+	echo "::${ARGANNOT_source}:${resFinder_source}:${NCBI_source}::"
 
 	cp "${ARGANNOT_source}" "${DATADIR}/argannot_${today}.fasta"
 	ARGANNOT_source="${DATADIR}/argannot_${today}.fasta"
@@ -85,7 +86,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 	#echo "Looking rf:${DATADIR}"
 		resFinder_zip=$(find ${DATADIR} -name 'genomicepidemiology-resfinder_db-*')
 	fi
-	echo "::${ARGANNOT_source}:${resFinder_zip}::"
+	echo "::${ARGANNOT_source}:${resFinder_zip}:${NCBI_source}::"
 
 	temp_dir=$(basename "${resFinder_zip}" ".zip")
 	#echo "${resFinder_zip}, ${temp_dir}"
@@ -96,8 +97,22 @@ if [[ "${non_duplicated}" != "true" ]]; then
 		echo "${files}"
 		mv "${files}" "${DATADIR}"
 	done
+
+	if [[ "${NCBI_source}" == "" ]]; then
+		#echo "looking ar:${DATADIR}"
+		NCBI_source=$(find ${DATADIR} -name 'NCBI*')
+		cp "${NCBI_source}" "${DATADIR}/NCBI_${today}.fasta"
+		NCBI_source="${DATADIR}/NCBI_${today}.fasta"
+		if [[ ! -f  "${NCBI_source}" ]]; then
+			echo "No NCBI fasta found, exiting"
+		fi
+	fi
+
+	echo "::${ARGANNOT_source}:${resFinder_zip}:${NCBI_source}::"
+
+
 	resFinder_source="${DATADIR}/resFinder_${today}.fasta"
-	ResGANNOT_source="${DATADIR}/ResGANNOT_${today}.fasta"
+	ResGANNCBI_source="${DATADIR}/ResGANNCBI_${today}.fasta"
 	echo "arg-source=${ARGANNOT_source}"
 	echo "res-source=${resFinder_source}"
 	echo "resGANNOT-source=${ResGANNOT_source}"
@@ -111,7 +126,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 	rm -r ${DATADIR}/*.fsa
 	rm -r ${DATADIR}/${temp_dir}
 
-	python "${shareScript}/ResGANNOT_Combiner_Non_Duplicate_Exe.py" "${resFinder_source}" "${ARGANNOT_source}" "${ResGANNOT_source}" "${DATADIR}/Copies.fasta" "RES" "ARG"
+	python "${shareScript}/ResGANNOT_Combiner_Non_Duplicate_Exe.py" "${resFinder_source}" "${ARGANNOT_source}" "${NCBI_source}" "${ResGANNCBI_source}" "${DATADIR}/Copies.fasta" "RES" "ARG"
 fi
 
 #Creates an associative array for looking up the genes to what they confer
