@@ -113,7 +113,16 @@ def Tri_Fasta_Combiner(file_1, file_2, file_3, out_file,t1,t2,t3):
     f2.close()
     f3 = open(file_3, 'r')
     for line in f3:
-        fo.write(line.replace('>', title_three).replace('/', '-'))
+        if line[0] == ">" and t3 == "NCBI":
+            ncbi_list=line.split("|")
+            ngene=ncbi_list[5]
+            ncount=ncbi_list[3]
+            naccession=ncbi_list[2]
+            nrange=line.split(" ")[1].split(":")[1]
+            newline=title_three+"_"+ngene+"_"+ncount+"_"+naccession+"_"+nrange
+            fo.write(newline).replace('/', '-'))
+        else
+            fo.write(line.replace('>', title_three).replace('/','-')))
     f3.close()
     fo.close()
 
