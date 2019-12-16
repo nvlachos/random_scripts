@@ -15,7 +15,7 @@ module load Python/2.7.15
 #
 # Consolidates resFinders multi fasta to one
 #
-# Usage ./ResGANNOT_DB_prep_1.sh path_to_resFinder_zip	path_to_ARGANNOT_fasta	path_to_output_dir
+# Usage ./ResGANNCBI_DB_prep_1.sh path_to_resFinder_zip	path_to_ARGANNOT_fasta	path_to_output_dir
 #
 
 $(python2 -V)
@@ -38,7 +38,7 @@ else
 			exit 1
 		else
 			non_duplicated="true"
-			ResGANNOT_source="${DATADIR}/${2}"
+			ResGANNCBI_source="${DATADIR}/${2}"
 		fi
 	# Gives the user a brief usage and help section if requested with the -h option argument
 	elif [[ "${1}" = "-h" ]]; then
@@ -115,7 +115,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 	ResGANNCBI_source="${DATADIR}/ResGANNCBI_${today}.fasta"
 	echo "arg-source=${ARGANNOT_source}"
 	echo "res-source=${resFinder_source}"
-	echo "resGANNOT-source=${ResGANNOT_source}"
+	echo "resGANNCBI-source=${ResGANNCBI_source}"
 	#Consolidate all resFinder excel files into a single large fasta file
 	for file in ${DATADIR}/*.fsa
 	do
@@ -206,7 +206,7 @@ while IFS= read -r line || [ -n "$line" ]; do
 			fi
 		fi
 	fi
-done < ${ResGANNOT_source}
+done < ${ResGANNCBI_source}
 
 echo "Assigning definitions to new group members"
 for i in ${new_groups[@]}
@@ -221,6 +221,6 @@ done
 
 # Create the gene lookup file to match gene and conferred resistance downstream
 echo "There are ${#groups[@]} different groups"
-echo -e "Please be sure to check ${local_DBs}/star/group_defs.txt for proper assignment of resistance to new groups\nand ${DATADIR}/ResGANNOT_${today}.bad for any actual sequences that might be able to be added"
+echo -e "Please be sure to check ${local_DBs}/star/group_defs.txt for proper assignment of resistance to new groups\nand ${DATADIR}/ResGANNCBI_${today}.bad for any actual sequences that might be able to be added"
 
 exit
