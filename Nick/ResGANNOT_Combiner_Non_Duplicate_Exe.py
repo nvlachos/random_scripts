@@ -115,9 +115,9 @@ def Tri_Fasta_Combiner(file_1, file_2, file_3, out_file,t1,t2,t3):
     for line in f3:
         fo.write(line.replace('>', title_three).replace('/', '-'))
     f3.close()
-    fo.close()        
+    fo.close()
 
 
 
-Tri_Fasta_Combiner(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[5], sys.argv[6])
-Duplicate_Gene_Remover(sys.argv[3], sys.argv[3], sys.argv[4])
+Tri_Fasta_Combiner(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[6], sys.argv[7], sys.argv[8])
+Duplicate_Gene_Remover(sys.argv[4], sys.argv[4], sys.argv[5])
