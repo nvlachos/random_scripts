@@ -98,8 +98,8 @@ def Tri_Fasta_Combiner(file_1, file_2, file_3, out_file,t1,t2,t3):
     print(file_1+"\n"+file_2+"\n"+file_3)
     f1 = open(file_1, 'r')
     fo = open(out_file, 'w')
-        for line in f1:
-            fo.write(line.replace('>', title_one).replace('/', '-'))
+    for line in f1:
+        fo.write(line.replace('>', title_one).replace('/', '-'))
     f1.close()
     f2 = open(file_2, 'r')
     for line in f2:
