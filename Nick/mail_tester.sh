@@ -30,6 +30,8 @@ outarray+=("
 ${1} finished at ${global_end_time}")
 
 
+echo "${outarray}"
+
 echo "Sending summary email to nvx4@cdc.gov"
 printf "%s\\n" "${outarray}" | mail -s "Run Status for ${1}_on_${run_start_time}_run.log" "nvx4@cdc.gov"
 
