@@ -18,7 +18,7 @@ fi
 # Usage ./clean_list.sh path_to_list_file
 #
 
-runsum=$(echo ${shareScript}/view_sum.sh ${1})
+runsum=$(${shareScript}/view_sum.sh ${1})
 outarray+="${runsum}"
 
 # Add print time the run completed in the text that will be emailed
