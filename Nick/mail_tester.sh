@@ -37,6 +37,6 @@ printf "%s\\n" "${outarray}" | mail -s "Run Status for ${1}_on_${run_start_time}
 
 
 end_date=$(date "+%m_%d_%Y_at_%Hh_%Mm")
-echo "Run ended at ${end_date}" >> "${log_dir}/${1}_on_${run_start_time}/${1}_on_${run_start_time}.log"
+echo "Run ended at ${end_date}"
 #Script exited gracefully (unless something else inside failed)
 exit 0
