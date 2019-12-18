@@ -18,6 +18,8 @@ fi
 # Usage ./clean_list.sh path_to_list_file
 #
 
+${shareScript}/view_sum.sh ${1}
+
 runsum=$(${shareScript}/view_sum.sh ${1})
 
 echo "${runsum}"
