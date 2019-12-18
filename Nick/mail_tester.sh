@@ -19,7 +19,10 @@ fi
 #
 
 runsum=$(${shareScript}/view_sum.sh ${1})
-outarray+="${runsum}"
+
+echo "${runsum}"
+
+outarray="${runsum}"
 
 # Add print time the run completed in the text that will be emailed
 
