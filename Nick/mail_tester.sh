@@ -22,7 +22,9 @@ runsum=$(echo ${shareScript}/view_sum.sh ${1})
 outarray+="${runsum}"
 
 # Add print time the run completed in the text that will be emailed
+
 global_end_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
+run_start_time=${global_end_time}
 echo "Finished with run ${1} at ${global_end_time}"
 outarray+=("
 ${1} finished at ${global_end_time}")
