@@ -113,16 +113,19 @@ if [[ "${non_duplicated}" != "true" ]]; then
 
 	resFinder_source="${DATADIR}/resFinder_${today}.fasta"
 	ResGANNCBI_source="${DATADIR}/ResGANNCBI_${today}.fasta"
+
 	echo "arg-source=${ARGANNOT_source}"
 	echo "res-source=${resFinder_source}"
+	echo "NCBI-source=${NCBI_source}"
 	echo "resGANNCBI-source=${ResGANNCBI_source}"
 	#Consolidate all resFinder excel files into a single large fasta file
-	for file in ${DATADIR}/*.fsa
-	do
-		while IFS= read -r line || [ -n "$line" ]; do
-			echo ${line} >> ${resFinder_source}
-		done < ${file}
-	done
+	#for file in ${DATADIR}/*.fsa
+	#do
+	#	while IFS= read -r line || [ -n "$line" ]; do
+	#		echo ${line} >> ${resFinder_source}
+	#	done < ${file}
+	#done
+	cat *.fsa > ${resFinder_source}
 	rm -r ${DATADIR}/*.fsa
 	rm -r ${DATADIR}/${temp_dir}
 
