@@ -125,7 +125,7 @@ if [[ "${non_duplicated}" != "true" ]]; then
 	#		echo ${line} >> ${resFinder_source}
 	#	done < ${file}
 	#done
-	cat *.fsa > ${resFinder_source}
+	cat ${DATADIR}/*.fsa > ${resFinder_source}
 	rm -r ${DATADIR}/*.fsa
 	rm -r ${DATADIR}/${temp_dir}
 
