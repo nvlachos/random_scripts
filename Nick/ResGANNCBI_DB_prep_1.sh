@@ -186,7 +186,7 @@ while IFS= read -r line || [ -n "$line" ]; do
 					exit
 				fi
 			fi
-		else
+		elif [[ "${source}" == "RES" ]]; then
 			# This is the one case...so far....where resFinder has an issue with the first 3 letters being able to determine resistance
 			if [[ "${header:0:4}" = "cmrA" ]]; then
 				gene_type=${header:0:4}
@@ -202,6 +202,19 @@ while IFS= read -r line || [ -n "$line" ]; do
 				continue
 			else
 				echo "RES -${line}-"
+				new_groups+=(${gene_type})
+			fi
+		elif [[ "${source}" == "NCBI" ]]; then
+			gene_type=$(echo ${header} | cut -d'_' -f1)
+			gene_type=${gene_type:0:3}
+			gene_type=${gene_type,,}
+			#echo "${gene_type}"
+			confers="${groups[${gene_type}]}"
+			#echo "confers-${confers}-"
+			if [[ "${confers}" ]]; then
+				continue
+			else
+				echo "NCBI -${line}-"
 				new_groups+=(${gene_type})
 			fi
 		fi

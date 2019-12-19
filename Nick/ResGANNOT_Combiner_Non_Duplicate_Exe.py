@@ -119,7 +119,7 @@ def Tri_Fasta_Combiner(file_1, file_2, file_3, out_file,t1,t2,t3):
             ncount=ncbi_list[3]
             naccession=ncbi_list[2]
             nrange=line.split(" ")[1].split(":")[1]
-            newline=title_three+"_"+ngene+"_"+ncount+"_"+naccession+"_"+nrange
+            newline=title_three+ngene+"_"+ncount+"_"+naccession+"_"+nrange
             fo.write(newline).replace('/', '-'))
         else
             fo.write(line.replace('>', title_three).replace('/','-')))
