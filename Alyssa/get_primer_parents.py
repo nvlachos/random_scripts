@@ -7,7 +7,7 @@ from Bio import Seq
 from argparse import ArgumentParser
 import sys
 
-def parse_args():	
+def parse_args():
 	parser=ArgumentParser(description='Get Primer affiliations from a reference')
 	parser.add_argument('-i',dest='infile',required=True,help = 'reference fasta')
 	parser.add_argument('-p',dest='primers', required=True,help='primer fasta')

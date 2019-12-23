@@ -207,7 +207,7 @@ while IFS= read -r gene_line || [ -n "$gene_line" ]; do
 			allele_location=$(echo "${line_items[3]}" | cut -d':' -f4)
 			allele_start=$(echo "${allele_location}" | cut -d'-' -f1)
 			allele_end=$(echo "${allele_location}" | cut -d'-' -f2)
-			allele_length=$(( allele end - allele_start ))
+			allele_length=$(( allele_end - allele_start ))
 			group="${groups[${group_raw,,}]}"
 			DB_ID="${line_items[3]}"
 			#echo "looking up sequence:${line_items[3]}:"
