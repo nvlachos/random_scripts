@@ -191,7 +191,7 @@ while IFS= read -r gene_line || [ -n "$gene_line" ]; do
 			if [[ "${gene}" == *":"* ]]; then
 				gene=$(echo ${gene} | cut -d':' -f1)
 			fi
-			for (( i=0; i<${#gene}; i++ ));
+			#for (( i=0; i<${#gene}; i++ ));
 			#do
 			#	if [[ "${gene:${i}:1}" == ")" ]]; then
 			#		i=$(( i + 1 ))
