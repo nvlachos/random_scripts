@@ -184,6 +184,35 @@ while IFS= read -r gene_line || [ -n "$gene_line" ]; do
 			#echo "result:${dnaseq}:"
 		elif [[ "${source}" == "NCBI" ]]; then
 		# Create a new way to identify other DB entries
+			seqID=${line_items[0]}
+			clusterID=${line_items[1]}
+			gene=${line_items[2]}
+			from_source="NCBI"
+			if [[ "${gene}" == *":"* ]]; then
+				gene=$(echo ${gene} | cut -d':' -f1)
+			fi
+			for (( i=0; i<${#gene}; i++ ));
+			#do
+			#	if [[ "${gene:${i}:1}" == ")" ]]; then
+			#		i=$(( i + 1 ))
+			#		gene=${gene:${i}}
+			#		break
+			#	fi
+			#done
+			allele=$(echo "${line_items[3]}" | cut -d':' -f1 | cut -d']' -f2-)
+			group_raw=$(echo "${line_items[2]}" | cut -d')' -f1 | cut -d'(' -f2)
+			accession=$(echo "${line_items[3]}" | cut -d':' -f3)
+			echo "allele-${allele}:accession-${accession}"
+			allele+="_${accession}"
+			allele_location=$(echo "${line_items[3]}" | cut -d':' -f4)
+			allele_start=$(echo "${allele_location}" | cut -d'-' -f1)
+			allele_end=$(echo "${allele_location}" | cut -d'-' -f2)
+			allele_length=$(( allele end - allele_start ))
+			group="${groups[${group_raw,,}]}"
+			DB_ID="${line_items[3]}"
+			#echo "looking up sequence:${line_items[3]}:"
+			dnaseq="${seqarr[${line_items[3]}]}"
+			#echo "result:${dnaseq}:"
 		else
 			seqID=${line_items[0]}
 			clusterID=${line_items[1]}
