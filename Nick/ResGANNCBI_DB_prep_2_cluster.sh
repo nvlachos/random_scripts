@@ -199,8 +199,8 @@ while IFS= read -r gene_line || [ -n "$gene_line" ]; do
 			#		break
 			#	fi
 			#done
-			allele=$(echo "${line_items[3]}" | cut -d':' -f1 | cut -d']' -f2-)
-			group_raw=$(echo "${line_items[2]}" | cut -d')' -f1 | cut -d'(' -f2)
+			allele=$(echo "${line_items[3]}" | cut -d']' -f2- | cut -d':' -f1)
+			group_lookup=${gene:0:3}
 			accession=$(echo "${line_items[3]}" | cut -d':' -f3)
 			echo "allele-${allele}:accession-${accession}"
 			allele+="_${accession}"
@@ -208,7 +208,7 @@ while IFS= read -r gene_line || [ -n "$gene_line" ]; do
 			allele_start=$(echo "${allele_location}" | cut -d'-' -f1)
 			allele_end=$(echo "${allele_location}" | cut -d'-' -f2)
 			allele_length=$(( allele_end - allele_start ))
-			group="${groups[${group_raw,,}]}"
+			group="${groups[${group_lookup,,}]}"
 			DB_ID="${line_items[3]}"
 			#echo "looking up sequence:${line_items[3]}:"
 			dnaseq="${seqarr[${line_items[3]}]}"
