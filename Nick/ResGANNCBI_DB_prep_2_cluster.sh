@@ -186,7 +186,7 @@ while IFS= read -r gene_line || [ -n "$gene_line" ]; do
 		# Create a new way to identify other DB entries
 			seqID=${line_items[0]}
 			clusterID=${line_items[1]}
-			gene=${line_items[2]}
+			gene=$(echo "${line_items[2]}" | cut -d']' -f2)
 			from_source="NCBI"
 			if [[ "${gene}" == *":"* ]]; then
 				gene=$(echo ${gene} | cut -d':' -f1)
