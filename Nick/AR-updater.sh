@@ -54,9 +54,7 @@ qsub "${shareScript}/abl_mass_qsub_csstar_plasFlow.sh" "${list_path}" 100 "/scic
 qsub "${shareScript}/abl_mass_qsub_GAMA.sh" "${list_path}" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs" "keep"
 qsub "${shareScript}/abl_mass_qsub_GAMA_plasFlow.sh" "${list_path}" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs" "keep"
 qsub -sync y "${shareScript}/abl_mass_qsub_srst2.sh" "${list_path}" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs" "keep"
-if [ ! -z "${dir_path}" ]; then
-	qsub "${shareScript}/abl_mass_qsub_runsum.sh" "${dir_path}" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs"
-fi
+qsub "${shareScript}/abl_mass_qsub_runsum.sh" "${dir_path}" 100 "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/mass_subs"
 qsub -sync y "${shareScript}/abl_AR_completion_check.sh" "${list_path}" "${ResGANNCBI_date}" "/scicomp/groups/OID/NCEZID/DHQP/CEMB/Nick_DIR/AR_check_${today}.txt"
 
 
