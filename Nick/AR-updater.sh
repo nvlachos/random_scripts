@@ -63,8 +63,8 @@ echo "All isolates are UTD on AR files, check /scicomp/groups/OID/NCEZID/DHQP/CE
 echo "${ResGANNCBI_srst2_filename}" >> ${local_DBs}/ar_updater.txt
 
 global_end_time=$(date "+%m-%d-%Y @ %Hh_%Mm_%Ss")
-rm ${shareScript}/sample_list_${today}.txt
-rm ${shareScript}/directory_list_${today}.txt
+#rm ${shareScript}/sample_list_${today}.txt
+#rm ${shareScript}/directory_list_${today}.txt
 #Script exited gracefully (unless something else inside failed)
 printf "%s %s" "AR_updater.sh has completed ${1}" "${global_end_time}" | mail -s "AR_updater complete" nvx4@cdc.gov
 exit 0
