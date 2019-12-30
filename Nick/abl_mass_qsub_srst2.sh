@@ -112,8 +112,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			else
 				qsub -sync y "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			fi
-			mv "${shareScript}/srst2AR_${sample}.err" ${main_dir}
-			mv "${shareScript}/srst2AR_${sample}.out" ${main_dir}
 		# Old data existed, skipping
 		else
 			echo -e $(date) > "${main_dir}/complete/${sample}_srst2AR_complete.txt"
@@ -152,8 +150,6 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					else
 						qsub -sync y "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					fi
-					mv "${shareScript}/srst2AR_${sample}.err" ${main_dir}
-					mv "${shareScript}/srst2AR_${sample}.out" ${main_dir}
 				# Old data existed, skipping
 				else
 					echo -e $(date) > "${main_dir}/complete/${sample}_srst2AR_complete.txt"
@@ -177,12 +173,6 @@ for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
 	if [[ -f "${main_dir}/complete/${waiting_sample}_srst2AR_complete.txt" ]]; then
 		echo "${item} is complete"
-		if [[ -f "${shareScript}/srst2AR_${waiting_sample}.out" ]]; then
-			mv "${shareScript}/srst2AR_${waiting_sample}.out" "${main_dir}"
-		fi
-		if [[ -f "${shareScript}/srst2AR_${waiting_sample}.err" ]]; then
-			mv "${shareScript}/srst2AR_${waiting_sample}.err" "${main_dir}"
-		fi
 	else
 		while :
 		do
@@ -192,12 +182,6 @@ for item in "${arr[@]}"; do
 				fi
 				if [[ -f "${main_dir}/complete/${waiting_sample}_srst2AR_complete.txt" ]]; then
 					echo "${item} is complete"
-					if [[ -f "${shareScript}/srst2AR_${waiting_sample}.out" ]]; then
-						mv "${shareScript}/srst2AR_${waiting_sample}.out" "${main_dir}"
-					fi
-					if [[ -f "${shareScript}/srst2AR_${waiting_sample}.err" ]]; then
-						mv "${shareScript}/srst2AR_${waiting_sample}.err" "${main_dir}"
-					fi
 					break
 				else
 					timer=$(( timer + 5 ))

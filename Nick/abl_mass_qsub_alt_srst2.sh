@@ -122,24 +122,12 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			echo -e "#$ -N srst2AR_${sample}"   >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo -e "#$ -cwd"  >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo -e "#$ -q short.q\n"  >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			echo -e "module unload Python/2.7" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			echo -e "module unload Python/3.5.2" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			echo -e "module unload perl/5.22.1" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			echo -e "module load Python/2.7.15" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			echo -e "module load bowtie2/2.2.4" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			echo -e "module load samtools/0.1.18" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			echo -e "module load perl/5.16.1-MT" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			echo -e "module load srst2" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
 			echo -e "cd ${shareScript}" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo -e "\"${shareScript}/run_srst2AR_altDB.sh\" \"${sample}\" \"${project}\" \"${alt_DB_path}\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2AR_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 			cd "${main_dir}"
-			#if [[ "${counter}" -lt "${last_index}" ]]; then
-				qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			#else
-			#	qsub -sync y "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-			#fi
+			qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 		# Old data exists, skipping
 		else
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2AR_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
@@ -170,24 +158,12 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					echo -e "#$ -N srst2AR_${sample}"   >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo -e "#$ -cwd"  >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo -e "#$ -q short.q\n"  >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-					echo -e "module unload Python/2.7" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-					echo -e "module unload Python/3.5.2" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-					echo -e "module unload perl/5.22.1" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-					echo -e "module load Python/2.7.15" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-					echo -e "module load bowtie2/2.2.4" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-					echo -e "module load samtools/0.1.18" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-					echo -e "module load perl/5.16.1-MT" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-					echo -e "module load srst2" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					# Can we somehow consolidate into one srst2 analysis to do MLST/AR/SEROTYPE
 					echo -e "cd ${shareScript}" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo -e "\"${shareScript}/run_srst2AR_altDB.sh\" \"${sample}\" \"${project}\" \"${alt_DB_path}\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2AR_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 					cd "${main_dir}"
-					#if [[ "${counter}" -lt "${last_index}" ]]; then
-						qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-					#else
-					#	qsub -sync y "${main_dir}/srst2AR_${sample}_${start_time}.sh"
-					#fi
+					qsub "${main_dir}/srst2AR_${sample}_${start_time}.sh"
 				# Old data exists, skipping
 				else
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_srst2AR_complete.txt\"" >> "${main_dir}/srst2AR_${sample}_${start_time}.sh"
@@ -211,12 +187,6 @@ for item in "${arr[@]}"; do
 	waiting_sample=$(echo "${item}" | cut -d'/' -f2)
 	if [[ -f "${main_dir}/complete/${waiting_sample}_srst2AR_complete.txt" ]]; then
 		echo "${item} is complete"
-		if [[ -f "${shareScript}/srst2AR_${waiting_sample}.out" ]]; then
-			mv "${shareScript}/srst2AR_${waiting_sample}.out" "${main_dir}"
-		fi
-		if [[ -f "${shareScript}/srst2AR_${waiting_sample}.err" ]]; then
-			mv "${shareScript}/srst2AR_${waiting_sample}.err" "${main_dir}"
-		fi
 	else
 		# Check every 5 seconds to see if the sample has completed normal csstar analysis
 		while :
@@ -227,12 +197,6 @@ for item in "${arr[@]}"; do
 				fi
 				if [[ -f "${main_dir}/complete/${waiting_sample}_srst2AR_complete.txt" ]]; then
 					echo "${item} is complete"
-					if [[ -f "${shareScript}/srst2AR_${waiting_sample}.out" ]]; then
-						mv "${shareScript}/srst2AR_${waiting_sample}.out" "${main_dir}"
-					fi
-					if [[ -f "${shareScript}/srst2AR__${waiting_sample}.err" ]]; then
-						mv "${shareScript}/srst2AR_${waiting_sample}.err" "${main_dir}"
-					fi
 					break
 				else
 					timer=$(( timer + 5 ))
