@@ -25,7 +25,7 @@ if [[ "$1" = "-h" ]]; then
 elif [ ! -z "${1}" ]; then
 	list_path=${1}
 else
-	#${shareScript}/make_sample_list_from_run_list.sh ${shareScript}/sample_list_${today}.txt ${shareScript}/directory_list_${today}.txt
+	${shareScript}/make_sample_list_from_run_list.sh ${shareScript}/sample_list_${today}.txt ${shareScript}/directory_list_${today}.txt
 	# Exits if a sample list from TODAY was not creaetd
 	if [[ ! -f ${shareScript}/sample_list_${today}.txt ]]; then
 		echo "No sample list file was created (${shareScript}/sample_list_${today}.txt), must exit..."
