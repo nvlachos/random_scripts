@@ -18,7 +18,7 @@ fi
 #. ./module_changers/list_modules.sh
 
 #
-# Usage ./abl_mass_qsub_GAMA.sh path_to_list max_concurrent_submissions output_directory_for_scripts clobberness[keep|clobber] [path_to_alternate_DB]
+# Usage ./abl_mass_qsub_GAMA.sh path_to_list max_concurrent_submissions output_directory_for_scripts clobberness[keep|clobber] path_to_alternate_DB
 #
 
 # Number regex to test max concurrent submission parametr
@@ -30,7 +30,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 # Shows a brief uasge/help section if -h option used as first argument
 elif [[ "$1" = "-h" ]]; then
-	echo "Usage is ./abl_mass_qsub_GAMA.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions path_to_alt_database output_directory_for_scripts clobberness[keep|clobber]"
+	echo "Usage is ./abl_mass_qsub_GAMA.sh path_to_list_file(single sample ID per line, e.g. B8VHY/1700128 (it must include project id also)) max_concurrent_submissions path_to_alt_database output_directory_for_scripts clobberness[keep|clobber] path_to _alt_database"
 	exit 1
 elif [[ ! -f "${1}" ]]; then
 	echo "${1} (list) does not exist...exiting"
