@@ -18,7 +18,7 @@ fi
 #. ./module_changers/list_modules.sh
 
 #
-# Usage ./abl_mass_qsub_GAMA.sh path_to_list max_concurrent_submissions output_directory_for_scripts clobberness[keep|clobber] path_to_alternate_DB
+# Usage ./abl_mass_qsub_GAMA.sh path_to_list max_concurrent_submissions path_to_alternate_DB output_directory_for_scripts clobberness[keep|clobber]
 #
 
 # Number regex to test max concurrent submission parametr
@@ -38,23 +38,23 @@ elif [[ ! -f "${1}" ]]; then
 elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
 	echo "${2} is not a number or is empty. Please input max number of concurrent qsub submissions...exiting"
 	exit 2
-elif [[ -z "${3}" ]]; then
+elif [[ -z "${4}" ]]; then
 	echo "Output directory parameter is empty...exiting"
 	exit 1
-elif [[ -z "${4}" ]]; then
+elif [[ -z "${5}" ]]; then
 	echo "Clobberness was not input, be sure to add keep or clobber as 4th parameter...exiting"
 	exit 1
-elif [[ ! -z "${5}" ]] && [[ ! -f "${5}" ]]; then
+elif [[ ! -z "${3}" ]] && [[ ! -f "${3}" ]]; then
 	echo "Alternate database does not exist...exiting"
 	exit 1
 fi
 
 # Check that clobberness is a valid option
-if [[ "${4}" != "keep" ]] && [[ "${4}" != "clobber" ]]; then
+if [[ "${5}" != "keep" ]] && [[ "${5}" != "clobber" ]]; then
 	echo "Clobberness was not input, be sure to add keep or clobber as 5th parameter...exiting"
 	exit 1
 else
-	clobberness="${4}"
+	clobberness="${5}"
 fi
 
 # create an array of all samples in the list
@@ -74,12 +74,12 @@ max_subs=${2}
 "${shareScript}/clean_list.sh" "${1}"
 
 # Set script directory
-main_dir="${3}/GAMA_subs"
-if [[ ! -d "${3}/GAMA_subs" ]]; then
-	mkdir "${3}/GAMA_subs"
-	mkdir "${3}/GAMA_subs/complete"
-elif [[ ! -d  "${3}/GAMA_subs/complete" ]]; then
-	mkdir "${3}/GAMA_subs/complete"
+main_dir="${4}/GAMA_subs"
+if [[ ! -d "${4}/GAMA_subs" ]]; then
+	mkdir "${4}/GAMA_subs"
+	mkdir "${4}/GAMA_subs/complete"
+elif [[ ! -d  "${4}/GAMA_subs/complete" ]]; then
+	mkdir "${4}/GAMA_subs/complete"
 fi
 
 start_time=$(date "+%m-%d-%Y_at_%Hh_%Mm_%Ss")
@@ -104,7 +104,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			echo -e "#$ -cwd"  >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
 			echo -e "#$ -q short.q\n"  >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
 			echo -e "cd ${shareScript}" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-			echo -e "\"${shareScript}/run_GAMA.sh\" \"${sample}\" \"${project}\" -c \"${5}\"" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
+			echo -e "\"${shareScript}/run_GAMA.sh\" \"${sample}\" \"${project}\" -c \"${3}\"" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_GAMAAR_complete.txt\"" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
 
 			#cd "${main_dir}"
@@ -145,7 +145,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					echo -e "#$ -cwd"  >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
 					echo -e "#$ -q short.q\n"  >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
 					echo -e "cd ${shareScript}" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-					echo -e "\"${shareScript}/run_GAMA.sh\" \"${sample}\" \"${project}\" -c \"${5}\"" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
+					echo -e "\"${shareScript}/run_GAMA.sh\" \"${sample}\" \"${project}\" -c \"${3}\"" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_GAMAAR_complete.txt\"" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
 
 					#cd "${main_dir}"
