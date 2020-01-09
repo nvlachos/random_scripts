@@ -19,15 +19,14 @@ fi
 #
 # Output location: default_config.sh_output_location/run_ID/sample_name/srst2/
 #
-# Modules required: srst2/0.2.0 bowtie2/2.2.4(?)
+# Modules required: srst2/0.2.0 bowtie2/2.2.4(?) Python2/2.7.13
 #
-# v1.0 (10/3/2019)
+# v1.0.1 (1/6/2020)
 #
 # Created by Nick Vlachos (nvx4@cdc.gov)
 #
 
-ml purge
-ml srst2 #bowtie2/2.2.4
+ml srst2 bowtie2/2.2.4 Python2/2.7.13
 
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
