@@ -11,13 +11,20 @@ if [[ ! -f "./config.sh" ]]; then
 	cp ./config_template.sh ./config.sh
 fi
 . ./config.sh
-#. "${mod_changers}/pipeline_mods"
-#. ./module_changers/list_modules.sh
+
 
 #
-# Will attempt to find any plasmids in sample
+# Description: Will attempt to find any plasmids in sample using plasFlow methods
 #
-# Usage ./run_plasFlow.sh sample_name run_ID
+# Usage: ./run_plasFlow.sh sample_name run_ID
+#
+# Output location: default_config.sh_output_location/run_ID/sample_name/plasFlow/
+#
+# Modules required: PlasFlow/1.1
+#
+# v1.0.1 (10/9/2019)
+#
+# Created by Nick Vlachos (nvx4@cdc.gov)
 #
 
 # Checks for proper argumentation
@@ -36,11 +43,7 @@ elif [[ -z "${2}" ]]; then
 	exit 1
 fi
 
-ml PlasFlow/1.1
-
-
-# Show loaded modules
-ml
+ml PlasFlow/1.1 Python3/3.5.4
 
 # Create output directory
 if [[ ! -d "${processed}/${2}/${1}/plasFlow" ]]; then
@@ -75,8 +78,6 @@ else
 	trimmomatic "${trim_endtype}" -"${trim_phred}" -threads "${procs}" "${processed}/${2}/${1}/removedAdapters/${1}-noPhiX-R1.fsq" "${processed}/${2}/${1}/removedAdapters/${1}-noPhiX-R2.fsq" "${processed}/${2}/${1}/trimmed/${1}_R1_001.paired.fq" "${processed}/${2}/${1}/trimmed/${1}_R1_001.unpaired.fq" "${processed}/${2}/${1}/trimmed/${1}_R2_001.paired.fq" "${processed}/${2}/${1}/trimmed/${1}_R2_001.unpaired.fq" ILLUMINACLIP:"${trim_adapter_location}:${trim_seed_mismatch}:${trim_palindrome_clip_threshold}:${trim_simple_clip_threshold}:${trim_min_adapt_length}:${trim_complete_palindrome}" SLIDINGWINDOW:"${trim_window_size}:${trim_window_qual}" LEADING:"${trim_leading}" TRAILING:"${trim_trailing}" MINLEN:"${trim_min_length}"
 fi
 
-ml Python3/3.5.4
-
 # Check if sample has original assembly to process plasflow from
 if [[ -s "${processed}/${2}/${1}/Assembly/${1}_scaffolds_trimmed.fasta" ]]; then
 	# Trim contigs a little to 2000 and larger and put through plasflow.
@@ -99,7 +100,7 @@ if [[ -s "${processed}/${2}/${1}/Assembly/${1}_scaffolds_trimmed.fasta" ]]; then
 	#module load racon/1.3.1;
 	#module load perl/5.22.1
 
-	ml -Python3/3.5.4 bowtie2/2.2.9 samtools/1.4.1 bam2fastq/1.1.0 Unicycler/0.4.4 gcc/5.5 SPAdes/3.13.0 racon/1.3.1 perl/5.22.1
+	ml -Python3/3.5.4 bowtie2/2.2.9 samtools/1.4.1 bam2fastq/1.1.0 Unicycler/0.4.4 #SPAdes/3.13.0 racon/1.3.1
 
 	mkdir ${processed}/${2}/${1}/plasFlow/bowtie2-index/
 	bowtie2-build -f "${processed}/${2}/${1}/plasFlow/${1}_plasFlow_results.tsv_chromosomes.fasta" "${processed}/${2}/${1}/plasFlow/bowtie2-index/bowtie2_${1}_chr"
@@ -114,6 +115,8 @@ if [[ -s "${processed}/${2}/${1}/Assembly/${1}_scaffolds_trimmed.fasta" ]]; then
 	python3 "${shareScript}/removeShortContigs.py" -i "${processed}/${2}/${1}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_plasmid_assembly.fasta" -t 500 -s "plasFlow"
 	mv "${processed}/${2}/${1}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_plasmid_assembly.fasta.TRIMMED.fasta" "${processed}/${2}/${1}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_plasmid_assembly_trimmed.fasta"
 	rm "${processed}/${2}/${1}/plasFlow/Unicycler_assemblies/${1}_uni_assembly/${1}_plasmid_assembly.fasta"
+else
+	echo "${processed}/${2}/${1}/Assembly/${1}_scaffolds_trimmed.fasta (Assembly) not found, cant do anything"
 fi
 
 #module unload PlasFlow/1.1
@@ -126,4 +129,4 @@ fi
 #module unload SPAdes/3.11.1;
 #module unload racon/1.2.0;
 
-ml -bowtie2/2.2.9 -samtools/1.4.1 -bam2fastq/1.1.0 -Unicycler/0.4.4 -gcc/5.5 -SPAdes/3.13.0 -racon/1.3.1 -perl/5.22.1
+ml -Python3/3.5.4 -bowtie2/2.2.9 -samtools/1.4.1 -bam2fastq/1.1.0 -Unicycler/0.4.4 -SPAdes/3.13.0 -racon/1.3.1
