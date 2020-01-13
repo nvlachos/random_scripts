@@ -29,14 +29,7 @@ fi
 while IFS= read -r var; do
 	sample_name=$(echo "${var}" | cut -d'/' -f2 | tr -d '[:space:]')
 	project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
-
-	if [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]]; then
-		mv "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst"
-	fi
-	if [[ -f "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" ]]; then
-		mv "${processed}/${project}/${sample_name}/MLST/${sample_name}_abaumannii.mlst" "${processed}/${project}/${sample_name}/MLST/${sample_name}_Oxford.mlst"
-	fi
-
+	${shareScript}/sample_cleaner.sh "${sample_name}" "${project}"
 done < "${1}"
 
 echo "All isolates completed"
