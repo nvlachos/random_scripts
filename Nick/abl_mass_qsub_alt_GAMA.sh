@@ -106,15 +106,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 			echo -e "cd ${shareScript}" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
 			echo -e "\"${shareScript}/run_GAMA.sh\" \"${sample}\" \"${project}\" -c \"${3}\"" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
 			echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_GAMAAR_complete.txt\"" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
+			qsub "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
 
-			#cd "${main_dir}"
-			if [[ "${counter}" -lt "${last_index}" ]]; then
-				qsub "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-			else
-				qsub -sync y "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-			fi
-			mv "${shareScript}/GAMAAR_${sample}.err" ${main_dir}
-			mv "${shareScript}/GAMAAR_${sample}.out" ${main_dir}
 		# Old data existed, skipping
 		else
 			echo -e $(date) > "${main_dir}/complete/${sample}_GAMAAR_complete.txt"
@@ -147,15 +140,7 @@ while [ ${counter} -lt ${arr_size} ] ; do
 					echo -e "cd ${shareScript}" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
 					echo -e "\"${shareScript}/run_GAMA.sh\" \"${sample}\" \"${project}\" -c \"${3}\"" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
 					echo -e "echo \"$(date)\" > \"${main_dir}/complete/${sample}_GAMAAR_complete.txt\"" >> "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-
-					#cd "${main_dir}"
-					if [[ "${counter}" -lt "${last_index}" ]]; then
-						qsub "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-					else
-						qsub -sync y "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
-					fi
-					mv "${shareScript}/GAMAAR_${sample}.err" ${main_dir}
-					mv "${shareScript}/GAMAAR_${sample}.out" ${main_dir}
+					qsub "${main_dir}/GAMAAR_${sample}_${start_time}.sh"
 				# Old data existed, skipping
 				else
 					echo -e $(date) > "${main_dir}/complete/${sample}_GAMAAR_complete.txt"
