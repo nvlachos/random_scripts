@@ -481,6 +481,12 @@ while IFS= read -r var || [ -n "$var" ]; do
 			else
 				srst2_mlst="NOT_FOUND"
 			fi
+			if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]]; then
+				mv "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst"
+				mlst=$(tail -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" | cut -d'	' -f2)
+			else
+				mlst="NOT_FOUND"
+			fi
 		fi
 	else
 		plasFlow="No_TAX_file"
