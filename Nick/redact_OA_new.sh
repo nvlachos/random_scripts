@@ -72,7 +72,7 @@ if [[ -d ${Phyl_OA}/${1} ]]; then
 			original_name=$(echo "${var}" | cut -d',' -f1 | cut -d'/' -f2 | tr -d '[:space:]')
 			original_project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 			redacted_name=$(echo "${var}" | cut -d',' -f2 | tr -d '[:space:]')
-			sed -i "s/${original_name}/${redacted_name}/g" ${Phyl_OA}/${1}/${1}_redacted.newick
+			sed -i "s/${original_name}/${redacted_name}/g" ${Phyl_OA}/${1}/${1}_MASH_redacted.newick
 			sed -i "s/${original_name}/${redacted_name}/g" ${Phyl_OA}/${1}/${1}_AR_plasmid_report_redacted.csv
 			sed -i "s/${original_project}/NA/g" ${Phyl_OA}/${1}/${1}_AR_plasmid_report_redacted.csv
 		done < ${3}
