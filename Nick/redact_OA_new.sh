@@ -48,7 +48,7 @@ if [[ -d ${Phyl_OA}/${1} ]]; then
 		if [[ -f ${Phyl_OA}/${1}/${2}/${2}_SNVPhyl_redacted.newick ]]; then
 			rm ${Phyl_OA}/${1}/${2}/${2}_SNVPhyl.newick ${Phyl_OA}/${1}/${2}/${2}_SNVPhyl_redacted.newick
 		fi
-		cp ${Phyl_OA}/${1}/${2}/${2}_phylogeneticTree.newick ${Phyl_OA}/${1}/${2}/${2}_phylogeneticTree_redacted.newick
+		cp ${Phyl_OA}/${1}/${2}/${2}_SNVPhyl.newick ${Phyl_OA}/${1}/${2}/${2}_SNVPhyl_redacted.newick
 		while IFS= read -r var  || [ -n "$var" ]; do
 			original_name=$(echo "${var}" | cut -d',' -f1 | cut -d'/' -f2 | tr -d '[:space:]')
 			redacted_name=$(echo "${var}" | cut -d',' -f2 | tr -d '[:space:]')
