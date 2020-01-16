@@ -40,7 +40,7 @@ fi
 
 if [[ -d ${Phyl_OA}/${1} ]]; then
 	if  [[ -d ${Phyl_OA}/${1}/${2} ]]; then
-		echo "Redacting Phylogeny folder: ${Phyl_OA}/${1}/${2}"
+		echo "Redacting Phylogeny files: ${Phyl_OA}/${1}/${2}"
 		if [[ -f ${Phyl_OA}/${1}/${2}/${2}_snvMatrix_redacted.tsv ]]; then
 			rm ${Phyl_OA}/${1}/${2}/${2}_snvMatrix_redacted.tsv
 		fi
@@ -58,6 +58,7 @@ if [[ -d ${Phyl_OA}/${1} ]]; then
 	else
 		echo "Phylo: ${1} exists, but ${2} is missing"
 	fi
+	echo "Redacting OA files: ${Phyl_OA}/${1}"
 	if [[ -f "${Phyl_OA}/${1}/${1}_AR_plasmid_report.csv" ]]; then
 		if [[ -f "${Phyl_OA}/${1}/${1}_AR_plasmid_report_redacted.csv" ]]; then
 			rm "${Phyl_OA}/${1}/${1}_AR_plasmid_report_redacted.csv"
@@ -71,9 +72,9 @@ if [[ -d ${Phyl_OA}/${1} ]]; then
 			original_name=$(echo "${var}" | cut -d',' -f1 | cut -d'/' -f2 | tr -d '[:space:]')
 			original_project=$(echo "${var}" | cut -d'/' -f1 | tr -d '[:space:]')
 			redacted_name=$(echo "${var}" | cut -d',' -f2 | tr -d '[:space:]')
-			sed -i "s/${original_name}/${redacted_name}/g" ${Phyl_OA}/${1}_redacted.newick
-			sed -i "s/${original_name}/${redacted_name}/g" ${Phyl_OA}/${1}_AR_plasmid_report_redacted.csv
-			sed -i "s/${original_project}/NA/g" ${Phyl_OA}/${1}_AR_plasmid_report_redacted.csv
+			sed -i "s/${original_name}/${redacted_name}/g" ${Phyl_OA}/${1}/${1}_redacted.newick
+			sed -i "s/${original_name}/${redacted_name}/g" ${Phyl_OA}/${1}/${1}_AR_plasmid_report_redacted.csv
+			sed -i "s/${original_project}/NA/g" ${Phyl_OA}/${1}/${1}_AR_plasmid_report_redacted.csv
 		done < ${3}
 	else
 		"OA: ${Phyl_OA}/${1}/${1}_AR_plasmid_report.csv does not exist, cannot redact OA"
