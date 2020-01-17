@@ -41,7 +41,7 @@ elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
 elif [[ -z "${4}" ]]; then
 	echo "Output directory parameter is empty...exiting"
 	exit 1
-elif [[ ! -z "${3}" ]] || [[ ! -f "${3}" ]]; then
+elif [[ -z "${3}" ]] || [[ ! -f "${3}" ]]; then
 	echo "Alternate database does not exist...exiting"
 	exit 1
 fi
