@@ -317,15 +317,6 @@ while IFS= read -r var || [ -n "$var" ]; do
 		aniAll="NOT_FOUND"
 	fi
 
-	if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" ]]; then
-		mlst=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" | cut -d'	' -f3)
-	else
-		mlst="NOT_FOUND"
-	fi
-
-
-
-
 	if [[ "${tax}" == "Found" ]]; then
 		# Parse tax file
 		family="Unknown"
@@ -427,6 +418,24 @@ while IFS= read -r var || [ -n "$var" ]; do
 			animash="Found"
 		else
 			animash="NOT_FOUND"
+		fi
+
+		# Fix any possible stragglers with standard mlst file naming
+		if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" ]]; then
+			db=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" | cut -d'	' -f2)
+			if [[ ${db} == "abaumannii" ]]; then
+				mv "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" "${processed}/${project}/${sample_name}/MLST/${sample_name}_Oxford.mlst"
+			elif [[ ${db} == "ecoli" ]]; then
+				mv "${processed}/${project}/${sample_name}/MLST/${sample_name}.mlst" "${processed}/${project}/${sample_name}/MLST/${sample_name}_Achtman.mlst"
+			else
+				mv "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst"
+			fi
+		fi
+
+		if [[ -s "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" ]]; then
+			mlst=$(head -n1 "${processed}/${project}/${sample_name}/MLST/${sample_name}_Pasteur.mlst" | cut -d'	' -f3)
+		else
+			mlst="NOT_FOUND"
 		fi
 
 		if [[ "${tempgenus}" == "Acinetobacter" ]] && [[ "${species}" == "baumannii" ]]; then
