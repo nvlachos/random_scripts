@@ -22,6 +22,8 @@ fi
 # Number regex to test max concurrent submission parametr
 number='^[0-9]+$'
 
+
+clobberness="keep"
 # Checks for proper argumentation
 if [[ $# -eq 0 ]]; then
 	echo "No argument supplied to $0, exiting"
@@ -38,9 +40,6 @@ elif ! [[ ${2} =~ $number ]] || [[ -z "${2}" ]]; then
 	exit 2
 elif [[ -z "${4}" ]]; then
 	echo "Output directory parameter is empty...exiting"
-	exit 1
-elif [[ -z "${5}" ]]; then
-	echo "Clobberness was not input, be sure to add keep or clobber as 4th parameter...exiting"
 	exit 1
 elif [[ ! -z "${3}" ]] || [[ ! -f "${3}" ]]; then
 	echo "Alternate database does not exist...exiting"
