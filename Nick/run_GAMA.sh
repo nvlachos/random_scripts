@@ -54,7 +54,7 @@ else
 	ARDB="${ResGANNCBI_srst2}"
 fi
 
-echo "Using DB - ${ResGANNCBI_srst2}"
+echo "${4} - Using DB - ${ResGANNCBI_srst2}"
 
 # Sets the output folder of GAMA classifier to the GAMA folder under the sample_name folder in processed samples
 OUTDATADIR="${processed}/${2}/${1}"
