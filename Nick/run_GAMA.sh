@@ -51,6 +51,7 @@ elif [[ "${3}" != "-c" &&  "${3}" != "-p" ]]; then
 elif [ ! -z "${4}" ]; then
 	ARDB="${4}"
 else
+	echo "Alt DB is empty, using ${ResGANNCBI_srst2}"
 	ARDB="${ResGANNCBI_srst2}"
 fi
 
