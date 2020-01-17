@@ -44,7 +44,7 @@ elif [[ -z "${4}" ]]; then
 elif [[ -z "${5}" ]]; then
 	echo "Clobberness was not input, be sure to add keep or clobber as 4th parameter...exiting"
 	exit 1
-elif [[ ! -z "${3}" ]] && [[ ! -f "${3}" ]]; then
+elif [[ ! -z "${3}" ]] || [[ ! -f "${3}" ]]; then
 	echo "Alternate database does not exist...exiting"
 	exit 1
 fi
