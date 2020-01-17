@@ -87,8 +87,8 @@ while [ ${counter} -lt ${arr_size} ] ; do
 	sample=$(echo "${arr[${counter}]}" | cut -d'/' -f2 | cut -d':' -f1)
 	#sample=${sample:0:20}
 	project=$(echo "${arr[${counter}]}" | cut -d'/' -f1)
-	#genus=${5}
-	#species=${6}
+	genus=${5}
+	species=${6}
 
 
 
